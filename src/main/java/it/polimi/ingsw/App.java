@@ -26,7 +26,7 @@ public class App
         do {
             System.out.println("Inserisci numero giocatori");
             numPlayer = in.nextInt();
-        }while(numPlayer<2 || numPlayer>4);
+        }while(numPlayer<2 || numPlayer>=4);
         System.out.print("Hai scelto: ");
         System.out.print(numPlayer);
         System.out.println(" giocatori.");
