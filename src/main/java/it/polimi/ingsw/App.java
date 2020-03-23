@@ -17,17 +17,21 @@ public class App
         int numPlayer;
         int counter =0;
         Game myGame;
-        Board myBoard;
         Player player1= new Player();
         Player player2= new Player();
         Player player3= new Player();
 
+
         Scanner in = new Scanner(System.in);
-        System.out.println("Inserisci numero giocatori");
-        numPlayer = in.nextInt();
+        do {
+            System.out.println("Inserisci numero giocatori");
+            numPlayer = in.nextInt();
+        }while(numPlayer<2 || numPlayer>4);
         System.out.print("Hai scelto: ");
         System.out.print(numPlayer);
         System.out.println(" giocatori.");
+
+
 
         while(counter<numPlayer){
             switch (counter){
@@ -55,9 +59,11 @@ public class App
             counter++;
         }
 
-        myGame = new Game(numPlayer);
-        myGame.getPlayerOrder(player1,player2,player3);
 
+        myGame = new Game(numPlayer);
+        myGame.setPlayerWorkerinOrder(player1,player2,player3);
+
+        myGame.Start();
     }
 
 
@@ -110,15 +116,15 @@ public class App
     }
 
     static void setPlayerBirthdate(Player currPlayer){
-
+        currPlayer.setBirthdate();
         Scanner in = new Scanner(System.in);
         System.out.println("Inserisci il giorno di nascita");
-        birthday.setDay(in.nextInt());
+        currPlayer.getBirthdate().setDay(in.nextInt());
         System.out.println("Inserisci il mese di nascita");
-        birthday.setMonth(in.nextInt());
+        currPlayer.getBirthdate().setMonth(in.nextInt());
         System.out.println("Inserisci l'anno di nascita");
-        birthday.setYear(in.nextInt());
-        currPlayer.setBirthdate(birthday);
+        currPlayer.getBirthdate().setYear(in.nextInt());
+
 
     }
 }

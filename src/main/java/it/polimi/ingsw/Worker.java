@@ -3,17 +3,34 @@ package it.polimi.ingsw;
 public class Worker {
     private int  workerNum;
     private Cell currentPosition;
+    private  PlayerColor color;
 
 
-    public Worker(Cell position, int number){
+    public Worker(Cell position, int number, PlayerColor color){
         this.currentPosition = position;
         this.workerNum = number;
         position.setFreeSpace(false);
+        this.color= color;
+    }
+
+    public int getWorkerNum() {
+        return workerNum;
+    }
+
+    public char getColor() {
+        switch (this.color){
+            case WHITE: return 'W';
+            case GREY:  return 'G';
+            case BLUE:  return 'B';
+            default: return ' ';
+        }
+
     }
 
     public void setWorkerPosition(Cell cell){
         this.currentPosition = cell;
         cell.setFreeSpace(false);
+        cell.setCurrWorker(this);
     }
 
     public Cell getWorkerPosition(){
@@ -26,6 +43,7 @@ public class Worker {
             if (this.getWorkerPosition().isClosedTo(cell) && cell.isFree()) {
                 if (cell.getLevel() - currentPosition.getLevel() <= 1) {
                     currentPosition.setFreeSpace(true);
+                    currentPosition.deleteCurrWorker();
                     this.setWorkerPosition(cell);
                     return true;
                 }
@@ -46,7 +64,7 @@ public class Worker {
            return true;
         }
         else{
-            System.out.println("Your move is not valid");
+            System.out.println("Your build is not valid");
             return false;
         }
 
