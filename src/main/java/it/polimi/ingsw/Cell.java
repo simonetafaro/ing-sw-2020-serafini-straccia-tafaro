@@ -103,37 +103,4 @@ public class Cell {
         this.freeSpace=freeSpace;
     }
 
-    public void printCell() {
-        int i, j;
-        for (i = 1; i <= 4; i++)
-        {
-            for (j = 1; j <= 8; j++)
-            {
-                if (i == 1 || i == 4 ||
-                        j == 1 || j == 8)
-                    System.out.print("*");
-                else
-                {
-                    if(currWorker != null && i==2 && j==4)
-                            System.out.print(currWorker.getColor());
-                    else{
-                        if(currWorker != null && i==2 && j==5)
-                            System.out.print(currWorker.getWorkerNum());
-                        else{
-                            if(i==3 && j==4)
-                                System.out.print("L");
-                            else{
-                                if(i==3 && j==5)
-                                    System.out.print(this.level);
-                                else
-                                    System.out.print(" ");
-                            }
-                        }
-                    }
-                }
-            }
-            System.out.println();
-        }
-    }
-
 }

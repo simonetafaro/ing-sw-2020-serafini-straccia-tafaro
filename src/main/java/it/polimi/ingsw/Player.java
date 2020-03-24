@@ -31,13 +31,6 @@ public class Player {
     }
 
 
-    /*public void setWorker1(Worker worker1) {
-        this.worker1 = worker1;
-    }
-
-    public void setWorker2(Worker worker2) {
-        this.worker2 = worker2;
-    }*/
 
     public PlayerColor getColor() {
         return color;

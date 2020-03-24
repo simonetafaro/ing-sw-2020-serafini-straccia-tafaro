@@ -1,11 +1,9 @@
 package it.polimi.ingsw;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
-/**
- * Hello world!
- *
- */
+
 public class App 
 {
     private static boolean grey=false, white=false, blue = false;
@@ -14,7 +12,7 @@ public class App
     public static void main( String[] args )
     {
 
-        int numPlayer;
+        int numPlayer=0;
         int counter =0;
         Game myGame;
         Player player1= new Player();
@@ -22,17 +20,23 @@ public class App
         Player player3= new Player();
 
 
-        Scanner in = new Scanner(System.in);
+
         do {
-            System.out.println("Inserisci numero giocatori");
-            numPlayer = in.nextInt();
+            try{
+                Scanner in = new Scanner(System.in);
+                System.out.println("Inserisci numero giocatori");
+                numPlayer = in.nextInt();
+            }
+            catch (InputMismatchException e){
+                System.out.println("ops I'would a number please ");
+            }
         }while(numPlayer<2 || numPlayer>=4);
         System.out.print("Hai scelto: ");
         System.out.print(numPlayer);
         System.out.println(" giocatori.");
 
 
-
+        Scanner in = new Scanner(System.in);
         while(counter<numPlayer){
             switch (counter){
                 case 0:
@@ -117,14 +121,20 @@ public class App
 
     static void setPlayerBirthdate(Player currPlayer){
         currPlayer.setBirthdate();
-        Scanner in = new Scanner(System.in);
-        System.out.println("Inserisci il giorno di nascita");
-        currPlayer.getBirthdate().setDay(in.nextInt());
-        System.out.println("Inserisci il mese di nascita");
-        currPlayer.getBirthdate().setMonth(in.nextInt());
-        System.out.println("Inserisci l'anno di nascita");
-        currPlayer.getBirthdate().setYear(in.nextInt());
-
-
+        while(true){
+        try {
+            Scanner in = new Scanner(System.in);
+            System.out.println("Inserisci il giorno di nascita");
+            currPlayer.getBirthdate().setDay(in.nextInt());
+            System.out.println("Inserisci il mese di nascita");
+            currPlayer.getBirthdate().setMonth(in.nextInt());
+            System.out.println("Inserisci l'anno di nascita");
+            currPlayer.getBirthdate().setYear(in.nextInt());
+            break;
+        }
+        catch (InputMismatchException e){
+            System.out.println("ops I'would a number please ");
+            }
+        }
     }
 }
