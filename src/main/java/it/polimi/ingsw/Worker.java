@@ -4,6 +4,7 @@ public class Worker {
     private int  workerNum;
     private Cell currentPosition;
     private  PlayerColor color;
+    private boolean win;
 
 
     public Worker(Cell position, int number, PlayerColor color){
@@ -37,14 +38,20 @@ public class Worker {
         return this.currentPosition;
     }
 
-
+    public boolean winner() {
+        return win;
+    }
 
     public boolean move(Cell cell) {
             if (this.getWorkerPosition().isClosedTo(cell) && cell.isFree()) {
                 if (cell.getLevel() - currentPosition.getLevel() <= 1) {
+                    if(currentPosition.getLevel()==2 && cell.getLevel()==3){
+                        win = true;
+                    }
                     currentPosition.setFreeSpace(true);
                     currentPosition.deleteCurrWorker();
                     this.setWorkerPosition(cell);
+
                     return true;
                 }
                 else{
@@ -70,8 +77,9 @@ public class Worker {
 
     }
 
-    public void clear(Cell cell){
-        cell.setFreeSpace(true);
+    public void clear(){
+        this.currentPosition.setFreeSpace(true);
+        this.currentPosition.setCurrWorker(null);
 
     }
 

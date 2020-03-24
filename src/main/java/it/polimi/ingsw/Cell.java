@@ -8,7 +8,6 @@ public class Cell {
     private boolean freeSpace;
     private Worker currWorker;
 
-
     public Cell(int posX, int posY){
         this.posX = posX;
         this.posY = posY;

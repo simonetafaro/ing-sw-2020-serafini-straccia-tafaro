@@ -20,19 +20,45 @@ public class Game {
 
 
     public void Start(){
-
+        int playerInGame = playerNumber;
         int i=0;
         while (!winner){
-            while(i<playerNumber){
-                System.out.println("E' il turno di "+playerOrder[i].getNickname());
+            while(i<playerNumber && playerOrder[i]!=null){
+                System.out.println(playerOrder[i].getNickname()+"'s turn");
                 playerOrder[i].play(this.islandBoard);
+                if(playerOrder[i].getWorker1().winner() || playerOrder[i].getWorker2().winner()){
+                    //playerOrder[i] wins
+                    System.out.println(playerOrder[i].getNickname()+" wins!");
+                    winner=true;
+                    break;
+                }
+                if(playerOrder[i].isWorker1Stuck() && playerOrder[i].isWorker2Stuck()) {
+                    if (playerInGame == 2) {
+                        if(playerOrder[(i+1)%3]!=null)
+                            System.out.println(playerOrder[(i+1)%3].getNickname()+" wins!");
+                        else
+                            System.out.println(playerOrder[(i+2)%3].getNickname()+" wins!");
+                        winner = true;
+                        break;
+                    }
+                    else{   //i player sono 3
+                        playerOrder[i].getWorker1().clear();
+                        playerOrder[i].getWorker2().clear();
+                        playerOrder[i]=null;
+                        playerInGame--;
+                    }
+                }
                 islandBoard.printBoard();
+                if(i==2)
+                    break;
                 i++;
             }
-            i=0;
+            if(i==playerNumber-1)
+                i=0;
+            else
+                i++;
         }
-
-
+        //Ha vinto qualcuno
     }
 
     public void setPlayerWorkerinOrder(Player player1, Player player2, Player player3){

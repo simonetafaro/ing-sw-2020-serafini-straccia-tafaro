@@ -1,6 +1,5 @@
 package it.polimi.ingsw;
 
-import java.util.Date;
 import java.util.Scanner;
 
 public class Player {
@@ -8,9 +7,9 @@ public class Player {
     private PlayerColor color;
     private CustomDate birthdate;
     private String nickname;
-    private  boolean win ;
     private Worker worker1;
     private Worker worker2;
+    private boolean worker1Stuck, worker2Stuck;
     //private Card myCard;
 
 
@@ -30,7 +29,13 @@ public class Player {
         this.nickname = nickname;
     }
 
+    public Worker getWorker1() {
+        return worker1;
+    }
 
+    public Worker getWorker2() {
+        return worker2;
+    }
 
     public PlayerColor getColor() {
         return color;
@@ -46,14 +51,14 @@ public class Player {
         System.out.println(nickname);
         do {
             do {
-                System.out.println("Scegli la cella in cui posizionare il tuo worker1");
-                System.out.println("Inserisci la coordinata x");
+                System.out.println("Choose the cell for worker1");
+                System.out.println("Choose the ROW");
                 x = in.nextInt();
-                System.out.println("Inserisci la coordinata y");
+                System.out.println("Choose the COLUMN");
                 y = in.nextInt();
 
             } while (x < 0 || x >= 5 || y < 0 || y >= 5);
-            System.out.println("Hai scelto ( " + x + " , " + y + " )");
+            System.out.println("You choose ( " + x + " , " + y + " )");
 
         }while(!(myBoard.getBoard()[x][y]).isFree());
 
@@ -64,66 +69,101 @@ public class Player {
 
         do {
             do {
-                System.out.println("Scegli la cella in cui posizionare il tuo worker2");
-                System.out.println("Inserisci la coordinata x");
+                System.out.println("Choose the cell for worker2");
+                System.out.println("Choose the ROW");
                 x = in.nextInt();
-                System.out.println("Inserisci la coordinata y");
+                System.out.println("Choose the COLUMN");
                 y = in.nextInt();
             } while (x < 0 || x >= 5 || y < 0 || y >= 5);
-            System.out.println("Hai scelto ( " + x + " , " + y + " )");
+            System.out.println("You choose ( " + x + " , " + y + " )");
         }while(!(myBoard.getBoard()[x][y]).isFree());
         worker2=new Worker(myBoard.getBoard()[x][y],2, this.color);
         (myBoard.getBoard()[x][y]).setCurrWorker(this.worker2);
 
     }
 
+    public boolean isWorker1Stuck() {
+        return worker1Stuck;
+    }
+
+    public boolean isWorker2Stuck() {
+        return worker2Stuck;
+    }
+
     public void play(Board islandBoard){
         Scanner in = new Scanner(System.in);
         int x,y;
-        System.out.println("Which worker do you want to move: Worker1 or Worker2 ?");
+        System.out.println(this.getNickname()+" which worker do you want to move: Worker1 or Worker2 ?");
 
         switch (in.nextInt()){
-            case 1:     worker1.getWorkerPosition().hasFreeCellClosed(islandBoard.getBoard());
-                        do{
-                            do {
-                                System.out.println("Please insert the cell where you want to move your worker");
-                                x = in.nextInt();
-                                y = in.nextInt();
-                            }while(x<0 || x>4 || y<0 || y>4);
-                        }while(!worker1.move(islandBoard.getBoard()[x][y]));
-
-                        worker1.getWorkerPosition().canBuildInCells(islandBoard.getBoard());
-                        do{
+            case 1:     if(worker1.getWorkerPosition().hasFreeCellClosed(islandBoard.getBoard())){
                             do{
-                                System.out.println("Please insert the cell where you want to build");
-                                x=in.nextInt();
-                                y=in.nextInt();
-                            }while(x<0 || x>4 || y<0 || y>4);
-                        }while(!worker1.build(islandBoard.getBoard()[x][y]));
+                                do {
+                                    System.out.println("Please insert the cell where you want to move your worker");
+                                    x = in.nextInt();
+                                    y = in.nextInt();
+                                }while(x<0 || x>4 || y<0 || y>4);
+                            }while(!worker1.move(islandBoard.getBoard()[x][y]));
+                            if(worker1.winner()){
+                                break;
+                            }
+
+                            worker1.getWorkerPosition().canBuildInCells(islandBoard.getBoard());
+                            do{
+                                do{
+                                    System.out.println("Please insert the cell where you want to build");
+                                    x=in.nextInt();
+                                    y=in.nextInt();
+                                }while(x<0 || x>4 || y<0 || y>4);
+                            }while(!worker1.build(islandBoard.getBoard()[x][y]));
+                        }
+                        else{
+                            System.out.println("You can't move Worker1");
+                            this.worker1Stuck = true;
+                            if(this.worker2Stuck){
+                                System.out.println("You are out!");
+                                break;
+                            }
+                            this.play(islandBoard);
+                        }
                         break;
 
-            case 2:     worker2.getWorkerPosition().hasFreeCellClosed(islandBoard.getBoard());
-                        do{
-                            do {
-                                System.out.println("Please insert the cell where you want to move your worker");
-                                x = in.nextInt();
-                                y = in.nextInt();
-                            }while(x<0 || x>4 || y<0 || y>4);
-                        }while(!worker2.move(islandBoard.getBoard()[x][y]));
-
-                        worker2.getWorkerPosition().canBuildInCells(islandBoard.getBoard());
-                        do{
+            case 2:     if(worker2.getWorkerPosition().hasFreeCellClosed(islandBoard.getBoard())){
                             do{
-                                System.out.println("Please insert the cell where you want to build");
-                                x=in.nextInt();
-                                y=in.nextInt();
-                            }while(x<0 || x>4 || y<0 || y>4);
-                        }while(!worker2.build(islandBoard.getBoard()[x][y]));
+                                do {
+                                    System.out.println("Please insert the cell where you want to move your worker");
+                                    x = in.nextInt();
+                                    y = in.nextInt();
+                                }while(x<0 || x>4 || y<0 || y>4);
+                            }while(!worker2.move(islandBoard.getBoard()[x][y]));
+                            if(worker1.winner()){
+                                break;
+                            }
+
+                            worker2.getWorkerPosition().canBuildInCells(islandBoard.getBoard());
+                            do{
+                                do{
+                                    System.out.println("Please insert the cell where you want to build");
+                                    x=in.nextInt();
+                                    y=in.nextInt();
+                                }while(x<0 || x>4 || y<0 || y>4);
+                            }while(!worker2.build(islandBoard.getBoard()[x][y]));
+                        }
+                        else{
+                                System.out.println("You can't move Worker2");
+                                this.worker2Stuck = true;
+                                if(this.worker1Stuck){
+                                    System.out.println("You are out!");
+                                    break;
+                                }
+                                this.play(islandBoard);
+                            }
                         break;
 
             default:    System.out.println("Invalid Input");
                         this.play(islandBoard);
         }
-
+        this.worker2Stuck =false;
+        this.worker1Stuck =false;
     }
 }
