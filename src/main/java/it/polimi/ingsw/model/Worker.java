@@ -1,17 +1,22 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.model;
 
-public class Worker {
+import it.polimi.ingsw.utils.PlayerColor;
+
+import java.io.Serializable;
+
+public class Worker implements Serializable {
     private int  workerNum;
     private Cell currentPosition;
-    private  PlayerColor color;
+    private PlayerColor color;
     private boolean win;
 
 
     public Worker(Cell position, int number, PlayerColor color){
         this.currentPosition = position;
         this.workerNum = number;
-        position.setFreeSpace(false);
         this.color= color;
+        position.setFreeSpace(false);
+        position.setCurrWorker(this);
     }
 
     public int getWorkerNum() {
@@ -44,6 +49,7 @@ public class Worker {
 
     public boolean move(Cell cell) {
             if (this.getWorkerPosition().isClosedTo(cell) && cell.isFree()) {
+
                 if (cell.getLevel() - currentPosition.getLevel() <= 1) {
                     if(currentPosition.getLevel()==2 && cell.getLevel()==3){
                         win = true;

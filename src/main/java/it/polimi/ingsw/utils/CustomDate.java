@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.utils;
 
 public class CustomDate {
     private int day;

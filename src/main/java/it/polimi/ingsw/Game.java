@@ -1,7 +1,10 @@
 package it.polimi.ingsw;
 
-public class Game {
+import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.model.Player;
 
+public class Game {
+    /**
     private int playerNumber;
     private Board islandBoard;
     private boolean winner;
@@ -127,4 +130,5 @@ public class Game {
         }
         islandBoard.printBoard();
     }
+     */
 }

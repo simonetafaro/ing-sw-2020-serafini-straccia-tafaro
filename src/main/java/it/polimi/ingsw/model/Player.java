@@ -1,4 +1,7 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.model;
+
+import it.polimi.ingsw.utils.CustomDate;
+import it.polimi.ingsw.utils.PlayerColor;
 
 import java.util.Scanner;
 
@@ -7,11 +10,24 @@ public class Player {
     private PlayerColor color;
     private CustomDate birthdate;
     private String nickname;
+
     private Worker worker1;
     private Worker worker2;
     private boolean worker1Stuck, worker2Stuck;
     //private Card myCard;
 
+
+    public Player(){}
+
+    public Player(Player player) {
+        this.nickname = player.getNickname();
+        this.color = player.getColor();
+        this.birthdate = player.getBirthdate();
+        this.worker1=player.worker1;
+        this.worker2=player.worker2;
+        worker1Stuck=false;
+        worker2Stuck=false;
+    }
 
     public String getNickname() {
         return nickname;
@@ -21,8 +37,8 @@ public class Player {
         this.color = color;
     }
 
-    public void setBirthdate() {
-        this.birthdate = new CustomDate();
+    public void setBirthdate(CustomDate birtday) {
+        this.birthdate = birtday;
     }
 
     public void setNickname(String nickname) {
@@ -37,6 +53,14 @@ public class Player {
         return worker2;
     }
 
+    public void setWorker1(Worker worker1) {
+        this.worker1 = worker1;
+    }
+
+    public void setWorker2(Worker worker2) {
+        this.worker2 = worker2;
+    }
+
     public PlayerColor getColor() {
         return color;
     }
@@ -48,7 +72,7 @@ public class Player {
     public void setWorkerPosition(Board myBoard){
         int x,y;
         Scanner in = new Scanner(System.in);
-        System.out.println(nickname);
+        //System.out.println(nickname);
         do {
             do {
                 System.out.println("Choose the cell for worker1");

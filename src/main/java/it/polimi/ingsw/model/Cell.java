@@ -1,6 +1,8 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.model;
 
-public class Cell {
+import java.io.Serializable;
+
+public class Cell implements Cloneable, Serializable {
 
     private int posX;
     private int posY;
@@ -8,6 +10,7 @@ public class Cell {
     private boolean freeSpace;
     private Worker currWorker;
 
+    public Cell(){}
     public Cell(int posX, int posY){
         this.posX = posX;
         this.posY = posY;
@@ -66,7 +69,6 @@ public class Cell {
         return bool;
     }
 
-
     public void setPosX(int newPosition){
         this.posX = newPosition;
     }
@@ -102,4 +104,8 @@ public class Cell {
         this.freeSpace=freeSpace;
     }
 
+    @Override
+    protected final Cell clone(){
+        return this.clone();
+    }
 }

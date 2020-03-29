@@ -1,13 +1,15 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.model;
 
-public class Board {
+import java.io.Serializable;
+
+public class Board implements Cloneable, Serializable {
 
     private static final int N_ROWS = 5;
     private static final int N_COLS = 5;
     private Cell[][] board;
 
     public Board() {
-        board = new Cell[N_COLS][N_COLS];
+        this.board = new Cell[N_COLS][N_COLS];
         for (int i = 0; i < N_ROWS; i++) {
             for (int j = 0; j < N_COLS; j++) {
                 board[i][j]= new Cell(i,j);
@@ -18,6 +20,10 @@ public class Board {
 
     public Cell[][] getBoard() {
         return board;
+    }
+
+    public Cell getCell(int x, int y){
+        return board[x][y];
     }
 
     public void clearAll(){
@@ -65,6 +71,11 @@ public class Board {
                 k=0;
             }
         }
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
 }
