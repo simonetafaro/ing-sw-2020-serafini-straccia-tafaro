@@ -14,7 +14,8 @@ public class Player {
     private Worker worker1;
     private Worker worker2;
     private boolean worker1Stuck, worker2Stuck;
-    //private Card myCard;
+    //TODO card attribute with getter and setter
+    // private Card myCard;
 
 
     public Player(){}

@@ -20,7 +20,7 @@ public class Server {
     private ServerSocket serverSocket;
     private ExecutorService executor = Executors.newFixedThreadPool(128);
     private Map<Player, ClientConnection> waitingConnection = new HashMap<>();
-    private Map<ClientConnection, ClientConnection> playingConnection = new HashMap<>();
+    //private Map<ClientConnection, ClientConnection> playingConnection = new HashMap<>();
 
     private int playerNumber;
     private boolean firstPlayer;
@@ -37,7 +37,7 @@ public class Server {
         return model;
     }
 
-    public synchronized void deregisterConnection(ClientConnection c) {
+    /**public synchronized void deregisterConnection(ClientConnection c) {
         ClientConnection opponent = playingConnection.get(c);
         if(opponent != null) {
             opponent.closeConnection();
@@ -50,15 +50,17 @@ public class Server {
                 iterator.remove();
             }
         }
-    }
+    }*/
 
     public synchronized void lobby(ClientConnection c, Player player){
         waitingConnection.put(player, c);
         //Creo la partita se ho nella lobby il numero di giocatori scelto
         if (waitingConnection.size() == playerNumber) {
+            /**this.firstPlayer=true;
+             * */
             //Questa sarà una lista di player
             List<Player> keys = new ArrayList<>(waitingConnection.keySet());
-            //Crea le ClientConnection per ogni player presente nella Hasmap
+            //Crea le ClientConnection per ogni player presente nella Hashmap
             ClientConnection c1 = waitingConnection.get(keys.get(0));
             ClientConnection c2 = waitingConnection.get(keys.get(1));
             ClientConnection c3 = null;
@@ -87,13 +89,13 @@ public class Server {
                 model.addObserver(player3View);
                 player3View.addObserver(controller);
             }
-            setPlayerWorkerinOrder(model, player1View, player2View, player3View);
+            setPlayerWorkerInOrder(model, player1View, player2View, player3View);
 
-            /**c1.asyncSend(model.getBoardCopy());
+            c1.asyncSend(model.getBoardCopy());
             c2.asyncSend(model.getBoardCopy());
             if(c3!=null)
                 c3.asyncSend(model.getBoardCopy());
-            */
+
             waitingConnection.clear();
             //gestione stampa primo turno
 
@@ -165,7 +167,7 @@ public class Server {
         this.playerNumber=playerNumber;
     }
 
-    public void setPlayerWorkerinOrder(Model model, View player1, View player2, View player3) {
+    public void setPlayerWorkerInOrder(Model model, View player1, View player2, View player3) {
         int compare;
         //trovare l'ordine di gioco tra i player
         compare = player1.getPlayer().getBirthdate().compareDate(player2.getPlayer().getBirthdate());

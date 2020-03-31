@@ -76,7 +76,7 @@ public class SocketClientConnection  extends Observable<String> implements Clien
     void close() {
         closeConnection();
         System.out.println("Deregistering client...");
-        server.deregisterConnection(this);
+        //server.deregisterConnection(this);
         System.out.println("Done!");
     }
 
@@ -110,7 +110,7 @@ public class SocketClientConnection  extends Observable<String> implements Clien
             setPlayerBirthdate(player,in);
             setPlayerColor(player,in);
 
-            //TODO: setWorkerPosition in order
+            //TODO: setWorkerPosition in (random, age) order
 
             /***/do{
                 do{
@@ -135,14 +135,33 @@ public class SocketClientConnection  extends Observable<String> implements Clien
             /***/
             server.lobby(this, player);
 
+            //TODO wait start command from server
+            /**while(waitForServerStart){
+             *  }
+             */
+             /*We can use this while with a value setted by Server
+             *  In the lobby function we can ask to each client in the order we choose to set their workers' position
+             *  When all the setting are done we "unlock" this while so each client can go on and play the game
+             * */
             while(isActive()){
                 /**Ciclo che processa l'input sul client
                  * */
                 move = in.nextLine();
-                //TODO build input
+                //TODO manage build input and card
+                /**send("Do you want to use your card power?(YES/NO)");
+                 * if(in.nextLine().toUpperCase().equals("YES"))
+                 *  playermove.setUsingCard(true);
+                 * else
+                 *  playermove.setUsingCard(false);
+                 *
+                 * For handle build input we can change the PlayerMove class
+                 * The input will be like YES 1-2,2-2,3
+                 *  The player want to use card's power, move the build
+                 *
+                 * */
                 //build= in.nextLine();
                 /**Questa notifiy chiama la update di message receiver in RemoteView
-                 * Perchè remoteView observes this
+                 * Perchè remoteView observes that
                  * */
                 notify(move);
             }

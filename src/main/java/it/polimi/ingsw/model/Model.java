@@ -17,10 +17,6 @@ public class Model extends Observable<MoveMessage> {
         this.board = new Board();
     }
 
-    public boolean isPlayerTurn(Player player) {
-        return player.getColor() == turn;
-    }
-
     public PlayerColor getTurn() {
         return turn;
     }
@@ -38,15 +34,20 @@ public class Model extends Observable<MoveMessage> {
         return board;
     }
 
-    //metodo che mi controlla se la mossa che voglio fare è possibile
-        //cella vuota, nelle 8 adiacenti e con un dislivello di massimo 1
-    public boolean isFeasibleMove(PlayerMove move){
-        if(move.getWorker().getWorkerPosition().isClosedTo(board.getCell(move.getRow(),move.getColumn()))){
-            //Se entro in questo if la cella scelta per quel worker è tra quelle possibili
-            return board.getCell(move.getRow(),move.getColumn()).isFree() &&
-                    ((board.getCell(move.getRow(),move.getColumn())).getLevel()-((move.getWorker().getWorkerPosition()).getLevel())<=1);
-        }
-        return false;
+    //metodi che mi controllano se la mossa che voglio fare è possibile
+        //mio turno, cella vuota e nelle 8 adiacenti e con un dislivello di massimo 1
+    public boolean isPlayerTurn(Player player) {
+        return player.getColor() == turn;
+    }
+
+    public boolean isReachableCell(PlayerMove move){
+        return move.getWorker().getWorkerPosition().isClosedTo(board.getCell(move.getRow(),move.getColumn()));
+    }
+    public boolean isEmptyCell(PlayerMove move){
+        return board.getCell(move.getRow(),move.getColumn()).isFree();
+    }
+    public boolean isLevelDifferenceAllowed(PlayerMove move){
+        return (board.getCell(move.getRow(), move.getColumn())).getLevel() - ((move.getWorker().getWorkerPosition()).getLevel()) <= 1;
     }
 
     //metodo che mi effettua i cambiamenti, setta la cella non free
