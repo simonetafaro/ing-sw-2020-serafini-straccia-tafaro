@@ -11,6 +11,7 @@ public class Worker implements Serializable {
     private boolean win;
 
 
+    public Worker(){}
     public Worker(Cell position, int number, PlayerColor color){
         this.currentPosition = position;
         this.workerNum = number;
