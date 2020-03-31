@@ -99,20 +99,20 @@ public class Server {
             waitingConnection.clear();
             //gestione stampa primo turno
 
-            if(model.isPlayerTurn(player1)){
+            if(model.getTurn()==(player1.getColor())){
                 //p1 è il primo
                 c1.asyncSend(gameMessage.moveMessage);
                 c2.asyncSend(gameMessage.waitMessage);
                 if(c3!=null)
                     c3.asyncSend(gameMessage.waitMessage);
             }else {
-                if(model.isPlayerTurn(player2)){
+                if(model.getTurn()==(player2.getColor())){
                     c2.asyncSend(gameMessage.moveMessage);
                     if(c3!=null)
                         c3.asyncSend(gameMessage.waitMessage);
                     c1.asyncSend(gameMessage.waitMessage);
                 }else{
-                    if(c3!=null && model.isPlayerTurn(player3)){
+                    if(c3!=null && model.getTurn()==(player3.getColor())){
                         c3.asyncSend(gameMessage.moveMessage);
                         c1.asyncSend(gameMessage.waitMessage);
                         c2.asyncSend(gameMessage.waitMessage);

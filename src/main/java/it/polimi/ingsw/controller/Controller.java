@@ -19,7 +19,8 @@ public class Controller implements Observer<PlayerMove> {
 
         /**Controlla che è il turno del giocatore che ha inviato la mossa
          * */
-        isPlayerTurn(move.getPlayer());
+        if(!isPlayerTurn(move.getPlayer()))
+            return;
         //Check input
         if(move.getRow()<0 || move.getRow()>=5 || move.getColumn()<0 || move.getColumn()>=5){
             move.getView().reportError(gameMessage.wrongInputMessage+"\n"+gameMessage.moveAgainMessage);
@@ -28,10 +29,14 @@ public class Controller implements Observer<PlayerMove> {
         /**Controlla che la cella scelta dal giocatore sia libera, tra quelle possibili
          * e che il dislivello non sia maggiore di 1
          * */
-        isReachableCell(move);
-        isEmptyCell(move);
-        isLevelDifferenceAllowed(move);
-        /**Nel caso di turno e mossa consentiti
+        if(!isReachableCell(move))
+            return;
+        if(!isEmptyCell(move))
+            return;
+        if(!isLevelDifferenceAllowed(move))
+            return;
+
+            /**Nel caso di turno e mossa consentiti
          * chiamo la model che va a effetturare la mossa.
          * */
         System.out.println("la mossa che voglio fare è fattibile");
