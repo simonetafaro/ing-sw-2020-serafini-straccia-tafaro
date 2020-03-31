@@ -14,7 +14,7 @@ public class PlayerMove {
     private final Player player;
     private final Worker worker;
     /**La view con cui interagisco
-     * */
+     **/
     private final View view;
 
     //TODO setting choosed card and add store build position

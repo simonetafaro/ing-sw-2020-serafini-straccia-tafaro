@@ -147,6 +147,7 @@ public class SocketClientConnection  extends Observable<String> implements Clien
                 /**Ciclo che processa l'input sul client
                  * */
                 move = in.nextLine();
+
                 //TODO manage build input and card
                 /**send("Do you want to use your card power?(YES/NO)");
                  * if(in.nextLine().toUpperCase().equals("YES"))

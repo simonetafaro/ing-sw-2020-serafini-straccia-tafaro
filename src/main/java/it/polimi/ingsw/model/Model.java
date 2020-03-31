@@ -34,21 +34,6 @@ public class Model extends Observable<MoveMessage> {
         return board;
     }
 
-    //metodi che mi controllano se la mossa che voglio fare è possibile
-        //mio turno, cella vuota e nelle 8 adiacenti e con un dislivello di massimo 1
-    public boolean isPlayerTurn(Player player) {
-        return player.getColor() == turn;
-    }
-
-    public boolean isReachableCell(PlayerMove move){
-        return move.getWorker().getWorkerPosition().isClosedTo(board.getCell(move.getRow(),move.getColumn()));
-    }
-    public boolean isEmptyCell(PlayerMove move){
-        return board.getCell(move.getRow(),move.getColumn()).isFree();
-    }
-    public boolean isLevelDifferenceAllowed(PlayerMove move){
-        return (board.getCell(move.getRow(), move.getColumn())).getLevel() - ((move.getWorker().getWorkerPosition()).getLevel()) <= 1;
-    }
 
     //metodo che mi effettua i cambiamenti, setta la cella non free
         //e controlla se il gioco è terminato nel caso avessi un vincitore
@@ -56,7 +41,7 @@ public class Model extends Observable<MoveMessage> {
 
         boolean hasWon = (move.getWorker().getWorkerPosition().getLevel()==2) &&
                             ((board.getCell(move.getRow(),move.getColumn())).getLevel()==3);
-
+        //Check if player with PAN wins
         board.getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).setFreeSpace(true);
         board.getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).deleteCurrWorker();
 
