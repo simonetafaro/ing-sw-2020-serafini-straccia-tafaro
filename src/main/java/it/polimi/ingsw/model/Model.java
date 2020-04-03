@@ -41,7 +41,7 @@ public class Model extends Observable<MoveMessage> {
 
         boolean hasWon = (move.getWorker().getWorkerPosition().getLevel()==2) &&
                             ((board.getCell(move.getRow(),move.getColumn())).getLevel()==3);
-        //Check if player with PAN wins
+
         board.getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).setFreeSpace(true);
         board.getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).deleteCurrWorker();
 
@@ -49,6 +49,23 @@ public class Model extends Observable<MoveMessage> {
         (board.getCell(move.getRow(),move.getColumn())).setFreeSpace(false);
         board.getCell(move.getRow(),move.getColumn()).setCurrWorker(move.getWorker());
 
+        notifyViewWinner(move,hasWon);
+
+    }
+
+    //metodi che mi controllano se la mossa che voglio fare è possibile
+    //mio turno, cella vuota e nelle 8 adiacenti e con un dislivello di massimo 1
+    public boolean isReachableCell(PlayerMove move){
+        return move.getWorker().getWorkerPosition().isClosedTo(board.getCell(move.getRow(),move.getColumn()));
+    }
+    public boolean isEmptyCell(PlayerMove move){
+        return board.getCell(move.getRow(),move.getColumn()).isFree();
+    }
+    public boolean isLevelDifferenceAllowed(PlayerMove move){
+        return (board.getCell(move.getRow(), move.getColumn())).getLevel() - ((move.getWorker().getWorkerPosition()).getLevel()) <= 1;
+    }
+
+    public void notifyViewWinner(PlayerMove move, boolean hasWon){
         /**Questa notify sollecita la update di Player1View e Player2View
          * passando come paramentro la nuova board e il giocatore dell'ultima mossa
          */
@@ -62,11 +79,10 @@ public class Model extends Observable<MoveMessage> {
                 }
                 j++;
             }
-            notify(new MoveMessage((Board) board.clone(), move.getPlayer(), hasWon, nextTurn));
+            notifyObserver(new MoveMessage((Board) board.clone(), move.getPlayer(), hasWon, nextTurn));
         }catch (CloneNotSupportedException e){
             System.err.println(e.getMessage());
         }
-
     }
 
     public void updateTurn(){

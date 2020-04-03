@@ -1,29 +1,27 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.model.Board;
-import it.polimi.ingsw.model.Cell;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.Worker;
+import it.polimi.ingsw.model.PlayerMove;
 import it.polimi.ingsw.observ.Observable;
-import it.polimi.ingsw.utils.CustomDate;
-import it.polimi.ingsw.utils.PlayerColor;
+import it.polimi.ingsw.utils.gameMessage;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class SocketClientConnection  extends Observable<String> implements ClientConnection, Runnable{
 
-    private Socket socket;
+    private final Socket socket;
     private ObjectOutputStream out;
     private Server server;
     private boolean firstPlayer;
     //questo attributo potrebbe servire quando i workers di questo client non si possono più muovere
     //setto questo attributo a false
     private boolean active = true;
+    private Thread t;
+    private boolean readCard, askMove, askBuild;
 
     public SocketClientConnection(Socket socket, Server server, boolean first) {
         this.socket = socket;
@@ -31,35 +29,35 @@ public class SocketClientConnection  extends Observable<String> implements Clien
         this.firstPlayer=first;
     }
 
+    public void setReadCard(boolean readCard) {
+        this.readCard = readCard;
+    }
+
+    public void setAskMove(boolean askMove) {
+        this.askMove = askMove;
+    }
+
+    public void setAskBuild(boolean askBuild) {
+        this.askBuild = askBuild;
+    }
+
     synchronized boolean isActive(){
         return active;
     }
-
-    synchronized public void send(Object message) {
-        try {
-            out.reset();
-            out.writeObject(message);
-            out.flush();
-        } catch(IOException e){
-            System.err.println(e.getMessage());
-        }
+    synchronized public Socket getSocket() {
+        return socket;
     }
-
     synchronized public String read(){
         Scanner in;
         String input="";
         try {
-                in = new Scanner(socket.getInputStream());
-                input=in.nextLine();
-                return input;
+            in = new Scanner(socket.getInputStream());
+            input=in.nextLine();
+            return input;
         }catch (IOException | NoSuchElementException e) {
             System.err.println("Error!" + e.getMessage());
         }
         return input;
-    }
-
-    synchronized public Socket getSocket() {
-        return socket;
     }
 
     @Override
@@ -72,12 +70,21 @@ public class SocketClientConnection  extends Observable<String> implements Clien
         }
         active = false;
     }
-
     void close() {
         closeConnection();
         System.out.println("Deregistering client...");
         //server.deregisterConnection(this);
         System.out.println("Done!");
+    }
+
+    synchronized public void send(Object message) {
+        try {
+            out.reset();
+            out.writeObject(message);
+            out.flush();
+        } catch(IOException e){
+            System.err.println(e.getMessage());
+        }
     }
 
     @Override
@@ -107,140 +114,87 @@ public class SocketClientConnection  extends Observable<String> implements Clien
             send("What is your name?");
             String move = in.nextLine();
             player.setNickname(move);
-            setPlayerBirthdate(player,in);
-            setPlayerColor(player,in);
+            server.getStartController().setPlayerBirthdate(this,player,in);
+            server.getStartController().setPlayerColor(this,player,in);
 
-            //TODO: setWorkerPosition in (random, age) order
-
-            /***/do{
-                do{
-                    send("Where do you want to put your worker1 (x,y)");
-                    cellCoord = in.nextLine().split(",");
-                    x=Integer.parseInt(cellCoord[0]);
-                    y=Integer.parseInt(cellCoord[1]);
-                }while( x<0 || x>=5 || y<0 || y>=5);
-            }while(!server.getModel().getBoard().getCell(x,y).isFree());
-            player.setWorker1(new Worker(server.getModel().getBoard().getCell(x,y), 1,player.getColor()));
-
-            do{
-                do{
-                    send("Where do you want to put your worker2 (x,y)");
-                    cellCoord = in.nextLine().split(",");
-                    x=Integer.parseInt(cellCoord[0]);
-                    y=Integer.parseInt(cellCoord[1]);
-                }while( x<0 || x>=5 || y<0 || y>=5);
-            }while(!server.getModel().getBoard().getCell(x,y).isFree());
-            player.setWorker2(new Worker(server.getModel().getBoard().getCell(x,y), 2,player.getColor()));
-
-            /***/
             server.lobby(this, player);
 
-            //TODO wait start command from server
-            /**while(waitForServerStart){
-             *  }
-             */
-             /*We can use this while with a value setted by Server
-             *  In the lobby function we can ask to each client in the order we choose to set their workers' position
-             *  When all the setting are done we "unlock" this while so each client can go on and play the game
-             * */
-            while(isActive()){
-                /**Ciclo che processa l'input sul client
-                 * */
-                move = in.nextLine();
 
-                //TODO manage build input and card
-                /**send("Do you want to use your card power?(YES/NO)");
-                 * if(in.nextLine().toUpperCase().equals("YES"))
-                 *  playermove.setUsingCard(true);
-                 * else
-                 *  playermove.setUsingCard(false);
-                 *
-                 * For handle build input we can change the PlayerMove class
-                 * The input will be like YES 1-2,2-2,3
-                 *  The player want to use card's power, move the build
-                 *
-                 * */
-                //build= in.nextLine();
-                /**Questa notifiy chiama la update di message receiver in RemoteView
-                 * Perchè remoteView observes that
-                 * */
-                notify(move);
-            }
         }catch (IOException | NoSuchElementException e) {
             send("error catched");
             System.err.println("Error!" + e.getMessage());
-        }finally{
+        }/**finally{
             send("ramo finally della socketClientConnection");
             close();
-        }
+        }*/
     }
 
-    public void setPlayerColor(Player currentPlayer,Scanner in){
-        String color= null;
-            try {
-                do{
-                    send("Choose the color :GREY, WHITE and BLUE");
-                    color = in.nextLine().toUpperCase();
-                }while(checkColorUnicity(color));
-                currentPlayer.setColor(PlayerColor.valueOf(color));
-                return;
+
+    public void getInputFromClient(){
+        t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String move,build,card;
+                Scanner in;
+                try {
+                    in = new Scanner(socket.getInputStream());
+                    while(isActive()){
+                            //send(gameMessage.moveMessage);
+                            //1-1,2
+                                askMove(in);
+                                //System.out.println("post wait pippo");
+                                //send("pronto per la build");
+                            //build=in.nextLine();
+                            //notifyObserver(build);
+                            //wait();
+
+                            //askBuild(in);
+                        //}
+                        //se voglio usare una carta chiamo una sequenza custom di askMove e askBuild
+                        //build= in.nextLine();
+                        /* sulle carte chiamo i metodi sulla carta
+                         *  lo switch sovraccarica
+                         *  }
+                         */
+                        /*We can use this while with a value setted by Server
+                         *  In the lobby function we can ask to each client in the order we choose to set their workers' position
+                         *  When all the setting are done we "unlock" this while so each client can go on and play the game
+                         * */
+                        /*
+                         * if(in.nextLine().toUpperCase().equals("YES"))
+                         *  playermove.setUsingCard(true);
+                         * else
+                         *  playermove.setUsingCard(false);
+                         *
+                         * For handle build input we can change the PlayerMove class
+                         * The input will be like YES 1-2,2-2,3
+                         *  The player want to use card's power, move the build
+                         *
+                         * */
+                        /*Questa notifiy chiama la update di message receiver in RemoteView
+                         * Perchè remoteView observes that
+                         */
+
+                    }
+                }catch(Exception e){
+                    System.out.println("End of getInputFromClient");
+                    //setActive(false);
+                }
             }
-            catch (IllegalArgumentException e ){
-                send("This color doesn't exist!");
-            }
+        });
+        t.start();
+
     }
 
-    public boolean checkColorUnicity(String color){
-        switch (color){
-            case "BLUE":   if(!server.isBlue()) {
-                            server.setBlue(true);
-                            return false;
-                        }
-                        else {
-                            send("This color is been already choosen!");
-                            return true;
-                        }
-            case "WHITE": if(!server.isWhite()){
-                            server.setWhite(true);
-                            return false;
-                        }
-                        else {
-                            send("This color is been already choosen!");
-                            return true;
-                        }
-            case "GREY":  if(!server.isGrey()){
-                            server.setGrey(true);
-                            return false;
-                        }
-                        else {
-                            send("This color is been already choosen!");
-                            return true;
-                        }
-            default:    send("This color doesn't exist!");
-                        return true;
-        }
+    /*public void notifyasd(String move){
+        notifyObserver(move);
+    }*/
+    private void askMove(Scanner in){
+        String move=in.nextLine();
+        notifyObserver(move);
     }
-
-    public void setPlayerBirthdate(Player currPlayer,Scanner in){
-        CustomDate birthday = new CustomDate();
-        int d,m,y;
-        while(true){
-            try {
-                send("Insert your birth's day");
-                d=Integer.parseInt(in.nextLine());
-                birthday.setDay(d);
-                send("Insert your birth's month");
-                m=Integer.parseInt(in.nextLine());
-                birthday.setMonth(m);
-                send("Insert your birth's year");
-                y=Integer.parseInt(in.nextLine());
-                birthday.setYear(y);
-                currPlayer.setBirthdate(birthday);
-                break;
-            }
-            catch (InputMismatchException e){
-                System.out.println("Ops, I'would a number please ");
-            }
-        }
+    private void readCard(Scanner in){
+        String card= in.nextLine();
+        notifyObserver(card);
     }
 }

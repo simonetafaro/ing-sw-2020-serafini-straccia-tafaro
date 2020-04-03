@@ -19,45 +19,43 @@ public class Controller implements Observer<PlayerMove> {
 
         /**Controlla che è il turno del giocatore che ha inviato la mossa
          * */
-        if(!isPlayerTurn(move.getPlayer()))
+        if(!isPlayerTurn(move.getPlayer())){
+            move.getView().reportError(gameMessage.wrongTurnMessage+"\n"+gameMessage.waitMessage);
             return;
+        }
+
         //Check input
         if(move.getRow()<0 || move.getRow()>=5 || move.getColumn()<0 || move.getColumn()>=5){
             move.getView().reportError(gameMessage.wrongInputMessage+"\n"+gameMessage.moveAgainMessage);
             return;
         }
+
         /**Controlla che la cella scelta dal giocatore sia libera, tra quelle possibili
          * e che il dislivello non sia maggiore di 1
          * */
-        if(!isReachableCell(move))
+        if(!model.isReachableCell(move)){
+            move.getView().reportError(gameMessage.notReachableCellMessage+"\n"+gameMessage.moveAgainMessage);
             return;
-        if(!isEmptyCell(move))
+        }
+        if(!model.isEmptyCell(move)){
+            move.getView().reportError(gameMessage.occupiedCellMessage+"\n"+gameMessage.moveAgainMessage);
             return;
-        if(!isLevelDifferenceAllowed(move))
+        }
+        if(!model.isLevelDifferenceAllowed(move)){
+            move.getView().reportError(gameMessage.tooHighCellMessage+"\n"+gameMessage.moveAgainMessage);
             return;
+        }
 
+        model.performMove(move);
             /**Nel caso di turno e mossa consentiti
          * chiamo la model che va a effetturare la mossa.
          * */
-        System.out.println("la mossa che voglio fare è fattibile");
-        model.performMove(move);
+        //System.out.println("la mossa che voglio fare è fattibile");
         model.updateTurn();
     }
 
-    //metodi che mi controllano se la mossa che voglio fare è possibile
-    //mio turno, cella vuota e nelle 8 adiacenti e con un dislivello di massimo 1
     public boolean isPlayerTurn(Player player) {
-
         return player.getColor() == model.getTurn();
-    }
-    public boolean isReachableCell(PlayerMove move){
-        return move.getWorker().getWorkerPosition().isClosedTo(model.getBoard().getCell(move.getRow(),move.getColumn()));
-    }
-    public boolean isEmptyCell(PlayerMove move){
-        return model.getBoard().getCell(move.getRow(),move.getColumn()).isFree();
-    }
-    public boolean isLevelDifferenceAllowed(PlayerMove move){
-        return (model.getBoard().getCell(move.getRow(), move.getColumn())).getLevel() - ((move.getWorker().getWorkerPosition()).getLevel()) <= 1;
     }
 
     @Override
@@ -71,4 +69,5 @@ public class Controller implements Observer<PlayerMove> {
          * */
         performMove(message);
     }
+
 }

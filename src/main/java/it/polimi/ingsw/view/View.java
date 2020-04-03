@@ -1,11 +1,9 @@
 package it.polimi.ingsw.view;
-import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.MoveMessage;
 import it.polimi.ingsw.model.PlayerMove;
 import it.polimi.ingsw.observ.*;
-
-import java.io.IOException;
+import it.polimi.ingsw.server.ClientConnection;
 
 public abstract class View extends Observable<PlayerMove> implements Observer<MoveMessage> {
 
@@ -31,11 +29,12 @@ public abstract class View extends Observable<PlayerMove> implements Observer<Mo
         /**Questa notify chiama la update all'interno del controller
          * perchè il controller è observer di Player1View e Player2View
          * */
-        notify(new PlayerMove(player, worker, row, column, this));
+        notifyObserver(new PlayerMove(player, worker, row, column, this));
     }
 
     public void reportError(String message){
         showMessage(message);
     }
 
+    public abstract ClientConnection getClientConnection();
 }

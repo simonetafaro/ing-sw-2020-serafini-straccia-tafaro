@@ -34,7 +34,6 @@ public class Client {
             public void run() {
                 try {
                     while (isActive()) {
-                        //System.out.println("Read From Socket");
                         Object inputObject = socketIn.readObject();
                         if(inputObject instanceof String){
                             System.out.println((String)inputObject);
@@ -45,7 +44,7 @@ public class Client {
                         }
                     }
                 }catch (Exception e){
-                    System.out.println("fine della read");
+                    //System.out.println("fine della read");
                     setActive(false);
                 }
             }
@@ -66,7 +65,7 @@ public class Client {
                         socketOut.flush();
                     }
                 }catch(Exception e){
-                    System.out.println("fine della write");
+                    //System.out.println("fine della write");
                     setActive(false);
                 }
             }

@@ -1,24 +1,14 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.MoveMessage;
-import it.polimi.ingsw.model.Worker;
 import it.polimi.ingsw.observ.Observer;
 import it.polimi.ingsw.server.ClientConnection;
 import it.polimi.ingsw.utils.gameMessage;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.net.SocketException;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
-
 public class RemoteView extends View {
 
-    private class MessageReceiver implements Observer<String> {
+    private class MessageReceiver implements Observer<String>{
         @Override
         public void update(String message) {
             /**Questa update è sollecitata dalla notify di una SocketClientConnection.
@@ -53,7 +43,8 @@ public class RemoteView extends View {
 
     @Override
     protected void showMessage(Object message) {
-        clientConnection.asyncSend(message);
+        //clientConnection.asyncSend(message);
+        clientConnection.send(message);
     }
 
     @Override
@@ -63,7 +54,6 @@ public class RemoteView extends View {
          * */
         //Mostro il nuovo campo di gioco aggiornato
         System.out.println("Notifica alle remoteview dal model");
-
         try {
             showMessage(message.getBoard().clone());
         }catch (CloneNotSupportedException e){
@@ -78,6 +68,7 @@ public class RemoteView extends View {
                  * se sono nella sua view mando messaggio WIN
                  * altrimenti mando messaggio LOSE
                  **/
+
                 resultMsg = gameMessage.winMessage + "\n";
             } else {
                 resultMsg = gameMessage.loseMessage + "\n";
@@ -92,6 +83,11 @@ public class RemoteView extends View {
         /**Stampo a video del client il messaggio creato
          * */
         showMessage(resultMsg);
-    }
 
+
+        }
+
+    public ClientConnection getClientConnection() {
+        return clientConnection;
+    }
 }

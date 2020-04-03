@@ -20,12 +20,13 @@ public class Observable<T> {
     }
 
 
-    protected void notify(T message){
+    protected void notifyObserver(T message){
         synchronized (observers) {
             for(Observer<T> observer : observers){
                 observer.update(message);
             }
         }
     }
+
 
 }

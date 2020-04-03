@@ -1,8 +1,10 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.controller.StartController;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.Model;
+import it.polimi.ingsw.model.Worker;
 import it.polimi.ingsw.view.RemoteView;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.utils.gameMessage;
@@ -11,6 +13,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -24,17 +27,22 @@ public class Server {
 
     private int playerNumber;
     private boolean firstPlayer;
-    private boolean Blue, Grey, White;
     private Model model;
+    private StartController startController;
 
     public Server() throws IOException {
         this.serverSocket = new ServerSocket(PORT);
         this.firstPlayer=true;
         this.model = new Model();
+        this.startController=new StartController();
     }
 
     public synchronized Model getModel() {
         return model;
+    }
+
+    public StartController getStartController() {
+        return startController;
     }
 
     /**public synchronized void deregisterConnection(ClientConnection c) {
@@ -89,7 +97,8 @@ public class Server {
                 model.addObserver(player3View);
                 player3View.addObserver(controller);
             }
-            setPlayerWorkerInOrder(model, player1View, player2View, player3View);
+
+            startController.setPlayerWorkerInOrder(model, player1View, player2View, player3View);
 
             c1.asyncSend(model.getBoardCopy());
             c2.asyncSend(model.getBoardCopy());
@@ -102,24 +111,30 @@ public class Server {
             if(model.getTurn()==(player1.getColor())){
                 //p1 è il primo
                 c1.asyncSend(gameMessage.moveMessage);
+                c1.setReadCard(true);
                 c2.asyncSend(gameMessage.waitMessage);
                 if(c3!=null)
                     c3.asyncSend(gameMessage.waitMessage);
             }else {
                 if(model.getTurn()==(player2.getColor())){
                     c2.asyncSend(gameMessage.moveMessage);
+                    c2.setReadCard(true);
                     if(c3!=null)
                         c3.asyncSend(gameMessage.waitMessage);
                     c1.asyncSend(gameMessage.waitMessage);
                 }else{
                     if(c3!=null && model.getTurn()==(player3.getColor())){
                         c3.asyncSend(gameMessage.moveMessage);
+                        c3.setReadCard(true);
                         c1.asyncSend(gameMessage.waitMessage);
                         c2.asyncSend(gameMessage.waitMessage);
                     }
                 }
             }
-            //model.getBoardCopy().printBoard();
+            c1.getInputFromClient();
+            c2.getInputFromClient();
+            if(c3!=null)
+                c3.getInputFromClient();
         }
     }
 
@@ -142,66 +157,9 @@ public class Server {
         }
     }
 
-    public synchronized boolean isBlue() {
-            return Blue;
-    }
-    public synchronized boolean isGrey() {
-            return Grey;
-
-    }
-    public synchronized boolean isWhite() {
-            return White;
-    }
-    public synchronized void setBlue(boolean blue) {
-            Blue = blue;
-    }
-    public synchronized void setGrey(boolean grey) {
-            Grey = grey;
-    }
-    public synchronized void setWhite(boolean white) {
-            White = white;
-    }
-
     public synchronized void setPlayerNumber(int playerNumber){
         System.out.println("Set playerNumber");
         this.playerNumber=playerNumber;
     }
 
-    public void setPlayerWorkerInOrder(Model model, View player1, View player2, View player3) {
-        int compare;
-        //trovare l'ordine di gioco tra i player
-        compare = player1.getPlayer().getBirthdate().compareDate(player2.getPlayer().getBirthdate());
-        if(compare==1){
-            //player1 è più giovane
-            if(player3!=null){
-                compare= player1.getPlayer().getBirthdate().compareDate(player3.getPlayer().getBirthdate());
-                if(compare==1){
-                    //il piu giovane è player1
-                    model.setPlayOrder(player1.getPlayer().getColor(),player2.getPlayer().getColor(), player3.getPlayer().getColor());
-                }
-                if(compare==-1 || compare ==0){
-                    //il più giovane è player 3
-                    model.setPlayOrder(player3.getPlayer().getColor(),player1.getPlayer().getColor(), player2.getPlayer().getColor());
-                }
-            }else{
-                model.setPlayOrder(player1.getPlayer().getColor(),player2.getPlayer().getColor());
-            }
-        }else{
-            //player 2 è più giovane
-            if(player3!=null){
-                compare= player2.getPlayer().getBirthdate().compareDate(player3.getPlayer().getBirthdate());
-                if(compare==1){
-                    //il piu giovane è player2
-                    model.setPlayOrder(player2.getPlayer().getColor(),player3.getPlayer().getColor(), player1.getPlayer().getColor());
-                }
-                if(compare==-1 || compare ==0){
-                    //il più giovane è player 3
-                    model.setPlayOrder(player3.getPlayer().getColor(),player1.getPlayer().getColor(), player2.getPlayer().getColor());
-                }
-            }
-            else{
-                model.setPlayOrder(player2.getPlayer().getColor(),player1.getPlayer().getColor());
-            }
-        }
     }
-}

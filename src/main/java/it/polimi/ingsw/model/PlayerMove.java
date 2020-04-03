@@ -12,23 +12,17 @@ public class PlayerMove {
     /**Il player che ha fatto la mossa, e il worker scelto (1 o 2)
      * */
     private final Player player;
-    private final Worker worker;
+    private Worker worker;
     /**La view con cui interagisco
      **/
     private final View view;
+    //private boolean usingCard;
 
     //TODO setting choosed card and add store build position
-    /**private boolean usingCard;
+    /**
      * With this attribute I can check if the user during this turn wants to use his card's power
      * */
 
-    public PlayerMove(Worker worker, int row, int column) {
-        this.player = null;
-        this.worker=worker;
-        this.row = row;
-        this.column = column;
-        this.view = null;
-    }
 
     public PlayerMove(Player player, int worker, int row, int column, View view) {
         this.player = player;
@@ -60,4 +54,6 @@ public class PlayerMove {
     public Worker getWorker() {
         return worker;
     }
+
+
 }
