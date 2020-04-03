@@ -110,21 +110,21 @@ public class Server {
 
             if(model.getTurn()==(player1.getColor())){
                 //p1 è il primo
-                c1.asyncSend(gameMessage.moveMessage);
+                c1.asyncSend(gameMessage.usingCardMessage);
                 c1.setReadCard(true);
                 c2.asyncSend(gameMessage.waitMessage);
                 if(c3!=null)
                     c3.asyncSend(gameMessage.waitMessage);
             }else {
                 if(model.getTurn()==(player2.getColor())){
-                    c2.asyncSend(gameMessage.moveMessage);
+                    c2.asyncSend(gameMessage.usingCardMessage);
                     c2.setReadCard(true);
                     if(c3!=null)
                         c3.asyncSend(gameMessage.waitMessage);
                     c1.asyncSend(gameMessage.waitMessage);
                 }else{
                     if(c3!=null && model.getTurn()==(player3.getColor())){
-                        c3.asyncSend(gameMessage.moveMessage);
+                        c3.asyncSend(gameMessage.usingCardMessage);
                         c3.setReadCard(true);
                         c1.asyncSend(gameMessage.waitMessage);
                         c2.asyncSend(gameMessage.waitMessage);

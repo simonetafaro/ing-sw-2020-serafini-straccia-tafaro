@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.concurrent.CountDownLatch;
 
 public class SocketClientConnection  extends Observable<String> implements ClientConnection, Runnable{
 
@@ -22,11 +23,17 @@ public class SocketClientConnection  extends Observable<String> implements Clien
     private boolean active = true;
     private Thread t;
     private boolean readCard, askMove, askBuild;
+    private static CountDownLatch latchMove, latchTurn;
+
 
     public SocketClientConnection(Socket socket, Server server, boolean first) {
         this.socket = socket;
         this.server = server;
         this.firstPlayer=first;
+    }
+
+    public CountDownLatch getLatchMove() {
+        return latchMove;
     }
 
     public void setReadCard(boolean readCard) {
@@ -134,16 +141,31 @@ public class SocketClientConnection  extends Observable<String> implements Clien
         t = new Thread(new Runnable() {
             @Override
             public void run() {
-                String move,build,card;
+                String move,build,cardString;
+                boolean card=false;
                 Scanner in;
                 try {
                     in = new Scanner(socket.getInputStream());
                     while(isActive()){
-                            //send(gameMessage.moveMessage);
-                            //1-1,2
+                        latchTurn= new CountDownLatch(1);
+                        while(latchTurn.getCount()!=0){
+                                cardString=readCard(in);
+                                notifyObserver(cardString);
+                        }
+                            //YES/NO
+                            if(!card){
+                                latchMove= new CountDownLatch(1);
+                                //1-1,1
                                 askMove(in);
+                                latchMove.await();
+                                latchMove= new CountDownLatch(1);
                                 //System.out.println("post wait pippo");
-                                //send("pronto per la build");
+                                //1-1,2
+                                askBuild(in);
+                                latchMove.await();
+                            }else{
+
+                            }
                             //build=in.nextLine();
                             //notifyObserver(build);
                             //wait();
@@ -193,8 +215,13 @@ public class SocketClientConnection  extends Observable<String> implements Clien
         String move=in.nextLine();
         notifyObserver(move);
     }
-    private void readCard(Scanner in){
-        String card= in.nextLine();
+    private void askBuild(Scanner in){
+        String build=in.nextLine();
+        notifyObserver(build);
+    }
+    private String readCard(Scanner in){
+        String card= in.nextLine().toUpperCase();
         notifyObserver(card);
+        return card;
     }
 }

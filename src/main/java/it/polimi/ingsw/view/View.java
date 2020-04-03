@@ -31,8 +31,12 @@ public abstract class View extends Observable<PlayerMove> implements Observer<Mo
          * */
         notifyObserver(new PlayerMove(player, worker, row, column, this));
     }
+    void handleCardChoose(String message){
+
+    }
 
     public void reportError(String message){
+        getClientConnection().getLatchMove().countDown();
         showMessage(message);
     }
 

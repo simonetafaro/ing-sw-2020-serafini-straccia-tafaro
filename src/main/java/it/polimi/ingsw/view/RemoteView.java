@@ -20,6 +20,10 @@ public class RemoteView extends View {
             try{
                 /**Gestione del format dell'input 1-1,2 ES:[Worker1, move to cell (1,2)]
                  */
+                //1-2,3
+                if(message.equals("YES")||message.equals("NO")){
+                    handleCardChoose(message);
+                }
                 handleMove( Integer.parseInt(message.substring(0,1)),
                             Integer.parseInt(message.substring(2,3)),
                             Integer.parseInt(message.substring(4,5)));
@@ -84,6 +88,8 @@ public class RemoteView extends View {
          * */
         showMessage(resultMsg);
 
+        if(message.getPlayer() == getPlayer())
+            clientConnection.getLatchMove().countDown();
 
         }
 
