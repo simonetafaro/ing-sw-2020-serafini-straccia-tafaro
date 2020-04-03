@@ -70,7 +70,7 @@ public class Player {
         return birthdate;
     }
 
-    public void setWorkerPosition(Board myBoard){
+  /*  public void setWorkerPosition(Board myBoard){
         int x,y;
         Scanner in = new Scanner(System.in);
         //System.out.println(nickname);
@@ -115,7 +115,7 @@ public class Player {
         return worker2Stuck;
     }
 
-    public void play(Board islandBoard){
+   /* public void play(Board islandBoard){
         Scanner in = new Scanner(System.in);
         int x,y;
         System.out.println(this.getNickname()+" which worker do you want to move: Worker1 or Worker2 ?");
@@ -190,5 +190,5 @@ public class Player {
         }
         this.worker2Stuck =false;
         this.worker1Stuck =false;
-    }
+    }*/
 }

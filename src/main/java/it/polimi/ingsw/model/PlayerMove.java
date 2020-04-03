@@ -19,6 +19,15 @@ public class PlayerMove {
     //private boolean usingCard;
 
     //TODO setting choosed card and add store build position
+
+    public PlayerMove( Worker worker, int row, int column) {
+        this.worker=worker;
+        this.player=null;
+        this.row = row;
+        this.column = column;
+        this.view = null;
+    }
+
     /**
      * With this attribute I can check if the user during this turn wants to use his card's power
      * */
