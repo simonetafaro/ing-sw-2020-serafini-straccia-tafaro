@@ -9,6 +9,7 @@ public class Worker implements Serializable {
     private Cell currentPosition;
     private PlayerColor color;
     private boolean win;
+    private boolean stuck;
 
 
     public Worker(){}
@@ -20,10 +21,21 @@ public class Worker implements Serializable {
         position.setCurrWorker(this);
     }
 
+    public void setWorkerPosition(Cell cell){
+        this.currentPosition = cell;
+        cell.setFreeSpace(false);
+        cell.setCurrWorker(this);
+    }
+    public void setStuck(boolean stuck) {
+        this.stuck = stuck;
+    }
+
+    public Cell getWorkerPosition(){
+        return this.currentPosition;
+    }
     public int getWorkerNum() {
         return workerNum;
     }
-
     public char getColor() {
         switch (this.color){
             case WHITE: return 'W';
@@ -33,55 +45,8 @@ public class Worker implements Serializable {
         }
 
     }
-
-    public void setWorkerPosition(Cell cell){
-        this.currentPosition = cell;
-        cell.setFreeSpace(false);
-        cell.setCurrWorker(this);
-    }
-
-    public Cell getWorkerPosition(){
-        return this.currentPosition;
-    }
-
-    public boolean winner() {
-        return win;
-    }
-
-    public boolean move(Cell cell) {
-            if (this.getWorkerPosition().isClosedTo(cell) && cell.isFree()) {
-
-                if (cell.getLevel() - currentPosition.getLevel() <= 1) {
-                    if(currentPosition.getLevel()==2 && cell.getLevel()==3){
-                        win = true;
-                    }
-                    currentPosition.setFreeSpace(true);
-                    currentPosition.deleteCurrWorker();
-                    this.setWorkerPosition(cell);
-
-                    return true;
-                }
-                else{
-                    return false;
-                }
-            }
-                else {
-                    System.out.println("Your move is not valid");
-                    return false;
-
-            }
-    }
-
-    public boolean build(Cell cell){
-        if (this.getWorkerPosition().isClosedTo(cell) && cell.isFree()) {
-           cell.setLevel(cell.getLevel()+1);
-           return true;
-        }
-        else{
-            System.out.println("Your build is not valid");
-            return false;
-        }
-
+    public boolean isStuck() {
+        return stuck;
     }
 
     public void clear(){

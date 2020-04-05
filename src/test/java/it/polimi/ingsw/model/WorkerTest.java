@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WorkerTest {
 
-    @Test
+  /*  @Test
 //controlla che la cella venga setta a occupata dopo la set
     void TestSetWorkerPosition() {
         Cell cell = new Cell(0, 0);
@@ -92,5 +92,5 @@ class WorkerTest {
         worker.setWorkerPosition(cell);
         cell2.setFreeSpace(true);
         assertTrue(worker.build(cell2));
-    }
+    }*/
 }

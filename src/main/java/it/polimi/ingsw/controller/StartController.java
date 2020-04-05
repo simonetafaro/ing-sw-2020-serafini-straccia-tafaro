@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.Worker;
 import it.polimi.ingsw.server.ClientConnection;
 import it.polimi.ingsw.utils.CustomDate;
@@ -104,7 +105,7 @@ public class StartController {
         White = white;
     }
 
-    public void setPlayerWorkerInOrder(Model model, View player1, View player2, View player3) {
+    public Turn setPlayerWorkerInOrder(Model model, View player1, View player2, View player3) {
         int compare;
         //trovare l'ordine di gioco tra i player
         compare = player1.getPlayer().getBirthdate().compareDate(player2.getPlayer().getBirthdate());
@@ -118,6 +119,7 @@ public class StartController {
                     setWorkerPosition(model, player1);
                     setWorkerPosition(model, player2);
                     setWorkerPosition(model, player3);
+                    return setTurn(player1.getPlayer(),player2.getPlayer(), player3.getPlayer());
                 }
                 if(compare==-1 || compare ==0){
                     //il più giovane è player 3
@@ -125,11 +127,13 @@ public class StartController {
                     setWorkerPosition(model, player3);
                     setWorkerPosition(model, player1);
                     setWorkerPosition(model, player2);
+                    return setTurn(player3.getPlayer(),player1.getPlayer(), player2.getPlayer());
                 }
             }else{
                 model.setPlayOrder(player1.getPlayer().getColor(),player2.getPlayer().getColor());
                 setWorkerPosition(model, player1);
                 setWorkerPosition(model, player2);
+                return setTurn(player1.getPlayer(),player2.getPlayer());
             }
         }else{
             //player 2 è più giovane
@@ -141,6 +145,7 @@ public class StartController {
                     setWorkerPosition(model, player2);
                     setWorkerPosition(model, player3);
                     setWorkerPosition(model, player1);
+                    return setTurn(player2.getPlayer(),player3.getPlayer(),player1.getPlayer());
                 }
                 if(compare==-1 || compare ==0){
                     //il più giovane è player 3
@@ -148,14 +153,17 @@ public class StartController {
                     setWorkerPosition(model, player3);
                     setWorkerPosition(model, player1);
                     setWorkerPosition(model, player2);
+                    return setTurn(player3.getPlayer(),player1.getPlayer(),player2.getPlayer());
                 }
             }
             else{
                 model.setPlayOrder(player2.getPlayer().getColor(),player1.getPlayer().getColor());
                 setWorkerPosition(model, player2);
                 setWorkerPosition(model, player1);
+                return setTurn(player2.getPlayer(),player1.getPlayer());
             }
         }
+        return null;
     }
 
     public void setWorkerPosition(Model model, View player){
@@ -191,5 +199,11 @@ public class StartController {
 
     }
 
+    public Turn setTurn(Player p1, Player p2, Player p3){
+        return new Turn(p1.setMyTurn(),p2.setMyTurn(),p3.setMyTurn());
+    }
 
+    public Turn setTurn(Player p1, Player p2){
+        return new Turn(p1.setMyTurn(),p2.setMyTurn());
+    }
 }

@@ -21,31 +21,13 @@ public class SocketClientConnection  extends Observable<String> implements Clien
     //questo attributo potrebbe servire quando i workers di questo client non si possono più muovere
     //setto questo attributo a false
     private boolean active = true;
-    private Thread t;
-    private boolean readCard, askMove, askBuild;
-    private static CountDownLatch latchMove, latchTurn;
+    private static CountDownLatch latchTurn;
 
 
     public SocketClientConnection(Socket socket, Server server, boolean first) {
         this.socket = socket;
         this.server = server;
         this.firstPlayer=first;
-    }
-
-    public CountDownLatch getLatchMove() {
-        return latchMove;
-    }
-
-    public void setReadCard(boolean readCard) {
-        this.readCard = readCard;
-    }
-
-    public void setAskMove(boolean askMove) {
-        this.askMove = askMove;
-    }
-
-    public void setAskBuild(boolean askBuild) {
-        this.askBuild = askBuild;
     }
 
     synchronized boolean isActive(){
@@ -138,65 +120,22 @@ public class SocketClientConnection  extends Observable<String> implements Clien
 
 
     public void getInputFromClient(){
-        t = new Thread(new Runnable() {
+       Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                String move,build,cardString;
-                boolean card=false;
+                String move;
                 Scanner in;
                 try {
                     in = new Scanner(socket.getInputStream());
                     while(isActive()){
-                        latchTurn= new CountDownLatch(1);
-                        while(latchTurn.getCount()!=0){
-                                cardString=readCard(in);
-                                notifyObserver(cardString);
-                        }
-                            //YES/NO
-                            if(!card){
-                                latchMove= new CountDownLatch(1);
-                                //1-1,1
-                                askMove(in);
-                                latchMove.await();
-                                latchMove= new CountDownLatch(1);
-                                //System.out.println("post wait pippo");
-                                //1-1,2
-                                askBuild(in);
-                                latchMove.await();
-                            }else{
-
-                            }
-                            //build=in.nextLine();
-                            //notifyObserver(build);
-                            //wait();
-
-                            //askBuild(in);
-                        //}
-                        //se voglio usare una carta chiamo una sequenza custom di askMove e askBuild
-                        //build= in.nextLine();
-                        /* sulle carte chiamo i metodi sulla carta
-                         *  lo switch sovraccarica
-                         *  }
-                         */
-                        /*We can use this while with a value setted by Server
-                         *  In the lobby function we can ask to each client in the order we choose to set their workers' position
-                         *  When all the setting are done we "unlock" this while so each client can go on and play the game
-                         * */
-                        /*
-                         * if(in.nextLine().toUpperCase().equals("YES"))
-                         *  playermove.setUsingCard(true);
-                         * else
-                         *  playermove.setUsingCard(false);
-                         *
-                         * For handle build input we can change the PlayerMove class
-                         * The input will be like YES 1-2,2-2,3
-                         *  The player want to use card's power, move the build
-                         *
-                         * */
+                        //Input: [M 1-2,2] [B 1-2,3] [M C 1-2,2] [B C 1-2,3] [END]
+                        //latchTurn= new CountDownLatch(1);
+                        move= in.nextLine();
                         /*Questa notifiy chiama la update di message receiver in RemoteView
                          * Perchè remoteView observes that
                          */
-
+                        notifyObserver(move.toUpperCase());
+                        //latchTurn.await();
                     }
                 }catch(Exception e){
                     System.out.println("End of getInputFromClient");
@@ -205,23 +144,5 @@ public class SocketClientConnection  extends Observable<String> implements Clien
             }
         });
         t.start();
-
-    }
-
-    /*public void notifyasd(String move){
-        notifyObserver(move);
-    }*/
-    private void askMove(Scanner in){
-        String move=in.nextLine();
-        notifyObserver(move);
-    }
-    private void askBuild(Scanner in){
-        String build=in.nextLine();
-        notifyObserver(build);
-    }
-    private String readCard(Scanner in){
-        String card= in.nextLine().toUpperCase();
-        notifyObserver(card);
-        return card;
     }
 }

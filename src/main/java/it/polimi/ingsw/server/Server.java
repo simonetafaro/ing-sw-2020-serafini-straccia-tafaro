@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.StartController;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.Model;
+import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.Worker;
 import it.polimi.ingsw.view.RemoteView;
 import it.polimi.ingsw.view.View;
@@ -98,7 +99,7 @@ public class Server {
                 player3View.addObserver(controller);
             }
 
-            startController.setPlayerWorkerInOrder(model, player1View, player2View, player3View);
+            controller.setTurn(startController.setPlayerWorkerInOrder(model, player1View, player2View, player3View));
 
             c1.asyncSend(model.getBoardCopy());
             c2.asyncSend(model.getBoardCopy());
@@ -110,22 +111,19 @@ public class Server {
 
             if(model.getTurn()==(player1.getColor())){
                 //p1 è il primo
-                c1.asyncSend(gameMessage.usingCardMessage);
-                c1.setReadCard(true);
+                c1.asyncSend(gameMessage.TurnMessage);
                 c2.asyncSend(gameMessage.waitMessage);
                 if(c3!=null)
                     c3.asyncSend(gameMessage.waitMessage);
             }else {
                 if(model.getTurn()==(player2.getColor())){
-                    c2.asyncSend(gameMessage.usingCardMessage);
-                    c2.setReadCard(true);
+                    c2.asyncSend(gameMessage.TurnMessage);
                     if(c3!=null)
                         c3.asyncSend(gameMessage.waitMessage);
                     c1.asyncSend(gameMessage.waitMessage);
                 }else{
                     if(c3!=null && model.getTurn()==(player3.getColor())){
-                        c3.asyncSend(gameMessage.usingCardMessage);
-                        c3.setReadCard(true);
+                        c3.asyncSend(gameMessage.TurnMessage);
                         c1.asyncSend(gameMessage.waitMessage);
                         c2.asyncSend(gameMessage.waitMessage);
                     }

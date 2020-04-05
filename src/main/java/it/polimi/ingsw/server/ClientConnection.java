@@ -15,9 +15,5 @@ public interface ClientConnection {
     void send(Object message);
     String read();
     void getInputFromClient();
-    void setReadCard(boolean setReadCard);
-    void setAskMove(boolean setAskMove);
-    void setAskBuild(boolean setAskBuild);
-    CountDownLatch getLatchMove();
 
 }

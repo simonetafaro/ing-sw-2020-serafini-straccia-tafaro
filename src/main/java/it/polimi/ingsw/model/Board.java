@@ -18,7 +18,7 @@ public class Board implements Cloneable, Serializable {
         }
     }
 
-    public Cell[][] getBoard() {
+    public Cell[][] getPlayingBoard() {
         return board;
     }
 
@@ -37,7 +37,7 @@ public class Board implements Cloneable, Serializable {
 
     public void printBoard(){
         int a,i,j,k=0;
-
+        //TODO code optimization and row and column number
         for(a=0; a<N_ROWS; a++){
             for (i = 1; i <= 4; i++)
             {

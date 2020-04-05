@@ -2,6 +2,8 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.MoveMessage;
+import it.polimi.ingsw.model.PlayerMove;
+import it.polimi.ingsw.model.PlayerMoveEnd;
 import it.polimi.ingsw.observ.Observer;
 import it.polimi.ingsw.server.ClientConnection;
 import it.polimi.ingsw.utils.gameMessage;
@@ -11,27 +13,39 @@ public class RemoteView extends View {
     private class MessageReceiver implements Observer<String>{
         @Override
         public void update(String message) {
-            /**Questa update è sollecitata dalla notify di una SocketClientConnection.
+            /*Questa update è sollecitata dalla notify di una SocketClientConnection.
              * Quando un client scrive qualcosa viene lanciata una notify
              * */
-            /**Questo stampa sul server ciò che il client ha scritto
+            /*Questo stampa sul server ciò che il client ha scritto
              * */
             System.out.println("Received from " +getPlayer().getNickname() +" "+ message);
             try{
-                /**Gestione del format dell'input 1-1,2 ES:[Worker1, move to cell (1,2)]
+                /*Gestione del format dell'input M 1-1,2
+                 * ES:[Move Worker1, move to cell (1,2)]
                  */
-                //1-2,3
-                if(message.equals("YES")||message.equals("NO")){
-                    handleCardChoose(message);
+                //M 1-2,3
+                if(message.equals("END")){
+                    isEndNotify();
+                    return;
                 }
-                handleMove( Integer.parseInt(message.substring(0,1)),
-                            Integer.parseInt(message.substring(2,3)),
-                            Integer.parseInt(message.substring(4,5)));
-
+                if(standardInput(message))
+                    handleMove(message.charAt(0),
+                            Integer.parseInt(message.substring(2, 3)),
+                            Integer.parseInt(message.substring(4, 5)),
+                            Integer.parseInt(message.substring(6, 7)));
+                else
+                    clientConnection.send(gameMessage.wrongInputMessage+ gameMessage.insertAgain);
             }catch(IllegalArgumentException e){
                 clientConnection.asyncSend("Error!");
             }
         }
+    }
+
+    private boolean standardInput(String message){
+        //M 1-1,2
+        return message.length()==7 && (message.charAt(0)=='M' || message.charAt(0)=='B') && (message.charAt(2)=='1' ||
+                    message.charAt(2)=='2') && Integer.parseInt(message.substring(4,5))>=0 && Integer.parseInt(message.substring(4,5))<=4 &&
+                        Integer.parseInt(message.substring(6,7))>=0 && Integer.parseInt(message.substring(6,7))<=4;
     }
 
     private ClientConnection clientConnection;
@@ -53,11 +67,10 @@ public class RemoteView extends View {
 
     @Override
     public void update(MoveMessage message) {
-        /**Update chiamata dalla notify del model quando effettuo un cambiamento sul model
+        /*Update chiamata dalla notify del model quando effettuo un cambiamento sul model
          * Il paramentro che ricevo contiene la nuova board aggiornata,
          * */
         //Mostro il nuovo campo di gioco aggiornato
-        System.out.println("Notifica alle remoteview dal model");
         try {
             showMessage(message.getBoard().clone());
         }catch (CloneNotSupportedException e){
@@ -80,7 +93,7 @@ public class RemoteView extends View {
         }
         else {
             if(message.getNextTurn()== getPlayer().getColor())
-                resultMsg += gameMessage.moveMessage;
+                resultMsg += gameMessage.TurnMessage;
             else
                 resultMsg += gameMessage.waitMessage;
         }
@@ -88,9 +101,9 @@ public class RemoteView extends View {
          * */
         showMessage(resultMsg);
 
-        if(message.getPlayer() == getPlayer())
+        /*if(message.getPlayer() == getPlayer())
             clientConnection.getLatchMove().countDown();
-
+        */
         }
 
     public ClientConnection getClientConnection() {

@@ -21,20 +21,53 @@ public class Cell implements Cloneable, Serializable {
     public void setCurrWorker(Worker currWorker) {
         this.currWorker = currWorker;
     }
-
-    public void deleteCurrWorker(){
-        this.currWorker=null;
+    public void setFreeSpace(boolean freeSpace){
+        this.freeSpace=freeSpace;
+    }
+    public void setPosX(int newPosition){
+        this.posX = newPosition;
+    }
+    public void setPosY(int newPosition){
+        this.posY = newPosition;
+    }
+    public void setLevel(int level){
+        this.level=level;
+        if(this.level==4){
+            this.setFreeSpace(false);
+        }
     }
 
+    public int getPosX(){
+        return this.posX;
+    }
+    public int getPosY(){
+        return this.posY;
+    }
+    public int getLevel(){
+        return this.level;
+    }
     public Worker getCurrWorker() {
         return currWorker;
     }
+    public boolean isFree(){
+        return this.freeSpace;
+    }
 
+    public void buildInCell(){
+        this.level++;
+        if(this.level==4){
+            this.setFreeSpace(false);
+        }
+    }
+    public void deleteCurrWorker(){
+        this.currWorker=null;
+    }
     public boolean isClosedTo(Cell cell){
         return (this.getPosX() - cell.getPosX() <= 1 && this.getPosX() - cell.getPosX() >= -1) &&
                 (this.getPosY() - cell.getPosY() <= 1 && this.getPosY() - cell.getPosY() >= -1);
     }
 
+    /**return true if worker has near free cell**/
     public boolean hasFreeCellClosed(Cell[][] board){
         boolean bool=false;
         for(int i=-1; i<2; i++){
@@ -43,15 +76,13 @@ public class Cell implements Cloneable, Serializable {
                         board[this.getPosX()+i][this.getPosY()+j].getLevel()- this.getLevel()<=1) {
                     if ((board[this.getPosX() + i][this.getPosY() + j]).isFree()) {
                         bool = true;
-                        System.out.println(("(" + (this.getPosX() + i) + "," + (this.getPosY() + j) + ")"));
-
+                        //System.out.println(("(" + (this.getPosX() + i) + "," + (this.getPosY() + j) + ")"));
                     }
                 }
-           }
-       }
-       return bool;
+            }
+        }
+        return bool;
     }
-
     public boolean canBuildInCells(Cell[][] board){
         boolean bool=false;
         for(int i=-1; i<2; i++){
@@ -69,40 +100,6 @@ public class Cell implements Cloneable, Serializable {
         return bool;
     }
 
-    public void setPosX(int newPosition){
-        this.posX = newPosition;
-    }
-
-    public void setPosY(int newPosition){
-        this.posY = newPosition;
-    }
-
-    public int getPosX(){
-        return this.posX;
-    }
-
-    public int getPosY(){
-        return this.posY;
-    }
-
-    public int getLevel(){
-        return this.level;
-    }
-
-    public void setLevel(int level){
-        this.level=level;
-        if(this.level==4){
-            this.setFreeSpace(false);
-        }
-    }
-
-    public boolean isFree(){
-        return this.freeSpace;
-    }
-
-    public void setFreeSpace(boolean freeSpace){
-        this.freeSpace=freeSpace;
-    }
 
     @Override
     protected final Cell clone(){
