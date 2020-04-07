@@ -3,34 +3,53 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.observ.Observable;
 import it.polimi.ingsw.utils.PlayerColor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Model extends Observable<MoveMessage> {
 
     private Board board;
-    /**Devo gestire il turno!!
+    /*Devo gestire il turno!!
      * Con una variabile color controllo se il color del player che ha giocato è uguale a quello del turno corrente
      * */
     private PlayerColor turn;
     private int players;
     private PlayerColor[] playOrder = new PlayerColor[players];
+    private List<PlayerColor> playOrder_List;
     //TODO manage playOrder as a List
 
     public Model() {
         this.board = new Board();
+        playOrder_List = new ArrayList<>();
     }
 
     public void setPlayOrder(PlayerColor color1, PlayerColor color2, PlayerColor color3){
-        playOrder[0]=color1;
+        /*playOrder[0]=color1;
         playOrder[1]=color2;
         playOrder[2]=color3;
         turn= color1;
-        players=3;
+        players=3;*/
+        //List
+
+        System.out.println("SetPLayerordermodel");
+        playOrder_List.add(color1);
+        playOrder_List.add(color2);
+        playOrder_List.add(color3);
+        turn= playOrder_List.get(0);
+        players= playOrder_List.size();
     }
     public void setPlayOrder(PlayerColor color1, PlayerColor color2){
-        playOrder[0]=color1;
+        /*playOrder[0]=color1;
         playOrder[1]=color2;
         playOrder[2]=null;
-        players=2;
         turn=color1;
+        players=2;
+        */
+        //List
+        playOrder_List.add(color1);
+        playOrder_List.add(color2);
+        turn=playOrder_List.get(0);
+        players= playOrder_List.size();
     }
 
     public PlayerColor getTurn() {
@@ -72,7 +91,7 @@ public class Model extends Observable<MoveMessage> {
          * passando come paramentro la nuova board e il giocatore dell'ultima mossa
          */
         try {
-            int j=0;
+            /*int j=0;
             PlayerColor nextTurn=null;
             while(j<players){
                 if(playOrder[j].equals(turn)){
@@ -81,6 +100,8 @@ public class Model extends Observable<MoveMessage> {
                 }
                 j++;
             }
+            */
+            PlayerColor nextTurn = playOrder_List.get((playOrder_List.indexOf(turn)+1)%playOrder_List.size());
             notifyObserver(new MoveMessage((Board) board.clone(), move.getPlayer(), hasWon, nextTurn));
         }catch (CloneNotSupportedException e){
             System.err.println(e.getMessage());
@@ -102,6 +123,9 @@ public class Model extends Observable<MoveMessage> {
     //mio turno, cella vuota e nelle 8 adiacenti e con un dislivello di massimo 1
     public boolean isReachableCell(PlayerMove move){
         return move.getWorker().getWorkerPosition().isClosedTo(board.getCell(move.getRow(),move.getColumn()));
+        /*WITH CARD
+          return move.getPlayer().getMyCard().getMoveNear();
+        * */
     }
     public boolean isEmptyCell(PlayerMove move){
         return board.getCell(move.getRow(),move.getColumn()).isFree();
@@ -110,6 +134,7 @@ public class Model extends Observable<MoveMessage> {
         return (board.getCell(move.getRow(), move.getColumn())).getLevel() - ((move.getWorker().getWorkerPosition()).getLevel()) <= 1;
     }
     public void updateTurn(){
+        /*
         int i=0;
         while(i<players){
             if(playOrder[i].equals(turn)){
@@ -119,6 +144,9 @@ public class Model extends Observable<MoveMessage> {
             }
             i++;
         }
+        */
+        turn=playOrder_List.get((playOrder_List.indexOf(turn)+1)%playOrder_List.size());
+        System.out.println("Ora tocca a "+turn);
     }
     public void deletePlayer(PlayerMove move){
         if(players==2){
@@ -130,13 +158,15 @@ public class Model extends Observable<MoveMessage> {
         move.getPlayer().getWorker1().clear();
         move.getPlayer().getWorker2().clear();
         //update this.players--
+        updateTurn();
         deletePlayerFromGame(move.getPlayer().getColor());
         //update turn
+        notifyView(move,false);
         //kill thread of move.getPlayer()
     }
 
     public void deletePlayerFromGame(PlayerColor color){
-
+        playOrder_List.remove(color);
     }
 
     public void endGamePlayerStuck(PlayerMove move){

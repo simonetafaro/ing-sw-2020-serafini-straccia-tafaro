@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.PlayerColor;
-import org.graalvm.compiler.lir.sparc.SPARCMove;
 
 public class MoveMessage {
 

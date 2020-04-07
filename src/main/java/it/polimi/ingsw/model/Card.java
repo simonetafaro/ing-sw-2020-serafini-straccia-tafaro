@@ -8,6 +8,7 @@ public class Card {
     public char mossa2;
     public char mossa3;
     private String Move_Free, Move_Near, Move_Level;
+    private String Build_Free, Build_Near;
     private String Win_Condition;
 
     public Card (String name){
@@ -25,6 +26,7 @@ public class Card {
         this.mossa2='B'; //B
         this.mossa3=' '; //B
     }
+
     private void setDemeter(){
         this.mossa1='M'; //M
         this.mossa2='B'; //B
@@ -33,6 +35,8 @@ public class Card {
     private void setApollo(){
         //standard sequence
         this.Move_Free="!(board.getCell(move.getRow(),move.getColumn()).getLevel()==4)";
+        //this.Move_Level="STANDARD";
+        //this.Move_Near="STANDARD";
     }
     private void setArtemis(){
         this.mossa1='B';
@@ -62,18 +66,25 @@ public class Card {
         this.mossa3='B';
     }
 
-    public String getMove_Free(){
-        return "aaaa";
+    public String getMoveFree(){
+        return Move_Free;
     }
+    public String getMoveLevel(){
+        return Move_Free;
+    }
+    public String getMoveNear(){
+        return Move_Free;
+    }
+
     public char getStepLetter(int i){
         return i==1 ? mossa1 : (i==2 ? mossa2 : mossa3);
     }
 
     /*  mazzo HashMap<String, boolean>;
-    carteScelte <>
+    carteScelte HashMap<String, String> //la seconda stringa è il metodo relativo alla carta
+            //Es per la carta Apollo ho il metodo setApollo che va a sovrascrivere le regole standard
     carteScelte.get("Demeter")
-    //player.card=new Card();
-    //player.card.setDemeter();
+    chiamiamo questo metodo sul player quando vogliamo settare la carta.
 
-*/
+    */
 }

@@ -1,9 +1,6 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.MoveMessage;
-import it.polimi.ingsw.model.PlayerMove;
-import it.polimi.ingsw.model.PlayerMoveEnd;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.observ.Observer;
 import it.polimi.ingsw.server.ClientConnection;
 import it.polimi.ingsw.utils.gameMessage;
@@ -71,17 +68,26 @@ public class RemoteView extends View {
          * Il paramentro che ricevo contiene la nuova board aggiornata,
          * */
         //Mostro il nuovo campo di gioco aggiornato
+        String resultMsg = "";
+
         try {
             showMessage(message.getBoard().clone());
         }catch (CloneNotSupportedException e){
             System.err.println(e.getMessage());
         }
-        //message.getBoard().printBoard();
-        String resultMsg = "";
+
+        if(message instanceof GameOverMessage){
+            if(message.getPlayer() == getPlayer())
+                resultMsg = gameMessage.loseMessage + "\n";
+            else
+                resultMsg = gameMessage.winMessage + "\n";
+            showMessage(resultMsg);
+            return;
+        }
 
         if (message.isHasWon()) {
             if (message.getPlayer() == getPlayer()) {
-                /**Il player che ha fatto questa mossa ha vinto,
+                /*Il player che ha fatto questa mossa ha vinto,
                  * se sono nella sua view mando messaggio WIN
                  * altrimenti mando messaggio LOSE
                  **/

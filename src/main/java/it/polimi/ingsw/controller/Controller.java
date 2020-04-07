@@ -40,22 +40,25 @@ public class Controller implements Observer<PlayerMove> {
             move.getView().reportError(gameMessage.wrongInputMessage+"\n"+gameMessage.insertAgain);
             return;
         }
+
+        if(!move.getWorker().getWorkerPosition().hasFreeCellClosed(model.getBoard().getPlayingBoard())){
+            //this worker is stuck
+            move.getWorker().setStuck(true);
+            move.getView().reportError(gameMessage.workerStuck+"\n"+gameMessage.insertAgain);
+            //check if both worker1 && worker2 are stuck player lose
+            if(isPlayerStuck(move)){
+                //this player lose, both workers are stuck
+                model.deletePlayer(move);
+            }
+            return;
+        }
+
         if(!model.isReachableCell(move)){
             move.getView().reportError(gameMessage.notReachableCellMessage+"\n"+gameMessage.insertAgain);
             return;
         }
-
         if(!model.isEmptyCell(move)){
             //read worker position and check if there are some empty cell where he can move in.
-            if(!move.getWorker().getWorkerPosition().hasFreeCellClosed(model.getBoard().getPlayingBoard())){
-                //this worker is stuck
-                move.getWorker().setStuck(true);
-                //check if both worker1 && worker2 are stuck player lose
-                if(isPlayerStuck(move)){
-                    //this player lose
-                    model.deletePlayer(move);
-                }
-            }
             move.getView().reportError(gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
             return;
         }
