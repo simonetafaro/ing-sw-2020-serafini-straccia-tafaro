@@ -38,6 +38,19 @@ public class RemoteView extends View {
         }
     }
 
+    private ClientConnection clientConnection;
+
+    public RemoteView(Player player, ClientConnection c) {
+        super(player);
+        this.clientConnection = c;
+        /*Aggiungo un observer alla connessione tra client e server
+         * */
+        c.addObserver(new MessageReceiver());
+
+    }
+    public ClientConnection getClientConnection() {
+        return clientConnection;
+    }
     private boolean standardInput(String message){
         //M 1-1,2
         return message.length()==7 && (message.charAt(0)=='M' || message.charAt(0)=='B') && (message.charAt(2)=='1' ||
@@ -45,23 +58,10 @@ public class RemoteView extends View {
                         Integer.parseInt(message.substring(6,7))>=0 && Integer.parseInt(message.substring(6,7))<=4;
     }
 
-    private ClientConnection clientConnection;
-
-    public RemoteView(Player player, ClientConnection c) {
-        super(player);
-        this.clientConnection = c;
-        /**Aggiungo un observer alla connessione tra client e server
-         * */
-        c.addObserver(new MessageReceiver());
-
-    }
-
     @Override
     protected void showMessage(Object message) {
-        //clientConnection.asyncSend(message);
         clientConnection.send(message);
     }
-
     @Override
     public void update(MoveMessage message) {
         /*Update chiamata dalla notify del model quando effettuo un cambiamento sul model
@@ -103,16 +103,10 @@ public class RemoteView extends View {
             else
                 resultMsg += gameMessage.waitMessage;
         }
-        /**Stampo a video del client il messaggio creato
+        /*Stampo a video del client il messaggio creato
          * */
         showMessage(resultMsg);
-
-        /*if(message.getPlayer() == getPlayer())
-            clientConnection.getLatchMove().countDown();
-        */
         }
 
-    public ClientConnection getClientConnection() {
-        return clientConnection;
-    }
+
 }

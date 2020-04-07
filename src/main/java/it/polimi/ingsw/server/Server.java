@@ -46,7 +46,7 @@ public class Server {
         return startController;
     }
 
-    /**public synchronized void deregisterConnection(ClientConnection c) {
+    /*public synchronized void deregisterConnection(ClientConnection c) {
         ClientConnection opponent = playingConnection.get(c);
         if(opponent != null) {
             opponent.closeConnection();
@@ -65,7 +65,7 @@ public class Server {
         waitingConnection.put(player, c);
         //Creo la partita se ho nella lobby il numero di giocatori scelto
         if (waitingConnection.size() == playerNumber) {
-            /**this.firstPlayer=true;
+            /*this.firstPlayer=true;
              * */
             //Questa sarà una lista di player
             List<Player> keys = new ArrayList<>(waitingConnection.keySet());
@@ -156,7 +156,6 @@ public class Server {
     }
 
     public synchronized void setPlayerNumber(int playerNumber){
-        System.out.println("Set playerNumber");
         this.playerNumber=playerNumber;
     }
 

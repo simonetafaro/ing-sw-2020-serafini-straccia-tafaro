@@ -16,6 +16,7 @@ public class Controller implements Observer<PlayerMove> {
     public void setTurn(Turn turn) {
         this.turn = turn;
     }
+
     //move for italian people is the new "mossa"
     private synchronized void performMove(PlayerMove move){
         /**Controlla che è il turno del giocatore che ha inviato la mossa

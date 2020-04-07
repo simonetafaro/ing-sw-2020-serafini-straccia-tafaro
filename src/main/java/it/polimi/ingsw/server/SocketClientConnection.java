@@ -18,11 +18,7 @@ public class SocketClientConnection  extends Observable<String> implements Clien
     private ObjectOutputStream out;
     private Server server;
     private boolean firstPlayer;
-    //questo attributo potrebbe servire quando i workers di questo client non si possono più muovere
-    //setto questo attributo a false
     private boolean active = true;
-    private static CountDownLatch latchTurn;
-
 
     public SocketClientConnection(Socket socket, Server server, boolean first) {
         this.socket = socket;
@@ -90,8 +86,6 @@ public class SocketClientConnection  extends Observable<String> implements Clien
     public void run() {
         Scanner in;
         Player player = new Player();
-        String[] cellCoord = null;
-        int x,y;
         try{
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
@@ -108,16 +102,13 @@ public class SocketClientConnection  extends Observable<String> implements Clien
 
             server.lobby(this, player);
 
-
         }catch (IOException | NoSuchElementException e) {
-            send("error catched");
             System.err.println("Error!" + e.getMessage());
-        }/**finally{
+        }/*finally{
             send("ramo finally della socketClientConnection");
             close();
         }*/
     }
-
 
     public void getInputFromClient(){
        Thread t = new Thread(new Runnable() {

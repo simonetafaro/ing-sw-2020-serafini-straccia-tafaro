@@ -24,6 +24,4 @@ public class Step {
     public Cell getCellTo() {
         return CellTo;
     }
-
-
 }

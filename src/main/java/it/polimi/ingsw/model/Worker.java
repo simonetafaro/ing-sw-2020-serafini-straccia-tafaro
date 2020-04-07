@@ -8,9 +8,7 @@ public class Worker implements Serializable {
     private int  workerNum;
     private Cell currentPosition;
     private PlayerColor color;
-    private boolean win;
     private boolean stuck;
-
 
     public Worker(){}
     public Worker(Cell position, int number, PlayerColor color){

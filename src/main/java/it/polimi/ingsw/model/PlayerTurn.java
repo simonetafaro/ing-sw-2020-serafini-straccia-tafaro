@@ -41,7 +41,6 @@ public class PlayerTurn {
     public boolean isFirstStep(){
         return currStep==steps[0];
     }
-
     public void setTurnWorker(Worker worker) {
         this.worker = worker;
     }

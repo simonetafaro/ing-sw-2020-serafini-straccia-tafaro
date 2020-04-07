@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.observ.Observable;
 import it.polimi.ingsw.utils.PlayerColor;
+import it.polimi.ingsw.utils.gameMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,14 +10,8 @@ import java.util.List;
 public class Model extends Observable<MoveMessage> {
 
     private Board board;
-    /*Devo gestire il turno!!
-     * Con una variabile color controllo se il color del player che ha giocato è uguale a quello del turno corrente
-     * */
     private PlayerColor turn;
-    private int players;
-    private PlayerColor[] playOrder = new PlayerColor[players];
     private List<PlayerColor> playOrder_List;
-    //TODO manage playOrder as a List
 
     public Model() {
         this.board = new Board();
@@ -24,32 +19,15 @@ public class Model extends Observable<MoveMessage> {
     }
 
     public void setPlayOrder(PlayerColor color1, PlayerColor color2, PlayerColor color3){
-        /*playOrder[0]=color1;
-        playOrder[1]=color2;
-        playOrder[2]=color3;
-        turn= color1;
-        players=3;*/
-        //List
-
-        System.out.println("SetPLayerordermodel");
         playOrder_List.add(color1);
         playOrder_List.add(color2);
         playOrder_List.add(color3);
         turn= playOrder_List.get(0);
-        players= playOrder_List.size();
     }
     public void setPlayOrder(PlayerColor color1, PlayerColor color2){
-        /*playOrder[0]=color1;
-        playOrder[1]=color2;
-        playOrder[2]=null;
-        turn=color1;
-        players=2;
-        */
-        //List
         playOrder_List.add(color1);
         playOrder_List.add(color2);
         turn=playOrder_List.get(0);
-        players= playOrder_List.size();
     }
 
     public PlayerColor getTurn() {
@@ -134,22 +112,10 @@ public class Model extends Observable<MoveMessage> {
         return (board.getCell(move.getRow(), move.getColumn())).getLevel() - ((move.getWorker().getWorkerPosition()).getLevel()) <= 1;
     }
     public void updateTurn(){
-        /*
-        int i=0;
-        while(i<players){
-            if(playOrder[i].equals(turn)){
-                turn=playOrder[(i+1)%players];
-                System.out.println("Ora tocca a "+turn);
-                break;
-            }
-            i++;
-        }
-        */
         turn=playOrder_List.get((playOrder_List.indexOf(turn)+1)%playOrder_List.size());
-        System.out.println("Ora tocca a "+turn);
     }
     public void deletePlayer(PlayerMove move){
-        if(players==2){
+        if(playOrder_List.size()==2){
             endGamePlayerStuck(move);
             return;
         }
@@ -162,13 +128,12 @@ public class Model extends Observable<MoveMessage> {
         deletePlayerFromGame(move.getPlayer().getColor());
         //update turn
         notifyView(move,false);
+        move.getView().reportError(gameMessage.loseMessage);
         //kill thread of move.getPlayer()
     }
-
     public void deletePlayerFromGame(PlayerColor color){
         playOrder_List.remove(color);
     }
-
     public void endGamePlayerStuck(PlayerMove move){
         try {
             notifyObserver(new GameOverMessage(move.getPlayer(), (Board) board.clone()));
