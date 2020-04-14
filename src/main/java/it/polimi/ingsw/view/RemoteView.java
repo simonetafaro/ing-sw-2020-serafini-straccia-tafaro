@@ -26,7 +26,7 @@ public class RemoteView extends View {
                     return;
                 }
                 if(standardInput(message))
-                    handleMove(message.charAt(0),
+                    handleMove(message.substring(0,1),
                             Integer.parseInt(message.substring(2, 3)),
                             Integer.parseInt(message.substring(4, 5)),
                             Integer.parseInt(message.substring(6, 7)));

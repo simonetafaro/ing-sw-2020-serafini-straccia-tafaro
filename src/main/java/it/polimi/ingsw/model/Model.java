@@ -142,4 +142,9 @@ public class Model extends Observable<MoveMessage> {
         }
     }
 
+    public boolean hasWon(PlayerMove move){
+        return (move.getWorker().getWorkerPosition().getLevel()==2) &&
+                ((board.getCell(move.getRow(),move.getColumn())).getLevel()==3);
+    }
+
 }

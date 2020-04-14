@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolcard>
+    <title>Artemis</title>
+    <imageURL></imageURL>
+    <description>Artemis description</description>
+    <placementRule decoratorName="StandardRuleDecorator" />
+    <controllerStep State="M"/>
+    <controllerStep State="M"/>
+    <controllerStep State="B"/>
+    <controllerStep State="END"/>
+</toolcard>

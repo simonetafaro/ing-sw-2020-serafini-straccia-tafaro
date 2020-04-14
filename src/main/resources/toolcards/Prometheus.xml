@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolcard>
+    <title>Prometheus</title>
+    <imageURL></imageURL>
+    <description>Prometheus description</description>
+    <placementRule decoratorName="StandardRuleDecorator" />
+    <controllerStep State="B"/>
+    <controllerStep State="M"/>
+    <controllerStep State="B"/>
+    <controllerStep State="END"/>
+</toolcard>

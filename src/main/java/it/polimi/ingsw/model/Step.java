@@ -1,11 +1,11 @@
 package it.polimi.ingsw.model;
 
 public class Step {
-    private char type; //M or B
+    private String type; //M or B
     private Cell CellFrom;
     private Cell CellTo;
 
-    public void setType(char type) {
+    public void setType(String type) {
         this.type = type;
     }
     public void setCellFrom(Cell cellFrom) {
@@ -15,7 +15,7 @@ public class Step {
         CellTo = cellTo;
     }
 
-    public char getType() {
+    public String getType() {
         return type;
     }
     public Cell getCellFrom() {

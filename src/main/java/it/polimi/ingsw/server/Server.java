@@ -35,7 +35,7 @@ public class Server {
         this.serverSocket = new ServerSocket(PORT);
         this.firstPlayer=true;
         this.model = new Model();
-        this.startController=new StartController();
+        this.startController= new StartController();
     }
 
     public synchronized Model getModel() {
@@ -65,9 +65,8 @@ public class Server {
         waitingConnection.put(player, c);
         //Creo la partita se ho nella lobby il numero di giocatori scelto
         if (waitingConnection.size() == playerNumber) {
-            /*this.firstPlayer=true;
-             * */
             //Questa sarà una lista di player
+            this.startController.setPlayerNumber(playerNumber);
             List<Player> keys = new ArrayList<>(waitingConnection.keySet());
             //Crea le ClientConnection per ogni player presente nella Hashmap
             ClientConnection c1 = waitingConnection.get(keys.get(0));
@@ -98,6 +97,7 @@ public class Server {
                 model.addObserver(player3View);
                 player3View.addObserver(controller);
             }
+
 
             controller.setTurn(startController.setPlayerWorkerInOrder(model, player1View, player2View, player3View));
 

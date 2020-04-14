@@ -9,7 +9,7 @@ public class PlayerMove {
     private final Player player;
     private Worker worker;
     private final View view;
-    private char MoveOrBuild;
+    private String MoveOrBuild;
 
     public PlayerMove(Player player, View view){
         this.row=-1;
@@ -17,7 +17,7 @@ public class PlayerMove {
         this.player=player;
         this.worker=null;
         this.view=view;
-        this.MoveOrBuild=' ';
+        this.MoveOrBuild=null;
     }
 
     public PlayerMove( Worker worker, int row, int column) {
@@ -29,7 +29,7 @@ public class PlayerMove {
         this.view = null;
     }
 
-    public PlayerMove(Player player, int worker, int row, int column, View view, char moveOrBuild) {
+    public PlayerMove(Player player, int worker, int row, int column, View view, String moveOrBuild) {
         this.player = player;
         if(worker==1)
             this.worker=player.getWorker1();
@@ -56,7 +56,7 @@ public class PlayerMove {
     public Worker getWorker() {
         return worker;
     }
-    public char getMoveOrBuild() {
+    public String getMoveOrBuild() {
         return MoveOrBuild;
     }
 }

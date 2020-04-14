@@ -1,19 +1,20 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.controller.CardManager;
 import it.polimi.ingsw.utils.CustomDate;
+import it.polimi.ingsw.utils.FileManager;
 import it.polimi.ingsw.utils.PlayerColor;
-
-import java.util.Scanner;
 
 public class Player {
 
+    private CardManager cardManager;
     private PlayerColor color;
     private CustomDate birthdate;
     private String nickname;
-
     private Worker worker1;
     private Worker worker2;
     private PlayerTurn myTurn;
+    private CardRuleDecorator myCardMethod;
     private Card myCard;
 
 
@@ -25,7 +26,7 @@ public class Player {
         this.birthdate = player.getBirthdate();
         this.worker1=player.worker1;
         this.worker2=player.worker2;
-        setMyCard();
+        this.cardManager= new CardManager();
     }
 
     public PlayerTurn setMyTurn() {
@@ -47,9 +48,12 @@ public class Player {
     public void setWorker2(Worker worker2) {
         this.worker2 = worker2;
     }
-    public void setMyCard(){
-        this.myCard = new Card("StandardCard");
-        this.myCard.setStandardGame();
+    public void setMyCard(String cardName){
+        cardManager.setCardFromFile(this,cardName);
+    }
+    public void setCard (Card card){ this.myCard=card; }
+    public void setMyCardMethod(CardRuleDecorator cardRuleDecorator){
+        this.myCardMethod=cardRuleDecorator;
     }
 
     public String getNickname() {
@@ -67,7 +71,11 @@ public class Player {
     public CustomDate getBirthdate() {
         return birthdate;
     }
-    public Card getMyCard() {
-        return myCard;
+    public Card getMyCard(){
+        return this.myCard;
+    }
+
+    public CardRuleDecorator getMyCardMethod() {
+        return myCardMethod;
     }
 }

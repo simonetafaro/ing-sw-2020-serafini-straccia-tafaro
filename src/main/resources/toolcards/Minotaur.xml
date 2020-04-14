@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolcard>
+    <title>Minotaur</title>
+    <imageURL></imageURL>
+    <description>Minotaur description</description>
+    <placementRule decoratorName="StandardRuleDecorator" />
+    <controllerStep State="M"/>
+    <controllerStep State="B"/>
+    <controllerStep State="END"/>
+</toolcard>

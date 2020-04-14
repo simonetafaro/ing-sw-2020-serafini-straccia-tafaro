@@ -99,6 +99,7 @@ public class SocketClientConnection  extends Observable<String> implements Clien
             player.setNickname(move);
             server.getStartController().setPlayerBirthdate(this,player,in);
             server.getStartController().setPlayerColor(this,player,in);
+            send("Wait for cards");
 
             server.lobby(this, player);
 

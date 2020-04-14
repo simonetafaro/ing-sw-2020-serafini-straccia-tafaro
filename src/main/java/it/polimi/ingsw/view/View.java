@@ -23,13 +23,14 @@ public abstract class View extends Observable<PlayerMove> implements Observer<Mo
     /*Questa funzione viene chiamata dalla remoteView dopo che un client
      * scrive qualcosa e fa una notify
      * */
-    void handleMove(char MoveorBuild, int worker, int row, int column) {
+    void handleMove(String MoveOrBuild, int worker, int row, int column) {
         /*Stampa sul server la mossa ricevuta
          **/
         /*Questa notify chiama la update all'interno del controller
          * perchè il controller è observer di Player1View e Player2View
          * */
-        notifyObserver(new PlayerMove(player, worker, row, column, this, MoveorBuild));
+        System.out.println("handle move from remoteView");
+        notifyObserver(new PlayerMove(player, worker, row, column, this, MoveOrBuild));
     }
 
     public void reportError(String message){
