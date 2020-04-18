@@ -1,13 +1,21 @@
 package it.polimi.ingsw.model;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class Card {
     private String name;
-    public String mossa1;
-    public String mossa2;
-    public String mossa3;
-    public String mossa4;
+    private String mossa1;
+    private String mossa2;
+    private String mossa3;
+    private String mossa4;
+
+    private String StandardM1= "M", StandardM2= "B", StandardM3="END";
+
+    private List<String> MosseCarta;
+    private List<String> MosseStandard;
+
+    private boolean usingCard;
 
     public Card (String name){
         this.name=name;
@@ -15,6 +23,15 @@ public class Card {
         this.mossa2=null;
         this.mossa3=null;
         this.mossa4=null;
+        this.usingCard=false;
+    }
+
+    public boolean isUsingCard() {
+        return usingCard;
+    }
+
+    public void setUsingCard(boolean usingCard) {
+        this.usingCard = usingCard;
     }
 
     public void setMossa1(String mossa1) {
@@ -40,11 +57,8 @@ public class Card {
         return i==1 ? mossa1 : (i==2 ? mossa2 : (i==3 ? mossa3 : mossa4));
     }
 
-    /*  mazzo HashMap<String, boolean>;
-    carteScelte HashMap<String, String> //la seconda stringa è il metodo relativo alla carta
-            //Es per la carta Apollo.xml ho il metodo setApollo che va a sovrascrivere le regole standard
-    carteScelte.get("Demeter.xml")
-    chiamiamo questo metodo sul player quando vogliamo settare la carta.
+    public String getStandardStepLetter(int i){
+        return i==1 ? StandardM1 : (i==2 ? StandardM2 : StandardM3);
+    }
 
-    */
 }

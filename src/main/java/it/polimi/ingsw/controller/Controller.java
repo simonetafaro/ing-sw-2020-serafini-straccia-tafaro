@@ -27,7 +27,6 @@ public class Controller implements Observer<PlayerMove> {
         }
 
         move.getPlayer().getMyCardMethod().play(move, turn, model);
-
         //System.out.println("la mossa che voglio fare è fattibile");
     }
     public boolean isPlayerTurn(Player player) {

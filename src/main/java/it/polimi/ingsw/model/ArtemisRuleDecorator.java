@@ -2,22 +2,19 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
-/** Decorator for standard game: move - build - end */
-public class StandardRuleDecorator implements CardRuleDecorator {
-
-    //private Model model;
-    //private Turn turn;
+public class ArtemisRuleDecorator extends StandardRuleDecorator implements CardRuleDecorator  {
 
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
-        System.out.println("Standard rule decorator- Play");
+        System.out.println("Artemis rule decorator- Play");
         //this.model= model;
         //this.turn= turn;
 
         if(move instanceof PlayerMoveEnd){
-            if(turn.getPlayerTurn(move.getPlayer()).getI()>=3) {
+            if(isEndAllowed(move, turn)) {
                 model.endMessage(move,turn,model);
                 move.getPlayer().getMyCard().setUsingCard(false);
+                move.getPlayer().getMyCard().setMossa3("B");
             }
             else
                 move.getView().reportError(gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
@@ -73,9 +70,20 @@ public class StandardRuleDecorator implements CardRuleDecorator {
         }
     }
 
+    @Override
     public void move(PlayerMove move, Model model, Turn turn) {
-        System.out.println("Standard Move");
+        //check if is second step, in this case check is the cell where i want to move in is different from the cell of first step
         boolean hasWon = model.hasWon(move);
+        System.out.println("Artemis Move");
+
+        if(turn.getPlayerTurn(move.getPlayer()).getI()==2){
+            //is the second move for this player, so he wants to use the card
+            if(model.getBoard().getCell(move.getRow(),move.getColumn()) == turn.getPlayerTurn(move.getPlayer()).getStepI(1).getCellFrom()){
+                move.getView().reportError(gameMessage.invalidMoveArtemis+"\n"+gameMessage.insertAgain);
+                return;
+            }
+            move.getPlayer().getMyCard().setUsingCard(true);
+        }
 
         model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).setFreeSpace(true);
         model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).deleteCurrWorker();
@@ -88,10 +96,13 @@ public class StandardRuleDecorator implements CardRuleDecorator {
         model.notifyView(move,hasWon);
     }
 
+    @Override
     public void build(PlayerMove move, Model model, Turn turn) {
-        System.out.println("Standard Build");
+        System.out.println("Artemis Build");
+        if(turn.getPlayerTurn(move.getPlayer()).getI()==2){
+            move.getPlayer().getMyCard().setMossa3("END");
+        }
         model.getBoard().getCell(move.getRow(),move.getColumn()).buildInCell();
-
         model.setStep(move, turn, model);
         model.notifyView(move,false);
     }

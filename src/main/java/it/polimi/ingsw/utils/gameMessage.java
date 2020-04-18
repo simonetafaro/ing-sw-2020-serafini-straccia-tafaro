@@ -13,6 +13,10 @@ public class gameMessage {
     public static String TurnMessage = "It is your turn, let's play!";
     public static String wrongTurnMessage = "It is not your turn!";
     public static String occupiedCellMessage = "The chosen cell is not empty!";
+    public static String invalidMove ="Moving in this cell means that you can't build, so this move is not allowed!";
+    public static String invalidMoveArtemis ="You can't move back in the space where you started on!";
+    public static String invalidMoveDemeter ="You can't build in the same space where you built previously!";
+    public static String invalidMoveHephaestus ="You must build in the same space where you built previously (not a dome)!";
     public static String endYourTurn ="Please, end your turn first!";
     public static String notReachableCellMessage = "The chosen cell is not reachable from your position!";
     public static String tooHighCellMessage = "The chosen cell is too high!";

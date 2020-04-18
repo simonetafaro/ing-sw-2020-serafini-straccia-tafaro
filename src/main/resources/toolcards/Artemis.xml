@@ -3,9 +3,10 @@
     <title>Artemis</title>
     <imageURL></imageURL>
     <description>Artemis description</description>
-    <placementRule decoratorName="StandardRuleDecorator" />
+    <placementRule decoratorName="ArtemisRuleDecorator" />
     <controllerStep State="M"/>
     <controllerStep State="M"/>
     <controllerStep State="B"/>
     <controllerStep State="END"/>
+
 </toolcard>

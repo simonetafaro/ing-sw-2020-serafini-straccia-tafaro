@@ -91,8 +91,7 @@ public class Cell implements Cloneable, Serializable {
                         && (this.getPosY()+j)>=0 && (this.getPosY()+j)<5 && (this.getPosX()+i)<5) {
                     if ((board[this.getPosX() + i][this.getPosY() + j]).isFree()) {
                         bool = true;
-                        System.out.println(("(" + (this.getPosX() + i) + "," + (this.getPosY() + j) + ")"));
-
+                        //System.out.println(("(" + (this.getPosX() + i) + "," + (this.getPosY() + j) + ")"));
                     }
                 }
             }

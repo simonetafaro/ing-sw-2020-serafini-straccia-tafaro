@@ -48,4 +48,9 @@ public class PlayerTurn {
         return this.worker;
     }
 
+    public Step getStepI(int i){
+        //TODO manage array out of bound exception
+        return steps[i-1];
+    }
+
 }

@@ -3,7 +3,7 @@
     <title>Hephaestus</title>
     <imageURL></imageURL>
     <description>Hephaestus description</description>
-    <placementRule decoratorName="StandardRuleDecorator" />
+    <placementRule decoratorName="HephaestusRuleDecorator" />
     <controllerStep State="M"/>
     <controllerStep State="B"/>
     <controllerStep State="B"/>

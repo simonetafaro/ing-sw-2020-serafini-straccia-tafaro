@@ -3,7 +3,7 @@
     <title>Demeter</title>
     <imageURL></imageURL>
     <description>Demeter description</description>
-    <placementRule decoratorName="StandardRuleDecorator" />
+    <placementRule decoratorName="DemeterRuleDecorator" />
     <controllerStep State="M"/>
     <controllerStep State="B"/>
     <controllerStep State="B"/>
