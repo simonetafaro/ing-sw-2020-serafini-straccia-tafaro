@@ -2,17 +2,24 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
-public class ApolloRuleDecorator implements CardRuleDecorator {
+public class ApolloRuleDecorator extends StandardRuleDecorator implements CardRuleDecorator {
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
             System.out.println("Apollo rule decorator - play");
             //this.model= model;
             //this.turn= turn;
+
+
             if(move instanceof PlayerMoveEnd){
                 if(turn.getPlayerTurn(move.getPlayer()).getI()==3)
                     model.endMessage(move,turn,model);
                 else
                     move.getView().reportError(gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
+                return;
+            }
+
+            if(!model.isRightWorker(move, turn)){
+                move.getView().reportError(gameMessage.insertAgain);
                 return;
             }
 
@@ -73,7 +80,8 @@ public class ApolloRuleDecorator implements CardRuleDecorator {
             }
         }
 
-    private void move(PlayerMove move, Model model, Turn turn) {
+    @Override
+    public void move(PlayerMove move, Model model, Turn turn) {
         System.out.println("Apollo Move");
         boolean hasWon = model.hasWon(move);
         if(model.getBoard().getCell(move.getRow(),move.getColumn()).getCurrWorker()!=null){
@@ -89,13 +97,6 @@ public class ApolloRuleDecorator implements CardRuleDecorator {
         model.setStep(move,turn, model);
         model.notifyView(move,hasWon);
     }
-    private void build(PlayerMove move, Model model, Turn turn) {
-        System.out.println("Apollo Move");
-        model.getBoard().getCell(move.getRow(),move.getColumn()).buildInCell();
-        model.setStep(move, turn, model);
-        model.notifyView(move,false);
-
-    }
 
     private void switchWorkerPosition(PlayerMove move, Model model){
         Worker tempWorker;
@@ -109,6 +110,7 @@ public class ApolloRuleDecorator implements CardRuleDecorator {
 
         tempWorker.setWorkerPosition(from);
     }
+
     private boolean hasFreeCellClosed(Cell from, Cell[][] board){
         boolean bool=false;
         for(int i=-1; i<2; i++){
@@ -116,7 +118,8 @@ public class ApolloRuleDecorator implements CardRuleDecorator {
                 if((from.getPosX()+i)>=0 && (from.getPosY()+j)>=0 && (from.getPosY()+j)<5 && (from.getPosX()+i)<5 &&
                         board[from.getPosX()+i][from.getPosY()+j].getLevel()- from.getLevel()<=1) {
                     if ((board[from.getPosX() + i][from.getPosY() + j]).isFree() ||
-                            (board[from.getPosX() + i][from.getPosY() + j]).getCurrWorker()!=null){
+                            ((board[from.getPosX() + i][from.getPosY() + j]).getCurrWorker()!=null &&
+                                    !isApolloWorker(from, (board[from.getPosX() + i][from.getPosY() + j]).getCurrWorker() )) ){
                         bool = true;
                     }
                 }
@@ -124,6 +127,8 @@ public class ApolloRuleDecorator implements CardRuleDecorator {
         }
         return bool;
     }
+
+
     private boolean isEmptyCell(PlayerMove move, Model model){
         Cell to = model.getBoard().getCell(move.getRow(),move.getColumn());
 
@@ -132,12 +137,13 @@ public class ApolloRuleDecorator implements CardRuleDecorator {
                     to.getCurrWorker()!= move.getPlayer().getWorker2() &&
                         model.getBoard().getCell(move.getRow(), move.getColumn()).getCurrWorker()!=null);
     }
+
     private boolean canBuildFromCellTo(PlayerMove move, Model model){
         return model.getBoard().getCell(move.getRow(),move.getColumn()).canBuildInCells(model.getBoard().getPlayingBoard());
     }
 
-    public boolean checkStepType(PlayerMove message, Turn turn){
-        return message.getMoveOrBuild().equals(message.getPlayer().getMyCard().getStepLetter(turn.getPlayerTurn(message.getPlayer()).getI()));
+    public boolean isApolloWorker(Cell from, Worker to){
+        return from.getCurrWorker().getColor()==to.getColor();
     }
 
 }

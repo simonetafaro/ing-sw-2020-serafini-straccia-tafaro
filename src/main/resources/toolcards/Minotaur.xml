@@ -3,7 +3,7 @@
     <title>Minotaur</title>
     <imageURL></imageURL>
     <description>Minotaur description</description>
-    <placementRule decoratorName="StandardRuleDecorator" />
+    <placementRule decoratorName="MinotaurRuleDecorator" />
     <controllerStep State="M"/>
     <controllerStep State="B"/>
     <controllerStep State="END"/>

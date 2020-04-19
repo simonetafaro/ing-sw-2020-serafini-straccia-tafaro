@@ -121,7 +121,6 @@ public class SocketClientConnection  extends Observable<String> implements Clien
                     in = new Scanner(socket.getInputStream());
                     while(isActive()){
                         //Input: [M 1-2,2] [B 1-2,3] [M C 1-2,2] [B C 1-2,3] [END]
-                        //latchTurn= new CountDownLatch(1);
                         move= in.nextLine();
                         /*Questa notifiy chiama la update di message receiver in RemoteView
                          * Perchè remoteView observes that

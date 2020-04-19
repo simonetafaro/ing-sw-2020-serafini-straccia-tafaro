@@ -53,6 +53,10 @@ public class Card {
         this.mossa3="END"; //B
     }
 
+    public String getName() {
+        return name;
+    }
+
     public String getStepLetter(int i){
         return i==1 ? mossa1 : (i==2 ? mossa2 : (i==3 ? mossa3 : mossa4));
     }

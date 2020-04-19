@@ -50,7 +50,8 @@ public class CardManager {
             NodeList placementRules = document.getElementsByTagName("placementRule");
 
             //Build the placement rule by decorating it with additional rules, following the Decorator Pattern
-            cardRuleDecorator = new EmptyCardRuleDecorator();
+            //cardRuleDecorator = new EmptyCardRuleDecorator();
+            cardRuleDecorator = new StandardRuleDecorator();
 
             for(int i=0; i<placementRules.getLength(); i++){
 

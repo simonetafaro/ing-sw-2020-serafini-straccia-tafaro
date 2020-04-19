@@ -17,10 +17,6 @@ public class RemoteView extends View {
              * */
             System.out.println("Received from " +getPlayer().getNickname() +" "+ message);
             try{
-                /*Gestione del format dell'input M 1-1,2
-                 * ES:[Move Worker1, move to cell (1,2)]
-                 */
-                //M 1-2,3
                 if(message.equals("END")){
                     isEndNotify();
                     return;

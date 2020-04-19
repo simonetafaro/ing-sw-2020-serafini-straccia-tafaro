@@ -10,6 +10,8 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator implements CardR
         //this.model= model;
         //this.turn= turn;
 
+
+
         if(move instanceof PlayerMoveEnd){
             if(isEndAllowed(move, turn)) {
                 model.endMessage(move,turn,model);
@@ -18,6 +20,11 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator implements CardR
             }
             else
                 move.getView().reportError(gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
+            return;
+        }
+
+        if(!model.isRightWorker(move, turn)){
+            move.getView().reportError(gameMessage.insertAgain);
             return;
         }
 

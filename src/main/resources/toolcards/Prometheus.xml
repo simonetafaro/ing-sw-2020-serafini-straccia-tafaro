@@ -3,7 +3,7 @@
     <title>Prometheus</title>
     <imageURL></imageURL>
     <description>Prometheus description</description>
-    <placementRule decoratorName="StandardRuleDecorator" />
+    <placementRule decoratorName="PrometheusRuleDecorator" />
     <controllerStep State="B"/>
     <controllerStep State="M"/>
     <controllerStep State="B"/>

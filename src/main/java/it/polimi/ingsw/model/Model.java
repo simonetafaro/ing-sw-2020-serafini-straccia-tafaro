@@ -152,29 +152,37 @@ public class Model extends Observable<MoveMessage> {
         turn.getPlayerTurn(message.getPlayer()).resetStep();
         model.endNotifyView(message,false);
     }
-    public boolean setStep(PlayerMove move, Turn turn, Model model){
+    public void setStep(PlayerMove move, Turn turn, Model model){
         turn.getPlayerTurn(move.getPlayer()).getCurrStep().setType(move.getMoveOrBuild());
+        /**EDIT*/
+        turn.getPlayerTurn(move.getPlayer()).getCurrStep().setCellFrom(move.getWorker().getWorkerPosition());
         turn.getPlayerTurn(move.getPlayer()).getCurrStep().setCellTo(model.getBoard().getCell(move.getRow(),move.getColumn()));
         turn.getPlayerTurn(move.getPlayer()).updateStep();
-        return true;
     }
     public boolean checkStep(PlayerMove move, Turn turn, Model model){
-        if(turn.getPlayerTurn(move.getPlayer()).isFirstStep())
-            turn.getPlayerTurn(move.getPlayer()).setTurnWorker(move.getWorker());
-
-        if(!turn.getPlayerTurn(move.getPlayer()).getTurnWorker().equals(move.getWorker())){
-            move.getView().reportError(gameMessage.wrongWorker);
-            return false;
-        }
+        setFirstStep(move, turn);
         //set both worker of this player !stuck
         move.getPlayer().getWorker1().setStuck(false);
         move.getPlayer().getWorker2().setStuck(false);
-        turn.getPlayerTurn(move.getPlayer()).getCurrStep().setCellFrom(move.getWorker().getWorkerPosition());
+        //turn.getPlayerTurn(move.getPlayer()).getCurrStep().setCellFrom(move.getWorker().getWorkerPosition());
 
         return true;
     }
     public boolean isPlayerStuck(PlayerMove move){
         return move.getPlayer().getWorker1().isStuck()&&move.getPlayer().getWorker2().isStuck();
+    }
+
+    public boolean isRightWorker(PlayerMove move, Turn turn){
+        if((!turn.getPlayerTurn(move.getPlayer()).isFirstStep()) && !turn.getPlayerTurn(move.getPlayer()).getTurnWorker().equals(move.getWorker())){
+            move.getView().reportError(gameMessage.wrongWorker);
+            return false;
+        }
+        return true;
+    }
+
+    public void setFirstStep(PlayerMove move, Turn turn){
+        if(turn.getPlayerTurn(move.getPlayer()).isFirstStep())
+            turn.getPlayerTurn(move.getPlayer()).setTurnWorker(move.getWorker());
     }
     /**end*/
 

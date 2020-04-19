@@ -4,6 +4,6 @@ public class EmptyCardRuleDecorator implements CardRuleDecorator {
 
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
-        System.out.println("play di emptyCardRuleDecorator");
+        System.out.println("Empty");
     }
 }
