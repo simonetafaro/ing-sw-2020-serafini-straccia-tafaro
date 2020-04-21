@@ -50,7 +50,6 @@ public class Worker implements Serializable {
     public void clear(){
         this.currentPosition.setFreeSpace(true);
         this.currentPosition.setCurrWorker(null);
-
     }
 
 }
