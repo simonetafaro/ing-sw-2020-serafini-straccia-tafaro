@@ -35,7 +35,10 @@ public class RemoteView extends View {
     }
 
     private ClientConnection clientConnection;
+    public RemoteView(Player player){
+        super(player);
 
+    }
     public RemoteView(Player player, ClientConnection c) {
         super(player);
         this.clientConnection = c;

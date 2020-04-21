@@ -18,7 +18,7 @@ public class PanRuleDecorator extends StandardRuleDecorator implements CardRuleD
         model.notifyView(move,hasWon);
     }
 
-    public boolean panWinCondition(PlayerMove move, Model model){
+    public static boolean panWinCondition(PlayerMove move, Model model){
         return ( move.getWorker().getWorkerPosition().getLevel() - model.getBoard().getCell(move.getRow(),move.getColumn()).getLevel() )>=2;
 
     }

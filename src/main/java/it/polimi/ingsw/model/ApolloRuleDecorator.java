@@ -98,7 +98,7 @@ public class ApolloRuleDecorator extends StandardRuleDecorator implements CardRu
         model.notifyView(move,hasWon);
     }
 
-    private void switchWorkerPosition(PlayerMove move, Model model){
+    public static void switchWorkerPosition(PlayerMove move, Model model){
         Worker tempWorker;
         Cell from = move.getWorker().getWorkerPosition();
         Cell to = model.getBoard().getCell(move.getRow(), move.getColumn());
@@ -111,7 +111,7 @@ public class ApolloRuleDecorator extends StandardRuleDecorator implements CardRu
         tempWorker.setWorkerPosition(from);
     }
 
-    private boolean hasFreeCellClosed(Cell from, Cell[][] board){
+    public static boolean hasFreeCellClosed(Cell from, Cell[][] board){
         boolean bool=false;
         for(int i=-1; i<2; i++){
             for(int j=-1; j<2; j++){
@@ -142,7 +142,7 @@ public class ApolloRuleDecorator extends StandardRuleDecorator implements CardRu
         return model.getBoard().getCell(move.getRow(),move.getColumn()).canBuildInCells(model.getBoard().getPlayingBoard());
     }
 
-    public boolean isApolloWorker(Cell from, Worker to){
+    public static boolean isApolloWorker(Cell from, Worker to){
         return from.getCurrWorker().getColor()==to.getColor();
     }
 
