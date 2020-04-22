@@ -21,7 +21,6 @@ public class PlayerMove {
     }
 
     public PlayerMove( Worker worker, int row, int column) {
-
         this.worker=worker;
         this.player=null;
         this.row = row;

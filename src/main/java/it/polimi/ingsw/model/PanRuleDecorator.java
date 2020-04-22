@@ -1,12 +1,13 @@
 package it.polimi.ingsw.model;
 
-public class PanRuleDecorator extends StandardRuleDecorator implements CardRuleDecorator {
+public class PanRuleDecorator extends StandardRuleDecorator {
 
     @Override
     public void move(PlayerMove move, Model model, Turn turn) {
         System.out.println("Pan Move");
         boolean hasWon = model.hasWon(move) || panWinCondition(move, model);
 
+        model.setStep(move, turn, model);
         model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).setFreeSpace(true);
         model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).deleteCurrWorker();
 
@@ -14,7 +15,6 @@ public class PanRuleDecorator extends StandardRuleDecorator implements CardRuleD
         (model.getBoard().getCell(move.getRow(),move.getColumn())).setFreeSpace(false);
         model.getBoard().getCell(move.getRow(),move.getColumn()).setCurrWorker(move.getWorker());
 
-        model.setStep(move, turn, model);
         model.notifyView(move,hasWon);
     }
 

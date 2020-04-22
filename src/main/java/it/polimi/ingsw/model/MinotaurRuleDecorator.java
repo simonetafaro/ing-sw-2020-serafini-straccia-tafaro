@@ -2,7 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
-public class MinotaurRuleDecorator extends StandardRuleDecorator implements CardRuleDecorator {
+public class MinotaurRuleDecorator extends StandardRuleDecorator {
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
         System.out.println("Minotaur rule decorator - play");
@@ -80,7 +80,9 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator implements Card
     public void move(PlayerMove move, Model model, Turn turn) {
         System.out.println("Minotaur Move");
         boolean hasWon = model.hasWon(move);
+        model.setStep(move, turn, model);
         if(model.getBoard().getCell(move.getRow(),move.getColumn()).getCurrWorker()!=null){
+            System.out.println("Push worker");
             pushWorkerPosition(move, model);
         }else{
             model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).setFreeSpace(true);
@@ -90,7 +92,6 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator implements Card
             (model.getBoard().getCell(move.getRow(),move.getColumn())).setFreeSpace(false);
             model.getBoard().getCell(move.getRow(),move.getColumn()).setCurrWorker(move.getWorker());
         }
-        model.setStep(move,turn, model);
         model.notifyView(move,hasWon);
     }
 
@@ -127,13 +128,13 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator implements Card
         }
         return bool;
     }
+
     private boolean isEmptyCell(PlayerMove move, Model model){
         Cell to = model.getBoard().getCell(move.getRow(),move.getColumn());
-
         return to.isFree() ||
-                (to.getCurrWorker()!= move.getPlayer().getWorker1() && to.getCurrWorker()!= move.getPlayer().getWorker2() &&
-                        model.getBoard().getCell(move.getRow(), move.getColumn()).getCurrWorker()!=null &&
-                            minotaurMoveAllowed(move.getWorker().getWorkerPosition(), to, model.getBoard().getPlayingBoard()));
+                ( (to.getCurrWorker()!= move.getPlayer().getWorker1()) && (to.getCurrWorker() != move.getPlayer().getWorker2()) &&
+                        ((model.getBoard().getCell(move.getRow(), move.getColumn()).getCurrWorker()!=null) &&
+                        (minotaurMoveAllowed(move.getWorker().getWorkerPosition(), to, model.getBoard().getPlayingBoard()))));
     }
 
     /**Return true if minotaur in cell from can push the worker in the cell after cell to
@@ -143,10 +144,12 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator implements Card
         if(from.getPosY()==to.getPosY()){
             if(to.getPosX()==4 || to.getPosX()==0)
                 return false;
-            if(from.getPosX()-to.getPosX()>0)
+            if(from.getPosX()-to.getPosX()>0){
                 return board[from.getPosX()-1][to.getPosY()].isFree();
-            else
+            }
+            else {
                 return board[from.getPosX()+1][to.getPosY()].isFree();
+            }
         }
 
         if(from.getPosX()==to.getPosX()){

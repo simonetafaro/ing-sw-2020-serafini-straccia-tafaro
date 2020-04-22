@@ -2,9 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
-public class PrometheusRuleDecorator extends StandardRuleDecorator implements CardRuleDecorator {
-
-    private boolean canGoUp=true;
+public class PrometheusRuleDecorator extends StandardRuleDecorator {
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
         System.out.println("Prometheus rule decorator - play");
@@ -14,7 +12,7 @@ public class PrometheusRuleDecorator extends StandardRuleDecorator implements Ca
                 model.endMessage(move,turn,model);
                 move.getPlayer().getMyCard().setUsingCard(false);
                 move.getPlayer().getMyCard().setMossa3("B");
-                canGoUp=true;
+                model.setGoUpLevel(1);
             }
             else
                 move.getView().reportError(gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
@@ -60,7 +58,7 @@ public class PrometheusRuleDecorator extends StandardRuleDecorator implements Ca
         }
 
         if(move.getMoveOrBuild().equals("M") ){
-            if(!isLevelDifferenceAllowed(move, model)){
+            if(!model.isLevelDifferenceAllowed(move)){
                 move.getView().reportError(gameMessage.tooHighCellMessage+"\n"+gameMessage.insertAgain);
                 return;
             }
@@ -83,6 +81,7 @@ public class PrometheusRuleDecorator extends StandardRuleDecorator implements Ca
         System.out.println("Prometheus Move");
         boolean hasWon = model.hasWon(move);
 
+        model.setStep(move, turn, model);
         model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).setFreeSpace(true);
         model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).deleteCurrWorker();
 
@@ -90,7 +89,7 @@ public class PrometheusRuleDecorator extends StandardRuleDecorator implements Ca
         (model.getBoard().getCell(move.getRow(),move.getColumn())).setFreeSpace(false);
         model.getBoard().getCell(move.getRow(),move.getColumn()).setCurrWorker(move.getWorker());
 
-        model.setStep(move, turn, model);
+
         model.notifyView(move,hasWon);
     }
 
@@ -98,8 +97,8 @@ public class PrometheusRuleDecorator extends StandardRuleDecorator implements Ca
     public void build(PlayerMove move, Model model, Turn turn) {
         System.out.println("Prometheus Build");
         if(turn.getPlayerTurn(move.getPlayer()).getI()==1){
-            move.getPlayer().getMyCard().setUsingCard(true);
-            canGoUp= false;
+            //Can't go up for this turn
+            model.setGoUpLevel(0);
         }
         if(turn.getPlayerTurn(move.getPlayer()).getI()==2){
             move.getPlayer().getMyCard().setMossa3("END");
@@ -130,10 +129,5 @@ public class PrometheusRuleDecorator extends StandardRuleDecorator implements Ca
         return bool;
     }
 
-    public boolean isLevelDifferenceAllowed(PlayerMove move, Model model){
-        return canGoUp ? ((model.getBoard().getCell(move.getRow(), move.getColumn())).getLevel() - ((move.getWorker().getWorkerPosition()).getLevel()) <= 1) :
-                ((model.getBoard().getCell(move.getRow(), move.getColumn())).getLevel() - ((move.getWorker().getWorkerPosition()).getLevel()) <= 0);
-
-    }
 
 }

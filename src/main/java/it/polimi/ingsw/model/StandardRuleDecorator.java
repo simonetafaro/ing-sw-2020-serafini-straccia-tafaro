@@ -79,6 +79,8 @@ public class StandardRuleDecorator implements CardRuleDecorator {
         System.out.println("Standard Move");
         boolean hasWon = model.hasWon(move);
 
+        model.setStep(move, turn, model);
+
         model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).setFreeSpace(true);
         model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).deleteCurrWorker();
 
@@ -86,7 +88,7 @@ public class StandardRuleDecorator implements CardRuleDecorator {
         (model.getBoard().getCell(move.getRow(),move.getColumn())).setFreeSpace(false);
         model.getBoard().getCell(move.getRow(),move.getColumn()).setCurrWorker(move.getWorker());
 
-        model.setStep(move, turn, model);
+
         model.notifyView(move,hasWon);
     }
 

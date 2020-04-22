@@ -12,10 +12,12 @@ public class Model extends Observable<MoveMessage> {
     private Board board;
     private PlayerColor turn;
     private List<PlayerColor> playOrder_List;
+    private int level;
 
     public Model() {
         this.board = new Board();
         playOrder_List = new ArrayList<>();
+        this.level=1;
     }
 
     public void setPlayOrder(PlayerColor color1, PlayerColor color2, PlayerColor color3){
@@ -28,6 +30,10 @@ public class Model extends Observable<MoveMessage> {
         playOrder_List.add(color1);
         playOrder_List.add(color2);
         turn=playOrder_List.get(0);
+    }
+
+    protected void setGoUpLevel(int level) {
+        this.level = level;
     }
 
     public PlayerColor getTurn() {
@@ -43,25 +49,6 @@ public class Model extends Observable<MoveMessage> {
     }
     public Board getBoard() {
         return board;
-    }
-
-    public void performMove(PlayerMove move){
-
-        boolean hasWon = (move.getWorker().getWorkerPosition().getLevel()==2) &&
-                            ((board.getCell(move.getRow(),move.getColumn())).getLevel()==3);
-
-        board.getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).setFreeSpace(true);
-        board.getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).deleteCurrWorker();
-
-        move.getWorker().setWorkerPosition(board.getCell(move.getRow(),move.getColumn()));
-        (board.getCell(move.getRow(),move.getColumn())).setFreeSpace(false);
-        board.getCell(move.getRow(),move.getColumn()).setCurrWorker(move.getWorker());
-
-        notifyView(move,hasWon);
-    }
-    public void performBuild(PlayerMove move){
-        board.getCell(move.getRow(),move.getColumn()).buildInCell();
-        notifyView(move,false);
     }
 
     public void endNotifyView(PlayerMove move, boolean hasWon){
@@ -109,8 +96,9 @@ public class Model extends Observable<MoveMessage> {
         return board.getCell(move.getRow(),move.getColumn()).isFree();
     }
     public boolean isLevelDifferenceAllowed(PlayerMove move){
-        return (board.getCell(move.getRow(), move.getColumn())).getLevel() - ((move.getWorker().getWorkerPosition()).getLevel()) <= 1;
+        return ((board.getCell(move.getRow(), move.getColumn())).getLevel() - ((move.getWorker().getWorkerPosition()).getLevel())) <= this.level;
     }
+
     public void updateTurn(){
         turn=playOrder_List.get((playOrder_List.indexOf(turn)+1)%playOrder_List.size());
     }
@@ -154,7 +142,6 @@ public class Model extends Observable<MoveMessage> {
     }
     public void setStep(PlayerMove move, Turn turn, Model model){
         turn.getPlayerTurn(move.getPlayer()).getCurrStep().setType(move.getMoveOrBuild());
-        /**EDIT*/
         turn.getPlayerTurn(move.getPlayer()).getCurrStep().setCellFrom(move.getWorker().getWorkerPosition());
         turn.getPlayerTurn(move.getPlayer()).getCurrStep().setCellTo(model.getBoard().getCell(move.getRow(),move.getColumn()));
         turn.getPlayerTurn(move.getPlayer()).updateStep();

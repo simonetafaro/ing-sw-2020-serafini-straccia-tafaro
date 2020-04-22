@@ -2,15 +2,13 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
-public class ArtemisRuleDecorator extends StandardRuleDecorator implements CardRuleDecorator  {
+public class ArtemisRuleDecorator extends StandardRuleDecorator {
 
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
         System.out.println("Artemis rule decorator- Play");
         //this.model= model;
         //this.turn= turn;
-
-
 
         if(move instanceof PlayerMoveEnd){
             if(isEndAllowed(move, turn)) {
@@ -84,13 +82,16 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator implements CardR
         System.out.println("Artemis Move");
 
         if(turn.getPlayerTurn(move.getPlayer()).getI()==2){
+            System.out.println("Move numero 2 artemis");
             //is the second move for this player, so he wants to use the card
-            if(model.getBoard().getCell(move.getRow(),move.getColumn()) == turn.getPlayerTurn(move.getPlayer()).getStepI(1).getCellFrom()){
+            //TODO check artemis condition
+            if(model.getBoard().getCell(move.getRow(),move.getColumn()).equals(turn.getPlayerTurn(move.getPlayer()).getStepI(1).getCellFrom())){
                 move.getView().reportError(gameMessage.invalidMoveArtemis+"\n"+gameMessage.insertAgain);
                 return;
             }
             move.getPlayer().getMyCard().setUsingCard(true);
         }
+        model.setStep(move, turn, model);
 
         model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).setFreeSpace(true);
         model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).deleteCurrWorker();
@@ -99,7 +100,7 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator implements CardR
         (model.getBoard().getCell(move.getRow(),move.getColumn())).setFreeSpace(false);
         model.getBoard().getCell(move.getRow(),move.getColumn()).setCurrWorker(move.getWorker());
 
-        model.setStep(move, turn, model);
+
         model.notifyView(move,hasWon);
     }
 
