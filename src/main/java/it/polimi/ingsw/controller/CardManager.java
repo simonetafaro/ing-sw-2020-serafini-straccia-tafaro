@@ -29,16 +29,16 @@ public class CardManager {
                 System.out.println("Mossa"+(i+1)+"="+a.getNamedItem("State").getNodeValue());
                 switch (i){
                     case 0:
-                        myCard.setMossa1(a.getNamedItem("State").getNodeValue());
+                        myCard.setCustomM1(a.getNamedItem("State").getNodeValue());
                         break;
                     case 1:
-                        myCard.setMossa2(a.getNamedItem("State").getNodeValue());
+                        myCard.setCustomM2(a.getNamedItem("State").getNodeValue());
                         break;
                     case 2:
-                        myCard.setMossa3(a.getNamedItem("State").getNodeValue());
+                        myCard.setCustomM3(a.getNamedItem("State").getNodeValue());
                         break;
                     case 3:
-                        myCard.setMossa4(a.getNamedItem("State").getNodeValue());
+                        myCard.setCustomM4(a.getNamedItem("State").getNodeValue());
                         break;
                 }
             }

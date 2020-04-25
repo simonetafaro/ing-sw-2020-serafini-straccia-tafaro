@@ -11,7 +11,7 @@ public class PrometheusRuleDecorator extends StandardRuleDecorator {
             if(isEndAllowed(move, turn)) {
                 model.endMessage(move,turn,model);
                 move.getPlayer().getMyCard().setUsingCard(false);
-                move.getPlayer().getMyCard().setMossa3("B");
+                move.getPlayer().getMyCard().setCustomM3("B");
                 model.setGoUpLevel(1);
             }
             else
@@ -101,7 +101,7 @@ public class PrometheusRuleDecorator extends StandardRuleDecorator {
             model.setGoUpLevel(0);
         }
         if(turn.getPlayerTurn(move.getPlayer()).getI()==2){
-            move.getPlayer().getMyCard().setMossa3("END");
+            move.getPlayer().getMyCard().setCustomM3("END");
         }
         model.getBoard().getCell(move.getRow(),move.getColumn()).buildInCell();
         model.setStep(move, turn, model);
