@@ -3,7 +3,7 @@
     <title>Athena</title>
     <imageURL></imageURL>
     <description>Athena description</description>
-    <placementRule decoratorName="AthenaRuleDecorator" />
+    <customRule decoratorName="AthenaRuleDecorator" />
     <controllerStep State="M"/>
     <controllerStep State="B"/>
     <controllerStep State="END"/>

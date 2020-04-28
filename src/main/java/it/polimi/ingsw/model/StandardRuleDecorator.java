@@ -7,10 +7,6 @@ public class StandardRuleDecorator implements CardRuleDecorator {
 
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
-        System.out.println("Standard rule decorator- Play");
-        //this.model= model;
-        //this.turn= turn;
-
         if(move instanceof PlayerMoveEnd){
             if(isEndAllowed(move, turn)) {
                 model.endMessage(move,turn,model);
@@ -76,24 +72,19 @@ public class StandardRuleDecorator implements CardRuleDecorator {
     }
 
     public void move(PlayerMove move, Model model, Turn turn) {
-        System.out.println("Standard Move");
         boolean hasWon = model.hasWon(move);
 
         model.setStep(move, turn, model);
-
         model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).setFreeSpace(true);
         model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).deleteCurrWorker();
-
         move.getWorker().setWorkerPosition(model.getBoard().getCell(move.getRow(),move.getColumn()));
         (model.getBoard().getCell(move.getRow(),move.getColumn())).setFreeSpace(false);
         model.getBoard().getCell(move.getRow(),move.getColumn()).setCurrWorker(move.getWorker());
-
 
         model.notifyView(move,hasWon);
     }
 
     public void build(PlayerMove move, Model model, Turn turn) {
-        System.out.println("Standard Build");
         model.getBoard().getCell(move.getRow(),move.getColumn()).buildInCell();
 
         model.setStep(move, turn, model);

@@ -5,9 +5,6 @@ import it.polimi.ingsw.utils.gameMessage;
 public class ApolloRuleDecorator extends StandardRuleDecorator {
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
-            System.out.println("Apollo rule decorator - play");
-            //this.model= model;
-            //this.turn= turn;
 
             if(move instanceof PlayerMoveEnd){
                 if(turn.getPlayerTurn(move.getPlayer()).getI()==3)
@@ -81,8 +78,10 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
 
     @Override
     public void move(PlayerMove move, Model model, Turn turn) {
-        System.out.println("Apollo Move");
         boolean hasWon = model.hasWon(move);
+
+        model.setStep(move,turn, model);
+
         if(model.getBoard().getCell(move.getRow(),move.getColumn()).getCurrWorker()!=null){
             switchWorkerPosition(move, model);
         }else{
@@ -93,7 +92,7 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
             (model.getBoard().getCell(move.getRow(),move.getColumn())).setFreeSpace(false);
             model.getBoard().getCell(move.getRow(),move.getColumn()).setCurrWorker(move.getWorker());
         }
-        model.setStep(move,turn, model);
+
         model.notifyView(move,hasWon);
     }
 

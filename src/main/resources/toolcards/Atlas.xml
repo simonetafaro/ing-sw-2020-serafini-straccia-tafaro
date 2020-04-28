@@ -3,7 +3,7 @@
     <title>Apollo</title>
     <imageURL></imageURL>
     <description>Apollo description</description>
-    <placementRule decoratorName="AtlasRuleDecorator" />
+    <customRule decoratorName="AtlasRuleDecorator" />
     <controllerStep State="M"/>
     <controllerStep State="B"/>
     <controllerStep State="END"/>

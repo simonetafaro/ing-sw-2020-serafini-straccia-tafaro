@@ -59,35 +59,28 @@ public class Server {
             //TODO check if input is a number between 2 and 3 and not a string
             playerNumber = Integer.parseInt(c.read());
         }
+        c.send("Wait for cards");
         waitingConnection.put(player, c);
-        //Creo la partita se ho nella lobby il numero di giocatori scelto
         if (waitingConnection.size() == playerNumber) {
-            //Questa sarà una lista di player
             Model model = new Model();
             this.startController.setPlayerNumber(playerNumber);
             List<Player> keys = new ArrayList<>(waitingConnection.keySet());
-            //Crea le ClientConnection per ogni player presente nella Hashmap
             ClientConnection c1 = waitingConnection.get(keys.get(0));
             ClientConnection c2 = waitingConnection.get(keys.get(1));
             ClientConnection c3 = null;
-            //Creo due istanze di player con i dati inseriti dai client
             Player player1 = new Player(keys.get(0));
             Player player2 = new Player(keys.get(1));
             Player player3 = null;
-            //Creo una remote view per ogni player con la relativa connessione creata
             View player1View = new RemoteView(player1, c1);
             View player2View = new RemoteView(player2, c2);
             View player3View = null;
-            //Creo un controller a cui passo il model creato
             Controller controller = new Controller(model);
-            //Le remoteView dei players osservano il model
+
             model.addObserver(player1View);
             model.addObserver(player2View);
-            //Il controller osserva le remoteView dei players
             player1View.addObserver(controller);
             player2View.addObserver(controller);
-            //playingConnection.put(c1, c2);
-            //playingConnection.put(c2, c1);
+
             if(playerNumber==3){
                 c3 = waitingConnection.get(keys.get(2));
                 player3 = new Player(keys.get(2));
@@ -104,7 +97,6 @@ public class Server {
                 c3.asyncSend(model.getBoardCopy());
 
             waitingConnection.clear();
-            //gestione stampa primo turno
 
             if(model.getTurn()==(player1.getColor())){
                 //p1 è il primo

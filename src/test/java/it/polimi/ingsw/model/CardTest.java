@@ -32,10 +32,10 @@ class CardTest {
     @Test
     void getStepLetter() {
         int i = 1;
-        card.setCustomM1("M");
-        card.setCustomM2("M");
-        card.setCustomM3("B");
-        card.setCustomM4("END");
+        card.addCustomStep(0,"M");
+        card.addCustomStep(1,"M");
+        card.addCustomStep(2,"B");
+        card.addCustomStep(3,"END");
         assertEquals(card.getStepLetter(i),"M");
         i = 2;
         assertEquals(card.getStepLetter(i),"M");

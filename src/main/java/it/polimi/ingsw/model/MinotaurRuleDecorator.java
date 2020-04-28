@@ -5,10 +5,6 @@ import it.polimi.ingsw.utils.gameMessage;
 public class MinotaurRuleDecorator extends StandardRuleDecorator {
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
-        System.out.println("Minotaur rule decorator - play");
-        //this.model= model;
-        //this.turn= turn;
-
         if(move instanceof PlayerMoveEnd){
             if(turn.getPlayerTurn(move.getPlayer()).getI()==3)
                 model.endMessage(move,turn,model);
@@ -22,7 +18,6 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
             return;
         }
 
-
         if(move.getRow()<0 || move.getRow()>=5 || move.getColumn()<0 || move.getColumn()>=5){
             move.getView().reportError(gameMessage.wrongInputMessage+"\n"+gameMessage.insertAgain);
             return;
@@ -33,7 +28,6 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
             return;
         }
 
-        //se minotaur ha worker vicino è stack se la cella dopo il worker è occupata (cupola o altro worker)
         if(!hasFreeCellClosed(move.getWorker().getWorkerPosition(), model.getBoard().getPlayingBoard())){
             //this worker is stuck
             move.getWorker().setStuck(true);
@@ -52,9 +46,7 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
         }
 
         if(move.getMoveOrBuild().equals("M") ){
-            //per minotauro anche le celle con un worker dentro la cui cella ""dietro"" è libera sono empty
             if(!isEmptyCell(move, model)){
-                //read worker position and check if there are some empty cell where he can move in.
                 move.getView().reportError(gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
                 return;
             }
@@ -78,16 +70,13 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
 
     @Override
     public void move(PlayerMove move, Model model, Turn turn) {
-        System.out.println("Minotaur Move");
         boolean hasWon = model.hasWon(move);
         model.setStep(move, turn, model);
         if(model.getBoard().getCell(move.getRow(),move.getColumn()).getCurrWorker()!=null){
-            System.out.println("Push worker");
             pushWorkerPosition(move, model);
         }else{
             model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).setFreeSpace(true);
             model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(),move.getWorker().getWorkerPosition().getPosY()).deleteCurrWorker();
-
             move.getWorker().setWorkerPosition(model.getBoard().getCell(move.getRow(),move.getColumn()));
             (model.getBoard().getCell(move.getRow(),move.getColumn())).setFreeSpace(false);
             model.getBoard().getCell(move.getRow(),move.getColumn()).setCurrWorker(move.getWorker());

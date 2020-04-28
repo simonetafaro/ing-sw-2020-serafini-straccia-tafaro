@@ -22,32 +22,18 @@ public class CardManager {
 
             myCard = new Card(cardName);
 
-            System.out.println("SetCardFromFile");
             NodeList controllerStepIterator = document.getElementsByTagName("controllerStep");
             for(int i=0; i<controllerStepIterator.getLength(); i++){
                 NamedNodeMap a = controllerStepIterator.item(i).getAttributes();
-                System.out.println("Mossa"+(i+1)+"="+a.getNamedItem("State").getNodeValue());
-                switch (i){
-                    case 0:
-                        myCard.setCustomM1(a.getNamedItem("State").getNodeValue());
-                        break;
-                    case 1:
-                        myCard.setCustomM2(a.getNamedItem("State").getNodeValue());
-                        break;
-                    case 2:
-                        myCard.setCustomM3(a.getNamedItem("State").getNodeValue());
-                        break;
-                    case 3:
-                        myCard.setCustomM4(a.getNamedItem("State").getNodeValue());
-                        break;
-                }
+
+                myCard.addCustomStep(i,a.getNamedItem("State").getNodeValue());
             }
             player.setCard(myCard);
 
 
             //Placement Rules PARSING
             CardRuleDecorator cardRuleDecorator;
-            NodeList placementRules = document.getElementsByTagName("placementRule");
+            NodeList placementRules = document.getElementsByTagName("customRule");
 
             //Build the placement rule by decorating it with additional rules, following the Decorator Pattern
             //cardRuleDecorator = new EmptyCardRuleDecorator();

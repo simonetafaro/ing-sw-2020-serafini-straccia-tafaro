@@ -6,15 +6,12 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
 
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
-        System.out.println("Artemis rule decorator- Play");
-        //this.model= model;
-        //this.turn= turn;
 
         if(move instanceof PlayerMoveEnd){
             if(isEndAllowed(move, turn)) {
                 model.endMessage(move,turn,model);
                 move.getPlayer().getMyCard().setUsingCard(false);
-                move.getPlayer().getMyCard().setCustomM3("B");
+                move.getPlayer().getMyCard().addCustomStep(2, "B");
             }
             else
                 move.getView().reportError(gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
@@ -79,12 +76,9 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
     public void move(PlayerMove move, Model model, Turn turn) {
         //check if is second step, in this case check is the cell where i want to move in is different from the cell of first step
         boolean hasWon = model.hasWon(move);
-        System.out.println("Artemis Move");
 
         if(turn.getPlayerTurn(move.getPlayer()).getI()==2){
-            System.out.println("Move numero 2 artemis");
             //is the second move for this player, so he wants to use the card
-            //TODO check artemis condition
             if(model.getBoard().getCell(move.getRow(),move.getColumn()).equals(turn.getPlayerTurn(move.getPlayer()).getStepI(1).getCellFrom())){
                 move.getView().reportError(gameMessage.invalidMoveArtemis+"\n"+gameMessage.insertAgain);
                 return;
@@ -106,9 +100,8 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
 
     @Override
     public void build(PlayerMove move, Model model, Turn turn) {
-        System.out.println("Artemis Build");
         if(turn.getPlayerTurn(move.getPlayer()).getI()==2){
-            move.getPlayer().getMyCard().setCustomM3("END");
+            move.getPlayer().getMyCard().addCustomStep(2,"END");
         }
         model.getBoard().getCell(move.getRow(),move.getColumn()).buildInCell();
         model.setStep(move, turn, model);

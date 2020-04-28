@@ -13,7 +13,6 @@ public class Player {
     private Worker worker1;
     private Worker worker2;
     private PlayerTurn myTurn;
-
     private CardRuleDecorator myCardMethod;
     private Card myCard;
 

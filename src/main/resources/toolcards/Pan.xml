@@ -3,7 +3,7 @@
     <title>Pan</title>
     <imageURL></imageURL>
     <description>Pan description</description>
-    <placementRule decoratorName="PanRuleDecorator" />
+    <customRule decoratorName="PanRuleDecorator" />
     <controllerStep State="M"/>
     <controllerStep State="B"/>
     <controllerStep State="END"/>

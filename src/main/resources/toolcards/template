@@ -3,6 +3,6 @@
     <title></title>
     <imageURL></imageURL>
     <description></description>
-    <placementRule decoratorName="" />
-    <controllerStep prevState="" nextState="" />
+    <customRule decoratorName="" />
+    <controllerStep State=""/>
 </toolcard>

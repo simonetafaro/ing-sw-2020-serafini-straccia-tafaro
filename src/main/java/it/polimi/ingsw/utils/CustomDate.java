@@ -17,7 +17,7 @@ public class CustomDate {
         this.year = year;
     }
 
-    //return 1 se la data su cui chiamo il metodo è antecedente a quella passata come metodo
+    //date1.compareDate(date2) -> return 1 if date1 is earlier than data2
     public int compareDate(CustomDate date){
         if(this.year>date.year)
             return 1;

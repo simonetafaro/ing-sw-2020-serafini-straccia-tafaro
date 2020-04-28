@@ -84,26 +84,18 @@ public class SocketClientConnection  extends Observable<String> implements Clien
         try{
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
-            /*if(firstPlayer){
-                send("Welcome! Choose the number of players?");
-                int playerNum = Integer.parseInt(in.nextLine());
-                server.setPlayerNumber(playerNum);
-            }*/
+
             send("What is your name?");
             String move = in.nextLine();
             player.setNickname(move);
             server.getStartController().setPlayerBirthDate(this,player,in);
             server.getStartController().setPlayerColor(this,player,in);
-            send("Wait for cards");
 
             server.lobby(this, player);
 
         }catch (IOException | NoSuchElementException e) {
             System.err.println("Error!" + e.getMessage());
-        }/*finally{
-            send("ramo finally della socketClientConnection");
-            close();
-        }*/
+        }
     }
 
     public void getInputFromClient(){
@@ -115,13 +107,9 @@ public class SocketClientConnection  extends Observable<String> implements Clien
                 try {
                     in = new Scanner(socket.getInputStream());
                     while(isActive()){
-                        //Input: [M 1-2,2] [B 1-2,3] [M C 1-2,2] [B C 1-2,3] [END]
+                        //Input: [M 1-2,2] [B 1-2,3] [END]
                         move= in.nextLine();
-                        /*Questa notifiy chiama la update di message receiver in RemoteView
-                         * Perchè remoteView observes that
-                         */
                         notifyObserver(move.toUpperCase());
-                        //latchTurn.await();
                     }
                 }catch(Exception e){
                     System.out.println("End of getInputFromClient");

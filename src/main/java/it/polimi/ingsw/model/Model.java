@@ -52,9 +52,6 @@ public class Model extends Observable<MoveMessage> {
     }
 
     public void endNotifyView(PlayerMove move, boolean hasWon){
-        /**Questa notify sollecita la update di Player1View e Player2View
-         * passando come paramentro la nuova board e il giocatore dell'ultima mossa
-         */
         try {
             PlayerColor nextTurn = playOrder_List.get((playOrder_List.indexOf(turn)+1)%playOrder_List.size());
             notifyObserver(new MoveMessage((Board) board.clone(), move.getPlayer(), hasWon, nextTurn));
@@ -64,9 +61,6 @@ public class Model extends Observable<MoveMessage> {
         updateTurn();
     }
     public void notifyView(PlayerMove move, boolean hasWon){
-        /**Questa notify sollecita la update di Player1View e Player2View
-         * passando come paramentro la nuova board e il giocatore dell'ultima mossa
-         */
         try {
             notifyObserver(new MoveMessage((Board) board.clone(), move.getPlayer(), hasWon, turn));
         }catch (CloneNotSupportedException e){
@@ -74,13 +68,8 @@ public class Model extends Observable<MoveMessage> {
         }
     }
 
-    //metodi che mi controllano se la mossa che voglio fare è possibile
-    //mio turno, cella vuota e nelle 8 adiacenti e con un dislivello di massimo 1
     public boolean isReachableCell(PlayerMove move){
         return move.getWorker().getWorkerPosition().isClosedTo(board.getCell(move.getRow(),move.getColumn()));
-        /*WITH CARD
-          return move.getPlayer().getMyCard().getMoveNear();
-        * */
     }
     public boolean isEmptyCell(PlayerMove move){
         return board.getCell(move.getRow(),move.getColumn()).isFree();
@@ -107,7 +96,7 @@ public class Model extends Observable<MoveMessage> {
         //update turn
         notifyView(move,false);
         move.getView().reportError(gameMessage.loseMessage);
-        //kill thread of move.getPlayer()
+        //kill thread of move.getPlayer() ?
     }
     public void deletePlayerFromGame(PlayerColor color){
         playOrder_List.remove(color);
@@ -125,7 +114,6 @@ public class Model extends Observable<MoveMessage> {
                 ((board.getCell(move.getRow(),move.getColumn())).getLevel()==3);
     }
 
-    /**Standard Method */
     public void endMessage(PlayerMove message, Turn turn, Model model){
         turn.getPlayerTurn(message.getPlayer()).resetStep();
         model.endNotifyView(message,false);
@@ -161,6 +149,5 @@ public class Model extends Observable<MoveMessage> {
         if(turn.getPlayerTurn(move.getPlayer()).isFirstStep())
             turn.getPlayerTurn(move.getPlayer()).setTurnWorker(move.getWorker());
     }
-    /**end*/
 
 }

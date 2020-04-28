@@ -6,8 +6,6 @@ public class DemeterRuleDecorator extends StandardRuleDecorator {
 
     @Override
     public void build(PlayerMove move, Model model, Turn turn) {
-        System.out.println("Demeter Build");
-
         if(turn.getPlayerTurn(move.getPlayer()).getI()==3){
             //is the second move for this player, so he wants to use the card
             if(model.getBoard().getCell(move.getRow(),move.getColumn()) == turn.getPlayerTurn(move.getPlayer()).getStepI(2).getCellTo()){

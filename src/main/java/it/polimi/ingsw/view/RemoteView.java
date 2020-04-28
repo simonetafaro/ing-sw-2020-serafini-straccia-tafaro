@@ -10,12 +10,7 @@ public class RemoteView extends View {
     private class MessageReceiver implements Observer<String>{
         @Override
         public void update(String message) {
-            /*Questa update è sollecitata dalla notify di una SocketClientConnection.
-             * Quando un client scrive qualcosa viene lanciata una notify
-             * */
-            /*Questo stampa sul server ciò che il client ha scritto
-             * */
-            System.out.println("Received from " +getPlayer().getNickname() +" "+ message);
+            //System.out.println("Received from " +getPlayer().getNickname() +" "+ message);
             try{
                 if(message.equals("END")){
                     isEndNotify();
@@ -42,14 +37,13 @@ public class RemoteView extends View {
     public RemoteView(Player player, ClientConnection c) {
         super(player);
         this.clientConnection = c;
-        /*Aggiungo un observer alla connessione tra client e server
-         * */
         c.addObserver(new MessageReceiver());
 
     }
     public ClientConnection getClientConnection() {
         return clientConnection;
     }
+
     private boolean standardInput(String message){
         //M 1-1,2
         return message.length()==7 && (message.charAt(0)=='M' || message.charAt(0)=='B') && (message.charAt(2)=='1' ||

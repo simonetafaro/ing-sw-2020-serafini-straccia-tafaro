@@ -172,8 +172,6 @@ public class StartController {
 
     public Turn setPlayerWorkerInOrder(Model model, View player1, View player2, View player3) {
         int compare;
-        System.out.println("SetPLayerWorkerinorder");
-        //trovare l'ordine di gioco tra i player
         compare = player1.getPlayer().getBirthDate().compareDate(player2.getPlayer().getBirthDate());
         if(compare==1){
             //player1 è più giovane
@@ -181,7 +179,6 @@ public class StartController {
                 compare= player1.getPlayer().getBirthDate().compareDate(player3.getPlayer().getBirthDate());
                 if(compare==1){
                     //il piu giovane è player1
-                    System.out.println("ilplayer1èpiugiovane");
                     model.setPlayOrder(player1.getPlayer().getColor(),player2.getPlayer().getColor(), player3.getPlayer().getColor());
                     //p1-p2-p3
                     chooseCardsFromDeck(player1);

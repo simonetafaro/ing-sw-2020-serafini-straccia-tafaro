@@ -6,7 +6,6 @@ public class AtlasRuleDecorator extends StandardRuleDecorator {
 
     @Override
     public void build(PlayerMove move, Model model, Turn turn) {
-        System.out.println("Atlas Build");
         move.getView().getClientConnection().send(gameMessage.atlasCard);
         String buildDome = move.getView().getClientConnection().read();
         if(buildDome.toUpperCase().equals("YES"))
