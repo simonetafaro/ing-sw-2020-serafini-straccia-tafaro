@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.utils.gameMessage;
 
 public class PrometheusRuleDecorator extends StandardRuleDecorator {
+
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
         System.out.println("Prometheus rule decorator - play");
@@ -109,7 +110,7 @@ public class PrometheusRuleDecorator extends StandardRuleDecorator {
     }
 
     public boolean canBuildInAndThenMove(PlayerMove move, Model model){
-        //se construisce in model.getBoard().getPlayingBoard(move.getRow(),move.getColumn()) ha celle libere in cui muoversi senza salire
+        //se costruisce in model.getBoard().getCell(move.getRow(),move.getColumn()) ha celle libere in cui muoversi senza salire
         boolean bool=false;
         Cell[][] board= model.getBoard().getPlayingBoard();
         Cell from = move.getWorker().getWorkerPosition();

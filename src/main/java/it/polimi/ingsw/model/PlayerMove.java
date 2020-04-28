@@ -28,6 +28,14 @@ public class PlayerMove {
         this.view = null;
     }
 
+    public PlayerMove(Player player, Worker worker,int row, int column) {
+        this.worker=worker;
+        this.player=player;
+        this.row = row;
+        this.column = column;
+        this.view = null;
+    }
+
     public PlayerMove(Player player, int worker, int row, int column, View view, String moveOrBuild) {
         this.player = player;
         if(worker==1)

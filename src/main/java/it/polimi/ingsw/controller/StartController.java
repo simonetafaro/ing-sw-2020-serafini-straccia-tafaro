@@ -20,15 +20,15 @@ public class StartController {
     private boolean Blue, Grey, White;
 
     public StartController(){
-        this.deck= new Deck();
-        this.ChosenCards= new ArrayList<>();
+        this.deck = new Deck();
+        this.ChosenCards = new ArrayList<>();
     }
 
     public void setPlayerNumber(int playerNumber) {
         this.playerNumber = playerNumber;
     }
 
-    public void setPlayerBirthdate(ClientConnection c, Player currPlayer, Scanner in){
+    public void setPlayerBirthDate(ClientConnection c, Player currPlayer, Scanner in){
         CustomDate birthday = new CustomDate();
         int d,m,y;
         while(true){
@@ -42,7 +42,7 @@ public class StartController {
                 c.send("Insert your birth's year");
                 y=Integer.parseInt(in.nextLine());
                 birthday.setYear(y);
-                currPlayer.setBirthdate(birthday);
+                currPlayer.setBirthDate(birthday);
                 break;
             }
             catch (InputMismatchException e){
@@ -71,7 +71,7 @@ public class StartController {
                 return false;
             }
             else {
-                c.send("This color is been already choosen!");
+                c.send("This color is already been chosen!");
                 return true;
             }
             case "WHITE": if(!isWhite()){
@@ -79,7 +79,7 @@ public class StartController {
                 return false;
             }
             else {
-                c.send("This color is been already choosen!");
+                c.send("This color is already been chosen!");
                 return true;
             }
             case "GREY":  if(!isGrey()){
@@ -87,7 +87,7 @@ public class StartController {
                 return false;
             }
             else {
-                c.send("This color is been already choosen!");
+                c.send("This color is already been chosen!");
                 return true;
             }
             default:    c.send("This color doesn't exist!");
@@ -168,11 +168,11 @@ public class StartController {
         int compare;
         System.out.println("SetPLayerWorkerinorder");
         //trovare l'ordine di gioco tra i player
-        compare = player1.getPlayer().getBirthdate().compareDate(player2.getPlayer().getBirthdate());
+        compare = player1.getPlayer().getBirthDate().compareDate(player2.getPlayer().getBirthDate());
         if(compare==1){
             //player1 è più giovane
             if(player3!=null){
-                compare= player1.getPlayer().getBirthdate().compareDate(player3.getPlayer().getBirthdate());
+                compare= player1.getPlayer().getBirthDate().compareDate(player3.getPlayer().getBirthDate());
                 if(compare==1){
                     //il piu giovane è player1
                     System.out.println("ilplayer1èpiugiovane");
@@ -211,7 +211,7 @@ public class StartController {
         }else{
             //player 2 è più giovane
             if(player3!=null){
-                compare= player2.getPlayer().getBirthdate().compareDate(player3.getPlayer().getBirthdate());
+                compare= player2.getPlayer().getBirthDate().compareDate(player3.getPlayer().getBirthDate());
                 if(compare==1){
                     //il piu giovane è player2
                     model.setPlayOrder(player2.getPlayer().getColor(),player3.getPlayer().getColor(), player1.getPlayer().getColor());

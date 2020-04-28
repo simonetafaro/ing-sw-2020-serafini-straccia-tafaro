@@ -14,7 +14,7 @@ public class Worker implements Serializable {
     public Worker(Cell position, int number, PlayerColor color){
         this.currentPosition = position;
         this.workerNum = number;
-        this.color= color;
+        this.color = color;
         position.setFreeSpace(false);
         position.setCurrWorker(this);
     }
@@ -26,6 +26,9 @@ public class Worker implements Serializable {
     }
     public void setStuck(boolean stuck) {
         this.stuck = stuck;
+    }
+    public void setColor(PlayerColor color){
+        this.color=color;
     }
 
     public Cell getWorkerPosition(){

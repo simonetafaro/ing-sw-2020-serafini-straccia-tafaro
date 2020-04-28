@@ -1,16 +1,13 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.PlayerMove;
 import it.polimi.ingsw.observ.Observable;
-import it.polimi.ingsw.utils.gameMessage;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import java.util.concurrent.CountDownLatch;
 
 public class SocketClientConnection  extends Observable<String> implements ClientConnection, Runnable{
 
@@ -97,7 +94,7 @@ public class SocketClientConnection  extends Observable<String> implements Clien
             send("What is your name?");
             String move = in.nextLine();
             player.setNickname(move);
-            server.getStartController().setPlayerBirthdate(this,player,in);
+            server.getStartController().setPlayerBirthDate(this,player,in);
             server.getStartController().setPlayerColor(this,player,in);
             send("Wait for cards");
 

@@ -67,7 +67,7 @@ public class Cell implements Cloneable, Serializable {
                 (this.getPosY() - cell.getPosY() <= 1 && this.getPosY() - cell.getPosY() >= -1);
     }
 
-    /*return true if worker has near free cell**/
+    /**return true if worker has near free cell**/
     public boolean hasFreeCellClosed(Cell[][] board){
         boolean bool=false;
         for(int i=-1; i<2; i++){

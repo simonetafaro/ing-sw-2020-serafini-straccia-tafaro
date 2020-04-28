@@ -95,7 +95,7 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
         model.notifyView(move,hasWon);
     }
 
-    private void pushWorkerPosition(PlayerMove move, Model model){
+    public void pushWorkerPosition(PlayerMove move, Model model){
         Cell from = move.getWorker().getWorkerPosition();
         Cell to = model.getBoard().getCell(move.getRow(), move.getColumn());
 
@@ -111,7 +111,7 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
         move.getWorker().setWorkerPosition(model.getBoard().getCell(move.getRow(),move.getColumn()));
     }
 
-    private boolean hasFreeCellClosed(Cell from, Cell[][] board){
+    public boolean hasFreeCellClosed(Cell from, Cell[][] board){
         boolean bool=false;
         for(int i=-1; i<2; i++){
             for(int j=-1; j<2; j++){
@@ -129,7 +129,7 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
         return bool;
     }
 
-    private boolean isEmptyCell(PlayerMove move, Model model){
+    public boolean isEmptyCell(PlayerMove move, Model model){
         Cell to = model.getBoard().getCell(move.getRow(),move.getColumn());
         return to.isFree() ||
                 ( (to.getCurrWorker()!= move.getPlayer().getWorker1()) && (to.getCurrWorker() != move.getPlayer().getWorker2()) &&
@@ -145,10 +145,10 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
             if(to.getPosX()==4 || to.getPosX()==0)
                 return false;
             if(from.getPosX()-to.getPosX()>0){
-                return board[from.getPosX()-1][to.getPosY()].isFree();
+                return board[to.getPosX()-1][to.getPosY()].isFree();
             }
             else {
-                return board[from.getPosX()+1][to.getPosY()].isFree();
+                return board[to.getPosX()+1][to.getPosY()].isFree();
             }
         }
 
@@ -181,9 +181,9 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
 
         if(from.getPosY()==to.getPosY()){
             if(from.getPosX()-to.getPosX()>0)
-                return board[from.getPosX()-1][to.getPosY()];
+                return board[to.getPosX()-1][to.getPosY()];
             else
-                return board[from.getPosX()+1][to.getPosY()];
+                return board[to.getPosX()+1][to.getPosY()];
         }
 
         if(from.getPosX()==to.getPosX()){

@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import java.util.List;
 
 public class PlayerTurn {
+
     private Step[] steps= new Step[4];
     private Player turnPlayer;
     private Worker worker;

@@ -1,32 +1,20 @@
 package it.polimi.ingsw.utils;
 
 public class CustomDate {
+
     private int day;
     private int month;
     private int year;
 
+    //TODO: manage correct date
     public void setDay(int day) {
         this.day = day;
     }
-
     public void setMonth(int month) {
         this.month = month;
     }
-
     public void setYear(int year) {
         this.year = year;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public int getYear() {
-        return year;
     }
 
     //return 1 se la data su cui chiamo il metodo è antecedente a quella passata come metodo

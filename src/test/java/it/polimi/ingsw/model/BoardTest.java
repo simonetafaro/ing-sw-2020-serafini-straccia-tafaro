@@ -25,6 +25,7 @@ class BoardTest {
         assertTrue(  board.getPlayingBoard()[0][4].isFree());
         assertTrue(  board.getPlayingBoard()[3][4].isFree());
     }
+
     //controllo che dopo la clear all i livelli siano a zero
     @Test
     void clearAllLevelTest() {
@@ -96,6 +97,7 @@ class BoardTest {
         assertFalse(board.getPlayingBoard()[1][1].canBuildInCells(board.getPlayingBoard()));
         board.clearAll();
     }
+
     @Test
     void canBuildTrueLevelTest(){
         Board board=new Board();
@@ -113,8 +115,9 @@ class BoardTest {
         assertTrue(board.getPlayingBoard()[1][1].canBuildInCells(board.getPlayingBoard()));
         board.clearAll();
     }
+
     @Test
-    void canbuildLevelTruespaceTest(){
+    void canBuildLevelTrueSpaceTest(){
         Board board=new Board();
         board.getPlayingBoard()[0][0].setLevel(4);
         //board.getBoard()[0][1].setFreeSpace(false);
@@ -130,8 +133,9 @@ class BoardTest {
         assertTrue(board.getPlayingBoard()[1][1].canBuildInCells(board.getPlayingBoard()));
         board.clearAll();
     }
+
     @Test
-    void canBuildLevelTrueMixlTest(){
+    void canBuildLevelTrueMixTest(){
         Board board=new Board();
         board.getPlayingBoard()[0][0].setLevel(2);
         //board.getBoard()[0][1].setFreeSpace(false);
@@ -147,6 +151,7 @@ class BoardTest {
         assertTrue(board.getPlayingBoard()[1][1].canBuildInCells(board.getPlayingBoard()));
         board.clearAll();
     }
+
     @Test
     void canBuildLevelTestCorner(){
         Board board=new Board();
@@ -159,6 +164,7 @@ class BoardTest {
         board.clearAll();
 
     }
+
     @Test
     void canBuildSpaceTestCorner(){
         Board board=new Board();
@@ -171,6 +177,7 @@ class BoardTest {
         board.clearAll();
 
     }
+
     @Test
     void canBuildMixTestCorner(){
         Board board=new Board();
@@ -183,6 +190,7 @@ class BoardTest {
         board.clearAll();
 
     }
+
     @Test
     void canBuildLevelTestCornerTrue(){
         Board board=new Board();
@@ -195,6 +203,7 @@ class BoardTest {
         board.clearAll();
 
     }
+
     @Test
     void canBuildSpaceTestCornerTrue(){
         Board board=new Board();
@@ -206,6 +215,7 @@ class BoardTest {
         board.clearAll();
 
     }
+
     @Test
     void canBuildMixTestCornerTrue(){
         Board board=new Board();
@@ -219,7 +229,7 @@ class BoardTest {
     }
 
     @Test
-    void hasfreecellSpaceTest(){
+    void hasFreeCellSpaceTest(){
         Board board=new Board();
         board.getPlayingBoard()[0][0].setFreeSpace(false);
         board.getPlayingBoard()[0][1].setFreeSpace(false);
@@ -237,7 +247,7 @@ class BoardTest {
     }
 
     @Test
-    void hasfreeLevelTest(){
+    void hasFreeLevelTest(){
         Board board=new Board();
         board.getPlayingBoard()[0][0].setLevel(3);
         board.getPlayingBoard()[0][1].setLevel(4);
@@ -254,9 +264,10 @@ class BoardTest {
         board.clearAll();
 
     }
+
     //mix dei due casi sopra
     @Test
-    void hasfreeLevelMixTest(){
+    void hasFreeLevelMixTest(){
         Board board=new Board();
         board.getPlayingBoard()[0][0].setLevel(3);
         board.getPlayingBoard()[0][1].setFreeSpace(false);
@@ -272,8 +283,9 @@ class BoardTest {
         assertFalse(board.getPlayingBoard()[1][1].hasFreeCellClosed(board.getPlayingBoard()));
         board.clearAll();
     }
+
     @Test
-    void hasfreeLevelTrueLevelTest(){
+    void hasFreeLevelTrueLevelTest(){
         Board board=new Board();
         board.getPlayingBoard()[0][0].setLevel(2);
         board.getPlayingBoard()[0][1].setFreeSpace(false);
@@ -289,8 +301,9 @@ class BoardTest {
         assertTrue(board.getPlayingBoard()[1][1].hasFreeCellClosed(board.getPlayingBoard()));
         board.clearAll();
     }
+
     @Test
-    void hasfreeLevelTruespaceTest(){
+    void hasFreeLevelTrueSpaceTest(){
         Board board=new Board();
         board.getPlayingBoard()[0][0].setLevel(3);
         //board.getBoard()[0][1].setFreeSpace(false);
@@ -306,8 +319,9 @@ class BoardTest {
         assertTrue(board.getPlayingBoard()[1][1].hasFreeCellClosed(board.getPlayingBoard()));
         board.clearAll();
     }
+
     @Test
-    void hasfreeLevelTrueMixlTest(){
+    void hasFreeLevelTrueMixTest(){
         Board board=new Board();
         board.getPlayingBoard()[0][0].setLevel(2);
         //board.getBoard()[0][1].setFreeSpace(false);
@@ -323,8 +337,9 @@ class BoardTest {
         assertTrue(board.getPlayingBoard()[1][1].hasFreeCellClosed(board.getPlayingBoard()));
         board.clearAll();
     }
+
     @Test
-    void hasfreeLevelTestCorner(){
+    void hasFreeLevelTestCorner(){
         Board board=new Board();
         board.getPlayingBoard()[0][1].setLevel(4);
         board.getPlayingBoard()[1][0].setLevel(3);
@@ -335,8 +350,9 @@ class BoardTest {
         board.clearAll();
 
     }
+
     @Test
-    void hasfreeSpaceTestCorner(){
+    void hasFreeSpaceTestCorner(){
         Board board=new Board();
         board.getPlayingBoard()[0][1].setFreeSpace(false);
         board.getPlayingBoard()[1][0].setFreeSpace(false);
@@ -347,8 +363,9 @@ class BoardTest {
         board.clearAll();
 
     }
+
     @Test
-    void hasfreeMixTestCorner(){
+    void hasFreeMixTestCorner(){
         Board board=new Board();
         board.getPlayingBoard()[0][1].setLevel(3);
         board.getPlayingBoard()[1][0].setFreeSpace(false);
@@ -359,8 +376,9 @@ class BoardTest {
         board.clearAll();
 
     }
+
     @Test
-    void hasfreeLevelTestCornerTrue(){
+    void hasFreeLevelTestCornerTrue(){
         Board board=new Board();
         board.getPlayingBoard()[0][1].setLevel(1);
         board.getPlayingBoard()[1][0].setLevel(3);
@@ -371,8 +389,9 @@ class BoardTest {
         board.clearAll();
 
     }
+
     @Test
-    void hasfreeSpaceTestCornerTrue(){
+    void hasFreeSpaceTestCornerTrue(){
         Board board=new Board();
         board.getPlayingBoard()[1][0].setFreeSpace(false);
         board.getPlayingBoard()[1][1].setFreeSpace(false);
@@ -382,8 +401,9 @@ class BoardTest {
         board.clearAll();
 
     }
+
     @Test
-    void hasfreeMixTestCornerTrue(){
+    void hasFreeMixTestCornerTrue(){
         Board board=new Board();
         board.getPlayingBoard()[0][1].setLevel(3);
         board.getPlayingBoard()[1][0].setLevel(1);

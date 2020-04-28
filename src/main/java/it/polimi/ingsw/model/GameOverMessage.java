@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.utils.PlayerColor;
 
 public class GameOverMessage extends MoveMessage {
     private boolean gameOver;

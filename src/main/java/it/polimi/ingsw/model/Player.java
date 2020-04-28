@@ -2,14 +2,13 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.controller.CardManager;
 import it.polimi.ingsw.utils.CustomDate;
-import it.polimi.ingsw.utils.FileManager;
 import it.polimi.ingsw.utils.PlayerColor;
 
 public class Player {
 
     private CardManager cardManager;
     private PlayerColor color;
-    private CustomDate birthdate;
+    private CustomDate birthDate;
     private String nickname;
     private Worker worker1;
     private Worker worker2;
@@ -23,7 +22,7 @@ public class Player {
     public Player(Player player) {
         this.nickname = player.getNickname();
         this.color = player.getColor();
-        this.birthdate = player.getBirthdate();
+        this.birthDate = player.getBirthDate();
         this.worker1=player.worker1;
         this.worker2=player.worker2;
         this.cardManager= new CardManager();
@@ -36,8 +35,8 @@ public class Player {
     public void setColor(PlayerColor color) {
         this.color = color;
     }
-    public void setBirthdate(CustomDate birtday) {
-        this.birthdate = birtday;
+    public void setBirthDate(CustomDate birthDate) {
+        this.birthDate = birthDate;
     }
     public void setNickname(String nickname) {
         this.nickname = nickname;
@@ -68,8 +67,8 @@ public class Player {
     public PlayerColor getColor() {
         return color;
     }
-    public CustomDate getBirthdate() {
-        return birthdate;
+    public CustomDate getBirthDate() {
+        return birthDate;
     }
     public Card getMyCard(){
         return this.myCard;

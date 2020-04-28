@@ -97,7 +97,7 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
         model.notifyView(move,hasWon);
     }
 
-    public static void switchWorkerPosition(PlayerMove move, Model model){
+    public void switchWorkerPosition(PlayerMove move, Model model){
         Worker tempWorker;
         Cell from = move.getWorker().getWorkerPosition();
         Cell to = model.getBoard().getCell(move.getRow(), move.getColumn());
@@ -110,7 +110,7 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
         tempWorker.setWorkerPosition(from);
     }
 
-    public static boolean hasFreeCellClosed(Cell from, Cell[][] board){
+    public boolean hasFreeCellClosed(Cell from, Cell[][] board){
         boolean bool=false;
         for(int i=-1; i<2; i++){
             for(int j=-1; j<2; j++){
@@ -128,7 +128,7 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
     }
 
 
-    private boolean isEmptyCell(PlayerMove move, Model model){
+    public boolean isEmptyCell(PlayerMove move, Model model){
         Cell to = model.getBoard().getCell(move.getRow(),move.getColumn());
 
         return to.isFree() ||
@@ -137,11 +137,11 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
                         model.getBoard().getCell(move.getRow(), move.getColumn()).getCurrWorker()!=null);
     }
 
-    private boolean canBuildFromCellTo(PlayerMove move, Model model){
+    public boolean canBuildFromCellTo(PlayerMove move, Model model){
         return model.getBoard().getCell(move.getRow(),move.getColumn()).canBuildInCells(model.getBoard().getPlayingBoard());
     }
 
-    public static boolean isApolloWorker(Cell from, Worker to){
+    public boolean isApolloWorker(Cell from, Worker to){
         return from.getCurrWorker().getColor()==to.getColor();
     }
 

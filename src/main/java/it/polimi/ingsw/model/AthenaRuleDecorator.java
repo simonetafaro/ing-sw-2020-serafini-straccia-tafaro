@@ -98,7 +98,7 @@ public class AthenaRuleDecorator extends StandardRuleDecorator {
         model.notifyView(move,hasWon);
     }
 
-    private boolean isLevelDifferenceAllowedAthena(PlayerMove move, Model model){
+    public boolean isLevelDifferenceAllowedAthena(PlayerMove move, Model model){
         return ((model.getBoard().getCell(move.getRow(), move.getColumn())).getLevel() - ((move.getWorker().getWorkerPosition()).getLevel())) <= 1;
     }
 }

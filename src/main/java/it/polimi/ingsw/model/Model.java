@@ -56,16 +56,6 @@ public class Model extends Observable<MoveMessage> {
          * passando come paramentro la nuova board e il giocatore dell'ultima mossa
          */
         try {
-            /*int j=0;
-            PlayerColor nextTurn=null;
-            while(j<players){
-                if(playOrder[j].equals(turn)){
-                    nextTurn=playOrder[(j+1)%players];
-                    break;
-                }
-                j++;
-            }
-            */
             PlayerColor nextTurn = playOrder_List.get((playOrder_List.indexOf(turn)+1)%playOrder_List.size());
             notifyObserver(new MoveMessage((Board) board.clone(), move.getPlayer(), hasWon, nextTurn));
         }catch (CloneNotSupportedException e){
@@ -156,7 +146,7 @@ public class Model extends Observable<MoveMessage> {
         return true;
     }
     public boolean isPlayerStuck(PlayerMove move){
-        return move.getPlayer().getWorker1().isStuck()&&move.getPlayer().getWorker2().isStuck();
+        return move.getPlayer().getWorker1().isStuck() && move.getPlayer().getWorker2().isStuck();
     }
 
     public boolean isRightWorker(PlayerMove move, Turn turn){
