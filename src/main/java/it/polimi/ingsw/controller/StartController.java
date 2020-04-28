@@ -24,6 +24,12 @@ public class StartController {
         this.ChosenCards = new ArrayList<>();
     }
 
+    public void cleanDeck(){
+        deck.clearDeck();
+    }
+    public void cleanChosenCards(){
+        ChosenCards.clear();
+    }
     public void setPlayerNumber(int playerNumber) {
         this.playerNumber = playerNumber;
     }

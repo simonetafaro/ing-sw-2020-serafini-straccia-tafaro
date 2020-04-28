@@ -27,19 +27,11 @@ public class Server {
     //private Map<ClientConnection, ClientConnection> playingConnection = new HashMap<>();
 
     private int playerNumber;
-    private boolean firstPlayer;
-    private Model model;
     private StartController startController;
 
     public Server() throws IOException {
         this.serverSocket = new ServerSocket(PORT);
-        this.firstPlayer=true;
-        this.model = new Model();
         this.startController= new StartController();
-    }
-
-    public synchronized Model getModel() {
-        return model;
     }
 
     public StartController getStartController() {
@@ -62,10 +54,16 @@ public class Server {
     }*/
 
     public synchronized void lobby(ClientConnection c, Player player){
+        if(waitingConnection.size()==0){
+            c.send("You are the first player, choose the number of player please.");
+            //TODO check if input is a number between 2 and 3 and not a string
+            playerNumber = Integer.parseInt(c.read());
+        }
         waitingConnection.put(player, c);
         //Creo la partita se ho nella lobby il numero di giocatori scelto
         if (waitingConnection.size() == playerNumber) {
             //Questa sarà una lista di player
+            Model model = new Model();
             this.startController.setPlayerNumber(playerNumber);
             List<Player> keys = new ArrayList<>(waitingConnection.keySet());
             //Crea le ClientConnection per ogni player presente nella Hashmap
@@ -81,7 +79,7 @@ public class Server {
             View player2View = new RemoteView(player2, c2);
             View player3View = null;
             //Creo un controller a cui passo il model creato
-            Controller controller = new Controller(this.model);
+            Controller controller = new Controller(model);
             //Le remoteView dei players osservano il model
             model.addObserver(player1View);
             model.addObserver(player2View);
@@ -97,7 +95,6 @@ public class Server {
                 model.addObserver(player3View);
                 player3View.addObserver(controller);
             }
-
 
             controller.setTurn(startController.setPlayerWorkerInOrder(model, player1View, player2View, player3View));
 
@@ -133,6 +130,12 @@ public class Server {
             c2.getInputFromClient();
             if(c3!=null)
                 c3.getInputFromClient();
+
+            startController.setBlue(false);
+            startController.setGrey(false);
+            startController.setWhite(false);
+            startController.cleanChosenCards();
+            startController.cleanDeck();
         }
     }
 
@@ -140,23 +143,12 @@ public class Server {
         while(true){
             try {
                     Socket newSocket = serverSocket.accept();
-                    if(firstPlayer){
-                        SocketClientConnection socketConnection = new SocketClientConnection(newSocket, this, firstPlayer);
-                        firstPlayer=false;
-                        executor.submit(socketConnection);
-                    }
-                    else {
-                        SocketClientConnection socketConnection = new SocketClientConnection(newSocket, this, firstPlayer);
-                        executor.submit(socketConnection);
-                    }
+                    SocketClientConnection socketConnection = new SocketClientConnection(newSocket, this);
+                    executor.submit(socketConnection);
+
             } catch (IOException e) {
                 System.out.println("Connection Error!");
             }
         }
     }
-
-    public synchronized void setPlayerNumber(int playerNumber){
-        this.playerNumber=playerNumber;
-    }
-
     }

@@ -14,13 +14,11 @@ public class SocketClientConnection  extends Observable<String> implements Clien
     private final Socket socket;
     private ObjectOutputStream out;
     private Server server;
-    private boolean firstPlayer;
     private boolean active = true;
 
-    public SocketClientConnection(Socket socket, Server server, boolean first) {
+    public SocketClientConnection(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
-        this.firstPlayer=first;
     }
 
     synchronized boolean isActive(){
@@ -86,11 +84,11 @@ public class SocketClientConnection  extends Observable<String> implements Clien
         try{
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
-            if(firstPlayer){
+            /*if(firstPlayer){
                 send("Welcome! Choose the number of players?");
                 int playerNum = Integer.parseInt(in.nextLine());
                 server.setPlayerNumber(playerNum);
-            }
+            }*/
             send("What is your name?");
             String move = in.nextLine();
             player.setNickname(move);

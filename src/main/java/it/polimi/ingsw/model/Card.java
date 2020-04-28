@@ -1,14 +1,14 @@
 package it.polimi.ingsw.model;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class Card {
     private String name;
-    private String mossa1;
-    private String mossa2;
-    private String mossa3;
-    private String mossa4;
+    //TODO this will be a list
+    private String CustomM1;
+    private String CustomM2;
+    private String CustomM3;
+    private String CustomM4;
 
     private String StandardM1= "M", StandardM2= "B", StandardM3="END";
 
@@ -19,10 +19,10 @@ public class Card {
 
     public Card (String name){
         this.name=name;
-        this.mossa1=null;
-        this.mossa2=null;
-        this.mossa3=null;
-        this.mossa4=null;
+        this.CustomM1 =null;
+        this.CustomM2 =null;
+        this.CustomM3 =null;
+        this.CustomM4 =null;
         this.usingCard=false;
     }
 
@@ -34,23 +34,23 @@ public class Card {
         this.usingCard = usingCard;
     }
 
-    public void setMossa1(String mossa1) {
-        this.mossa1 = mossa1;
+    public void setCustomM1(String customM1) {
+        this.CustomM1 = customM1;
     }
-    public void setMossa2(String mossa2) {
-        this.mossa2 = mossa2;
+    public void setCustomM2(String customM2) {
+        this.CustomM2 = customM2;
     }
-    public void setMossa3(String mossa3) {
-        this.mossa3 = mossa3;
+    public void setCustomM3(String customM3) {
+        this.CustomM3 = customM3;
     }
-    public void setMossa4(String mossa4) {
-        this.mossa4 = mossa4;
+    public void setCustomM4(String customM4) {
+        this.CustomM4 = customM4;
     }
 
     public void setStandardGame(){
-        this.mossa1="M"; //M
-        this.mossa2="B"; //B
-        this.mossa3="END"; //B
+        this.CustomM1 ="M"; //M
+        this.CustomM2 ="B"; //B
+        this.CustomM3 ="END"; //B
     }
 
     public String getName() {
@@ -58,7 +58,7 @@ public class Card {
     }
 
     public String getStepLetter(int i){
-        return i==1 ? mossa1 : (i==2 ? mossa2 : (i==3 ? mossa3 : mossa4));
+        return i==1 ? CustomM1 : (i==2 ? CustomM2 : (i==3 ? CustomM3 : CustomM4));
     }
 
     public String getStandardStepLetter(int i){

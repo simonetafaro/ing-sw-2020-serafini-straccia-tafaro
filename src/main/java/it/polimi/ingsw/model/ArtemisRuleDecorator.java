@@ -14,7 +14,7 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
             if(isEndAllowed(move, turn)) {
                 model.endMessage(move,turn,model);
                 move.getPlayer().getMyCard().setUsingCard(false);
-                move.getPlayer().getMyCard().setMossa3("B");
+                move.getPlayer().getMyCard().setCustomM3("B");
             }
             else
                 move.getView().reportError(gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
@@ -108,7 +108,7 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
     public void build(PlayerMove move, Model model, Turn turn) {
         System.out.println("Artemis Build");
         if(turn.getPlayerTurn(move.getPlayer()).getI()==2){
-            move.getPlayer().getMyCard().setMossa3("END");
+            move.getPlayer().getMyCard().setCustomM3("END");
         }
         model.getBoard().getCell(move.getRow(),move.getColumn()).buildInCell();
         model.setStep(move, turn, model);
