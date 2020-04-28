@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolcard>
+    <title>Pan</title>
+    <imageURL></imageURL>
+    <description>Pan description</description>
+    <customRule decoratorName="PanRuleDecorator" />
+    <controllerStep State="M"/>
+    <controllerStep State="B"/>
+    <controllerStep State="END"/>
+</toolcard>

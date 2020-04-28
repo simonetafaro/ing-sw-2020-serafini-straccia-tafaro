@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolcard>
+    <title>Demeter</title>
+    <imageURL></imageURL>
+    <description>Demeter description</description>
+    <customRule decoratorName="DemeterRuleDecorator" />
+    <controllerStep State="M"/>
+    <controllerStep State="B"/>
+    <controllerStep State="B"/>
+    <controllerStep State="END"/>
+</toolcard>

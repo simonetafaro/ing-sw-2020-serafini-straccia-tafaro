@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolcard>
+    <title>Apollo</title>
+    <imageURL></imageURL>
+    <description>Apollo description</description>
+    <customRule decoratorName="ApolloRuleDecorator" />
+    <controllerStep State="M"/>
+    <controllerStep State="B"/>
+    <controllerStep State="END"/>
+</toolcard>
