@@ -1,9 +1,11 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.utils.OkayMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.NoSuchElementException;
@@ -14,6 +16,7 @@ public class Client {
     private String ip;
     private int port;
     private boolean active = true;
+    private Socket socket;
 
     public Client(String ip, int port){
         this.ip = ip;
@@ -35,12 +38,16 @@ public class Client {
                 try {
                     while (isActive()) {
                         Object inputObject = socketIn.readObject();
-                        if(inputObject instanceof String){
-                            System.out.println((String)inputObject);
-                        } else if (inputObject instanceof Board){
-                            ((Board)inputObject).printBoard();
-                        } else {
-                            throw new IllegalArgumentException();
+                        if(inputObject instanceof ClientGUIParameters){
+                            StartGame startGame = new StartGame(socket, socketIn);
+                        }else{
+                            if(inputObject instanceof String){
+                                System.out.println((String)inputObject);
+                            } else if (inputObject instanceof Board){
+                                ((Board)inputObject).printBoard();
+                            } else {
+                                throw new IllegalArgumentException();
+                            }
                         }
                     }
                 }catch (Exception e){
@@ -53,7 +60,7 @@ public class Client {
         return t;
     }
 
-    public Thread asyncWriteToSocket(final Scanner stdin, final PrintWriter socketOut){
+    public Thread asyncWriteToSocket(final Scanner stdin, final PrintWriter socketOut) {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -74,8 +81,10 @@ public class Client {
         return t;
     }
 
+
     public void run() throws IOException {
-        Socket socket = new Socket(ip, port);
+
+        socket = new Socket(ip, port);
         System.out.println("Connection established");
         ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
         PrintWriter socketOut = new PrintWriter(socket.getOutputStream());

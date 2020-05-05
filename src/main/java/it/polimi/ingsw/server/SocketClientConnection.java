@@ -1,9 +1,15 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.client.ClientGUIParameters;
+import it.polimi.ingsw.client.StartGame;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.observ.Observable;
+import it.polimi.ingsw.utils.ErrorMessage;
+import it.polimi.ingsw.utils.OkayMessage;
+import it.polimi.ingsw.utils.PlayerColor;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.NoSuchElementException;
@@ -81,17 +87,29 @@ public class SocketClientConnection  extends Observable<String> implements Clien
     public void run() {
         Scanner in;
         Player player = new Player();
+        PlayerColor playerColor;
         try{
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
 
-            send("What is your name?");
-            String move = in.nextLine();
-            player.setNickname(move);
-            server.getStartController().setPlayerBirthDate(this,player,in);
-            server.getStartController().setPlayerColor(this,player,in);
-
-            server.lobby(this, player);
+            //TODO while on GUIOrCLI input
+            send("Do you want to use CLI or GUI");
+            String GuiOrCli = in.nextLine().toUpperCase();
+            if(GuiOrCli.equals("CLI")){
+                send("What is your name?");
+                String move = in.nextLine();
+                player.setNickname(move);
+                server.getStartController().setPlayerBirthDate(this,player,in);
+                server.getStartController().setPlayerColor(this,player,in);
+                server.lobby(this, player);
+            }else{
+                if(GuiOrCli.equals("GUI")){
+                    send(new ClientGUIParameters(true));
+                    setupGUIPlayer();
+                }else{
+                    //error choose cli or gui
+                }
+            }
 
         }catch (IOException | NoSuchElementException e) {
             System.err.println("Error!" + e.getMessage());
@@ -118,5 +136,31 @@ public class SocketClientConnection  extends Observable<String> implements Clien
             }
         });
         t.start();
+    }
+
+    public void setupGUIPlayer(){
+        ObjectInputStream socketIn;
+        boolean finish= true;
+        try{
+            socketIn = new ObjectInputStream(socket.getInputStream());
+
+            do{
+                Object obj = socketIn.readObject();
+                if(!server.getStartController().checkColorUnicity(this,((Player) obj).getColor().toString()))
+                {
+                    send("okay");
+                    finish = false;
+                    if(obj instanceof Player){
+                        System.out.println("Nome "+ ((Player) obj).getNickname()+ "Colore: "+((Player) obj).getColor().toString());
+                        server.lobby(this, (Player) obj);
+                    }
+                }else{
+                    send("error");
+                }
+            }while(finish);
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+        }
+        //socket.nextObject();
     }
 }

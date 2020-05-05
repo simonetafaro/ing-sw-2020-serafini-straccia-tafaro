@@ -5,6 +5,8 @@ import it.polimi.ingsw.utils.FileManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
+
+import java.io.Serializable;
 import java.lang.reflect.Constructor;
 
 public class CardManager {
@@ -16,6 +18,7 @@ public class CardManager {
     public CardManager(){
         this.fileFinder = new FileManager();
     }
+
     public void setCardFromFile(Player player, String cardName){
         try {
             Document document = fileFinder.getFileDocument(PATH.concat(cardName).concat(".xml"));

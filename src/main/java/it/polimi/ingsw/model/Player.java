@@ -4,27 +4,42 @@ import it.polimi.ingsw.controller.CardManager;
 import it.polimi.ingsw.utils.CustomDate;
 import it.polimi.ingsw.utils.PlayerColor;
 
-public class Player {
+import java.io.Serializable;
 
-    private CardManager cardManager;
+public class Player implements Serializable {
+
+    private transient CardManager cardManager;
     private PlayerColor color;
     private CustomDate birthDate;
     private String nickname;
-    private Worker worker1;
-    private Worker worker2;
-    private PlayerTurn myTurn;
-    private CardRuleDecorator myCardMethod;
-    private Card myCard;
+    private transient Worker worker1;
+    private transient Worker worker2;
+    private transient PlayerTurn myTurn;
+    private transient CardRuleDecorator myCardMethod;
+    private transient Card myCard;
 
-    public Player(){}
+    public Player(){
+        this.worker1=null;
+        this.worker2=null;
+        this.cardManager= new CardManager();
+    }
 
-    public Player(Player player) {
+    /*public Player(Player player) {
         this.nickname = player.getNickname();
         this.color = player.getColor();
         this.birthDate = player.getBirthDate();
         this.worker1=player.worker1;
         this.worker2=player.worker2;
         this.cardManager= new CardManager();
+    }*/
+
+    public Player(String name, CustomDate birthDate, PlayerColor color){
+        this.nickname = name;
+        this.birthDate = birthDate;
+        this.color = color;
+        this.worker1 = null;
+        this.worker2 = null;
+        this.cardManager = new CardManager();
     }
 
     public PlayerTurn setMyTurn() {

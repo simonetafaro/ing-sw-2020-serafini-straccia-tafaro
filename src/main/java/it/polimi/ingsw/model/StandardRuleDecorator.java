@@ -1,5 +1,4 @@
 package it.polimi.ingsw.model;
-
 import it.polimi.ingsw.utils.gameMessage;
 
 /** Decorator for standard game: move - build - end */

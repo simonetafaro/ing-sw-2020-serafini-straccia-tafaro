@@ -1,11 +1,21 @@
 package it.polimi.ingsw.utils;
 
-public class CustomDate {
+import java.io.Serializable;
+
+public class CustomDate implements Serializable {
 
     private int day;
     private int month;
     private int year;
 
+
+    public CustomDate (int day, int month, int year){
+        this.day= day;
+        this.month=month;
+        this.year= year;
+    }
+
+    public CustomDate(){}
     //TODO: manage correct date
     public void setDay(int day) {
         this.day = day;

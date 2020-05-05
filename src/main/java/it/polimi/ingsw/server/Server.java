@@ -18,7 +18,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Server {
+public class Server{
 
     private static final int PORT = 12345;
     private ServerSocket serverSocket;
@@ -68,8 +68,10 @@ public class Server {
             ClientConnection c1 = waitingConnection.get(keys.get(0));
             ClientConnection c2 = waitingConnection.get(keys.get(1));
             ClientConnection c3 = null;
-            Player player1 = new Player(keys.get(0));
-            Player player2 = new Player(keys.get(1));
+            Player player1 = keys.get(0);
+            Player player2 = keys.get(1);
+            //Player player1 = new Player(keys.get(0));
+            //Player player2 = new Player(keys.get(1));
             Player player3 = null;
             View player1View = new RemoteView(player1, c1);
             View player2View = new RemoteView(player2, c2);
@@ -83,7 +85,8 @@ public class Server {
 
             if(playerNumber==3){
                 c3 = waitingConnection.get(keys.get(2));
-                player3 = new Player(keys.get(2));
+                //player3 = new Player(keys.get(2));
+                player3= keys.get(2);
                 player3View = new RemoteView(player3, c3);
                 model.addObserver(player3View);
                 player3View.addObserver(controller);
@@ -135,6 +138,7 @@ public class Server {
         while(true){
             try {
                     Socket newSocket = serverSocket.accept();
+
                     SocketClientConnection socketConnection = new SocketClientConnection(newSocket, this);
                     executor.submit(socketConnection);
 
