@@ -1,8 +1,6 @@
 package it.polimi.ingsw.client;
-
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.utils.*;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -13,8 +11,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.NoSuchElementException;
-
 public class StartGame implements Runnable{
 
     private ObjectOutputStream socketObjectOut;
