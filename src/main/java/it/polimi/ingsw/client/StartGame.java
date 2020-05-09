@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+
 public class StartGame implements Runnable{
 
     private ObjectOutputStream socketObjectOut;
@@ -244,7 +245,7 @@ public class StartGame implements Runnable{
         mainFrame.getContentPane().add(rootPanel, gbcPanel);
         rootPanel.setLayout(new BorderLayout(0, 0));
 
-        westPanelImage = new ImageIcon("C:\\Users\\Simone\\IdeaProjects\\ing-sw-2020-serafini-straccia-tafaro\\src\\main\\resources\\images\\SX_Panel.png");
+        westPanelImage = new ImageIcon("src\\main\\resources\\images\\SX_Panel.png");
         westPanelImageScaled = new ImageIcon(westPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
 
@@ -253,7 +254,7 @@ public class StartGame implements Runnable{
         westPanel.setOpaque(false);
         rootPanel.add(westPanel, BorderLayout.WEST);
 
-        eastPanelImage = new ImageIcon("C:\\Users\\Simone\\IdeaProjects\\ing-sw-2020-serafini-straccia-tafaro\\src\\main\\resources\\images\\DX_Panel.png");
+        eastPanelImage = new ImageIcon("src\\main\\resources\\images\\DX_Panel.png");
         eastPanelImageScaled = new ImageIcon(eastPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
         JPanel eastPanel = new EastJPanel();
@@ -261,7 +262,7 @@ public class StartGame implements Runnable{
         eastPanel.setOpaque(false);
         rootPanel.add(eastPanel, BorderLayout.EAST);
 
-        centralPanelImage = new ImageIcon("C:\\Users\\Simone\\IdeaProjects\\ing-sw-2020-serafini-straccia-tafaro\\src\\main\\resources\\images\\Central_Panel_Crop.png");
+        centralPanelImage = new ImageIcon("src\\main\\resources\\images\\Central_Panel_Crop.png");
         centralPanelImageScaled = new ImageIcon(centralPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
         JPanel centralPanel = new CentralJPanel();
@@ -282,7 +283,7 @@ public class StartGame implements Runnable{
         JLabel logoLabel = new JLabel();
         logoLabel.setBorder(new EmptyBorder(0, 0, 30, 0));
         logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        logoLabel.setIcon(new ImageIcon("C:\\Users\\Simone\\IdeaProjects\\ing-sw-2020-serafini-straccia-tafaro\\src\\main\\resources\\images\\empty_title.png"));
+        logoLabel.setIcon(new ImageIcon("src\\main\\resources\\images\\empty_title.png"));
         logoLabel.setOpaque(false);
         GridBagConstraints gbcLogoLabel = new GridBagConstraints();
         gbcLogoLabel.insets = new Insets(0, 0, 5, 0);
@@ -362,23 +363,23 @@ public class StartGame implements Runnable{
         gbcLblDate.gridy = 17;
         centralPanel.add(colorLabel, gbcLblDate);
 
-        Image greyButton_image = new ImageIcon("C:\\Users\\Simone\\IdeaProjects\\ing-sw-2020-serafini-straccia-tafaro\\src\\main\\resources\\images\\G_workers_No_Shadow.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image greyButton_image = new ImageIcon("src\\main\\resources\\images\\G_workers_No_Shadow.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon greyButton_Icon = new ImageIcon(greyButton_image);
-        Image greyButton_image_pressed = new ImageIcon("C:\\Users\\Simone\\IdeaProjects\\ing-sw-2020-serafini-straccia-tafaro\\src\\main\\resources\\images\\G_workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image greyButton_image_pressed = new ImageIcon("src\\main\\resources\\images\\G_workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon greyButton_Icon_Pressed = new ImageIcon(greyButton_image_pressed);
         JLabel greyImage = new JLabel();
         greyImage.setIcon(greyButton_Icon);
 
-        Image blueButton_image = new ImageIcon("C:\\Users\\Simone\\IdeaProjects\\ing-sw-2020-serafini-straccia-tafaro\\src\\main\\resources\\images\\B_workers_No_Shadow.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image blueButton_image = new ImageIcon("src\\main\\resources\\images\\B_workers_No_Shadow.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon blueButton_Icon = new ImageIcon(blueButton_image);
-        Image blueButton_image_pressed = new ImageIcon("C:\\Users\\Simone\\IdeaProjects\\ing-sw-2020-serafini-straccia-tafaro\\src\\main\\resources\\images\\B_workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image blueButton_image_pressed = new ImageIcon("src\\main\\resources\\images\\B_workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon blueButton_Icon_Pressed = new ImageIcon(blueButton_image_pressed);
         JLabel blueImage = new JLabel();
         blueImage.setIcon(blueButton_Icon);
 
-        Image whiteButton_image = new ImageIcon("C:\\Users\\Simone\\IdeaProjects\\ing-sw-2020-serafini-straccia-tafaro\\src\\main\\resources\\images\\W_workers_No_Press.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image whiteButton_image = new ImageIcon("src\\main\\resources\\images\\W_workers_No_Press.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon whiteButton_Icon = new ImageIcon(whiteButton_image);
-        Image whiteButton_image_pressed = new ImageIcon("C:\\Users\\Simone\\IdeaProjects\\ing-sw-2020-serafini-straccia-tafaro\\src\\main\\resources\\images\\W_workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image whiteButton_image_pressed = new ImageIcon("src\\main\\resources\\images\\W_workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon whiteButton_Icon_Pressed = new ImageIcon(whiteButton_image_pressed);
         JLabel whiteImage = new JLabel();
         whiteImage.setIcon(whiteButton_Icon);
@@ -453,7 +454,7 @@ public class StartGame implements Runnable{
         color.add(blue_button);
 
         playButton = new JButton();
-        Image play = new ImageIcon("C:\\Users\\Simone\\IdeaProjects\\ing-sw-2020-serafini-straccia-tafaro\\src\\main\\resources\\images\\button_play.png").getImage().getScaledInstance(126,141, Image.SCALE_SMOOTH);
+        Image play = new ImageIcon("src\\main\\resources\\images\\button_play.png").getImage().getScaledInstance(126,141, Image.SCALE_SMOOTH);
         ImageIcon play_button = new ImageIcon(play);
         playButton.setIcon(play_button);
         playButton.setBorder(new LineBorder(new Color(0,0,0,0)));
