@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.client.PopUpNumberPlayer;
 import it.polimi.ingsw.controller.StartController;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.controller.Controller;
@@ -24,6 +25,7 @@ public class Server{
     private ServerSocket serverSocket;
     private ExecutorService executor = Executors.newFixedThreadPool(128);
     private Map<Player, ClientConnection> waitingConnection = new HashMap<>();
+    private Map<Map, StartController> matchHandler = new HashMap<>();
     //private Map<ClientConnection, ClientConnection> playingConnection = new HashMap<>();
 
     private int playerNumber;
@@ -55,15 +57,24 @@ public class Server{
 
     public synchronized void lobby(ClientConnection c, Player player){
         if(waitingConnection.size()==0){
-            c.send("You are the first player, choose the number of player please.");
-            //TODO check if input is a number between 2 and 3 and not a string
-            playerNumber = Integer.parseInt(c.read());
+            if(c.isUsingGUI()){
+                c.send("SetNumberPlayer");
+                String number = c.read();
+                System.out.println("numero scelto"+ number);
+                playerNumber = Integer.parseInt(number);
+            }
+            else {
+                //TODO check if input is a number between 2 and 3 and not a string
+                c.send("You are the first player, choose the number of player please.");
+                playerNumber = Integer.parseInt(c.read());
+            }
         }
         c.send("Wait for cards");
         waitingConnection.put(player, c);
         if (waitingConnection.size() == playerNumber) {
+
             Model model = new Model();
-            this.startController.setPlayerNumber(playerNumber);
+            startController.setPlayerNumber(playerNumber);
             List<Player> keys = new ArrayList<>(waitingConnection.keySet());
             ClientConnection c1 = waitingConnection.get(keys.get(0));
             ClientConnection c2 = waitingConnection.get(keys.get(1));
@@ -92,6 +103,8 @@ public class Server{
                 player3View.addObserver(controller);
             }
 
+            waitingConnection.clear();
+
             controller.setTurn(startController.setPlayerWorkerInOrder(model, player1View, player2View, player3View));
 
             c1.asyncSend(model.getBoardCopy());
@@ -99,7 +112,7 @@ public class Server{
             if(c3!=null)
                 c3.asyncSend(model.getBoardCopy());
 
-            waitingConnection.clear();
+
 
             if(model.getTurn()==(player1.getColor())){
                 //p1 è il primo
@@ -126,12 +139,23 @@ public class Server{
             if(c3!=null)
                 c3.getInputFromClient();
 
+            startController.cleanChosenCards();
+            startController.cleanDeck();
+            waitingConnection.clear();
             startController.setBlue(false);
             startController.setGrey(false);
             startController.setWhite(false);
-            startController.cleanChosenCards();
-            startController.cleanDeck();
         }
+    }
+
+    private void createMatch(Map<Player,ClientConnection> waitingConnection, int playerN){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                }
+        }).start();
+
     }
 
     public void run(){

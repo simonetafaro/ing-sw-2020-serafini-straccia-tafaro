@@ -56,6 +56,8 @@ public class StartController {
             }
         }
     }
+
+
     public void setPlayerColor(ClientConnection c,Player currentPlayer, Scanner in){
         String color= null;
         try {

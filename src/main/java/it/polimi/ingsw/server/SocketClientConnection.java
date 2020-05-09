@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.client.CheckServerResponse;
 import it.polimi.ingsw.client.ClientGUIParameters;
 import it.polimi.ingsw.client.StartGame;
 import it.polimi.ingsw.model.Player;
@@ -21,6 +22,7 @@ public class SocketClientConnection  extends Observable<String> implements Clien
     private ObjectOutputStream out;
     private Server server;
     private boolean active = true;
+    private boolean usingGui;
 
     public SocketClientConnection(Socket socket, Server server) {
         this.socket = socket;
@@ -44,6 +46,10 @@ public class SocketClientConnection  extends Observable<String> implements Clien
             System.err.println("Error!" + e.getMessage());
         }
         return input;
+    }
+
+    public boolean isUsingGUI() {
+        return usingGui;
     }
 
     @Override
@@ -96,6 +102,7 @@ public class SocketClientConnection  extends Observable<String> implements Clien
             send("Do you want to use CLI or GUI");
             String GuiOrCli = in.nextLine().toUpperCase();
             if(GuiOrCli.equals("CLI")){
+                usingGui = false;
                 send("What is your name?");
                 String move = in.nextLine();
                 player.setNickname(move);
@@ -104,6 +111,7 @@ public class SocketClientConnection  extends Observable<String> implements Clien
                 server.lobby(this, player);
             }else{
                 if(GuiOrCli.equals("GUI")){
+                    usingGui= true;
                     send(new ClientGUIParameters(true));
                     setupGUIPlayer();
                 }else{
@@ -148,14 +156,16 @@ public class SocketClientConnection  extends Observable<String> implements Clien
                 Object obj = socketIn.readObject();
                 if(!server.getStartController().checkColorUnicity(this,((Player) obj).getColor().toString()))
                 {
-                    send("okay");
+                    //send("okay");
+                    send(new CheckServerResponse(true));
                     finish = false;
                     if(obj instanceof Player){
                         System.out.println("Nome "+ ((Player) obj).getNickname()+ "Colore: "+((Player) obj).getColor().toString());
                         server.lobby(this, (Player) obj);
                     }
                 }else{
-                    send("error");
+                    //send("error");
+                    send(new CheckServerResponse(false));
                 }
             }while(finish);
         }catch (Exception e){

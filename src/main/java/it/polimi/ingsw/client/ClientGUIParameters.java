@@ -9,4 +9,7 @@ public class ClientGUIParameters implements Serializable {
         this.usingGui= usingGui;
     }
 
+    private boolean isUsingGui(){
+        return usingGui;
+    }
 }

@@ -17,6 +17,8 @@ public class Client {
     private int port;
     private boolean active = true;
     private Socket socket;
+    private StartGame startGame;
+    private PrintWriter socketOut;
 
     public Client(String ip, int port){
         this.ip = ip;
@@ -38,19 +40,26 @@ public class Client {
                 try {
                     while (isActive()) {
                         Object inputObject = socketIn.readObject();
-                        if(inputObject instanceof ClientGUIParameters){
-                            StartGame startGame = new StartGame(socket, socketIn);
-                        }else{
-                            if(inputObject instanceof String){
-                                System.out.println((String)inputObject);
-                            } else if (inputObject instanceof Board){
-                                ((Board)inputObject).printBoard();
-                            } else {
-                                throw new IllegalArgumentException();
+                        if (inputObject instanceof ClientGUIParameters) {
+                            startGame = new StartGame(socket, socketIn);
+                        }
+                        if (inputObject instanceof String) {
+                            if(inputObject.equals("SetNumberPlayer")){
+                                new PopUpNumberPlayer(socketOut);
                             }
+                            System.out.println((String) inputObject);
+                        }
+                        if (inputObject instanceof Board) {
+                            ((Board) inputObject).printBoard();
+                        }
+                        if(inputObject instanceof CheckServerResponse){
+                            startGame.serverResponse(((CheckServerResponse) inputObject).isCheckError());
+                        }
+                        if(inputObject instanceof PopUpNumberPlayer){
+                            startGame.showPopUpNumberPlayer();
                         }
                     }
-                }catch (Exception e){
+                }catch (Exception e ){
                     //System.out.println("fine della read");
                     setActive(false);
                 }
@@ -87,7 +96,7 @@ public class Client {
         socket = new Socket(ip, port);
         System.out.println("Connection established");
         ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
-        PrintWriter socketOut = new PrintWriter(socket.getOutputStream());
+        socketOut = new PrintWriter(socket.getOutputStream());
         Scanner stdin = new Scanner(System.in);
 
         try{
