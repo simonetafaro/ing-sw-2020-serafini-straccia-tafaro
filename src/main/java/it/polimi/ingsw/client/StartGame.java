@@ -7,6 +7,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -49,6 +50,14 @@ public class StartGame implements Runnable{
     private JLabel whiteImage;
     private ImageIcon greyButton_Icon_No_Available;
     private JLabel greyImage;
+
+
+    private static final String SRC = "src";
+    private static final String MAIN = "main";
+    private static final String RESOURCES = "resources";
+    private static final String IMAGE = "images";
+
+    private static final String PATH = SRC + File.separatorChar + MAIN + File.separatorChar + RESOURCES + File.separatorChar + IMAGE + File.separatorChar;
 
     private class EastJPanel extends JPanel {
 
@@ -263,7 +272,7 @@ public class StartGame implements Runnable{
         mainFrame.getContentPane().add(rootPanel, gbcPanel);
         rootPanel.setLayout(new BorderLayout(0, 0));
 
-        westPanelImage = new ImageIcon("src\\main\\resources\\images\\SX_Panel.png");
+        westPanelImage = new ImageIcon(PATH + "SX_Panel.png");
         westPanelImageScaled = new ImageIcon(westPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
 
@@ -272,7 +281,7 @@ public class StartGame implements Runnable{
         westPanel.setOpaque(false);
         rootPanel.add(westPanel, BorderLayout.WEST);
 
-        eastPanelImage = new ImageIcon("src\\main\\resources\\images\\DX_Panel.png");
+        eastPanelImage = new ImageIcon(PATH + "DX_Panel.png");
         eastPanelImageScaled = new ImageIcon(eastPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
         JPanel eastPanel = new EastJPanel();
@@ -280,7 +289,7 @@ public class StartGame implements Runnable{
         eastPanel.setOpaque(false);
         rootPanel.add(eastPanel, BorderLayout.EAST);
 
-        centralPanelImage = new ImageIcon("src\\main\\resources\\images\\Central_Panel_Crop.png");
+        centralPanelImage = new ImageIcon(PATH + "Central_Panel_Crop.png");
         centralPanelImageScaled = new ImageIcon(centralPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
         JPanel centralPanel = new CentralJPanel();
@@ -301,7 +310,7 @@ public class StartGame implements Runnable{
         JLabel logoLabel = new JLabel();
         logoLabel.setBorder(new EmptyBorder(0, 0, 30, 0));
         logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        logoLabel.setIcon(new ImageIcon("src\\main\\resources\\images\\empty_title.png"));
+        logoLabel.setIcon(new ImageIcon(PATH + "empty_title.png"));
         logoLabel.setOpaque(false);
         GridBagConstraints gbcLogoLabel = new GridBagConstraints();
         gbcLogoLabel.insets = new Insets(0, 0, 5, 0);
@@ -381,31 +390,31 @@ public class StartGame implements Runnable{
         gbcLblDate.gridy = 17;
         centralPanel.add(colorLabel, gbcLblDate);
 
-        Image greyButton_image = new ImageIcon("src\\main\\resources\\images\\G_Workers_No_Shadow.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image greyButton_image = new ImageIcon(PATH + "G_Workers_No_Shadow.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon greyButton_Icon = new ImageIcon(greyButton_image);
-        Image greyButton_image_pressed = new ImageIcon("src\\main\\resources\\images\\G_Workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image greyButton_image_pressed = new ImageIcon(PATH + "G_Workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon greyButton_Icon_Pressed = new ImageIcon(greyButton_image_pressed);
-        Image greyButton_image_No_Available = new ImageIcon("src\\main\\resources\\images\\G_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image greyButton_image_No_Available = new ImageIcon(PATH + "G_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         greyButton_Icon_No_Available = new ImageIcon(greyButton_image_No_Available);
 
         //greyImage = new JLabel();
         //greyImage.setIcon(greyButton_Icon);
 
-        Image blueButton_image = new ImageIcon("src\\main\\resources\\images\\B_Workers_No_Shadow.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image blueButton_image = new ImageIcon(PATH + "B_Workers_No_Shadow.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon blueButton_Icon = new ImageIcon(blueButton_image);
-        Image blueButton_image_pressed = new ImageIcon("src\\main\\resources\\images\\B_Workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image blueButton_image_pressed = new ImageIcon(PATH + "B_Workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon blueButton_Icon_Pressed = new ImageIcon(blueButton_image_pressed);
-        Image blueButton_image_No_Available = new ImageIcon("src\\main\\resources\\images\\B_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image blueButton_image_No_Available = new ImageIcon(PATH + "B_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         blueButton_Icon_No_Available = new ImageIcon(blueButton_image_No_Available);
 
         //blueImage = new JLabel();
         //blueImage.setIcon(blueButton_Icon);
 
-        Image whiteButton_image = new ImageIcon("src\\main\\resources\\images\\W_workers_No_Press.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image whiteButton_image = new ImageIcon(PATH + "W_workers_No_Press.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon whiteButton_Icon = new ImageIcon(whiteButton_image);
-        Image whiteButton_image_pressed = new ImageIcon("src\\main\\resources\\images\\W_Workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image whiteButton_image_pressed = new ImageIcon(PATH + "W_Workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon whiteButton_Icon_Pressed = new ImageIcon(whiteButton_image_pressed);
-        Image whiteButton_image_No_Available = new ImageIcon("src\\main\\resources\\images\\W_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image whiteButton_image_No_Available = new ImageIcon(PATH + "W_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         whiteButton_Icon_No_Available = new ImageIcon(whiteButton_image_No_Available);
 
         //whiteImage = new JLabel();
@@ -492,8 +501,10 @@ public class StartGame implements Runnable{
         color.add(white_button);
         color.add(blue_button);
 
+
         playButton = new JRadioButton();
-        Image play = new ImageIcon("src\\main\\resources\\images\\button_play.png").getImage().getScaledInstance(126,141, Image.SCALE_SMOOTH);
+
+        Image play = new ImageIcon(PATH + "button_play.png").getImage().getScaledInstance(126,141, Image.SCALE_SMOOTH);
         ImageIcon play_button = new ImageIcon(play);
         playButton.setIcon(play_button);
         playButton.setHorizontalAlignment(SwingConstants.CENTER);

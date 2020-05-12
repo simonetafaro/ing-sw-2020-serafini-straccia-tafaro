@@ -4,9 +4,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.PrintWriter;
 
+
 public class PopUpNumberPlayer {
+
+    private static final String SRC = "src";
+    private static final String MAIN = "main";
+    private static final String RESOURCES = "resources";
+    private static final String IMAGE = "images";
+
+    private static final String PATH = SRC + File.separatorChar + MAIN + File.separatorChar + RESOURCES + File.separatorChar + IMAGE + File.separatorChar;
+
 
     public PopUpNumberPlayer(PrintWriter socketOut){
         JFrame popUpFrame = new JFrame("Santorini - Set Player Number");
@@ -16,7 +26,7 @@ public class PopUpNumberPlayer {
         //playerLabel.setFont(fontTitilliumBoldUpright);
         textLabel.setForeground(Color.DARK_GRAY);
 
-        Image twoButton_image = new ImageIcon("src\\main\\resources\\images\\2Players.png").getImage().getScaledInstance(188,170, Image.SCALE_SMOOTH);
+        Image twoButton_image = new ImageIcon(PATH + "2Players.png").getImage().getScaledInstance(188,170, Image.SCALE_SMOOTH);
         ImageIcon twoButton_Icon = new ImageIcon(twoButton_image);
 
         JRadioButton two_button = new JRadioButton();
@@ -25,7 +35,7 @@ public class PopUpNumberPlayer {
         two_button.setHorizontalAlignment(SwingConstants.CENTER);
         two_button.setIcon(twoButton_Icon);
 
-        Image threeButton_image = new ImageIcon("src\\main\\resources\\images\\3Players.png").getImage().getScaledInstance(188,170, Image.SCALE_SMOOTH);
+        Image threeButton_image = new ImageIcon(PATH + "3Players.png").getImage().getScaledInstance(188,170, Image.SCALE_SMOOTH);
         ImageIcon threeButton_Icon = new ImageIcon(threeButton_image);
 
         JRadioButton three_button = new JRadioButton();
