@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -17,14 +18,18 @@ public class PopUpNumberPlayer {
 
     private static final String PATH = SRC + File.separatorChar + MAIN + File.separatorChar + RESOURCES + File.separatorChar + IMAGE + File.separatorChar;
 
+    public PopUpNumberPlayer(PrintWriter socketOut, JFrame mainFrame){
 
-    public PopUpNumberPlayer(PrintWriter socketOut){
-        JFrame popUpFrame = new JFrame("Santorini - Set Player Number");
+        JPanel popUpFrame = new JPanel();
         popUpFrame.setLayout(new GridLayout(2,1));
 
-        JLabel textLabel = new JLabel("You are the first player, choose the number of player please.:");
-        //playerLabel.setFont(fontTitilliumBoldUpright);
-        textLabel.setForeground(Color.DARK_GRAY);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+
+        Image titleImage = new ImageIcon(PATH + "playerNumberTitle.png").getImage();
+        ImageIcon titleIMG = new ImageIcon(titleImage);
+        JLabel title = new JLabel();
+        title.setIcon(titleIMG);
+        popUpFrame.add(title);
 
         Image twoButton_image = new ImageIcon(PATH + "2Players.png").getImage().getScaledInstance(188,170, Image.SCALE_SMOOTH);
         ImageIcon twoButton_Icon = new ImageIcon(twoButton_image);
@@ -35,6 +40,7 @@ public class PopUpNumberPlayer {
         two_button.setHorizontalAlignment(SwingConstants.CENTER);
         two_button.setIcon(twoButton_Icon);
 
+
         Image threeButton_image = new ImageIcon(PATH + "3Players.png").getImage().getScaledInstance(188,170, Image.SCALE_SMOOTH);
         ImageIcon threeButton_Icon = new ImageIcon(threeButton_image);
 
@@ -44,22 +50,22 @@ public class PopUpNumberPlayer {
         three_button.setHorizontalAlignment(SwingConstants.CENTER);
         three_button.setIcon(threeButton_Icon);
 
-        popUpFrame.add(textLabel);
-        JPanel buttons = new JPanel(new FlowLayout());
-        buttons.add(two_button);
-        buttons.add(three_button);
-        popUpFrame.add(buttons);
-        popUpFrame.setSize(1000,600);
-        popUpFrame.setVisible(true);
-        popUpFrame.pack();
+        JPanel buttons = new JPanel(new GridLayout(1,2,10,30));
 
+        buttons.add(two_button, SwingConstants.CENTER);
+        buttons.add(three_button,SwingConstants.CENTER);
+        popUpFrame.add(buttons);
+        popUpFrame.setSize(1280,720);
+        mainFrame.add(popUpFrame);
+        mainFrame.setVisible(true);
 
         two_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 socketOut.println("2");
                 socketOut.flush();
-                popUpFrame.dispose();
+                //mainFrame.remove(popUpFrame);
+                new LobbyFrame(mainFrame);
             }
         });
 
@@ -68,9 +74,9 @@ public class PopUpNumberPlayer {
             public void actionPerformed(ActionEvent e) {
                 socketOut.println("3");
                 socketOut.flush();
-                popUpFrame.dispose();
+                //mainFrame.remove(popUpFrame);
+                new LobbyFrame(mainFrame);
             }
         });
-
     }
 }

@@ -15,6 +15,6 @@ public interface ClientConnection {
     void send(Object message);
     String read();
     void getInputFromClient();
-    boolean isUsingGUI();
-
+    String getNickName();
+    void setFirstPlayer(boolean firstPlayer);
 }

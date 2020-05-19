@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.PopUpNumberPlayer;
 import it.polimi.ingsw.controller.StartController;
 import it.polimi.ingsw.model.Player;
@@ -7,11 +8,16 @@ import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.Worker;
+import it.polimi.ingsw.utils.ColorCheck;
+import it.polimi.ingsw.utils.PlayerColor;
+import it.polimi.ingsw.utils.setupMessage;
 import it.polimi.ingsw.view.RemoteView;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.utils.gameMessage;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
@@ -19,22 +25,25 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+
 public class Server{
 
     private static final int PORT = 12345;
     private ServerSocket serverSocket;
     private ExecutorService executor = Executors.newFixedThreadPool(128);
     private Map<Player, ClientConnection> waitingConnection = new HashMap<>();
-    private Map<Map, StartController> matchHandler = new HashMap<>();
     //private Map<ClientConnection, ClientConnection> playingConnection = new HashMap<>();
 
+    private Map<Integer, List<ClientConnection>> singleMatchConnection = new HashMap<>();
+    private Map<Integer, Integer> matchHandler = new HashMap<>();
+
+    private List<ClientConnection> activeConnection = new ArrayList<>();
+
     private int playerNumber;
+    private Integer currentMatch = 0;
     private StartController startController;
 
-    public Server() throws IOException {
-        this.serverSocket = new ServerSocket(PORT);
-        this.startController= new StartController();
-    }
+
 
     public StartController getStartController() {
         return startController;
@@ -57,7 +66,7 @@ public class Server{
 
     public synchronized void lobby(ClientConnection c, Player player){
         if(waitingConnection.size()==0){
-            if(c.isUsingGUI()){
+            if(true){
                 c.send("SetNumberPlayer");
                 String number = c.read();
                 System.out.println("numero scelto"+ number);
@@ -158,17 +167,221 @@ public class Server{
 
     }
 
-    public void run(){
-        while(true){
-            try {
-                    Socket newSocket = serverSocket.accept();
 
-                    SocketClientConnection socketConnection = new SocketClientConnection(newSocket, this);
-                    executor.submit(socketConnection);
 
-            } catch (IOException e) {
-                System.out.println("Connection Error!");
+    public void matchManager(ClientConnection socketConnection, String nickname){
+        if(singleMatchConnection.get(currentMatch).size() == 0){
+            //primo giocatore connesso in questa partita
+            singleMatchConnection.get(currentMatch).add(socketConnection);
+            socketConnection.setFirstPlayer(true);
+            broadcastStringMessage(singleMatchConnection.get(currentMatch) , "The first player is "+nickname);
+        }
+    }
+
+    public void broadcastStringMessage(List<ClientConnection> match, String message){
+        match.forEach( c -> c.send(message));
+    }
+
+    public void broadcastObjectMessage(List<ClientConnection> match, Object message){
+        match.forEach( c -> c.send(message));
+    }
+
+    /*Return true if name is unique*/
+    public boolean checkNicknameUnicity(String name){
+        boolean result = true;
+        for(ClientConnection c: activeConnection){
+            result = result && !c.getNickName().equals(name);
+        }
+        return result;
+    }
+    public void setPlayerNumber(int playerNumber, ClientConnection connection){
+        singleMatchConnection.get(currentMatch).forEach(c -> {
+                if(c.equals(connection)){
+                    matchHandler.put(currentMatch, playerNumber);
+                }
+        });
+        addPlayerToMatch();
+    }
+
+    public void addPlayerToMatch(){
+        while((singleMatchConnection.get(currentMatch).size() < matchHandler.get(currentMatch)) || activeConnection.size() >0 ) {
+            singleMatchConnection.get(currentMatch).add(activeConnection.get(0));
+            broadcastStringMessage(singleMatchConnection.get(currentMatch), activeConnection.get(0).getNickName()+" is now in the match");
+            activeConnection.remove(0);
+        }
+        if(singleMatchConnection.get(currentMatch).size() == matchHandler.get(currentMatch)){
+            this.currentMatch++;
+            if(activeConnection.get(0) != null){
+                matchManager(activeConnection.get(0), activeConnection.get(0).getNickName());
+                activeConnection.remove(0);
             }
         }
     }
+
+
+
+    /**new implementations*/
+    private static int clientId = 1;
+    private List<Integer> twoPlayerMatch;
+    private List<Integer> threePlayerMatch;
+    private Map<Integer, String> playerData;
+    private Map<Integer, Socket> activeClientConnection;
+    private Map<Integer, ObjectOutputStream> ClientConnectionOutput;
+    private Map<Integer, ObjectInputStream> ClientConnectionInput;
+
+    public static int getClientId() {
+        return clientId;
     }
+    public static void increaseClientId() {
+        clientId++;
+    }
+
+    public List<Integer> getTwoPlayerMatch() {
+        return twoPlayerMatch;
+    }
+    public List<Integer> getThreePlayerMatch() {
+        return threePlayerMatch;
+    }
+    public Map<Integer, Socket> getActiveClientConnection() {
+        return activeClientConnection;
+    }
+    public Map<Integer, String> getPlayerData() {
+        return playerData;
+    }
+
+    public Map<Integer, ObjectOutputStream> getClientConnectionOutput() {
+        return ClientConnectionOutput;
+    }
+
+    public Map<Integer, ObjectInputStream> getClientConnectionInput() {
+        return ClientConnectionInput;
+    }
+
+    public Server() throws IOException {
+        this.activeClientConnection = new HashMap<>();
+        this.playerData = new HashMap<>();
+        this.twoPlayerMatch = new ArrayList<>();
+        this.threePlayerMatch = new ArrayList<>();
+        this.ClientConnectionOutput = new HashMap<>();
+        this.ClientConnectionInput = new HashMap<>();
+        /*
+        this.serverSocket = new ServerSocket(PORT);
+        this.startController= new StartController();
+        */
+    }
+
+    public void run(){
+        ExecutorService executorSocket = Executors.newCachedThreadPool();
+        //thread always on
+        executorSocket.submit(new SocketClientConnection(PORT, this));
+
+    }
+
+    public void createTwoPlayersMatch(int player1, int player2){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                    ColorCheck matchColor = new ColorCheck(true, true, true);
+                    ObjectOutputStream output1, output2;
+                    List<ObjectOutputStream> broadcast = new ArrayList<>();
+                    List<String> playerName = new ArrayList<>();
+                    ObjectInputStream input1, input2;
+                    try {
+                        System.out.println("partita composta da "+ player1+" "+player2);
+                        playerName.add(playerData.get(player1));
+                        playerName.add(playerData.get(player2));
+                        //client = activeClientConnection.get(player1);
+                        input1 = ClientConnectionInput.get(player1);
+                        //output1 = new ObjectOutputStream(client.getOutputStream());
+                        output1 = ClientConnectionOutput.get(player1);
+                        //output1.writeObject("Match created");
+                        //output1.flush();
+                        broadcast.add(output1);
+                        //client = activeClientConnection.get(player2);
+                        input2 = ClientConnectionInput.get(player2);
+                        //output2 = new ObjectOutputStream(client.getOutputStream());
+                        output2 = ClientConnectionOutput.get(player2);
+                        broadcast.add(output2);
+
+                        broadcastMessage(broadcast, "Match created");
+                        //broadcastMessage(broadcast, playerName);
+
+                        Thread t1 = handleColorChoose(matchColor, input1, player1, broadcast);
+                        Thread t2 = handleColorChoose(matchColor, input2, player2, broadcast);
+                        t1.join();
+                        t2.join();
+                        System.out.println("Fine -> creo la partita");
+
+                    }catch (Exception e){
+                        System.err.println(e.getMessage());
+                    }
+                }
+        }).start();
+    }
+
+    public void broadcastMessage(List<ObjectOutputStream> match, Object message){
+        match.forEach( c -> {
+            try {
+                c.writeObject(message);
+                c.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public synchronized boolean parseColor(ColorCheck matchColor, String color, int player1, List<ObjectOutputStream> broadcast){
+        switch (color){
+            case "WHITE": if(matchColor.isWhite()){
+                broadcastMessage(broadcast, player1+" white");
+                matchColor.setWhite(false);
+                return true;
+            }else{
+                broadcastMessage(broadcast, "white locked");
+                return false;
+            }
+            case "BLUE": if(matchColor.isBlue()){
+                broadcastMessage(broadcast, player1+" blue");
+                matchColor.setBlue(false);
+                return true;
+            }else{
+                broadcastMessage(broadcast, "blue locked");
+                return false;
+            }
+            case "GREY": if(matchColor.isGrey()){
+                broadcastMessage(broadcast, player1+" grey");
+                matchColor.setGrey(false);
+                return true;
+            }else{
+                broadcastMessage(broadcast, "grey locked");
+                return false;
+            }
+        }
+        return false;
+    }
+
+    private Thread handleColorChoose (ColorCheck matchColor, ObjectInputStream input, int player, List broadcast){
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String color = null;
+                boolean playerColor = false;
+                while (!playerColor) {
+                    try {
+                        color = (String) input.readObject();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println(color);
+                    playerColor = parseColor(matchColor, color, player, broadcast);
+                }
+                System.out.println("thread colore server morto");
+            }
+        });
+        t.start();
+        return t;
+    }
+
+}

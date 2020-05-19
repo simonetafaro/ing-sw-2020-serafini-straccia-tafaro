@@ -1,66 +1,53 @@
-package it.polimi.ingsw.client;
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.utils.*;
+package it.polimi.ingsw;
+
+import it.polimi.ingsw.client.ConnectionManagerSocket;
+import it.polimi.ingsw.client.PopUpNumberPlayer;
+import it.polimi.ingsw.client.StartGame;
+import it.polimi.ingsw.client.showPopUpColor;
+import it.polimi.ingsw.utils.CustomDate;
+import it.polimi.ingsw.utils.PlayerColor;
+import it.polimi.ingsw.utils.setupMessage;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.io.PrintWriter;
 
-public class StartGame{
-
-    private ObjectOutputStream socketObjectOut;
-    private ObjectInputStream socketIn;
-    private PrintWriter socketout;
+public class ClientGUIMain implements Runnable{
 
     private JFrame mainFrame;
     private JPanel rootPanel;
-    private JPanel topPanel;
-    private JPanel dataPanel, sxPanel, dxPanel;
-    private JLabel dataTitle;
-    private JTextField nickname;
-
-
     private ImageIcon westPanelImage;
     private Image westPanelImageScaled;
     private Image eastPanelImageScaled;
     private ImageIcon eastPanelImage;
-
-
     private Image centralPanelImageScaled;
     private ImageIcon centralPanelImage;
-
-
     private JTextField playerTextField;
-
     private  JRadioButton playButton;
+    private JTextField dayField, monthField, yearField;
+
     private ButtonGroup color;
     private JRadioButton grey_button;
     private JRadioButton blue_button;
     private JRadioButton white_button;
-
-
-    private JTextField dayField, monthField, yearField;
-    private Player player;
-    private PlayerColor playerColor;
-
     private ImageIcon blueButton_Icon_No_Available;
-    private JLabel blueImage;
     private ImageIcon whiteButton_Icon_No_Available;
-    private JLabel whiteImage;
     private ImageIcon greyButton_Icon_No_Available;
-    private JLabel greyImage;
+
+    private JRadioButton two_Players_button;
+    private JRadioButton three_Players_button;
+
 
     private static final String SRC = "src";
     private static final String MAIN = "main";
     private static final String RESOURCES = "resources";
     private static final String IMAGE = "images";
+    private PlayerColor playerColor;
+    private int clientID = 0;
 
     private static final String PATH = SRC + File.separatorChar + MAIN + File.separatorChar + RESOURCES + File.separatorChar + IMAGE + File.separatorChar;
 
@@ -154,54 +141,50 @@ public class StartGame{
     private class PlayActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+
+            ConnectionManagerSocket connectionManagerSocket;
+
             String playerName = playerTextField.getText();
             String day = dayField.getText();
             String month = monthField.getText();
             String year = yearField.getText();
-            int day_value, month_value, year_value;
-            if(playerName != null && day!=null && month!=null && year!=null){
-                    //TODO check day,month and year value, must be an integer
-                    day_value = Integer.parseInt(day);
-                    month_value = Integer.parseInt(month);
-                    year_value = Integer.parseInt(year);
-                    sendObject(new setupMessage(playerName, day_value, month_value, year_value));
+            int day_value, month_value, year_value, playerNumber = 0;
+            CustomDate birthday;
+            if(playerName != null){
+                if(two_Players_button.isSelected() || three_Players_button.isSelected()){
+                    if(day!=null && month!=null && year!=null){
+                        //TODO check day,month and year value, must be an integer
+                        day_value = Integer.parseInt(day);
+                        month_value = Integer.parseInt(month);
+                        year_value = Integer.parseInt(year);
+                        birthday = new CustomDate(day_value, month_value, year_value);
+                        if(two_Players_button.isSelected())
+                            playerNumber= 2;
+                        if(three_Players_button.isSelected())
+                            playerNumber= 3;
+                        System.out.println("invio i dati");
+                        connectionManagerSocket = new ConnectionManagerSocket(playerName, playerColor, birthday, playerNumber);
+                        connectionManagerSocket.setup();
+                        //mainFrame.dispose();
+                        //connectionManagerSocket.setColor(mainFrame);
+                        showPopUpNumberPlayer(connectionManagerSocket);
+
+
+                    }
+                }
             }
+
         }
     }
 
-    public void sendObject(Object o){
-        //TODO handle exception
-        try{
-            socketObjectOut.reset();
-            socketObjectOut.writeObject(o);
-            socketObjectOut.flush();
-        }catch(IOException e){
-            System.err.println(e.getMessage());
-        }
+    public void showPopUpNumberPlayer(ConnectionManagerSocket connectionManagerSocket){
+        mainFrame.getContentPane().removeAll();
+        mainFrame.update(mainFrame.getGraphics());
+        SwingUtilities.invokeLater(new showPopUpColor(mainFrame, connectionManagerSocket));
+
     }
 
-    public void serverResponse(boolean response){
-        if(response){
-
-            new LobbyFrame(mainFrame);
-        }
-        else{
-            if(player.getColor().equals(PlayerColor.BLUE)){
-                blue_button.setEnabled(false);
-            }
-            if(player.getColor().equals(PlayerColor.WHITE)){
-                white_button.setEnabled(false);
-            }
-            if(player.getColor().equals(PlayerColor.GREY)){
-                grey_button.setEnabled(false);
-            }
-        }
-    }
-
-    public StartGame(ObjectOutputStream socketObjectOut){
-
-        this.socketObjectOut = socketObjectOut;
-
+    public ClientGUIMain(){
         mainFrame = new JFrame("Santorini Game");
         mainFrame.setBackground(Color.lightGray);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -227,7 +210,7 @@ public class StartGame{
         westPanelImageScaled = new ImageIcon(westPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
 
-        JPanel westPanel = new WestJPanel();
+        JPanel westPanel = new ClientGUIMain.WestJPanel();
         westPanel.setPreferredSize(new Dimension(280, 10));
         westPanel.setOpaque(false);
         rootPanel.add(westPanel, BorderLayout.WEST);
@@ -235,7 +218,7 @@ public class StartGame{
         eastPanelImage = new ImageIcon(PATH + "DX_Panel.png");
         eastPanelImageScaled = new ImageIcon(eastPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
-        JPanel eastPanel = new EastJPanel();
+        JPanel eastPanel = new ClientGUIMain.EastJPanel();
         eastPanel.setPreferredSize(new Dimension(280, 10));
         eastPanel.setOpaque(false);
         rootPanel.add(eastPanel, BorderLayout.EAST);
@@ -243,7 +226,7 @@ public class StartGame{
         centralPanelImage = new ImageIcon(PATH + "Central_Panel_Crop.png");
         centralPanelImageScaled = new ImageIcon(centralPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
-        JPanel centralPanel = new CentralJPanel();
+        JPanel centralPanel = new ClientGUIMain.CentralJPanel();
         centralPanel.setBackground(Color.BLACK);
         centralPanel.setPreferredSize(new Dimension(720, 10));
         centralPanel.setOpaque(true);
@@ -335,107 +318,70 @@ public class StartGame{
         gbcTxtDate.gridx = 0;
         gbcTxtDate.gridy = 15;
         centralPanel.add(datePickerPanel, gbcTxtDate);
-        /*
-        JLabel colorLabel = new JLabel("CHOOSE YOUR COLOR:");
+
+        JLabel colorLabel = new JLabel("CHOOSE PREFERRED PLAYER NUMBER:");
         colorLabel.setForeground(Color.darkGray);
         gbcLblDate.gridy = 17;
         centralPanel.add(colorLabel, gbcLblDate);
 
-        Image greyButton_image = new ImageIcon(PATH + "G_Workers_No_Shadow.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
-        ImageIcon greyButton_Icon = new ImageIcon(greyButton_image);
-        Image greyButton_image_pressed = new ImageIcon(PATH + "G_Workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
-        ImageIcon greyButton_Icon_Pressed = new ImageIcon(greyButton_image_pressed);
-        Image greyButton_image_No_Available = new ImageIcon(PATH + "G_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
-        greyButton_Icon_No_Available = new ImageIcon(greyButton_image_No_Available);
+        Image twoButton_image = new ImageIcon(PATH + "2Players.png").getImage().getScaledInstance(188,170, Image.SCALE_SMOOTH);
+        ImageIcon twoButton_Icon = new ImageIcon(twoButton_image);
+        Image twoButton_Icon_pressed = new ImageIcon(PATH + "2Players.png").getImage().getScaledInstance(188,170, Image.SCALE_SMOOTH);
+        ImageIcon twoButton_Icon_Pressed = new ImageIcon(twoButton_Icon_pressed);
 
 
-        Image blueButton_image = new ImageIcon(PATH + "B_Workers_No_Shadow.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
-        ImageIcon blueButton_Icon = new ImageIcon(blueButton_image);
-        Image blueButton_image_pressed = new ImageIcon(PATH + "B_Workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
-        ImageIcon blueButton_Icon_Pressed = new ImageIcon(blueButton_image_pressed);
-        Image blueButton_image_No_Available = new ImageIcon(PATH + "B_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
-        blueButton_Icon_No_Available = new ImageIcon(blueButton_image_No_Available);
+        Image threeButton_image = new ImageIcon(PATH + "3Players.png").getImage().getScaledInstance(188,170, Image.SCALE_SMOOTH);
+        ImageIcon threeButton_Icon = new ImageIcon(threeButton_image);
+        Image threeButton_Icon_pressed = new ImageIcon(PATH + "3Players.png").getImage().getScaledInstance(188,170, Image.SCALE_SMOOTH);
+        ImageIcon threeButton_Icon_Pressed = new ImageIcon(threeButton_Icon_pressed);
 
 
-        Image whiteButton_image = new ImageIcon(PATH + "W_workers_No_Press.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
-        ImageIcon whiteButton_Icon = new ImageIcon(whiteButton_image);
-        Image whiteButton_image_pressed = new ImageIcon(PATH + "W_Workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
-        ImageIcon whiteButton_Icon_Pressed = new ImageIcon(whiteButton_image_pressed);
-        Image whiteButton_image_No_Available = new ImageIcon(PATH + "W_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
-        whiteButton_Icon_No_Available = new ImageIcon(whiteButton_image_No_Available);
+        JPanel playerNumberButtons = new JPanel(new GridLayout(1,2, 25,0));
+        playerNumberButtons.setBackground(new Color(0,0,0,0));
+        playerNumberButtons.setOpaque(false);
 
-        GridBagConstraints gbcWorkerColor = new GridBagConstraints();
-        gbcWorkerColor.insets = new Insets(0, 150, 0, 150);
-        gbcWorkerColor.fill = GridBagConstraints.HORIZONTAL;
-        gbcWorkerColor.gridx = 0;
-        gbcWorkerColor.gridy = 20;
+        two_Players_button = new JRadioButton();
+        two_Players_button.setBackground(new Color(0,0,0,0));
+        two_Players_button.setOpaque(false);
+        two_Players_button.setHorizontalAlignment(SwingConstants.CENTER);
+        two_Players_button.setIcon(twoButton_Icon);
 
-
-        JPanel workersColorButton = new JPanel(new GridLayout(1,3, 25,0));
-        workersColorButton.setBackground(new Color(0,0,0,0));
-        workersColorButton.setOpaque(false);
-
-        grey_button = new JRadioButton();
-        grey_button.setBackground(new Color(0,0,0,0));
-        grey_button.setOpaque(false);
-        grey_button.setHorizontalAlignment(SwingConstants.CENTER);
-        grey_button.setIcon(greyButton_Icon);
-        grey_button.setDisabledIcon(greyButton_Icon_No_Available);
-        grey_button.addActionListener(new ActionListener() {
+        two_Players_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                grey_button.setIcon(greyButton_Icon_Pressed);
-                if(!blue_button.getIcon().equals(blueButton_Icon_No_Available))
-                    blue_button.setIcon(blueButton_Icon);
-                if(!white_button.getIcon().equals(whiteButton_Icon_No_Available))
-                    white_button.setIcon(whiteButton_Icon);
-
-            }
-        });
-        blue_button = new JRadioButton();
-        blue_button.setBackground(new Color(0,0,0,0));
-        blue_button.setOpaque(false);
-        blue_button.setHorizontalAlignment(SwingConstants.CENTER);
-        blue_button.setIcon(blueButton_Icon);
-        blue_button.setDisabledIcon(blueButton_Icon_No_Available);
-        blue_button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                blue_button.setIcon(blueButton_Icon_Pressed);
-                if(!grey_button.getIcon().equals(greyButton_Icon_No_Available))
-                    grey_button.setIcon(greyButton_Icon);
-                if(!white_button.getIcon().equals(whiteButton_Icon_No_Available))
-                    white_button.setIcon(whiteButton_Icon);
-            }
-        });
-        white_button = new JRadioButton();
-        white_button.setBackground(new Color(0,0,0,0));
-        white_button.setOpaque(false);
-        white_button.setHorizontalAlignment(SwingConstants.CENTER);
-        white_button.setIcon(whiteButton_Icon);
-        white_button.setDisabledIcon(whiteButton_Icon_No_Available);
-        white_button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(!blue_button.getIcon().equals(blueButton_Icon_No_Available))
-                    blue_button.setIcon(blueButton_Icon);
-                if(!grey_button.getIcon().equals(greyButton_Icon_No_Available))
-                    grey_button.setIcon(greyButton_Icon);
-                white_button.setIcon(whiteButton_Icon_Pressed);
+                two_Players_button.setIcon(twoButton_Icon_Pressed);
+                three_Players_button.setIcon(threeButton_Icon);
             }
         });
 
-        gbcWorkerColor.insets = new Insets(0, 150, 5, 150);
-        workersColorButton.add(grey_button);
-        workersColorButton.add(blue_button);
-        workersColorButton.add(white_button);
-        centralPanel.add(workersColorButton,gbcWorkerColor);
+        three_Players_button = new JRadioButton();
+        three_Players_button.setBackground(new Color(0,0,0,0));
+        three_Players_button.setOpaque(false);
+        three_Players_button.setHorizontalAlignment(SwingConstants.CENTER);
+        three_Players_button.setIcon(threeButton_Icon);
 
-        color = new ButtonGroup();
-        color.add(grey_button);
-        color.add(white_button);
-        color.add(blue_button);
-        */
+        three_Players_button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                two_Players_button.setIcon(twoButton_Icon);
+                three_Players_button.setIcon(threeButton_Icon_Pressed);
+            }
+        });
+
+        playerNumberButtons.add(two_Players_button);
+        playerNumberButtons.add(three_Players_button);
+
+        ButtonGroup playerNumber = new ButtonGroup();
+        playerNumber.add(two_Players_button);
+        playerNumber.add(three_Players_button);
+
+        GridBagConstraints gbcPlayerNumber = new GridBagConstraints();
+        gbcPlayerNumber.insets = new Insets(0, 150, 0, 150);
+        gbcPlayerNumber.fill = GridBagConstraints.HORIZONTAL;
+        gbcPlayerNumber.gridx = 0;
+        gbcPlayerNumber.gridy = 20;
+
+        centralPanel.add(playerNumberButtons, gbcPlayerNumber);
 
         playButton = new JRadioButton();
 
@@ -446,7 +392,7 @@ public class StartGame{
         //playButton.setBackground(new Color(0,0,0,0));
         playButton.setOpaque(false);
 
-        playButton.addActionListener(new PlayActionListener());
+        //playButton.addActionListener(new ClientGUIMain.PlayActionListener());
 
         GridBagConstraints gbcPlayButton = new GridBagConstraints();
         gbcPlayButton.insets = new Insets(0, 240, 15, 240);
@@ -464,18 +410,12 @@ public class StartGame{
 
     }
 
-    public void showPopUpNumberPlayer(){
-        mainFrame.getContentPane().removeAll();
-        mainFrame.update(mainFrame.getGraphics());
-        new PopUpNumberPlayer(socketout, mainFrame);
+    @Override
+    public void run() {
+        playButton.addActionListener(new PlayActionListener());
     }
 
-    /*public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-        }catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-        SwingUtilities.invokeLater(new StartGame());
-    }*/
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new ClientGUIMain());
+    }
 }

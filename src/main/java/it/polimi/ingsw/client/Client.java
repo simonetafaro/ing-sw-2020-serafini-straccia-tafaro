@@ -2,6 +2,7 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.utils.OkayMessage;
+import it.polimi.ingsw.utils.setupMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,11 +15,13 @@ import java.util.Scanner;
 public class Client {
 
     private String ip;
+    private String nickname;
     private int port;
     private boolean active = true;
     private Socket socket;
     private StartGame startGame;
     private PrintWriter socketOut;
+    private ObjectOutputStream socketObjectOut;
 
     public Client(String ip, int port){
         this.ip = ip;
@@ -40,23 +43,36 @@ public class Client {
                 try {
                     while (isActive()) {
                         Object inputObject = socketIn.readObject();
+                        if(inputObject instanceof String){
+                            if(((String) inputObject).indexOf("The first player is ")>0){
+                                if(startGame != null){
+                                    startGame.showPopUpNumberPlayer();
+                                }else{
+                                    System.out.println("Please insert player number: ");
+                                }
+                            }
+                        }
+
                         if (inputObject instanceof ClientGUIParameters) {
-                            startGame = new StartGame(socket, socketIn);
+                            //startGame = new StartGame(socket, socketIn, socketOut);
+
                         }
                         if (inputObject instanceof String) {
                             if(inputObject.equals("SetNumberPlayer")){
-                                new PopUpNumberPlayer(socketOut);
+                                startGame.showPopUpNumberPlayer();
+
                             }
+
                             System.out.println((String) inputObject);
+
                         }
                         if (inputObject instanceof Board) {
                             ((Board) inputObject).printBoard();
+
                         }
                         if(inputObject instanceof CheckServerResponse){
                             startGame.serverResponse(((CheckServerResponse) inputObject).isCheckError());
-                        }
-                        if(inputObject instanceof PopUpNumberPlayer){
-                            startGame.showPopUpNumberPlayer();
+
                         }
                     }
                 }catch (Exception e ){
@@ -90,6 +106,35 @@ public class Client {
         return t;
     }
 
+    public void setupParameters(){
+        Scanner in = new Scanner(System.in);
+
+        System.out.println("Do you want to use CLI or GUI ?");
+        String CLI_GUI =in.nextLine();
+        switch (CLI_GUI.toUpperCase()){
+            case "CLI": setupCLI(in);
+                        break;
+            default:    setupGUI();
+                        break;
+        }
+    }
+
+    public void setupCLI(Scanner in){
+        System.out.println("Please insert your nickname");
+        String nickname = in.nextLine();
+        System.out.println("Please insert your birthday. ES: 01/10/1997");
+        String birthday = in.nextLine();
+        try {
+            socketObjectOut.reset();
+            socketObjectOut.writeObject(new setupMessage(nickname, Integer.parseInt(birthday.substring(0, 2)), Integer.parseInt(birthday.substring(3, 5)), Integer.parseInt(birthday.substring(6, 10))));
+            socketObjectOut.flush();
+        }catch (IOException e ){
+            System.err.println(e.getMessage());
+        }
+    }
+    public void setupGUI(){
+        startGame = new StartGame(socketObjectOut);
+    }
 
     public void run() throws IOException {
 
@@ -98,9 +143,10 @@ public class Client {
         ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
         socketOut = new PrintWriter(socket.getOutputStream());
         Scanner stdin = new Scanner(System.in);
-
+        socketObjectOut = new ObjectOutputStream(socket.getOutputStream());
         try{
             Thread t0 = asyncReadFromSocket(socketIn);
+            setupParameters();
             Thread t1 = asyncWriteToSocket(stdin, socketOut);
             t0.join();
             t1.join();
