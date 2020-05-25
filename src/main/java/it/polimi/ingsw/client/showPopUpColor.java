@@ -35,7 +35,6 @@ public class showPopUpColor implements Runnable{
     private ObjectOutputStream socketOut;
     private static final String PATH = SRC + File.separatorChar + MAIN + File.separatorChar + RESOURCES + File.separatorChar + IMAGE + File.separatorChar;
 
-
     private class WhiteColor implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -63,7 +62,6 @@ public class showPopUpColor implements Runnable{
 
     public showPopUpColor(JFrame mainFrame, ConnectionManagerSocket connectionManagerSocket){
         this.connectionManagerSocket = connectionManagerSocket;
-
         this.mainFrame = mainFrame;
         JPanel popUpFrame = new JPanel();
         popUpFrame.setLayout(new GridLayout(2,1));
@@ -90,7 +88,6 @@ public class showPopUpColor implements Runnable{
         ImageIcon blueButton_Icon_Pressed = new ImageIcon(blueButton_image_pressed);
         Image blueButton_image_No_Available = new ImageIcon(PATH + "B_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         blueButton_Icon_No_Available = new ImageIcon(blueButton_image_No_Available);
-
 
         Image whiteButton_image = new ImageIcon(PATH + "W_workers_No_Press.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon whiteButton_Icon = new ImageIcon(whiteButton_image);
@@ -146,16 +143,16 @@ public class showPopUpColor implements Runnable{
         popUpFrame.setSize(1280,720);
         this.mainFrame.add(popUpFrame);
         this.mainFrame.setVisible(true);
-
+        this.mainFrame.setEnabled(true);
         this.mainFrame.setSize(1280, 720);
-
+        connectionManagerSocket.receiveColorResponse(this);
     }
 
-
     public void closeGUI(){
+        //connectionManagerSocket.setColorSetted(true);
         mainFrame.getContentPane().removeAll();
+        SwingUtilities.invokeLater(new PickUpCards(mainFrame, connectionManagerSocket.getPlayerNumber()));
         mainFrame.update(mainFrame.getGraphics());
-        SwingUtilities.invokeLater(new PickUpCards(mainFrame));
     }
 
     public void lock(String color){
@@ -171,7 +168,6 @@ public class showPopUpColor implements Runnable{
 
     @Override
     public void run() {
-        this.t = connectionManagerSocket.receiveColorResponse(this);
         blue_button.addActionListener(new BlueColor());
         white_button.addActionListener(new WhiteColor());
         grey_button.addActionListener(new GreyColor());

@@ -220,20 +220,21 @@ public class SocketClientConnection  extends Observable<String> implements Clien
                     System.out.println("date accepted!");
                     output.writeObject("VALID DATE");
                     output.flush();
-
+                    Player player = new Player(clientId, nickName, birthday);
                     int playerNumber = (int) input.readObject();
                     switch (playerNumber){
-                        case 2: activeServer.getTwoPlayerMatch().add(clientId);
+                        case 2: activeServer.getTwoPlayerMatch().add(player);
                                 output.writeObject(new String("VALID NUMBER"));
                                 output.flush();
+
                                 if(activeServer.getTwoPlayerMatch().size() == 2){
                                     //create two players match
                                     activeServer.createTwoPlayersMatch(activeServer.getTwoPlayerMatch().get(0),activeServer.getTwoPlayerMatch().get(1));
                                     activeServer.getTwoPlayerMatch().clear();
                                 }
 
-                        case 3: activeServer.getThreePlayerMatch().add(clientId);
-                                output.writeObject(new String("VALID NUMBER"));
+                        case 3: activeServer.getThreePlayerMatch().add(player);
+                                output.writeObject(new String("VALID NUMBER:" +playerNumber));
                                 output.flush();
                                 if(activeServer.getThreePlayerMatch().size() == 3){
                                     //create three players match

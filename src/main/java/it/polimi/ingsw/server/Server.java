@@ -222,8 +222,8 @@ public class Server{
 
     /**new implementations*/
     private static int clientId = 1;
-    private List<Integer> twoPlayerMatch;
-    private List<Integer> threePlayerMatch;
+    private List<Player> twoPlayerMatch;
+    private List<Player> threePlayerMatch;
     private Map<Integer, String> playerData;
     private Map<Integer, Socket> activeClientConnection;
     private Map<Integer, ObjectOutputStream> ClientConnectionOutput;
@@ -236,10 +236,10 @@ public class Server{
         clientId++;
     }
 
-    public List<Integer> getTwoPlayerMatch() {
+    public List<Player> getTwoPlayerMatch() {
         return twoPlayerMatch;
     }
-    public List<Integer> getThreePlayerMatch() {
+    public List<Player> getThreePlayerMatch() {
         return threePlayerMatch;
     }
     public Map<Integer, Socket> getActiveClientConnection() {
@@ -277,7 +277,7 @@ public class Server{
 
     }
 
-    public void createTwoPlayersMatch(int player1, int player2){
+    public void createTwoPlayersMatch(Player player1, Player player2){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -287,30 +287,27 @@ public class Server{
                     List<String> playerName = new ArrayList<>();
                     ObjectInputStream input1, input2;
                     try {
-                        System.out.println("partita composta da "+ player1+" "+player2);
-                        playerName.add(playerData.get(player1));
-                        playerName.add(playerData.get(player2));
-                        //client = activeClientConnection.get(player1);
-                        input1 = ClientConnectionInput.get(player1);
-                        //output1 = new ObjectOutputStream(client.getOutputStream());
-                        output1 = ClientConnectionOutput.get(player1);
-                        //output1.writeObject("Match created");
-                        //output1.flush();
+                        playerName.add(playerData.get(player1.getID()));
+                        playerName.add(playerData.get(player2.getID()));
+
+                        input1 = ClientConnectionInput.get(player1.getID());
+                        output1 = ClientConnectionOutput.get(player1.getID());
                         broadcast.add(output1);
-                        //client = activeClientConnection.get(player2);
-                        input2 = ClientConnectionInput.get(player2);
-                        //output2 = new ObjectOutputStream(client.getOutputStream());
-                        output2 = ClientConnectionOutput.get(player2);
+
+                        input2 = ClientConnectionInput.get(player2.getID());
+                        output2 = ClientConnectionOutput.get(player2.getID());
                         broadcast.add(output2);
 
                         broadcastMessage(broadcast, "Match created");
-                        //broadcastMessage(broadcast, playerName);
 
-                        Thread t1 = handleColorChoose(matchColor, input1, player1, broadcast);
-                        Thread t2 = handleColorChoose(matchColor, input2, player2, broadcast);
+                        //broadcastMessage(broadcast, "Players in this match:"+player1.getNickname()+player2.getNickname());
+
+                        Thread t1 = handleColorChoose(matchColor, input1, player1.getID(), broadcast);
+                        Thread t2 = handleColorChoose(matchColor, input2, player2.getID(), broadcast);
                         t1.join();
                         t2.join();
-                        System.out.println("Fine -> creo la partita");
+
+                        broadcastMessage(broadcast, "firstPlayer: "+player1.getID());
 
                     }catch (Exception e){
                         System.err.println(e.getMessage());

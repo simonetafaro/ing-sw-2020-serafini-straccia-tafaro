@@ -24,12 +24,12 @@ public class ConnectionManagerSocket {
     private Socket socket;
     private ObjectOutputStream output;
     private ObjectInputStream input;
-    public String playerColor;
-
+    private String playerColor;
+    private JFrame mainFrame;
     private Thread t;
     private static final String SERVER_ADDRESS = "127.0.0.1";
     private static final int SOCKET_PORT = 12345;
-
+    private Boolean colorSetted;
     //private ClientData clientData;
 
     protected int clientID;
@@ -42,21 +42,40 @@ public class ConnectionManagerSocket {
         this.color = color;
         this.clientID = 0;
         this.playerColor = null;
+        this.colorSetted =false;
         //this.clientData = new ClientData();
     }
 
+    public void setMainFrame(JFrame mainFrame) {
+        this.mainFrame = mainFrame;
+    }
     public void setclientID(int clientID) {
         this.clientID = clientID;
     }
-
+    public void setColorSetted(boolean colorSetted) {
+        synchronized (this.colorSetted){
+            this.colorSetted = colorSetted;
+        }
+    }
     public int getclientID() {
         return this.clientID;
+    }
+
+    public int getPlayerNumber() {
+        return playerNumber;
     }
 
     public void setup() {
         try {
             this.initializeSocket();
             this.chooseColor();
+            /*
+            this.openPopUpColor();
+            System.out.println("avvio colori ok");
+            while(!colorSetted){
+            }
+            System.out.println("avvio carte");
+            this.openPickUpCardPopUp(); */
             /**
              * Creates an always-on thread that works as a subscriber. When the
              * server publishes something, this thread is notified.
@@ -128,7 +147,6 @@ public class ConnectionManagerSocket {
         //socket = null;
         //output = null;
     }
-
     public void chooseColor() throws IOException {
         String matchCreated =null;
         do{
@@ -139,30 +157,9 @@ public class ConnectionManagerSocket {
             }
             System.out.println(matchCreated);
         }while (!matchCreated.equals("Match created"));
-        /*
-        try {
-
-            System.out.println("waiting");
-            String matchCreated = (String) input.readObject();
-            if (matchCreated.equals("Match created")){
-                System.out.println("Match created.");
-            }
-            System.out.println("waiting");
-
-        } catch (IOException e) {
-            System.err.println("--"+e.getMessage());
-        } catch (ClassNotFoundException e) {
-            System.err.println("++"+e.getMessage());
-        }
-        */
-        //this.close(socket);
-        // delete references
-        //socket = null;
-        //output = null;
     }
-
     public void setColor(String color, showPopUpColor guiInstance){
-
+        System.out.println("colore"+color);
         try{
             this.playerColor = color;
             output.writeObject(color);
@@ -172,13 +169,8 @@ public class ConnectionManagerSocket {
         }
 
     }
-
-    public ObjectOutputStream getOutput() {
-        return output;
-    }
-
     public Thread receiveColorResponse(showPopUpColor guiInstance){
-        Thread t = new Thread(new Runnable() {
+        t = new Thread(new Runnable() {
             @Override
             public void run() {
                 boolean colorCheck = false;
@@ -190,17 +182,14 @@ public class ConnectionManagerSocket {
                         System.err.println(e.getMessage());
                     }
                 }
-                System.out.println("thread colore clinet morto");
             }
         });
         t.start();
         return t;
     }
-
     public String getPlayerColor() {
         return playerColor;
     }
-
     private boolean handleColorResponse(String colorResult, showPopUpColor guiInstance){
         if(colorResult.toUpperCase().equals(Integer.toString(getclientID())+" "+getPlayerColor())){
             System.out.println("color ok");
@@ -219,6 +208,18 @@ public class ConnectionManagerSocket {
         return false;
 
     }
+
+    private void openPopUpColor(){
+        mainFrame.getContentPane().removeAll();
+        SwingUtilities.invokeLater(new showPopUpColor(mainFrame, this));
+        mainFrame.update(mainFrame.getGraphics());
+    }
+    private void openPickUpCardPopUp(){
+        mainFrame.getContentPane().removeAll();
+        mainFrame.update(mainFrame.getGraphics());
+        SwingUtilities.invokeLater(new PickUpCards(mainFrame, playerNumber));
+    }
+
     private void close(Socket socket) {
         try {
             socket.close();

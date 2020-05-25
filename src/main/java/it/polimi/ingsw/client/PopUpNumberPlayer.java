@@ -31,7 +31,7 @@ public class PopUpNumberPlayer {
         title.setIcon(titleIMG);
         popUpFrame.add(title);
 
-        Image twoButton_image = new ImageIcon(PATH + "2Players.png").getImage().getScaledInstance(188,170, Image.SCALE_SMOOTH);
+        Image twoButton_image = new ImageIcon(PATH + "2Players.png").getImage();
         ImageIcon twoButton_Icon = new ImageIcon(twoButton_image);
 
         JRadioButton two_button = new JRadioButton();
@@ -40,15 +40,17 @@ public class PopUpNumberPlayer {
         two_button.setHorizontalAlignment(SwingConstants.CENTER);
         two_button.setIcon(twoButton_Icon);
 
-
-        Image threeButton_image = new ImageIcon(PATH + "3Players.png").getImage().getScaledInstance(188,170, Image.SCALE_SMOOTH);
+        Image threeButton_image = new ImageIcon(PATH + "3Players.png").getImage();
         ImageIcon threeButton_Icon = new ImageIcon(threeButton_image);
+        Image threeButton_image_pressed = new ImageIcon(PATH + "3Players_pressed.png").getImage();
+        ImageIcon threeButton_Icon_pressed = new ImageIcon(threeButton_image);
 
         JRadioButton three_button = new JRadioButton();
         three_button.setBackground(new Color(0,0,0,0));
         three_button.setOpaque(false);
         three_button.setHorizontalAlignment(SwingConstants.CENTER);
         three_button.setIcon(threeButton_Icon);
+        three_button.setDisabledIcon(threeButton_Icon_pressed);
 
         JPanel buttons = new JPanel(new GridLayout(1,2,10,30));
 
@@ -62,6 +64,7 @@ public class PopUpNumberPlayer {
         two_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                two_button.setEnabled(false);
                 socketOut.println("2");
                 socketOut.flush();
                 //mainFrame.remove(popUpFrame);
@@ -72,6 +75,7 @@ public class PopUpNumberPlayer {
         three_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                three_button.setEnabled(false);
                 socketOut.println("3");
                 socketOut.flush();
                 //mainFrame.remove(popUpFrame);

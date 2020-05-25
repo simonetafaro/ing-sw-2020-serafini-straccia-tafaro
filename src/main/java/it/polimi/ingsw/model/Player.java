@@ -12,6 +12,7 @@ public class Player implements Serializable {
     private PlayerColor color;
     private CustomDate birthDate;
     private String nickname;
+    private int ID;
     private transient Worker worker1;
     private transient Worker worker2;
     private transient PlayerTurn myTurn;
@@ -32,6 +33,12 @@ public class Player implements Serializable {
         this.worker2=player.worker2;
         this.cardManager= new CardManager();
     }*/
+
+    public Player(int ID, String nickname, CustomDate birthDate) {
+        this.birthDate = birthDate;
+        this.nickname = nickname;
+        this.ID = ID;
+    }
 
     public Player(String name, CustomDate birthDate, PlayerColor color){
         this.nickname = name;
@@ -86,6 +93,9 @@ public class Player implements Serializable {
     }
     public Card getMyCard(){
         return this.myCard;
+    }
+    public int getID() {
+        return ID;
     }
 
     public CardRuleDecorator getMyCardMethod() {

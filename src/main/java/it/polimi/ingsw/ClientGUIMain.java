@@ -29,6 +29,9 @@ public class ClientGUIMain implements Runnable{
     private JTextField playerTextField;
     private  JRadioButton playButton;
     private JTextField dayField, monthField, yearField;
+    private ImageIcon threeButton_Icon, threeButton_Icon_Pressed;
+    private ImageIcon twoButton_Icon, twoButton_Icon_Pressed;
+
 
     private ButtonGroup color;
     private JRadioButton grey_button;
@@ -38,9 +41,9 @@ public class ClientGUIMain implements Runnable{
     private ImageIcon whiteButton_Icon_No_Available;
     private ImageIcon greyButton_Icon_No_Available;
 
-    private JRadioButton two_Players_button;
-    private JRadioButton three_Players_button;
-
+    private JCheckBox two_Players_button;
+    private JCheckBox three_Players_button;
+    private ButtonGroup playersNumberButtonGroup;
 
     private static final String SRC = "src";
     private static final String MAIN = "main";
@@ -48,6 +51,7 @@ public class ClientGUIMain implements Runnable{
     private static final String IMAGE = "images";
     private PlayerColor playerColor;
     private int clientID = 0;
+    private int playerNumber;
 
     private static final String PATH = SRC + File.separatorChar + MAIN + File.separatorChar + RESOURCES + File.separatorChar + IMAGE + File.separatorChar;
 
@@ -158,18 +162,21 @@ public class ClientGUIMain implements Runnable{
                         month_value = Integer.parseInt(month);
                         year_value = Integer.parseInt(year);
                         birthday = new CustomDate(day_value, month_value, year_value);
-                        if(two_Players_button.isSelected())
+                        if(two_Players_button.isSelected()){
                             playerNumber= 2;
-                        if(three_Players_button.isSelected())
+                            ClientGUIMain.this.playerNumber = 2;
+                        }
+                        if(three_Players_button.isSelected()){
                             playerNumber= 3;
+                            ClientGUIMain.this.playerNumber = 3;
+                        }
                         System.out.println("invio i dati");
                         connectionManagerSocket = new ConnectionManagerSocket(playerName, playerColor, birthday, playerNumber);
+                        //connectionManagerSocket.setMainFrame(ClientGUIMain.this.mainFrame);
                         connectionManagerSocket.setup();
                         //mainFrame.dispose();
                         //connectionManagerSocket.setColor(mainFrame);
-                        showPopUpNumberPlayer(connectionManagerSocket);
-
-
+                        showPopUpPlayerColor(connectionManagerSocket);
                     }
                 }
             }
@@ -177,11 +184,10 @@ public class ClientGUIMain implements Runnable{
         }
     }
 
-    public void showPopUpNumberPlayer(ConnectionManagerSocket connectionManagerSocket){
+    public void showPopUpPlayerColor(ConnectionManagerSocket connectionManagerSocket){
         mainFrame.getContentPane().removeAll();
         mainFrame.update(mainFrame.getGraphics());
         SwingUtilities.invokeLater(new showPopUpColor(mainFrame, connectionManagerSocket));
-
     }
 
     public ClientGUIMain(){
@@ -324,47 +330,55 @@ public class ClientGUIMain implements Runnable{
         gbcLblDate.gridy = 17;
         centralPanel.add(colorLabel, gbcLblDate);
 
-        Image twoButton_image = new ImageIcon(PATH + "2Players.png").getImage().getScaledInstance(188,170, Image.SCALE_SMOOTH);
-        ImageIcon twoButton_Icon = new ImageIcon(twoButton_image);
-        Image twoButton_Icon_pressed = new ImageIcon(PATH + "2Players.png").getImage().getScaledInstance(188,170, Image.SCALE_SMOOTH);
-        ImageIcon twoButton_Icon_Pressed = new ImageIcon(twoButton_Icon_pressed);
+        Image twoButton_image = new ImageIcon(PATH + "2Players.png").getImage();
+        twoButton_Icon = new ImageIcon(twoButton_image);
+        Image twoButton_image_Pressed = new ImageIcon(PATH + "2Players_pressed.png").getImage();
+        twoButton_Icon_Pressed = new ImageIcon(twoButton_image_Pressed);
 
+        Image threeButton_image = new ImageIcon(PATH + "3Players.png").getImage();
+        threeButton_Icon = new ImageIcon(threeButton_image);
+        Image threeButton_image_pressed = new ImageIcon(PATH + "3Players_pressed.png").getImage();
+        threeButton_Icon_Pressed = new ImageIcon(threeButton_image_pressed);
 
-        Image threeButton_image = new ImageIcon(PATH + "3Players.png").getImage().getScaledInstance(188,170, Image.SCALE_SMOOTH);
-        ImageIcon threeButton_Icon = new ImageIcon(threeButton_image);
-        Image threeButton_Icon_pressed = new ImageIcon(PATH + "3Players.png").getImage().getScaledInstance(188,170, Image.SCALE_SMOOTH);
-        ImageIcon threeButton_Icon_Pressed = new ImageIcon(threeButton_Icon_pressed);
-
-
-        JPanel playerNumberButtons = new JPanel(new GridLayout(1,2, 25,0));
+        JPanel playerNumberButtons = new JPanel(new GridLayout(1,2, 15,0));
         playerNumberButtons.setBackground(new Color(0,0,0,0));
         playerNumberButtons.setOpaque(false);
 
-        two_Players_button = new JRadioButton();
+        two_Players_button = new JCheckBox();
         two_Players_button.setBackground(new Color(0,0,0,0));
         two_Players_button.setOpaque(false);
         two_Players_button.setHorizontalAlignment(SwingConstants.CENTER);
         two_Players_button.setIcon(twoButton_Icon);
+        two_Players_button.setDisabledIcon(twoButton_Icon_Pressed);
 
         two_Players_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                two_Players_button.setIcon(twoButton_Icon_Pressed);
-                three_Players_button.setIcon(threeButton_Icon);
+                if(two_Players_button.isSelected()){
+                    two_Players_button.setIcon(twoButton_Icon_Pressed);
+                    three_Players_button.setIcon(threeButton_Icon);
+                }else{
+                    two_Players_button.setIcon(twoButton_Icon);
+                }
             }
         });
 
-        three_Players_button = new JRadioButton();
+        three_Players_button = new JCheckBox();
         three_Players_button.setBackground(new Color(0,0,0,0));
         three_Players_button.setOpaque(false);
         three_Players_button.setHorizontalAlignment(SwingConstants.CENTER);
         three_Players_button.setIcon(threeButton_Icon);
+        three_Players_button.setDisabledIcon(threeButton_Icon_Pressed);
 
         three_Players_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                two_Players_button.setIcon(twoButton_Icon);
-                three_Players_button.setIcon(threeButton_Icon_Pressed);
+                if(three_Players_button.isSelected()){
+                    three_Players_button.setIcon(threeButton_Icon_Pressed);
+                    two_Players_button.setIcon(twoButton_Icon);
+                }else{
+                    two_Players_button.setIcon(twoButton_Icon);
+                }
             }
         });
 
@@ -413,6 +427,8 @@ public class ClientGUIMain implements Runnable{
     @Override
     public void run() {
         playButton.addActionListener(new PlayActionListener());
+        //two_Players_button.addActionListener(new PlayerNumberButtonActionListener());
+        //three_Players_button.addActionListener(new PlayerNumberButtonActionListener());
     }
 
     public static void main(String[] args) {
