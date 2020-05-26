@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -27,7 +28,7 @@ public class ConnectionManagerSocket {
     private Thread t;
     private static final String SERVER_ADDRESS = "127.0.0.1";
     private static final int SOCKET_PORT = 12345;
-    private Boolean colorSetted;
+    private int order;
     //private ClientData clientData;
 
     protected int clientID;
@@ -40,7 +41,6 @@ public class ConnectionManagerSocket {
         this.color = color;
         this.clientID = 0;
         this.playerColor = null;
-        this.colorSetted =false;
         //this.clientData = new ClientData();
     }
 
@@ -50,11 +50,7 @@ public class ConnectionManagerSocket {
     public void setclientID(int clientID) {
         this.clientID = clientID;
     }
-    public void setColorSetted(boolean colorSetted) {
-        synchronized (this.colorSetted){
-            this.colorSetted = colorSetted;
-        }
-    }
+
     public int getclientID() {
         return this.clientID;
     }
@@ -206,33 +202,76 @@ public class ConnectionManagerSocket {
 
     }
 
-    private void openPopUpColor(){
-        mainFrame.getContentPane().removeAll();
-        SwingUtilities.invokeLater(new showPopUpColor(mainFrame, this));
-        mainFrame.update(mainFrame.getGraphics());
-    }
-    private void openPickUpCardPopUp(){
-        mainFrame.getContentPane().removeAll();
-        mainFrame.update(mainFrame.getGraphics());
-        SwingUtilities.invokeLater(new PickUpCards(mainFrame, playerNumber));
-    }
     public void waitForFirstPlayer() throws IOException{
-        String firstPlayer = null;
+        String orderPlayer = null;
         do{
             try{
-                firstPlayer = (String) input.readObject();
+                orderPlayer = (String) input.readObject();
             }catch (ClassNotFoundException e){
                 System.err.println(e.getMessage());
             }
-        }while (!firstPlayer.contains("firstPlayer"));
-        System.out.println(firstPlayer);
-        if(firstPlayer.equals("firstPlayer: "+ this.clientID))
-            SwingUtilities.invokeLater(new PickUpCards(mainFrame,playerNumber));
+        }while (!orderPlayer.contains(" "+clientID));
+        if(orderPlayer.equals("firstPlayer: "+ this.clientID))
+            this.order = 0;
+        if(orderPlayer.equals("secondPlayer: "+ this.clientID))
+            this.order = 1;
+        if(orderPlayer.equals("thirdPlayer: "+ this.clientID))
+            this.order = 2;
+
+        if(orderPlayer.equals("firstPlayer: "+ this.clientID))
+            SwingUtilities.invokeLater(new PickUpCards(mainFrame,playerNumber, this, true));
+        else
+            SwingUtilities.invokeLater(new PickUpCards(mainFrame,playerNumber, this, false));
     }
+
+    public Thread receiveCard(PickUpCards guiInstance){
+        t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int i= 1;
+                Object obj;
+                while(i<playerNumber){
+                    try {
+                        obj =input.readObject();
+                        if (obj instanceof ArrayList){
+                            ArrayList cards = null;
+                            cards = (ArrayList) obj;
+                            if(cards.size() == playerNumber && ConnectionManagerSocket.this.order == 1){
+                                System.out.println("1");
+                                guiInstance.updateGodImage(cards);
+                            }
+                            if((cards.size() == (playerNumber-1)) && ConnectionManagerSocket.this.order == 2){
+                                System.out.println("2");
+                                guiInstance.updateGodImage(cards);
+                            }
+                            i++;
+                        }
+                        if(obj instanceof String)
+                            System.out.println(obj);
+                    }catch (ClassNotFoundException | IOException e){
+                        System.err.println(e.getMessage());
+                    }
+                }
+                System.out.println("thread carte finito");
+            }
+        });
+        t.start();
+        return t;
+    }
+
     private void close(Socket socket) {
         try {
             socket.close();
         } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public void sendObjectToServer(Object o){
+        try{
+            output.writeObject(o);
+            output.flush();
+        }catch (IOException e ){
             System.err.println(e.getMessage());
         }
     }

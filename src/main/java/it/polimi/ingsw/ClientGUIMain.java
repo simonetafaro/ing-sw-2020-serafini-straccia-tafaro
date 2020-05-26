@@ -19,6 +19,7 @@ import java.io.ObjectOutputStream;
 public class ClientGUIMain implements Runnable{
 
     private JFrame mainFrame;
+
     private JPanel rootPanel;
     private ImageIcon westPanelImage;
     private Image westPanelImageScaled;
@@ -32,18 +33,8 @@ public class ClientGUIMain implements Runnable{
     private ImageIcon threeButton_Icon, threeButton_Icon_Pressed;
     private ImageIcon twoButton_Icon, twoButton_Icon_Pressed;
 
-
-    private ButtonGroup color;
-    private JRadioButton grey_button;
-    private JRadioButton blue_button;
-    private JRadioButton white_button;
-    private ImageIcon blueButton_Icon_No_Available;
-    private ImageIcon whiteButton_Icon_No_Available;
-    private ImageIcon greyButton_Icon_No_Available;
-
     private JCheckBox two_Players_button;
     private JCheckBox three_Players_button;
-    private ButtonGroup playersNumberButtonGroup;
 
     private static final String SRC = "src";
     private static final String MAIN = "main";
@@ -147,7 +138,6 @@ public class ClientGUIMain implements Runnable{
         public void actionPerformed(ActionEvent e) {
 
             ConnectionManagerSocket connectionManagerSocket;
-
             String playerName = playerTextField.getText();
             String day = dayField.getText();
             String month = monthField.getText();
@@ -172,7 +162,7 @@ public class ClientGUIMain implements Runnable{
                         }
                         System.out.println("invio i dati");
                         connectionManagerSocket = new ConnectionManagerSocket(playerName, playerColor, birthday, playerNumber);
-                        //connectionManagerSocket.setMainFrame(ClientGUIMain.this.mainFrame);
+                        connectionManagerSocket.setMainFrame(ClientGUIMain.this.mainFrame);
                         connectionManagerSocket.setup();
                         //mainFrame.dispose();
                         //connectionManagerSocket.setColor(mainFrame);

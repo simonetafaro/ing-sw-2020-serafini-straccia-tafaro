@@ -38,6 +38,7 @@ public class Player implements Serializable {
         this.birthDate = birthDate;
         this.nickname = nickname;
         this.ID = ID;
+        this.cardManager = new CardManager();
     }
 
     public Player(String name, CustomDate birthDate, PlayerColor color){

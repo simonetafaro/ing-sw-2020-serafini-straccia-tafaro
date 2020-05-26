@@ -237,8 +237,9 @@ public class SocketClientConnection  extends Observable<String> implements Clien
                                 output.writeObject(new String("VALID NUMBER:" +playerNumber));
                                 output.flush();
                                 if(activeServer.getThreePlayerMatch().size() == 3){
-                                    //create three players match
-                                    //activeServer.createThreePlayersMatch();
+                                    activeServer.createThreePlayersMatch(activeServer.getThreePlayerMatch().get(0),activeServer.getThreePlayerMatch().get(1), activeServer.getThreePlayerMatch().get(2));
+                                    activeServer.getThreePlayerMatch().clear();
+
                                 }
                     }
                     activeServer.getClientConnectionOutput().put(clientId, output);
