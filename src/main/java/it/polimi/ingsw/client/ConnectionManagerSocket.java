@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.ClientGUIMain;
 import it.polimi.ingsw.utils.CustomDate;
 import it.polimi.ingsw.utils.PlayerColor;
 
@@ -9,7 +8,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -70,7 +68,6 @@ public class ConnectionManagerSocket {
             this.initializeSocket();
             this.chooseColor();
             /*
-            this.openPopUpColor();
             System.out.println("avvio colori ok");
             while(!colorSetted){
             }
@@ -190,7 +187,7 @@ public class ConnectionManagerSocket {
     public String getPlayerColor() {
         return playerColor;
     }
-    private boolean handleColorResponse(String colorResult, showPopUpColor guiInstance){
+    private boolean handleColorResponse(String colorResult, showPopUpColor guiInstance) throws IOException {
         if(colorResult.toUpperCase().equals(Integer.toString(getclientID())+" "+getPlayerColor())){
             System.out.println("color ok");
             guiInstance.closeGUI();
@@ -219,7 +216,19 @@ public class ConnectionManagerSocket {
         mainFrame.update(mainFrame.getGraphics());
         SwingUtilities.invokeLater(new PickUpCards(mainFrame, playerNumber));
     }
-
+    public void waitForFirstPlayer() throws IOException{
+        String firstPlayer = null;
+        do{
+            try{
+                firstPlayer = (String) input.readObject();
+            }catch (ClassNotFoundException e){
+                System.err.println(e.getMessage());
+            }
+        }while (!firstPlayer.contains("firstPlayer"));
+        System.out.println(firstPlayer);
+        if(firstPlayer.equals("firstPlayer: "+ this.clientID))
+            SwingUtilities.invokeLater(new PickUpCards(mainFrame,playerNumber));
+    }
     private void close(Socket socket) {
         try {
             socket.close();

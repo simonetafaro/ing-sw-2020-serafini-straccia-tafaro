@@ -145,13 +145,14 @@ public class showPopUpColor implements Runnable{
         this.mainFrame.setVisible(true);
         this.mainFrame.setEnabled(true);
         this.mainFrame.setSize(1280, 720);
-        connectionManagerSocket.receiveColorResponse(this);
     }
 
-    public void closeGUI(){
+    public void closeGUI() throws IOException {
         //connectionManagerSocket.setColorSetted(true);
         mainFrame.getContentPane().removeAll();
-        SwingUtilities.invokeLater(new PickUpCards(mainFrame, connectionManagerSocket.getPlayerNumber()));
+        //SwingUtilities.invokeLater(new PickUpCards(mainFrame, connectionManagerSocket.getPlayerNumber()));
+        connectionManagerSocket.setMainFrame(mainFrame);
+        connectionManagerSocket.waitForFirstPlayer();
         mainFrame.update(mainFrame.getGraphics());
     }
 
@@ -171,5 +172,6 @@ public class showPopUpColor implements Runnable{
         blue_button.addActionListener(new BlueColor());
         white_button.addActionListener(new WhiteColor());
         grey_button.addActionListener(new GreyColor());
+        t = connectionManagerSocket.receiveColorResponse(this);
     }
 }
