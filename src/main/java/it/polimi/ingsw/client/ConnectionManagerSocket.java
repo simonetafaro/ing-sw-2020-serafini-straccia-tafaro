@@ -120,6 +120,8 @@ public class ConnectionManagerSocket {
                     System.out.println("Date accepted");
                 }
 
+                executor.submit(new ClientSocketMessage(SOCKET_PORT,SERVER_ADDRESS));
+
                 //PLAYERNUMBER
                 output.writeObject(this.playerNumber);
                 output.flush();
@@ -252,7 +254,7 @@ public class ConnectionManagerSocket {
                         System.err.println(e.getMessage());
                     }
                 }
-                System.out.println("thread carte finito");
+                SwingUtilities.invokeLater(new BoardGUI(mainFrame,ConnectionManagerSocket.this));
             }
         });
         t.start();

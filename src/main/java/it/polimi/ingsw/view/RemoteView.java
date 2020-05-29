@@ -5,9 +5,15 @@ import it.polimi.ingsw.observ.Observer;
 import it.polimi.ingsw.server.ClientConnection;
 import it.polimi.ingsw.utils.gameMessage;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.net.Socket;
+
 public class RemoteView extends View {
 
-    private class MessageReceiver implements Observer<String>{
+
+    private class MessageReceiver implements Observer<String> {
+
         @Override
         public void update(String message) {
             //System.out.println("Received from " +getPlayer().getNickname() +" "+ message);
@@ -30,15 +36,17 @@ public class RemoteView extends View {
     }
 
     private ClientConnection clientConnection;
+    private Socket socket;
+
     public RemoteView(Player player){
         super(player);
-
+        this.socket = player.getSocket();
+        readFromClient();
     }
     public RemoteView(Player player, ClientConnection c) {
         super(player);
         this.clientConnection = c;
         c.addObserver(new MessageReceiver());
-
     }
     public ClientConnection getClientConnection() {
         return clientConnection;
@@ -51,16 +59,34 @@ public class RemoteView extends View {
                         Integer.parseInt(message.substring(6,7))>=0 && Integer.parseInt(message.substring(6,7))<=4;
     }
 
+    public void readFromClient(){
+        try{
+            ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
+            while(true){
+                Object o = inputStream.readObject();
+                notifyObserver(o);
+            }
+
+        } catch (IOException | ClassNotFoundException e){
+            System.err.println(e.getMessage());
+        }
+
+    }
+
     @Override
     protected void showMessage(Object message) {
         clientConnection.send(message);
     }
+
     @Override
-    public void update(MoveMessage message) {
+    public void update(Object message) {
+
         /*Update chiamata dalla notify del model quando effettuo un cambiamento sul model
          * Il paramentro che ricevo contiene la nuova board aggiornata,
          * */
         //Mostro il nuovo campo di gioco aggiornato
+
+        /*
         String resultMsg = "";
 
         try {
@@ -80,10 +106,7 @@ public class RemoteView extends View {
 
         if (message.isHasWon()) {
             if (message.getPlayer() == getPlayer()) {
-                /*Il player che ha fatto questa mossa ha vinto,
-                 * se sono nella sua view mando messaggio WIN
-                 * altrimenti mando messaggio LOSE
-                 **/
+
 
                 resultMsg = gameMessage.winMessage + "\n";
             } else {
@@ -96,9 +119,9 @@ public class RemoteView extends View {
             else
                 resultMsg += gameMessage.waitMessage;
         }
-        /*Stampo a video del client il messaggio creato
-         * */
         showMessage(resultMsg);
+
+         */
         }
 
 

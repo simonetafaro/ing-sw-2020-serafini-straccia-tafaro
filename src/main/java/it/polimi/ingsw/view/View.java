@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.PlayerMoveEnd;
 import it.polimi.ingsw.observ.*;
 import it.polimi.ingsw.server.ClientConnection;
 
-public abstract class View extends Observable<PlayerMove> implements Observer<MoveMessage> {
+public abstract class View extends Observable<Object> implements Observer<Object> {
 
     private Player player;
 

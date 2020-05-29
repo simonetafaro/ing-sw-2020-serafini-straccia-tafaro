@@ -225,6 +225,8 @@ public class Server{
     private Map<Integer, Socket> activeClientConnection;
     private Map<Integer, ObjectOutputStream> ClientConnectionOutput;
     private Map<Integer, ObjectInputStream> ClientConnectionInput;
+    private List<Game> activeGame;
+    private final int  portGame = 14456;
 
     public static int getClientId() {
         return clientId;
@@ -261,6 +263,7 @@ public class Server{
         this.threePlayerMatch = new ArrayList<>();
         this.ClientConnectionOutput = new HashMap<>();
         this.ClientConnectionInput = new HashMap<>();
+        this.activeGame = new ArrayList<>();
         /*
         this.serverSocket = new ServerSocket(PORT);
         this.startController= new StartController();
@@ -270,7 +273,7 @@ public class Server{
     public void run(){
         ExecutorService executorSocket = Executors.newCachedThreadPool();
         //thread always on
-        executorSocket.submit(new SocketClientConnection(PORT, this));
+        executorSocket.submit(new SocketClientConnection(PORT, this, portGame));
 
     }
 
@@ -328,7 +331,10 @@ public class Server{
 
                         player1.setMyCard(cards.get(0));
 
+
                         //call lobby
+                        Game game = new Game(player1, player2);
+
                 }catch (Exception e){
                         System.err.println(e.getMessage());
                 }
@@ -401,6 +407,10 @@ public class Server{
                     player3.setMyCard(parts[1]);
 
                     player1.setMyCard(cards.get(0));
+
+
+                    Game game = new Game(player1, player2, player3);
+
 
                     //call lobby
                 }catch (Exception e){

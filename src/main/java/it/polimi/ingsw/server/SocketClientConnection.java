@@ -174,10 +174,13 @@ public class SocketClientConnection  extends Observable<String> implements Clien
     /**new implementation*/
     private ServerSocket serverSocket;
     private Server activeServer;
-    public SocketClientConnection(int port, Server server) {
+    private ServerSocket gameSocket;
+
+    public SocketClientConnection(int port, Server server, int portGame) {
         this.activeServer = server;
         try {
             serverSocket = new ServerSocket(port);
+            gameSocket = new ServerSocket(portGame);
         }catch (IOException e ){
             System.err.println(e.getMessage());
         }
@@ -220,7 +223,10 @@ public class SocketClientConnection  extends Observable<String> implements Clien
                     System.out.println("date accepted!");
                     output.writeObject("VALID DATE");
                     output.flush();
-                    Player player = new Player(clientId, nickName, birthday);
+
+                    Socket playerGameSocket = gameSocket.accept();
+
+                    Player player = new Player(clientId, nickName, birthday, playerGameSocket);
                     int playerNumber = (int) input.readObject();
                     switch (playerNumber){
                         case 2: activeServer.getTwoPlayerMatch().add(player);
@@ -242,6 +248,7 @@ public class SocketClientConnection  extends Observable<String> implements Clien
 
                                 }
                     }
+
                     activeServer.getClientConnectionOutput().put(clientId, output);
                     activeServer.getClientConnectionInput().put(clientId, input);
                 } else{

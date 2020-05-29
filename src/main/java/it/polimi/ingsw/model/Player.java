@@ -5,6 +5,7 @@ import it.polimi.ingsw.utils.CustomDate;
 import it.polimi.ingsw.utils.PlayerColor;
 
 import java.io.Serializable;
+import java.net.Socket;
 
 public class Player implements Serializable {
 
@@ -18,6 +19,7 @@ public class Player implements Serializable {
     private transient PlayerTurn myTurn;
     private transient CardRuleDecorator myCardMethod;
     private transient Card myCard;
+    private Socket socket;
 
     public Player(){
         this.worker1=null;
@@ -34,11 +36,12 @@ public class Player implements Serializable {
         this.cardManager= new CardManager();
     }*/
 
-    public Player(int ID, String nickname, CustomDate birthDate) {
+    public Player(int ID, String nickname, CustomDate birthDate, Socket socket) {
         this.birthDate = birthDate;
         this.nickname = nickname;
         this.ID = ID;
         this.cardManager = new CardManager();
+        this.socket = socket;
     }
 
     public Player(String name, CustomDate birthDate, PlayerColor color){
@@ -49,6 +52,7 @@ public class Player implements Serializable {
         this.worker2 = null;
         this.cardManager = new CardManager();
     }
+
 
     public PlayerTurn setMyTurn() {
         this.myTurn = new PlayerTurn(this);
@@ -77,6 +81,9 @@ public class Player implements Serializable {
         this.myCardMethod=cardRuleDecorator;
     }
 
+    public Socket getSocket() {
+        return socket;
+    }
     public String getNickname() {
         return nickname;
     }
