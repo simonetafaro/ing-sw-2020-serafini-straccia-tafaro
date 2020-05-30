@@ -30,6 +30,7 @@ public class Controller implements Observer<PlayerMove> {
 
     @Override
     public void update(PlayerMove message) {
+        System.out.println(message.getMoveOrBuild());
         performMove(message);
     }
 

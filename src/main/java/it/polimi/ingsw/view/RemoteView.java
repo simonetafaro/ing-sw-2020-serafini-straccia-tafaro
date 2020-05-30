@@ -64,7 +64,7 @@ public class RemoteView extends View {
             ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
             while(true){
                 Object o = inputStream.readObject();
-                notifyObserver(o);
+                notifyObserver((PlayerMove) o);
             }
 
         } catch (IOException | ClassNotFoundException e){
@@ -79,7 +79,7 @@ public class RemoteView extends View {
     }
 
     @Override
-    public void update(Object message) {
+    public void update(MoveMessage message) {
 
         /*Update chiamata dalla notify del model quando effettuo un cambiamento sul model
          * Il paramentro che ricevo contiene la nuova board aggiornata,

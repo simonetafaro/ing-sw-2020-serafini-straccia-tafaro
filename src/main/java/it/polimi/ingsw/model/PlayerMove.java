@@ -11,6 +11,13 @@ public class PlayerMove {
     private final View view;
     private String MoveOrBuild;
 
+    public PlayerMove(String pippo){
+        this.MoveOrBuild=pippo;
+        this.row=0;
+        this.column=0;
+        this.player=null;
+        this.view=null;
+    }
     public PlayerMove(Player player, View view){
         this.row=-1;
         this.column=-1;

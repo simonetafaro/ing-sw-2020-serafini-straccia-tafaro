@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.model.PlayerMove;
 import it.polimi.ingsw.utils.CustomDate;
 import it.polimi.ingsw.utils.PlayerColor;
 
@@ -28,7 +29,9 @@ public class ConnectionManagerSocket {
     private Thread t;
     private static final String SERVER_ADDRESS = "127.0.0.1";
     private static final int SOCKET_PORT = 12345;
+    private static final int SOCKET_MESSAGE_PORT = 14456;
     private int order;
+    private ClientSocketMessage clientSocket;
     //private ClientData clientData;
 
     protected int clientID;
@@ -83,9 +86,9 @@ public class ConnectionManagerSocket {
     }
 
     public void initializeSocket() throws IOException {
-        socket = new Socket(SERVER_ADDRESS, SOCKET_PORT);
-        System.out.println("Connected to server " + SERVER_ADDRESS + " on port " + SOCKET_PORT);
 
+        System.out.println("Connected to server " + SERVER_ADDRESS + " on port " + SOCKET_PORT);
+        socket = new Socket(SERVER_ADDRESS, SOCKET_PORT);
         output = new ObjectOutputStream(socket.getOutputStream());
         input = new ObjectInputStream(socket.getInputStream());
 
@@ -120,7 +123,8 @@ public class ConnectionManagerSocket {
                     System.out.println("Date accepted");
                 }
 
-                executor.submit(new ClientSocketMessage(SOCKET_PORT,SERVER_ADDRESS));
+                clientSocket=new ClientSocketMessage(SOCKET_MESSAGE_PORT,SERVER_ADDRESS);
+                //clientSocket.readFromServer();
 
                 //PLAYERNUMBER
                 output.writeObject(this.playerNumber);
@@ -254,6 +258,11 @@ public class ConnectionManagerSocket {
                         System.err.println(e.getMessage());
                     }
                 }
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 SwingUtilities.invokeLater(new BoardGUI(mainFrame,ConnectionManagerSocket.this));
             }
         });
@@ -277,4 +286,14 @@ public class ConnectionManagerSocket {
             System.err.println(e.getMessage());
         }
     }
+
+    public void initializeMessageSocket(){
+        this.clientSocket.initialize();
+    }
+
+    public void sendToServer(PlayerMove playerMove){
+        this.clientSocket.send(playerMove);
+
+    }
+
 }
