@@ -223,6 +223,7 @@ public class PickUpCards implements Runnable {
         @Override
         public void actionPerformed(ActionEvent e) {
             connectionManagerSocket.sendObjectToServer(deck);
+            connectionManagerSocket.openBoardGui();
         }
     }
 
@@ -290,7 +291,7 @@ public class PickUpCards implements Runnable {
                     connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID()+" Hephaestus");
 
             });
-
+            connectionManagerSocket.openBoardGui();
         }
     }
 
@@ -555,8 +556,8 @@ public class PickUpCards implements Runnable {
 
         }else{
             playButton.addActionListener(new ChooseCardActionListener());
-            connectionManagerSocket.receiveCard(this);
         }
+        connectionManagerSocket.receiveCard(this);
     }
 
     public static void main(String[] args) {

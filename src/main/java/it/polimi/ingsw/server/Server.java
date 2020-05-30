@@ -323,7 +323,7 @@ public class Server{
                         }
                         cards.forEach((cardName)-> { deck.setChosenCard(cardName); });
 
-                        broadcastMessage(broadcast, cards.clone());
+                        broadcastMessage(broadcast, cards);
                         String cardName = (String) input2.readObject();
                         String[] parts = cardName.split(" ");
                         cards.remove(parts[1]);
@@ -394,13 +394,13 @@ public class Server{
 
                     cards.forEach((cardName)-> { deck.setChosenCard(cardName); });
 
-                    broadcastMessage(broadcast, cards.clone());
+                    broadcastMessage(broadcast, cards);
                     String cardName = (String) input2.readObject();
                     String[] parts = cardName.split(" ");
                     cards.remove(parts[1]);
                     player2.setMyCard(parts[1]);
 
-                    broadcastMessage(broadcast, cards.clone());
+                    broadcastMessage(broadcast, cards);
                     cardName = (String) input3.readObject();
                     parts = cardName.split(" ");
                     cards.remove(parts[1]);
@@ -423,6 +423,7 @@ public class Server{
     public void broadcastMessage(List<ObjectOutputStream> match, Object message){
         match.forEach( c -> {
             try {
+                c.reset();
                 c.writeObject(message);
                 c.flush();
             } catch (IOException e) {

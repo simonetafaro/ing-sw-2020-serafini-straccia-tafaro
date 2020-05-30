@@ -123,7 +123,7 @@ public class ConnectionManagerSocket {
                     System.out.println("Date accepted");
                 }
 
-                clientSocket=new ClientSocketMessage(SOCKET_MESSAGE_PORT,SERVER_ADDRESS);
+                clientSocket = new ClientSocketMessage(SOCKET_MESSAGE_PORT,SERVER_ADDRESS);
                 //clientSocket.readFromServer();
 
                 //PLAYERNUMBER
@@ -252,21 +252,17 @@ public class ConnectionManagerSocket {
                             }
                             i++;
                         }
-                        if(obj instanceof String)
-                            System.out.println(obj);
+
                     }catch (ClassNotFoundException | IOException e){
                         System.err.println(e.getMessage());
                     }
                 }
-                try {
-                    socket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                SwingUtilities.invokeLater(new BoardGUI(mainFrame,ConnectionManagerSocket.this));
+                close(ConnectionManagerSocket.this.socket);
+
             }
         });
         t.start();
+
         return t;
     }
 
@@ -289,6 +285,11 @@ public class ConnectionManagerSocket {
 
     public void initializeMessageSocket(){
         this.clientSocket.initialize();
+    }
+    public void openBoardGui(){
+        mainFrame.getContentPane().removeAll();
+        SwingUtilities.invokeLater(new BoardGUI(mainFrame,ConnectionManagerSocket.this));
+        mainFrame.update(mainFrame.getGraphics());
     }
 
     public void sendToServer(PlayerMove playerMove){

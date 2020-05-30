@@ -43,12 +43,17 @@ public class ClientSocketMessage implements Runnable {
     }
     public void initialize(){
         try {
-            inputStream = new ObjectInputStream(socket.getInputStream());
-            outputStream = new ObjectOutputStream(socket.getOutputStream());
+            System.out.println("inizio");
+            inputStream = new ObjectInputStream(this.socket.getInputStream());
+            outputStream = new ObjectOutputStream(this.socket.getOutputStream());
+            System.out.println("fine");
         }catch(IOException e) {
-        System.err.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
+        System.out.println("A");
         readFromServer();
+        System.out.println("B");
+
     }
     public void parseInput(Object o){
         if(o instanceof ClientSocketMessage){
