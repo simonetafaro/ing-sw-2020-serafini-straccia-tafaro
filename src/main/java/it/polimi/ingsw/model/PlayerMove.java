@@ -2,13 +2,15 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.view.View;
 
-public class PlayerMove {
+import java.io.Serializable;
+
+public class PlayerMove implements Serializable {
 
     private final int row;
     private final int column;
     private final Player player;
-    private Worker worker;
-    private final View view;
+    private transient Worker worker;
+    private transient final View view;
     private String MoveOrBuild;
 
     public PlayerMove(String pippo){

@@ -22,6 +22,7 @@ public class BoardGUI implements Runnable{
     @Override
     public void run() {
         this.connectionManagerSocket.initializeMessageSocket();
+        System.out.println("gui"+connectionManagerSocket.getclientID());
         PlayerMove playermove =new PlayerMove("test"+connectionManagerSocket.getclientID());
         this.connectionManagerSocket.sendToServer(playermove);
 

@@ -4,6 +4,8 @@ import it.polimi.ingsw.controller.CardManager;
 import it.polimi.ingsw.utils.CustomDate;
 import it.polimi.ingsw.utils.PlayerColor;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
 
@@ -20,6 +22,24 @@ public class Player implements Serializable {
     private transient CardRuleDecorator myCardMethod;
     private transient Card myCard;
     private Socket socket;
+    private ObjectInputStream input;
+    private ObjectOutputStream output;
+
+    public ObjectInputStream getInput() {
+        return input;
+    }
+
+    public void setInput(ObjectInputStream input) {
+        this.input = input;
+    }
+
+    public ObjectOutputStream getOutput() {
+        return output;
+    }
+
+    public void setOutput(ObjectOutputStream output) {
+        this.output = output;
+    }
 
     public Player(){
         this.worker1=null;

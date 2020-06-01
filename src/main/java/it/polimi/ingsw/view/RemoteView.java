@@ -7,6 +7,7 @@ import it.polimi.ingsw.utils.gameMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class RemoteView extends View {
@@ -36,11 +37,16 @@ public class RemoteView extends View {
     }
 
     private ClientConnection clientConnection;
-    private Socket socket;
+
+    private ObjectInputStream input;
+    private ObjectOutputStream output;
+    private int id;
 
     public RemoteView(Player player){
         super(player);
-        this.socket = player.getSocket();
+        this.id = player.getID();
+        this.input= player.getInput();
+        this.output = player.getOutput();
         readFromClient();
     }
     public RemoteView(Player player, ClientConnection c) {
@@ -60,17 +66,23 @@ public class RemoteView extends View {
     }
 
     public void readFromClient(){
-        try{
-            ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
-            while(true){
-                Object o = inputStream.readObject();
-                notifyObserver((PlayerMove) o);
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    while(true){
+                        System.out.println("read from client "+RemoteView.this.id);
+                        PlayerMove o = (PlayerMove) RemoteView.this.input.readObject();
+                        System.out.println("notify"+RemoteView.this.id);
+                        notifyObserver(o);
+                    }
+
+                } catch (IOException | ClassNotFoundException e){
+                    System.err.println(e.getMessage());
+                }
             }
-
-        } catch (IOException | ClassNotFoundException e){
-            System.err.println(e.getMessage());
-        }
-
+        });
+        t.start();
     }
 
     @Override

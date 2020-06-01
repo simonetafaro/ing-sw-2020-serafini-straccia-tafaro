@@ -35,8 +35,10 @@ public class Game {
     }
 
     public Game(Player player1, Player player2){
-        View player1View = new RemoteView(player1);
+        System.out.println(player1.getID()+" "+ player1.getNickname());
         View player2View = new RemoteView(player2);
+        System.out.println(player2.getID()+" "+ player2.getNickname());
+        View player1View = new RemoteView(player1);
         players = new HashMap<>();
         players.put(player1,player1View);
         players.put(player2,player2View);

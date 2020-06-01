@@ -224,7 +224,7 @@ public class SocketClientConnection  extends Observable<String> implements Clien
                     output.writeObject("VALID DATE");
                     output.flush();
 
-                    Player player = new Player(clientId, nickName, birthday, gameSocket.accept());
+                    Player player = new Player(clientId, playerName, birthday, null);
                     int playerNumber = (int) input.readObject();
                     switch (playerNumber){
                         case 2: activeServer.getTwoPlayerMatch().add(player);
@@ -249,6 +249,7 @@ public class SocketClientConnection  extends Observable<String> implements Clien
 
                     activeServer.getClientConnectionOutput().put(clientId, output);
                     activeServer.getClientConnectionInput().put(clientId, input);
+
                 } else{
 
                 }

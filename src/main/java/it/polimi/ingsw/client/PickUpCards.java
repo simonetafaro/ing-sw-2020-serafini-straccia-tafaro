@@ -291,6 +291,7 @@ public class PickUpCards implements Runnable {
                     connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID()+" Hephaestus");
 
             });
+            //connectionManagerSocket.close();
             connectionManagerSocket.openBoardGui();
         }
     }

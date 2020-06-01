@@ -7,54 +7,22 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class ClientSocketMessage implements Runnable {
+public class ClientSocketMessage{
 
     private Socket socket;
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
 
 
-    public ClientSocketMessage(int PORT, String IP) throws IOException {
-        try {
-            System.out.println("prima della socket ");
-            this.socket = new Socket(IP, PORT);
-            System.out.println("dopo della socket ");
-           // inputStream = new ObjectInputStream(socket.getInputStream());
-           // outputStream = new ObjectOutputStream(socket.getOutputStream());
-        }
-        catch(IOException e){
-            System.err.println(e.getMessage());
-        }
+    public ClientSocketMessage(ObjectInputStream input, ObjectOutputStream output) {
+        this.inputStream = input;
+        this.outputStream = output;
     }
 
-    @Override
-    public void run() {
-        System.out.println("clietsocketmessage");
-        while(true) {
-            try {
-                Object o = inputStream.readObject();
-                parseInput((PlayerMove) o);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-    }
     public void initialize(){
-        try {
-            System.out.println("inizio");
-            inputStream = new ObjectInputStream(this.socket.getInputStream());
-            outputStream = new ObjectOutputStream(this.socket.getOutputStream());
-            System.out.println("fine");
-        }catch(IOException e) {
-            System.err.println(e.getMessage());
-        }
-        System.out.println("A");
         readFromServer();
-        System.out.println("B");
-
     }
+
     public void parseInput(Object o){
         if(o instanceof ClientSocketMessage){
 
@@ -62,6 +30,7 @@ public class ClientSocketMessage implements Runnable {
     }
     public void send (PlayerMove playerMove){
         try {
+            outputStream.reset();
             outputStream.writeObject(playerMove);
             outputStream.flush();
         }catch (IOException e) {

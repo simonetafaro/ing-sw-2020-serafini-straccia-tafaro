@@ -123,7 +123,7 @@ public class ConnectionManagerSocket {
                     System.out.println("Date accepted");
                 }
 
-                clientSocket = new ClientSocketMessage(SOCKET_MESSAGE_PORT,SERVER_ADDRESS);
+                //clientSocket = new ClientSocketMessage(SOCKET_MESSAGE_PORT,SERVER_ADDRESS);
                 //clientSocket.readFromServer();
 
                 //PLAYERNUMBER
@@ -157,6 +157,7 @@ public class ConnectionManagerSocket {
             System.out.println(matchCreated);
         }while (!matchCreated.equals("Match created"));
     }
+
     public void setColor(String color, showPopUpColor guiInstance){
         System.out.println("colore"+color);
         try{
@@ -257,8 +258,6 @@ public class ConnectionManagerSocket {
                         System.err.println(e.getMessage());
                     }
                 }
-                close(ConnectionManagerSocket.this.socket);
-
             }
         });
         t.start();
@@ -266,9 +265,14 @@ public class ConnectionManagerSocket {
         return t;
     }
 
-    private void close(Socket socket) {
+    public void close() {
         try {
-            socket.close();
+            this.socket.close();
+            this.input.close();
+            this.output.close();
+            this.socket = null;
+            this.output = null;
+            this.input = null;
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
@@ -284,6 +288,7 @@ public class ConnectionManagerSocket {
     }
 
     public void initializeMessageSocket(){
+        this.clientSocket = new ClientSocketMessage(input, output);
         this.clientSocket.initialize();
     }
     public void openBoardGui(){
