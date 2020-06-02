@@ -18,33 +18,33 @@ public class BoardGUI implements Runnable{
     private Image mainPanelImageScaled;
 
 
-    private JButton c00;
-    private JButton c01;
-    private JButton c02;
-    private JButton c03;
-    private JButton c04;
-    private JButton c10;
-    private JButton c11;
-    private JButton c12;
-    private JButton c13;
-    private JButton c14;
-    private JButton c20;
-    private JButton c21;
-    private JButton c22;
-    private JButton c23;
-    private JButton c24;
-    private JButton c30;
-    private JButton c31;
-    private JButton c32;
-    private JButton c33;
-    private JButton c34;
-    private JButton c40;
-    private JButton c41;
-    private JButton c42;
-    private JButton c43;
-    private JButton c44;
+    private JLabel c00;
+    private JLabel c01;
+    private JLabel c02;
+    private JLabel c03;
+    private JLabel c04;
+    private JLabel c10;
+    private JLabel c11;
+    private JLabel c12;
+    private JLabel c13;
+    private JLabel c14;
+    private JLabel c20;
+    private JLabel c21;
+    private JLabel c22;
+    private JLabel c23;
+    private JLabel c24;
+    private JLabel c30;
+    private JLabel c31;
+    private JLabel c32;
+    private JLabel c33;
+    private JLabel c34;
+    private JLabel c40;
+    private JLabel c41;
+    private JLabel c42;
+    private JLabel c43;
+    private JLabel c44;
 
-    private ArrayList<JButton> boardButton;
+    private ArrayList<JLabel> boardButton;
 
     private static final String SRC = "src";
     private static final String MAIN = "main";
@@ -86,7 +86,7 @@ public class BoardGUI implements Runnable{
         this.mainframe = mainframe;
         this.connectionManagerSocket = connectionManagerSocket;
         //this.mainframe.setSize(1280,755);
-        this.boardButton = new ArrayList<JButton>();
+        this.boardButton = new ArrayList<JLabel>();
         this.boardButton.add(c00);
         this.boardButton.add(c01);
         this.boardButton.add(c02);
@@ -139,8 +139,14 @@ public class BoardGUI implements Runnable{
         BoardPanel.setBackground(new Color(0,0,0,0));
         BoardPanel.setOpaque(false);
 
+        Image ApolloCard = new ImageIcon(PATH + "W_Workers.png").getImage();
+        ImageIcon ApolloCard_Icon = new ImageIcon(ApolloCard);
+
+
         boardButton.forEach((currentButton)->{
-            currentButton = new JButton();
+            currentButton = new JLabel();
+            currentButton.setBackground(new Color(0,0,0,50));
+            currentButton.setIcon(ApolloCard_Icon);
             currentButton.setOpaque(true);
             BoardPanel.add(currentButton);
         });
