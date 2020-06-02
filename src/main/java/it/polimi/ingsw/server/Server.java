@@ -409,11 +409,14 @@ public class Server{
                     player3.setMyCard(parts[1]);
 
                     player1.setMyCard(cards.get(0));
-
+                    player1.setInput(input1);
+                    player2.setInput(input2);
+                    player3.setInput(input3);
+                    player1.setOutput(output1);
+                    player2.setOutput(output2);
+                    player3.setOutput(output3);
 
                     Game game = new Game(player1, player2, player3);
-
-
                     //call lobby
                 }catch (Exception e){
                     System.err.println(e.getMessage());

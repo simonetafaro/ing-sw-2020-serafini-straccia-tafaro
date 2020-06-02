@@ -271,25 +271,26 @@ public class PickUpCards implements Runnable {
         @Override
         public void actionPerformed(ActionEvent e) {
             ActiveCardList.forEach((ButtonName, Image) -> {
-                if(ButtonName.equals(ApolloButton))
-                   connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID()+" Apollo");
-                if(ButtonName.equals(DemeterButton))
-                    connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID()+" Demeter");
-                if(ButtonName.equals(AtlasButton))
-                    connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID()+" Atlas");
-                if(ButtonName.equals(ArtemisButton))
-                    connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID()+" Artemis");
-                if(ButtonName.equals(PrometheusButton))
-                    connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID()+" Prometheus");
-                if(ButtonName.equals(MinotaurButton))
-                    connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID()+" Minotaur");
-                if(ButtonName.equals(PanButton))
-                    connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID()+" Pan");
-                if(ButtonName.equals(AthenaButton))
-                    connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID()+" Athena");
-                if(ButtonName.equals(HephaestusButton))
-                    connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID()+" Hephaestus");
-
+                if(ButtonName.isSelected()) {
+                    if (ButtonName.equals(ApolloButton))
+                        connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID() + " Apollo");
+                    if (ButtonName.equals(DemeterButton))
+                        connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID() + " Demeter");
+                    if (ButtonName.equals(AtlasButton))
+                        connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID() + " Atlas");
+                    if (ButtonName.equals(ArtemisButton))
+                        connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID() + " Artemis");
+                    if (ButtonName.equals(PrometheusButton))
+                        connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID() + " Prometheus");
+                    if (ButtonName.equals(MinotaurButton))
+                        connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID() + " Minotaur");
+                    if (ButtonName.equals(PanButton))
+                        connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID() + " Pan");
+                    if (ButtonName.equals(AthenaButton))
+                        connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID() + " Athena");
+                    if (ButtonName.equals(HephaestusButton))
+                        connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID() + " Hephaestus");
+                }
             });
             //connectionManagerSocket.close();
             connectionManagerSocket.openBoardGui();

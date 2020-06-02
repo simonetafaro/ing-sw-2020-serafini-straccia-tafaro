@@ -41,13 +41,15 @@ public class RemoteView extends View {
     private ObjectInputStream input;
     private ObjectOutputStream output;
     private int id;
+    private Thread readThread;
 
     public RemoteView(Player player){
         super(player);
         this.id = player.getID();
         this.input= player.getInput();
         this.output = player.getOutput();
-        readFromClient();
+        this.readThread = readFromClient();
+        readThread.start();
     }
     public RemoteView(Player player, ClientConnection c) {
         super(player);
@@ -65,7 +67,7 @@ public class RemoteView extends View {
                         Integer.parseInt(message.substring(6,7))>=0 && Integer.parseInt(message.substring(6,7))<=4;
     }
 
-    public void readFromClient(){
+    public Thread readFromClient(){
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -82,7 +84,7 @@ public class RemoteView extends View {
                 }
             }
         });
-        t.start();
+        return t;
     }
 
     @Override
@@ -135,6 +137,5 @@ public class RemoteView extends View {
 
          */
         }
-
 
 }

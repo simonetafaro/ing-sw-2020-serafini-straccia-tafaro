@@ -246,11 +246,15 @@ public class ConnectionManagerSocket {
                             if(cards.size() == playerNumber && ConnectionManagerSocket.this.order == 1){
                                 System.out.println("1");
                                 guiInstance.updateGodImage(cards);
+                                break;
                             }
                             if((cards.size() == (playerNumber-1)) && ConnectionManagerSocket.this.order == 2){
                                 System.out.println("2");
                                 guiInstance.updateGodImage(cards);
+                                break;
                             }
+                            if(ConnectionManagerSocket.this.order == 0)
+                                break;
                             i++;
                         }
 
@@ -280,6 +284,7 @@ public class ConnectionManagerSocket {
 
     public void sendObjectToServer(Object o){
         try{
+            output.reset();
             output.writeObject(o);
             output.flush();
         }catch (IOException e ){
@@ -299,7 +304,10 @@ public class ConnectionManagerSocket {
 
     public void sendToServer(PlayerMove playerMove){
         this.clientSocket.send(playerMove);
+    }
 
+    public void sendStringToServer(String playerMove){
+        this.clientSocket.sendString(playerMove);
     }
 
 }

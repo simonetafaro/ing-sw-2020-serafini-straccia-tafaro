@@ -38,6 +38,17 @@ public class ClientSocketMessage{
         }
 
     }
+    public void sendString (String playerMove){
+        try {
+            outputStream.reset();
+            outputStream.writeObject(playerMove);
+            outputStream.flush();
+        }catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+
+    }
+
     public void readFromServer(){
         Thread t=new Thread(new Runnable() {
             @Override
@@ -45,8 +56,11 @@ public class ClientSocketMessage{
                 System.out.println("clietsocketmessage");
                 while(true) {
                     try {
-                        Object o = inputStream.readObject();
-                        parseInput((PlayerMove) o);
+                        Object o = ClientSocketMessage.this.inputStream.readObject();
+                        if(o instanceof PlayerMove)
+                            parseInput((PlayerMove) o);
+                        else
+                            System.out.println("non sono una playerMove");
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (ClassNotFoundException e) {
