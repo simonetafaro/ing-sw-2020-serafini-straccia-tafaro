@@ -18,33 +18,33 @@ public class BoardGUI implements Runnable{
     private Image mainPanelImageScaled;
 
 
-    private JLabel c00;
-    private JLabel c01;
-    private JLabel c02;
-    private JLabel c03;
-    private JLabel c04;
-    private JLabel c10;
-    private JLabel c11;
-    private JLabel c12;
-    private JLabel c13;
-    private JLabel c14;
-    private JLabel c20;
-    private JLabel c21;
-    private JLabel c22;
-    private JLabel c23;
-    private JLabel c24;
-    private JLabel c30;
-    private JLabel c31;
-    private JLabel c32;
-    private JLabel c33;
-    private JLabel c34;
-    private JLabel c40;
-    private JLabel c41;
-    private JLabel c42;
-    private JLabel c43;
-    private JLabel c44;
+    private JLayeredPane c00;
+    private JLayeredPane c01;
+    private JLayeredPane c02;
+    private JLayeredPane c03;
+    private JLayeredPane c04;
+    private JLayeredPane c10;
+    private JLayeredPane c11;
+    private JLayeredPane c12;
+    private JLayeredPane c13;
+    private JLayeredPane c14;
+    private JLayeredPane c20;
+    private JLayeredPane c21;
+    private JLayeredPane c22;
+    private JLayeredPane c23;
+    private JLayeredPane c24;
+    private JLayeredPane c30;
+    private JLayeredPane c31;
+    private JLayeredPane c32;
+    private JLayeredPane c33;
+    private JLayeredPane c34;
+    private JLayeredPane c40;
+    private JLayeredPane c41;
+    private JLayeredPane c42;
+    private JLayeredPane c43;
+    private JLayeredPane c44;
 
-    private ArrayList<JLabel> boardButton;
+    private ArrayList<JLayeredPane> boardButton;
 
     private static final String SRC = "src";
     private static final String MAIN = "main";
@@ -86,8 +86,9 @@ public class BoardGUI implements Runnable{
         this.mainframe = mainframe;
         this.connectionManagerSocket = connectionManagerSocket;
         //this.mainframe.setSize(1280,755);
-        this.boardButton = new ArrayList<JLabel>();
-        this.boardButton.add(c00);
+        this.boardButton = new ArrayList<JLayeredPane>();
+
+        /*this.boardButton.add(c00);
         this.boardButton.add(c01);
         this.boardButton.add(c02);
         this.boardButton.add(c03);
@@ -112,7 +113,7 @@ public class BoardGUI implements Runnable{
         this.boardButton.add(c42);
         this.boardButton.add(c43);
         this.boardButton.add(c44);
-
+        */
         mainPanelImage = new ImageIcon(PATH + "BoardBackground.png");
         mainPanelImageScaled = mainPanelImage.getImage();
         JPanel mainPanel = new MainJPanel();
@@ -135,21 +136,50 @@ public class BoardGUI implements Runnable{
         gbcBoardConstraint.gridx = 0;
         gbcBoardConstraint.gridy = 0;
 
+        JLayeredPane BoardContainer = new JLayeredPane();
         JPanel BoardPanel = new JPanel(new GridLayout(5,5,8,8));
+        BoardContainer.add(BoardPanel, JLayeredPane.DEFAULT_LAYER);
         BoardPanel.setBackground(new Color(0,0,0,0));
         BoardPanel.setOpaque(false);
+        BoardPanel.setVisible(true);
 
-        Image ApolloCard = new ImageIcon(PATH + "W_Workers.png").getImage();
-        ImageIcon ApolloCard_Icon = new ImageIcon(ApolloCard);
+        Image level1 = new ImageIcon(PATH + "level1.png").getImage();
+        ImageIcon level1_Icon = new ImageIcon(level1);
+        Image level2 = new ImageIcon(PATH + "level2.png").getImage();
+        ImageIcon level2_Icon = new ImageIcon(level2);
+        Image level3 = new ImageIcon(PATH + "level3.png").getImage();
+        ImageIcon level3_Icon = new ImageIcon(level3);
+        Image dome = new ImageIcon(PATH + "dome.png").getImage();
+        ImageIcon dome_Icon = new ImageIcon(dome);
 
+        JLabel level1_label = new JLabel(level1_Icon);
+        level1_label.setOpaque(true);
+        level1_label.setVisible(true);
+        JLabel level2_label = new JLabel(level2_Icon);
+        level2_label.setOpaque(true);
+        level2_label.setVisible(true);
+        JLabel level3_label = new JLabel(level3_Icon);
+        level3_label.setOpaque(true);
+        level3_label.setVisible(true);
+        JLabel dome_label = new JLabel(dome_Icon);
+        dome_label.setOpaque(true);
+        dome_label.setVisible(true);
 
-        boardButton.forEach((currentButton)->{
-            currentButton = new JLabel();
-            currentButton.setBackground(new Color(0,0,0,50));
-            currentButton.setIcon(ApolloCard_Icon);
-            currentButton.setOpaque(true);
-            BoardPanel.add(currentButton);
-        });
+        for(int i=0; i<25; i++){
+            JLayeredPane currCell = new JLayeredPane();
+            JLabel l1 = new JLabel(level1_Icon);
+            l1.setVisible(true);
+            l1.setOpaque(true);
+            l1.setBackground(new Color(0,0,0,0));
+            currCell.add(l1, -1);
+            boardButton.add(currCell);
+            BoardPanel.add(currCell);
+        }
+        JLabel currCell1 = new JLabel(dome_Icon);
+        currCell1.setVisible(true);
+        currCell1.setOpaque(true);
+        currCell1.setBackground(new Color(0,0,0,0));
+        boardButton.get(1).add(currCell1,0);
 
         mainPanel.add(BoardPanel, gbcBoardConstraint);
 
