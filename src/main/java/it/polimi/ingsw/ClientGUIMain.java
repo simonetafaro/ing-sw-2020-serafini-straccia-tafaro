@@ -40,7 +40,6 @@ public class ClientGUIMain implements Runnable{
     private static final String MAIN = "main";
     private static final String RESOURCES = "resources";
     private static final String IMAGE = "images";
-    private PlayerColor playerColor;
     private int clientID = 0;
     private int playerNumber;
 
@@ -161,7 +160,7 @@ public class ClientGUIMain implements Runnable{
                             ClientGUIMain.this.playerNumber = 3;
                         }
                         System.out.println("invio i dati");
-                        connectionManagerSocket = new ConnectionManagerSocket(playerName, playerColor, birthday, playerNumber);
+                        connectionManagerSocket = new ConnectionManagerSocket(playerName, birthday, playerNumber);
                         connectionManagerSocket.setMainFrame(ClientGUIMain.this.mainFrame);
                         connectionManagerSocket.setup();
                         //mainFrame.dispose();

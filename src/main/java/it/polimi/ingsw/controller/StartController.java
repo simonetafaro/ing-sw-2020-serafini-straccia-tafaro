@@ -254,6 +254,8 @@ public class StartController {
         }
         return null;
     }
+
+
     public void setWorkerPosition(Model model, View player){
         String[] cellCoord;
         int x,y;
@@ -268,7 +270,7 @@ public class StartController {
                     y=Integer.parseInt(cellCoord[1]);
                 }while( x<0 || x>=5 || y<0 || y>=5);
             }while(!model.getBoard().getCell(x,y).isFree());
-            player.getPlayer().setWorker1(new Worker(model.getBoard().getCell(x,y), 1,player.getPlayer().getColor()));
+            player.getPlayer().setWorker1(new Worker(0,model.getBoard().getCell(x,y), 1,player.getPlayer().getColor()));
 
             cellCoord=null;
             do{
@@ -279,13 +281,14 @@ public class StartController {
                     y=Integer.parseInt(cellCoord[1]);
                 }while( x<0 || x>=5 || y<0 || y>=5);
             }while(!model.getBoard().getCell(x,y).isFree());
-            player.getPlayer().setWorker2(new Worker(model.getBoard().getCell(x,y), 2,player.getPlayer().getColor()));
+            player.getPlayer().setWorker2(new Worker(0, model.getBoard().getCell(x,y), 2,player.getPlayer().getColor()));
 
         }catch (IOException e){
             System.err.println(e.getMessage());
         }
 
     }
+
     public Turn setTurn(Player p1, Player p2, Player p3){
         return new Turn(p1.setMyTurn(),p2.setMyTurn(),p3.setMyTurn());
     }

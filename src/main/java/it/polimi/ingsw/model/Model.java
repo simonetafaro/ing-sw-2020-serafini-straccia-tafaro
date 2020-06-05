@@ -3,13 +3,17 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.observ.Observable;
 import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.gameMessage;
+import it.polimi.ingsw.view.View;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Model extends Observable<MoveMessage> {
+public class Model extends Observable<Object> {
 
     private Board board;
+    private List<Player> players;
     private PlayerColor turn;
     private List<PlayerColor> playOrder_List;
     private int level;
@@ -17,6 +21,7 @@ public class Model extends Observable<MoveMessage> {
     public Model() {
         this.board = new Board();
         playOrder_List = new ArrayList<>();
+        this.players = new ArrayList<Player>();
         this.level=1;
     }
 
@@ -50,6 +55,13 @@ public class Model extends Observable<MoveMessage> {
     public Board getBoard() {
         return board;
     }
+    public Player getPlayer(int ID){
+        for (Player player : this.players) {
+            if(player.getID() == ID)
+                return player;
+        }
+        return null;
+    }
 
     public void endNotifyView(PlayerMove move, boolean hasWon){
         try {
@@ -66,6 +78,9 @@ public class Model extends Observable<MoveMessage> {
         }catch (CloneNotSupportedException e){
             System.err.println(e.getMessage());
         }
+    }
+    public void notifySetWorker(Worker worker){
+        notifyObserver(new PlayerMove(worker, worker.getWorkerPosition().getPosX(), worker.getWorkerPosition().getPosY()));
     }
 
     public boolean isReachableCell(PlayerMove move){
@@ -149,5 +164,9 @@ public class Model extends Observable<MoveMessage> {
         if(turn.getPlayerTurn(move.getPlayer()).isFirstStep())
             turn.getPlayerTurn(move.getPlayer()).setTurnWorker(move.getWorker());
     }
-
+    public void setPlayers (Player p1, Player p2, Player p3){
+        this.players.add(p1);
+        this.players.add(p2);
+        this.players.add(p3);
+    }
 }

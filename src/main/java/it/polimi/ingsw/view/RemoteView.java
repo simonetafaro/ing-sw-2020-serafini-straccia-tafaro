@@ -73,9 +73,7 @@ public class RemoteView extends View {
             public void run() {
                 try{
                     while(true){
-                        System.out.println("read from client "+RemoteView.this.id);
-                        PlayerMove o = (PlayerMove) RemoteView.this.input.readObject();
-                        System.out.println("notify"+RemoteView.this.id);
+                        Object o = RemoteView.this.input.readObject();
                         notifyObserver(o);
                     }
 
@@ -87,14 +85,25 @@ public class RemoteView extends View {
         return t;
     }
 
+    public void writeToClient(Object o){
+        try{
+            this.output.reset();
+            this.output.writeObject(o);
+            this.output.flush();
+        } catch (IOException e){
+            System.err.println(e.getMessage());
+        }
+    }
+
     @Override
     protected void showMessage(Object message) {
         clientConnection.send(message);
     }
 
     @Override
-    public void update(MoveMessage message) {
+    public void update(Object message) {
 
+        writeToClient(message);
         /*Update chiamata dalla notify del model quando effettuo un cambiamento sul model
          * Il paramentro che ricevo contiene la nuova board aggiornata,
          * */

@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.PlayerMove;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -13,36 +15,11 @@ public class BoardGUI implements Runnable{
     private JFrame mainframe;
     private ConnectionManagerSocket connectionManagerSocket;
 
-
     private ImageIcon mainPanelImage;
     private Image mainPanelImageScaled;
 
-
-    private JLayeredPane c00;
-    private JLayeredPane c01;
-    private JLayeredPane c02;
-    private JLayeredPane c03;
-    private JLayeredPane c04;
-    private JLayeredPane c10;
-    private JLayeredPane c11;
-    private JLayeredPane c12;
-    private JLayeredPane c13;
-    private JLayeredPane c14;
-    private JLayeredPane c20;
-    private JLayeredPane c21;
-    private JLayeredPane c22;
-    private JLayeredPane c23;
-    private JLayeredPane c24;
-    private JLayeredPane c30;
-    private JLayeredPane c31;
-    private JLayeredPane c32;
-    private JLayeredPane c33;
-    private JLayeredPane c34;
-    private JLayeredPane c40;
-    private JLayeredPane c41;
-    private JLayeredPane c42;
-    private JLayeredPane c43;
-    private JLayeredPane c44;
+    private ImageIcon level1_Icon, level2_Icon, level3_Icon, dome_Icon;
+    private ImageIcon worker_Man_Icon, worker_Woman_Icon;
 
     private ArrayList<JLayeredPane> boardButton;
 
@@ -82,38 +59,21 @@ public class BoardGUI implements Runnable{
         }
     }
 
+    private class SetWorker implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
+    }
+
+
     public BoardGUI(JFrame mainframe, ConnectionManagerSocket connectionManagerSocket){
         this.mainframe = mainframe;
         this.connectionManagerSocket = connectionManagerSocket;
         //this.mainframe.setSize(1280,755);
         this.boardButton = new ArrayList<JLayeredPane>();
 
-        /*this.boardButton.add(c00);
-        this.boardButton.add(c01);
-        this.boardButton.add(c02);
-        this.boardButton.add(c03);
-        this.boardButton.add(c04);
-        this.boardButton.add(c10);
-        this.boardButton.add(c11);
-        this.boardButton.add(c12);
-        this.boardButton.add(c13);
-        this.boardButton.add(c14);
-        this.boardButton.add(c20);
-        this.boardButton.add(c21);
-        this.boardButton.add(c22);
-        this.boardButton.add(c23);
-        this.boardButton.add(c24);
-        this.boardButton.add(c30);
-        this.boardButton.add(c31);
-        this.boardButton.add(c32);
-        this.boardButton.add(c33);
-        this.boardButton.add(c34);
-        this.boardButton.add(c40);
-        this.boardButton.add(c41);
-        this.boardButton.add(c42);
-        this.boardButton.add(c43);
-        this.boardButton.add(c44);
-        */
         mainPanelImage = new ImageIcon(PATH + "BoardBackground.png");
         mainPanelImageScaled = mainPanelImage.getImage();
         JPanel mainPanel = new MainJPanel();
@@ -144,43 +104,26 @@ public class BoardGUI implements Runnable{
         BoardPanel.setVisible(true);
 
         Image level1 = new ImageIcon(PATH + "level1.png").getImage();
-        ImageIcon level1_Icon = new ImageIcon(level1);
+        level1_Icon = new ImageIcon(level1.getScaledInstance(90,90,Image.SCALE_SMOOTH));
         Image level2 = new ImageIcon(PATH + "level2.png").getImage();
-        ImageIcon level2_Icon = new ImageIcon(level2);
+        level2_Icon = new ImageIcon(level2.getScaledInstance(75,75,Image.SCALE_SMOOTH));
         Image level3 = new ImageIcon(PATH + "level3.png").getImage();
-        ImageIcon level3_Icon = new ImageIcon(level3);
+        level3_Icon = new ImageIcon(level3.getScaledInstance(60,60,Image.SCALE_SMOOTH));
         Image dome = new ImageIcon(PATH + "dome.png").getImage();
-        ImageIcon dome_Icon = new ImageIcon(dome);
+        dome_Icon = new ImageIcon(dome.getScaledInstance(45,45,Image.SCALE_SMOOTH));
+        Image worker_Man = new ImageIcon(PATH + "Blue_Worker_Man.png").getImage();
+        worker_Man_Icon = new ImageIcon(worker_Man.getScaledInstance(29,50,Image.SCALE_SMOOTH));
+        Image worker_Woman = new ImageIcon(PATH + "Blue_Worker_Woman.png").getImage();
+        worker_Woman_Icon = new ImageIcon(worker_Woman.getScaledInstance(29,50,Image.SCALE_SMOOTH));
 
-        JLabel level1_label = new JLabel(level1_Icon);
-        level1_label.setOpaque(true);
-        level1_label.setVisible(true);
-        JLabel level2_label = new JLabel(level2_Icon);
-        level2_label.setOpaque(true);
-        level2_label.setVisible(true);
-        JLabel level3_label = new JLabel(level3_Icon);
-        level3_label.setOpaque(true);
-        level3_label.setVisible(true);
-        JLabel dome_label = new JLabel(dome_Icon);
-        dome_label.setOpaque(true);
-        dome_label.setVisible(true);
 
         for(int i=0; i<25; i++){
             JLayeredPane currCell = new JLayeredPane();
-            JLabel l1 = new JLabel(level1_Icon);
-            l1.setVisible(true);
-            l1.setOpaque(true);
-            l1.setBackground(new Color(0,0,0,0));
-            currCell.add(l1, -1);
             boardButton.add(currCell);
             BoardPanel.add(currCell);
         }
-        JLabel currCell1 = new JLabel(dome_Icon);
-        currCell1.setVisible(true);
-        currCell1.setOpaque(true);
-        currCell1.setBackground(new Color(0,0,0,0));
-        boardButton.get(1).add(currCell1,0);
 
+        addLevel1(boardButton.get(1));
         mainPanel.add(BoardPanel, gbcBoardConstraint);
 
         mainPanel.setVisible(true);
@@ -195,7 +138,7 @@ public class BoardGUI implements Runnable{
         //System.out.println("gui"+connectionManagerSocket.getclientID());
         //PlayerMove playermove =new PlayerMove("test"+connectionManagerSocket.getclientID());
         //this.connectionManagerSocket.sendToServer(playermove);
-
+        //boardButton.forEach((currButton)-> currButton.);
     }
 
     public static void main(String[] args) {
@@ -206,6 +149,58 @@ public class BoardGUI implements Runnable{
             System.err.println(e.getMessage());
         }
         SwingUtilities.invokeLater(new BoardGUI(mainFrame,  null));
+    }
+
+    public void addLevel1(JLayeredPane currCell){
+        JLabel l1 = new JLabel(level1_Icon);
+        l1.setVisible(true);
+        l1.setOpaque(true);
+        l1.setBackground(new Color(0,0,0,0));
+        l1.setBounds(0, 0, 90, 90);
+        currCell.add(l1, -1);
+    }
+    public void addLevel2(JLayeredPane currCell){
+        JLabel lv2 = new JLabel(level2_Icon);
+        lv2.setVisible(true);
+        lv2.setOpaque(true);
+        lv2.setBackground(new Color(0,0,0,0));
+        lv2.setBounds(7, 7, 75, 75);
+        currCell.add(lv2,0);
+    }
+    public void addLevel3(JLayeredPane currCell){
+        JLabel lv3 = new JLabel(level3_Icon);
+        lv3.setVisible(true);
+        lv3.setOpaque(true);
+        lv3.setBackground(new Color(0,0,0,0));
+        lv3.setBounds(15, 15, 60, 60);
+        currCell.add(lv3,0);
+    }
+    public void addDome(JLayeredPane currCell){
+        JLabel dome = new JLabel(dome_Icon);
+        dome.setVisible(true);
+        dome.setOpaque(true);
+        dome.setBackground(new Color(0,0,0,0));
+        dome.setBounds(22, 22, 45, 45);
+        currCell.add(dome,0);
+    }
+    public void addWorkerMan(JLayeredPane currCell){
+        JLabel worker = new JLabel(worker_Man_Icon);
+        worker.setVisible(true);
+        worker.setOpaque(true);
+        worker.setBackground(new Color(0,0,0,0));
+        worker.setBounds(30, 20, 29, 50);
+        currCell.add(worker,0);
+    }
+    public void addWorkerWoman(JLayeredPane currCell){
+        JLabel worker = new JLabel(worker_Woman_Icon);
+        worker.setVisible(true);
+        worker.setOpaque(true);
+        worker.setBackground(new Color(0,0,0,0));
+        worker.setBounds(30, 20, 29, 50);
+        currCell.add(worker,0);
+    }
+    public void removeWorker(JLayeredPane currCell){
+        currCell.remove(0);
     }
 }
 

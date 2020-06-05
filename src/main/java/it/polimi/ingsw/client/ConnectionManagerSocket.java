@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 public class ConnectionManagerSocket {
 
     private String nickname ;
-    private PlayerColor color;
+    private PlayerColor myColor;
     private transient ExecutorService executor;
     protected boolean nameSet;
     private CustomDate customDate;
@@ -36,12 +36,12 @@ public class ConnectionManagerSocket {
 
     protected int clientID;
 
-    public ConnectionManagerSocket(String nickname, PlayerColor color, CustomDate birthday, int playerNumber) {
+    public ConnectionManagerSocket(String nickname, CustomDate birthday, int playerNumber) {
         this.nickname = nickname;
         this.playerNumber = playerNumber;
         this.customDate = birthday;
         this.executor = Executors.newCachedThreadPool();
-        this.color = color;
+        this.myColor = null;
         this.clientID = 0;
         this.playerColor = null;
         //this.clientData = new ClientData();
@@ -162,6 +162,11 @@ public class ConnectionManagerSocket {
         System.out.println("colore"+color);
         try{
             this.playerColor = color;
+            switch (playerColor.toUpperCase()){
+                case "WHITE": this.myColor = PlayerColor.WHITE;
+                case "BLUE": this.myColor = PlayerColor.BLUE;
+                case "GREY": this.myColor = PlayerColor.GREY;
+            }
             output.writeObject(color);
             output.flush();
         }catch (IOException e){

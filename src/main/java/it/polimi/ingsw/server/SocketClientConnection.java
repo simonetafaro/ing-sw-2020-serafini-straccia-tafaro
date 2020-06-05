@@ -123,7 +123,7 @@ public class SocketClientConnection  extends Observable<String> implements Clien
                     finish = false;
                     if(obj instanceof Player){
                         System.out.println("Nome "+ ((Player) obj).getNickname()+ "Colore: "+((Player) obj).getColor().toString());
-                        server.lobby(this, (Player) obj);
+                        //server.lobby(this, (Player) obj);
                     }
                 }else{
                     //send("error");

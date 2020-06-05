@@ -29,7 +29,7 @@ public class PlayerMove implements Serializable {
         this.MoveOrBuild=null;
     }
 
-    public PlayerMove( Worker worker, int row, int column) {
+    public PlayerMove(Worker worker, int row, int column) {
         this.worker=worker;
         this.player=null;
         this.row = row;

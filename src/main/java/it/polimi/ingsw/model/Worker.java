@@ -9,9 +9,20 @@ public class Worker implements Serializable {
     private Cell currentPosition;
     private PlayerColor color;
     private boolean stuck;
+    private int ID;
 
     public Worker(){}
+    public Worker(int ID, Cell position, int number, PlayerColor color){
+        this.ID = ID;
+        this.currentPosition = position;
+        this.workerNum = number;
+        this.color = color;
+        position.setFreeSpace(false);
+        position.setCurrWorker(this);
+    }
+
     public Worker(Cell position, int number, PlayerColor color){
+        this.ID = 0;
         this.currentPosition = position;
         this.workerNum = number;
         this.color = color;
@@ -46,10 +57,15 @@ public class Worker implements Serializable {
         }
 
     }
+    public PlayerColor getPlayerColor(){
+        return this.color;
+    }
     public boolean isStuck() {
         return stuck;
     }
-
+    public int getID(){
+        return this.ID;
+    }
     public void clear(){
         this.currentPosition.setFreeSpace(true);
         this.currentPosition.setCurrWorker(null);

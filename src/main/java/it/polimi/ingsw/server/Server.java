@@ -61,7 +61,7 @@ public class Server{
         }
     }*/
 
-    public synchronized void lobby(ClientConnection c, Player player){
+    /*public synchronized void lobby(ClientConnection c, Player player){
         if(waitingConnection.size()==0){
             if(true){
                 c.send("SetNumberPlayer");
@@ -153,6 +153,7 @@ public class Server{
             startController.setWhite(false);
         }
     }
+*/
 
     private void createMatch(Map<Player,ClientConnection> waitingConnection, int playerN){
 
