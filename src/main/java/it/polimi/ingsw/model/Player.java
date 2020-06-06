@@ -89,9 +89,11 @@ public class Player implements Serializable {
     }
     public void setWorker1(Worker worker1) {
         this.worker1 = worker1;
+
     }
     public void setWorker2(Worker worker2) {
         this.worker2 = worker2;
+
     }
     public void setMyCard(String cardName){
         cardManager.setCardFromFile(this,cardName);
@@ -109,6 +111,7 @@ public class Player implements Serializable {
     }
     public Worker getWorker1() {
         return worker1;
+
     }
     public Worker getWorker2() {
         return worker2;

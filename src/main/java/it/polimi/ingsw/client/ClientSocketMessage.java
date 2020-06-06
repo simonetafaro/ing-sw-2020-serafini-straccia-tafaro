@@ -1,22 +1,26 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.model.PlayerMove;
+import it.polimi.ingsw.utils.SetWorkerPosition;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Set;
 
 public class ClientSocketMessage{
 
     private Socket socket;
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
+    private ConnectionManagerSocket connectionManagerSocket;
 
 
-    public ClientSocketMessage(ObjectInputStream input, ObjectOutputStream output) {
+    public ClientSocketMessage(ConnectionManagerSocket connectionManagerSocket, ObjectInputStream input, ObjectOutputStream output) {
         this.inputStream = input;
         this.outputStream = output;
+        this.connectionManagerSocket = connectionManagerSocket;
     }
 
     public void initialize(){
@@ -57,6 +61,15 @@ public class ClientSocketMessage{
                 while(true) {
                     try {
                         Object o = ClientSocketMessage.this.inputStream.readObject();
+                        if(o instanceof SetWorkerPosition){
+                            updateBoard((SetWorkerPosition) o);
+                        }
+                        if(o instanceof String){
+                            if(((String) o).contains(connectionManagerSocket.getPlayerColor().toUpperCase())){
+                                System.out.println("setto i workers");
+                                connectionManagerSocket.getBoardGUI().setWorkers();
+                            }
+                        }
                         if(o instanceof PlayerMove)
                             parseInput((PlayerMove) o);
                         else
@@ -69,5 +82,14 @@ public class ClientSocketMessage{
                 }
             }
         });t.start();
+    }
+
+    public void updateBoard(SetWorkerPosition o){
+        if(o.getID() == connectionManagerSocket.getclientID()){
+            connectionManagerSocket.getBoardGUI().incrementWorkerNum();
+            if(connectionManagerSocket.getBoardGUI().getWorkersNum() == 2)
+                connectionManagerSocket.getBoardGUI().removeSetWorkersListener();
+        }
+        connectionManagerSocket.getBoardGUI().addWorkerToBoard(o.getWorkerNum(), o.getColor(), o.getX(), o.getY());
     }
 }

@@ -32,6 +32,7 @@ public class ConnectionManagerSocket {
     private static final int SOCKET_MESSAGE_PORT = 14456;
     private int order;
     private ClientSocketMessage clientSocket;
+    private BoardGUI boardGUI;
     //private ClientData clientData;
 
     protected int clientID;
@@ -44,6 +45,7 @@ public class ConnectionManagerSocket {
         this.myColor = null;
         this.clientID = 0;
         this.playerColor = null;
+        this.boardGUI = null;
         //this.clientData = new ClientData();
     }
 
@@ -193,8 +195,17 @@ public class ConnectionManagerSocket {
         return t;
     }
     public String getPlayerColor() {
-        return playerColor;
+        return this.playerColor;
     }
+    public PlayerColor getPlayerColorEnum(){
+        switch (playerColor.toUpperCase()){
+            case "WHITE": return PlayerColor.WHITE;
+            case "BLUE": return PlayerColor.BLUE;
+            case "GREY": return PlayerColor.GREY;
+        }
+        return null;
+    }
+
     private boolean handleColorResponse(String colorResult, showPopUpColor guiInstance) throws IOException {
         if(colorResult.toUpperCase().equals(Integer.toString(getclientID())+" "+getPlayerColor())){
             System.out.println("color ok");
@@ -297,14 +308,19 @@ public class ConnectionManagerSocket {
         }
     }
 
-    public void initializeMessageSocket(){
-        this.clientSocket = new ClientSocketMessage(input, output);
+    public void initializeMessageSocket(BoardGUI boardGUI){
+        this.boardGUI = boardGUI;
+        this.clientSocket = new ClientSocketMessage(this, input, output);
         this.clientSocket.initialize();
     }
     public void openBoardGui(){
         mainFrame.getContentPane().removeAll();
         SwingUtilities.invokeLater(new BoardGUI(mainFrame,ConnectionManagerSocket.this));
         mainFrame.update(mainFrame.getGraphics());
+    }
+
+    public BoardGUI getBoardGUI() {
+        return boardGUI;
     }
 
     public void sendToServer(PlayerMove playerMove){

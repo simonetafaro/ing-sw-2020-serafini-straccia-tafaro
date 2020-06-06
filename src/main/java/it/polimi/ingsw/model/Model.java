@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.observ.Observable;
 import it.polimi.ingsw.utils.PlayerColor;
+import it.polimi.ingsw.utils.SetWorkerPosition;
 import it.polimi.ingsw.utils.gameMessage;
 import it.polimi.ingsw.view.View;
 
@@ -79,8 +80,20 @@ public class Model extends Observable<Object> {
             System.err.println(e.getMessage());
         }
     }
-    public void notifySetWorker(Worker worker){
-        notifyObserver(new PlayerMove(worker, worker.getWorkerPosition().getPosX(), worker.getWorkerPosition().getPosY()));
+    public void notifySetWorker(SetWorkerPosition worker){
+        notifyObserver(worker);
+        players.forEach((player)-> {
+            if(player.getID() == worker.getID()){
+                if(player.getWorker1() != null && player.getWorker2() != null){
+                    System.out.println("update del turno");
+                    updateTurn();
+                    notifySetWorkers();
+                }
+            }
+        });
+    }
+    public void notifySetWorkers(){
+        notifyObserver(getTurn() + "setWorkers");
     }
 
     public boolean isReachableCell(PlayerMove move){
@@ -168,5 +181,9 @@ public class Model extends Observable<Object> {
         this.players.add(p1);
         this.players.add(p2);
         this.players.add(p3);
+    }
+    public void setPlayers (Player p1, Player p2){
+        this.players.add(p1);
+        this.players.add(p2);
     }
 }

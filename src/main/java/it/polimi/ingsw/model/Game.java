@@ -33,9 +33,8 @@ public class Game {
         player2View.addObserver(controller);
         player3View.addObserver(controller);
         model.setPlayOrder(player1.getColor(), player2.getColor(), player3.getColor());
-        setWorker(player1View, player1View);
+        controller.setWorkersMessage();
     }
-
     public Game(Player player1, Player player2){
         System.out.println(player1.getID()+" "+ player1.getNickname());
         View player1View = new RemoteView(player1);
@@ -45,21 +44,15 @@ public class Game {
         players.put(player1,player1View);
         players.put(player2,player2View);
         this.model = new Model();
+        this.model.setPlayers(player1, player2);
         this.controller = new Controller(model);
         this.model.addObserver(player1View);
         this.model.addObserver(player2View);
         player1View.addObserver(controller);
         player2View.addObserver(controller);
+        model.setPlayOrder(player1.getColor(), player2.getColor());
+        controller.setWorkersMessage();
+        //setWorker(player1View, player1View);
     }
-
-    public void setWorker(View p1, View p2){
-        p1.writeToClient(p1.getPlayer().getID() + "setWorkers");
-        p2.writeToClient(p1.getPlayer().getID() + "setWorkers");
-        while (p1.getPlayer().getWorker1() != null && p1.getPlayer().getWorker2() != null){
-
-        }
-
-    }
-
 
 }

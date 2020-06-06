@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.observ.Observer;
+import it.polimi.ingsw.utils.SetWorkerPosition;
 import it.polimi.ingsw.utils.gameMessage;
 
 public class Controller implements Observer<Object> {
@@ -30,20 +31,28 @@ public class Controller implements Observer<Object> {
 
     @Override
     public void update(Object message) {
-        if(message instanceof Worker) {
-            setWorker((Worker) message);
-            model.notifySetWorker((Worker) message);
+        if(message instanceof SetWorkerPosition) {
+            System.out.println("set worker ricevuto");
+            setWorker((SetWorkerPosition) message);
         }
-        System.out.println("controller update");
+
         //123performMove(message);
     }
 
-    public void setWorker(Worker worker){
+    public void setWorker(SetWorkerPosition worker){
+        if(!model.getBoard().getCell(worker.getX(), worker.getY()).isFree())
+            return;
+
         Player currPlayer = model.getPlayer(worker.getID());
         if(worker.getWorkerNum() == 1 )
-            currPlayer.setWorker1(new Worker(worker.getID(), model.getBoard().getCell(worker.getWorkerPosition().getPosX(), worker.getWorkerPosition().getPosY()), 1, worker.getPlayerColor()));
+            currPlayer.setWorker1(new Worker(worker.getID(), model.getBoard().getCell(worker.getX(), worker.getY()), 1, worker.getColor()));
         else
-            currPlayer.setWorker2(new Worker(worker.getID(), model.getBoard().getCell(worker.getWorkerPosition().getPosX(), worker.getWorkerPosition().getPosY()), 2, worker.getPlayerColor()));
+            currPlayer.setWorker2(new Worker(worker.getID(), model.getBoard().getCell(worker.getX(), worker.getY()), 2, worker.getColor()));
+        model.notifySetWorker(worker);
+    }
+
+    public void setWorkersMessage(){
+        model.notifySetWorkers();
     }
 
 }
