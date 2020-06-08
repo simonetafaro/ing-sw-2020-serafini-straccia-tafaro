@@ -336,6 +336,7 @@ public class Server{
                         player2.setInput(input2);
                         player2.setOutput(output2);
                         //call lobby
+
                         Game game = new Game(player1, player2);
 
                 }catch (Exception e){

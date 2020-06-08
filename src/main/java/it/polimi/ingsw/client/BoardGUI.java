@@ -3,16 +3,24 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerMove;
 import it.polimi.ingsw.model.Worker;
+import it.polimi.ingsw.utils.FileManager;
 import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.SetWorkerPosition;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.List;
 import java.util.ArrayList;
 
 public class BoardGUI implements Runnable{
@@ -30,6 +38,7 @@ public class BoardGUI implements Runnable{
 
     private JLayeredPane[][] boardButton;
     private  JPanel BoardPanel;
+    private JPanel powerColumn;
     private int workersNum;
 
     private static final String SRC = "src";
@@ -37,7 +46,7 @@ public class BoardGUI implements Runnable{
     private static final String RESOURCES = "resources";
     private static final String IMAGE = "images";
     private static final String PATH = SRC + File.separatorChar + MAIN + File.separatorChar + RESOURCES + File.separatorChar + IMAGE + File.separatorChar;
-
+    private static final String PATHFILE = "toolcards/";
     private class MainJPanel extends JPanel {
 
         @Override
@@ -77,8 +86,8 @@ public class BoardGUI implements Runnable{
             //int updatedWidth = this.getWidth();
             //int updatedHeight = this.getHeight();
 
-            int updatedWidth = 410;
-            int updatedHeight = 720;
+            int updatedWidth = 322;
+            int updatedHeight = 600;
 
             if (1280 -  powerColumnImageScaled.getWidth(null) > 720 - powerColumnImageScaled.getHeight(null)) {
                 updatedWidth = updatedHeight
@@ -91,8 +100,8 @@ public class BoardGUI implements Runnable{
                         / powerColumnImageScaled.getWidth(null);
             }
 
-            int x = (410 - updatedWidth) / 2;
-            int y = (720 - updatedHeight) / 2;
+            int x = (322 - updatedWidth) / 2;
+            int y = (600 - updatedHeight) / 2;
             g.drawImage(powerColumnImageScaled, x, y, updatedWidth,
                     updatedHeight, null);
         }
@@ -101,11 +110,9 @@ public class BoardGUI implements Runnable{
     private class SetWorker implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
-            if(BoardGUI.this.workersNum<2){
                 int x = (int) getCellX(BoardPanel.getMousePosition().getX());
                 int y = (int) getCellY(BoardPanel.getMousePosition().getY());
                 connectionManagerSocket.sendObjectToServer(new SetWorkerPosition(y, x, connectionManagerSocket.getPlayerColorEnum(), connectionManagerSocket.getclientID(), BoardGUI.this.workersNum+1));
-            }
 
         }
         @Override
@@ -272,15 +279,34 @@ public class BoardGUI implements Runnable{
 
         dxPanel.add(buttonColumn, gbcButtonColumnConstraint);
 
+        JPanel topPowerColumn = new JPanel(new GridLayout(1,2,10,0));
+        topPowerColumn.setPreferredSize(new Dimension(322,180));
+        topPowerColumn.setBackground(new Color(0,0,0,0));
+        topPowerColumn.setVisible(true);
+        topPowerColumn.setOpaque(true);
+
         ImageIcon powerColumnImage = new ImageIcon(PATH + "powerColumn.png");
         powerColumnImageScaled = powerColumnImage.getImage();
-        JPanel powerColumn = new PowerColumn();
-        powerColumn.setPreferredSize(new Dimension(410,720));
+
+        powerColumn = new PowerColumn();
+        powerColumn.setPreferredSize(new Dimension(322,600));
         powerColumn.setVisible(true);
         powerColumn.setBackground(new Color(0,0,0,0));
         gbcButtonColumnConstraint.gridx = 1;
         gbcButtonColumnConstraint.gridwidth= 2;
+        gbcButtonColumnConstraint.anchor = GridBagConstraints.NORTH;
+        gbcButtonColumnConstraint.insets = new Insets(20,30,0,5);
+        dxPanel.add(topPowerColumn, gbcButtonColumnConstraint);
 
+        gbcButtonColumnConstraint.anchor = GridBagConstraints.SOUTH;
+        Image god_Image = new ImageIcon(PATH + "CardApollo.png").getImage();
+        ImageIcon god_Image_Icon = new ImageIcon(god_Image);
+        JLabel godImage = new JLabel(god_Image_Icon);
+        godImage.setBackground(new Color(0,0,0,0));
+        godImage.setVisible(true);
+        godImage.setOpaque(true);
+        topPowerColumn.add(godImage, BorderLayout.WEST);
+        gbcButtonColumnConstraint.insets = new Insets(0,0,0,5);
         dxPanel.add(powerColumn, gbcButtonColumnConstraint);
 
 
@@ -321,11 +347,12 @@ public class BoardGUI implements Runnable{
         }
     }
     public void removeSetWorkersListener(){
-        this.workersNum = 0;
+        //this.workersNum = 0;
         for(int x=0; x<5; x++){
             for(int y=0; y<5; y++){
-                boardButton[x][y].removeMouseListener(new SetWorker());
+                this.boardButton[x][y].removeMouseListener(boardButton[x][y].getMouseListeners()[0]);
             }
+
         }
     }
 
@@ -404,6 +431,34 @@ public class BoardGUI implements Runnable{
     public int getWorkersNum() {
         return workersNum;
     }
+
+    public void populatePlayersInfo(ArrayList players){
+        FileManager f = new FileManager();
+        for(Object p : players){
+            if(p instanceof Player){
+                if(((Player) p).getColor() != connectionManagerSocket.getPlayerColorEnum()){
+                    createPlayerInfo((Player) p, f);
+                }
+            }
+        }
+    }
+
+    public void createPlayerInfo(Player player, FileManager fileFinder){
+        try{
+            Document document = fileFinder.getFileDocument(PATHFILE.concat(player.getMyCard().getName()).concat(".xml"));
+            NodeList placementRules = document.getElementsByTagName("ImageIconURL");
+            Image god_Image = new ImageIcon(PATH + placementRules.item(0).getTextContent()).getImage();
+            ImageIcon god_Image_Icon = new ImageIcon(god_Image.getScaledInstance(29,50,Image.SCALE_SMOOTH));
+            JLabel godImage = new JLabel(god_Image_Icon);
+            godImage.setVisible(true);
+            godImage.setOpaque(true);
+            this.powerColumn.add(godImage, BorderLayout.NORTH);
+        }catch (IOException | ParserConfigurationException | SAXException | URISyntaxException e ){
+            System.err.println(e.getMessage());
+        }
+
+    }
+
 }
 
 

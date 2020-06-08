@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Artemis</title>
+    <ImageIconURL>CardArtemis.png</ImageIconURL>
     <imageURL></imageURL>
     <description>Artemis description</description>
     <customRule decoratorName="ArtemisRuleDecorator" />

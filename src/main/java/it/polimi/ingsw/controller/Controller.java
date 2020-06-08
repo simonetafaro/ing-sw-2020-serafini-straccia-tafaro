@@ -32,11 +32,10 @@ public class Controller implements Observer<Object> {
     @Override
     public void update(Object message) {
         if(message instanceof SetWorkerPosition) {
-            System.out.println("set worker ricevuto");
             setWorker((SetWorkerPosition) message);
         }
 
-        //123performMove(message);
+        //performMove(message);
     }
 
     public void setWorker(SetWorkerPosition worker){

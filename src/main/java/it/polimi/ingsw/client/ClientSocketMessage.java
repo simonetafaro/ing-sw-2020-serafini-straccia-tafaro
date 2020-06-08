@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerMove;
 import it.polimi.ingsw.utils.SetWorkerPosition;
 
@@ -7,7 +8,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClientSocketMessage{
 
@@ -72,8 +74,9 @@ public class ClientSocketMessage{
                         }
                         if(o instanceof PlayerMove)
                             parseInput((PlayerMove) o);
-                        else
-                            System.out.println("non sono una playerMove");
+                        if(o instanceof ArrayList){
+                            connectionManagerSocket.getBoardGUI().populatePlayersInfo((ArrayList) o);
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (ClassNotFoundException e) {

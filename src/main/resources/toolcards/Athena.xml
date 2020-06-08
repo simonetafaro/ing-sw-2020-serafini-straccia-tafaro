@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Athena</title>
+    <ImageIconURL>CardAthena.png</ImageIconURL>
     <imageURL></imageURL>
     <description>Athena description</description>
     <customRule decoratorName="AthenaRuleDecorator" />

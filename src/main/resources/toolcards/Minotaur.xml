@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Minotaur</title>
+    <ImageIconURL>CardMinotaur.png</ImageIconURL>
     <imageURL></imageURL>
     <description>Minotaur description</description>
     <customRule decoratorName="MinotaurRuleDecorator" />

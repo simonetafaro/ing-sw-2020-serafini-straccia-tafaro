@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Apollo</title>
+    <ImageIconURL>CardApollo.png</ImageIconURL>
     <imageURL></imageURL>
     <description>Apollo description</description>
     <customRule decoratorName="ApolloRuleDecorator" />

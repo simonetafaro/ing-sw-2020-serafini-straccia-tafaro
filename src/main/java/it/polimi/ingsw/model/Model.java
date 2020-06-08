@@ -85,15 +85,22 @@ public class Model extends Observable<Object> {
         players.forEach((player)-> {
             if(player.getID() == worker.getID()){
                 if(player.getWorker1() != null && player.getWorker2() != null){
-                    System.out.println("update del turno");
-                    updateTurn();
-                    notifySetWorkers();
+                    if(player.getColor().equals(playOrder_List.get(playOrder_List.size()-1))){
+                        updateTurn();
+                        notifyStartGame();
+                    }else{
+                        updateTurn();
+                        notifySetWorkers();
+                    }
                 }
             }
         });
     }
     public void notifySetWorkers(){
         notifyObserver(getTurn() + "setWorkers");
+    }
+    public void notifyStartGame(){
+        notifyObserver(this.players);
     }
 
     public boolean isReachableCell(PlayerMove move){

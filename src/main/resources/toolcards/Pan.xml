@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Pan</title>
+    <ImageIconURL>CardPan.png</ImageIconURL>
     <imageURL></imageURL>
     <description>Pan description</description>
     <customRule decoratorName="PanRuleDecorator" />

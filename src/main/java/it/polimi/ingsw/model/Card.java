@@ -1,12 +1,13 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Card {
+public class Card implements Serializable {
     private String name;
-    private ArrayList<String> customSteps;
-    private ArrayList<String> standardStep;
-    private boolean usingCard;
+    private transient ArrayList<String> customSteps;
+    private transient ArrayList<String> standardStep;
+    private transient boolean usingCard;
 
     public Card (String name){
         this.name=name;

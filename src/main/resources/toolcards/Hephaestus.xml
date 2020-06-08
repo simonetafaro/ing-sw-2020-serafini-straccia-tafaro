@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Hephaestus</title>
+    <ImageIconURL>CardHephaestus.png</ImageIconURL>
     <imageURL></imageURL>
     <description>Hephaestus description</description>
     <customRule decoratorName="HephaestusRuleDecorator" />
