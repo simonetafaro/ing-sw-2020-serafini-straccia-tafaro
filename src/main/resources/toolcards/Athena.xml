@@ -2,6 +2,11 @@
 <toolcard>
     <title>Athena</title>
     <ImageIconURL>CardAthena.png</ImageIconURL>
+    <ImagePressedIconURL>AthenaCardPressed.png</ImagePressedIconURL>
+    <PowerDescription>Opponent’s Turn: If one of your
+        Workers moved up on your last
+        turn, opponent Workers cannot
+        move up this turn.</PowerDescription>
     <imageURL></imageURL>
     <description>Athena description</description>
     <customRule decoratorName="AthenaRuleDecorator" />

@@ -2,6 +2,10 @@
 <toolcard>
     <title>Demeter</title>
     <ImageIconURL>CardDemeter.png</ImageIconURL>
+    <ImagePressedIconURL>DemeterCardPressed.png</ImagePressedIconURL>
+    <PowerDescription>Your Build: Your Worker may
+        build one additional time, but not
+        on the same space.</PowerDescription>
     <imageURL></imageURL>
     <description>Demeter description</description>
     <customRule decoratorName="DemeterRuleDecorator" />

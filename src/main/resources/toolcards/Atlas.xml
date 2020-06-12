@@ -2,6 +2,9 @@
 <toolcard>
     <title>Atlas</title>
     <ImageIconURL>CardAtlas.png</ImageIconURL>
+    <ImagePressedIconURL>AtlasCardPressed.png</ImagePressedIconURL>
+    <PowerDescription>Your Build: Your Worker may
+        build a dome at any level.</PowerDescription>
     <imageURL></imageURL>
     <description>Apollo description</description>
     <customRule decoratorName="AtlasRuleDecorator" />

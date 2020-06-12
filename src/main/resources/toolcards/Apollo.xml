@@ -2,6 +2,12 @@
 <toolcard>
     <title>Apollo</title>
     <ImageIconURL>CardApollo.png</ImageIconURL>
+    <ImagePressedIconURL>ApolloCardPressed.png</ImagePressedIconURL>
+    <PowerDescription>Your Move: Your Worker may
+        move into an opponent Worker’s
+        space by forcing their Worker to
+        the space yours just vacated.</PowerDescription>
+
     <imageURL></imageURL>
     <description>Apollo description</description>
     <customRule decoratorName="ApolloRuleDecorator" />

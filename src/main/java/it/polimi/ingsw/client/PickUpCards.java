@@ -365,9 +365,7 @@ public class PickUpCards implements Runnable {
         gbcCardsImageLabel.gridx = 0;
         gbcCardsImageLabel.gridy = 0;
 
-        Image ArtemisImage = new ImageIcon(PATH + "Artemis_Image.png").getImage();
-        this.ArtemisImage = new ImageIcon(ArtemisImage);
-
+        ArtemisImage = new ImageIcon(PATH + "Artemis_Image.png");
         PanImage = new ImageIcon(PATH + "Pan_Image.png");
         AtlasImage = new ImageIcon(PATH + "Atlas_Image.png");
         DemeterImage = new ImageIcon(PATH + "Demeter_Image.png");
@@ -379,7 +377,6 @@ public class PickUpCards implements Runnable {
 
         ImageContainer = new JLabel();
         ImageContainer.setBackground(new Color(0,0,0,0));
-        //ImageContainer.setOpaque(false);
         centralPanel.add(ImageContainer, gbcCardsImageLabel);
 
         eastPanelImage = new ImageIcon(PATH + "Dx_Panel_Cards_new.png");

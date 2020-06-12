@@ -2,6 +2,10 @@
 <toolcard>
     <title>Prometheus</title>
     <ImageIconURL>CardPrometheus.png</ImageIconURL>
+    <ImagePressedIconURL>PrometheusCardPressed.png</ImagePressedIconURL>
+    <PowerDescription>Your Turn: If your Worker does
+        not move up, it may build both
+        before and after moving.</PowerDescription>
     <imageURL></imageURL>
     <description>Prometheus description</description>
     <customRule decoratorName="PrometheusRuleDecorator" />

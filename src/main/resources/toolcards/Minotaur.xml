@@ -2,6 +2,12 @@
 <toolcard>
     <title>Minotaur</title>
     <ImageIconURL>CardMinotaur.png</ImageIconURL>
+    <ImagePressedIconURL>MinotaurCardPressed.png</ImagePressedIconURL>
+    <PowerDescription>Your Move: Your Worker may
+        move into an opponent Worker’s
+        space, if their Worker can be
+        forced one space straight backwards to an
+        unoccupied space at any level.</PowerDescription>
     <imageURL></imageURL>
     <description>Minotaur description</description>
     <customRule decoratorName="MinotaurRuleDecorator" />

@@ -2,6 +2,10 @@
 <toolcard>
     <title>Pan</title>
     <ImageIconURL>CardPan.png</ImageIconURL>
+    <ImagePressedIconURL>PanCardPressed.png</ImagePressedIconURL>
+    <PowerDescription>Win Condition: You also win if
+        your Worker moves down two or
+        more levels.</PowerDescription>
     <imageURL></imageURL>
     <description>Pan description</description>
     <customRule decoratorName="PanRuleDecorator" />

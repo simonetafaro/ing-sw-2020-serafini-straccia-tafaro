@@ -74,6 +74,7 @@ public class ClientSocketMessage{
                         }
                         if(o instanceof PlayerMove)
                             parseInput((PlayerMove) o);
+
                         if(o instanceof ArrayList){
                             connectionManagerSocket.getBoardGUI().populatePlayersInfo((ArrayList) o);
                         }

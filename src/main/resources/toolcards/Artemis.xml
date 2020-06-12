@@ -2,6 +2,10 @@
 <toolcard>
     <title>Artemis</title>
     <ImageIconURL>CardArtemis.png</ImageIconURL>
+    <ImagePressedIconURL>ArtemisCardPressed.png</ImagePressedIconURL>
+    <PowerDescription>Your Move: Your Worker may
+        move one additional time, but not
+        back to its initial space.</PowerDescription>
     <imageURL></imageURL>
     <description>Artemis description</description>
     <customRule decoratorName="ArtemisRuleDecorator" />

@@ -11,6 +11,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class BoardGUI implements Runnable{
 
@@ -35,12 +37,16 @@ public class BoardGUI implements Runnable{
     private ImageIcon   worker_Man_White_Icon, worker_Woman_White_Icon,
                         worker_Man_Blue_Icon, worker_Woman_Blue_Icon,
                         worker_Man_Grey_Icon, worker_Woman_Grey_Icon;
-
+    private JLabel additionalIsland;
     private JLayeredPane[][] boardButton;
     private  JPanel BoardPanel;
     private JPanel powerColumn;
+    private JPanel topPowerColumn;
+    private List<JRadioButton> opponentPowers;
     private int workersNum;
-
+    private JLabel powerTextContainer;
+    private JLabel myPowerDescription;
+    private Player player;
     private static final String SRC = "src";
     private static final String MAIN = "main";
     private static final String RESOURCES = "resources";
@@ -142,6 +148,48 @@ public class BoardGUI implements Runnable{
 
     }
 
+    private class ChangePowerDescription implements ActionListener{
+        ImageIcon workerImage;
+        StringBuilder textDescription;
+        JRadioButton button;
+        public ChangePowerDescription(JRadioButton button, PlayerColor color, StringBuilder textDescription) {
+            Image workers;
+            ImageIcon workers_scaled;
+            switch (color){
+                case WHITE: workers = new ImageIcon(PATH + "W_Workers.png").getImage();
+                            workers_scaled = new ImageIcon(workers.getScaledInstance(72,62, Image.SCALE_SMOOTH));
+                            this.workerImage = workers_scaled;
+                            break;
+                case BLUE:  workers = new ImageIcon(PATH + "B_Workers.png").getImage();
+                            workers_scaled = new ImageIcon(workers.getScaledInstance(72,62, Image.SCALE_SMOOTH));
+                            this.workerImage = workers_scaled;
+                            break;
+                case GREY:  workers = new ImageIcon(PATH + "G_Workers.png").getImage();
+                            workers_scaled = new ImageIcon(workers.getScaledInstance(72,62, Image.SCALE_SMOOTH));
+                            this.workerImage = workers_scaled;
+                            break;
+            }
+            this.textDescription = textDescription;
+            this.button = button;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            /*
+            BoardGUI.this.opponentColor.removeAll();
+            BoardGUI.this.opponentColor.add(workerImage);
+            */
+            BoardGUI.this.opponentPowers.forEach((button) -> {
+                button.setEnabled(true);
+            });
+            this.button.setEnabled(false);
+            BoardGUI.this.powerTextContainer.removeAll();
+            BoardGUI.this.powerTextContainer.setText(textDescription.toString());
+
+        }
+    }
+
+
     public BoardGUI(JFrame mainframe, ConnectionManagerSocket connectionManagerSocket){
         this.mainframe = mainframe;
         this.workersNum = 0;
@@ -211,7 +259,6 @@ public class BoardGUI implements Runnable{
             }
         }
 
-
         GridBagConstraints gbcDxPanelConstraint = new GridBagConstraints();
         gbcDxPanelConstraint.insets = new Insets(0, 0, 0, 0);
         gbcDxPanelConstraint.anchor = GridBagConstraints.EAST;
@@ -262,7 +309,7 @@ public class BoardGUI implements Runnable{
         doneButtonLabel.setBounds(0, 0, 90, 90);
 
         GridBagConstraints gbcButtonColumnConstraint = new GridBagConstraints();
-        gbcButtonColumnConstraint.insets = new Insets(0, 0, 0, 0);
+        gbcButtonColumnConstraint.insets = new Insets(0, 0, 0, 40);
         gbcButtonColumnConstraint.anchor = GridBagConstraints.WEST;
         gbcButtonColumnConstraint.gridx = 0;
         gbcButtonColumnConstraint.gridy = 0;
@@ -270,7 +317,7 @@ public class BoardGUI implements Runnable{
 
         JPanel buttonColumn = new JPanel(new GridLayout(4,1, 0,6));
         buttonColumn.setVisible(true);
-        buttonColumn.setOpaque(true);
+        buttonColumn.setOpaque(false);
         buttonColumn.setBackground(new Color(0,0,0,0));
         buttonColumn.add(moveButtonLabel);
         buttonColumn.add(buildButtonLabel);
@@ -279,37 +326,62 @@ public class BoardGUI implements Runnable{
 
         dxPanel.add(buttonColumn, gbcButtonColumnConstraint);
 
-        JPanel topPowerColumn = new JPanel(new GridLayout(1,2,10,0));
-        topPowerColumn.setPreferredSize(new Dimension(322,180));
+        topPowerColumn = new JPanel(new BorderLayout());
+        topPowerColumn.setPreferredSize(new Dimension(215,180));
         topPowerColumn.setBackground(new Color(0,0,0,0));
         topPowerColumn.setVisible(true);
-        topPowerColumn.setOpaque(true);
+        topPowerColumn.setOpaque(false);
 
         ImageIcon powerColumnImage = new ImageIcon(PATH + "powerColumn.png");
         powerColumnImageScaled = powerColumnImage.getImage();
 
+        ImageIcon additionalIslandImage = new ImageIcon(PATH + "island_image.png");
+
         powerColumn = new PowerColumn();
         powerColumn.setPreferredSize(new Dimension(322,600));
         powerColumn.setVisible(true);
+        powerColumn.setOpaque(false);
         powerColumn.setBackground(new Color(0,0,0,0));
         gbcButtonColumnConstraint.gridx = 1;
         gbcButtonColumnConstraint.gridwidth= 2;
         gbcButtonColumnConstraint.anchor = GridBagConstraints.NORTH;
-        gbcButtonColumnConstraint.insets = new Insets(20,30,0,5);
+        gbcButtonColumnConstraint.insets = new Insets(20,0,0,5);
         dxPanel.add(topPowerColumn, gbcButtonColumnConstraint);
 
         gbcButtonColumnConstraint.anchor = GridBagConstraints.SOUTH;
-        Image god_Image = new ImageIcon(PATH + "CardApollo.png").getImage();
-        ImageIcon god_Image_Icon = new ImageIcon(god_Image);
-        JLabel godImage = new JLabel(god_Image_Icon);
-        godImage.setBackground(new Color(0,0,0,0));
-        godImage.setVisible(true);
-        godImage.setOpaque(true);
-        topPowerColumn.add(godImage, BorderLayout.WEST);
+
+        //topPowerColumn.add(godImage, BorderLayout.WEST);
         gbcButtonColumnConstraint.insets = new Insets(0,0,0,5);
         dxPanel.add(powerColumn, gbcButtonColumnConstraint);
 
+        additionalIsland = new JLabel(additionalIslandImage);
+        additionalIsland.setBackground(new Color(0,0,0,0));
+        additionalIsland.setVisible(false);
+        additionalIsland.setOpaque(false);
+        gbcButtonColumnConstraint.insets = new Insets(125,0,0,5);
+        gbcButtonColumnConstraint.anchor = GridBagConstraints.NORTHEAST;
+        dxPanel.add(additionalIsland, gbcButtonColumnConstraint);
 
+
+
+        powerTextContainer = new JLabel();
+        powerTextContainer.setVisible(true);
+        powerTextContainer.setPreferredSize(new Dimension(200,250));
+        gbcButtonColumnConstraint.insets = new Insets(0,0,123,5);
+        gbcButtonColumnConstraint.anchor = GridBagConstraints.CENTER;
+        dxPanel.add(powerTextContainer, gbcButtonColumnConstraint);
+        dxPanel.setComponentZOrder(powerTextContainer, 0);
+
+        myPowerDescription = new JLabel();
+        myPowerDescription.setVisible(true);
+        myPowerDescription.setPreferredSize(new Dimension(200,250));
+        gbcButtonColumnConstraint.insets = new Insets(0,0,0,5);
+        gbcButtonColumnConstraint.anchor = GridBagConstraints.SOUTH;
+        dxPanel.add(myPowerDescription, gbcButtonColumnConstraint);
+        dxPanel.setComponentZOrder(myPowerDescription, 0);
+
+
+        dxPanel.setOpaque(false);
         mainPanel.add(dxPanel, gbcDxPanelConstraint);
         mainPanel.add(BoardPanel, gbcBoardConstraint);
 
@@ -419,7 +491,7 @@ public class BoardGUI implements Runnable{
         }
 
         worker.setVisible(true);
-        worker.setOpaque(true);
+        worker.setOpaque(false);
         worker.setBackground(new Color(0,0,0,0));
         worker.setBounds(30, 20, 29, 50);
         boardButton[x][y].add(worker,0);
@@ -428,35 +500,89 @@ public class BoardGUI implements Runnable{
         currCell.remove(0);
     }
 
+    public void addAdditionalIsland(){
+        this.additionalIsland.setVisible(true);
+        this.mainframe.validate();
+    }
+
     public int getWorkersNum() {
         return workersNum;
     }
 
     public void populatePlayersInfo(ArrayList players){
         FileManager f = new FileManager();
+        this.opponentPowers = new ArrayList<JRadioButton>();
+        int index = 0;
+        if(players.size() == 3)
+            addAdditionalIsland();
         for(Object p : players){
             if(p instanceof Player){
                 if(((Player) p).getColor() != connectionManagerSocket.getPlayerColorEnum()){
-                    createPlayerInfo((Player) p, f);
+                    createPlayerInfo((Player) p, f, index);
+                    index ++;
+                }else{
+                    this.player = (Player) p;
+                    addMyPowerInfo((Player) p, f);
                 }
             }
         }
     }
+    public void addMyPowerInfo (Player player, FileManager fileFinder){
+        try {
+            Document document = fileFinder.getFileDocument(PATHFILE.concat(player.getMyCard().getName()).concat(".xml"));
 
-    public void createPlayerInfo(Player player, FileManager fileFinder){
+            NodeList GodImage = document.getElementsByTagName("ImageIconURL");
+            Image god_Image = new ImageIcon(PATH + GodImage.item(0).getTextContent()).getImage();
+            ImageIcon god_Image_Icon = new ImageIcon(god_Image);
+
+            NodeList powerDescription = document.getElementsByTagName("PowerDescription");
+            String text = powerDescription.item(0).getTextContent();
+            StringBuilder sb = new StringBuilder(64);
+            sb.append("<html>"+ text +"</html>");
+            this.myPowerDescription.setText(sb.toString());
+
+
+        } catch (IOException | ParserConfigurationException | SAXException | URISyntaxException e){
+            System.err.println(e.getMessage());
+        }
+    }
+    public void createPlayerInfo(Player player, FileManager fileFinder, int index){
         try{
             Document document = fileFinder.getFileDocument(PATHFILE.concat(player.getMyCard().getName()).concat(".xml"));
-            NodeList placementRules = document.getElementsByTagName("ImageIconURL");
-            Image god_Image = new ImageIcon(PATH + placementRules.item(0).getTextContent()).getImage();
-            ImageIcon god_Image_Icon = new ImageIcon(god_Image.getScaledInstance(29,50,Image.SCALE_SMOOTH));
-            JLabel godImage = new JLabel(god_Image_Icon);
-            godImage.setVisible(true);
-            godImage.setOpaque(true);
-            this.powerColumn.add(godImage, BorderLayout.NORTH);
+
+            NodeList GodImage = document.getElementsByTagName("ImageIconURL");
+            Image god_Image = new ImageIcon(PATH + GodImage.item(0).getTextContent()).getImage();
+            ImageIcon god_Image_Icon = new ImageIcon(god_Image);
+
+            NodeList GodImagePressed = document.getElementsByTagName("ImagePressedIconURL");
+            Image GodImagePressed_Image = new ImageIcon(PATH + GodImagePressed.item(0).getTextContent()).getImage();
+            ImageIcon GodImagePressed_Icon = new ImageIcon(GodImagePressed_Image);
+
+            JRadioButton godImageButton = new JRadioButton();
+            godImageButton.setIcon(god_Image_Icon);
+            godImageButton.setDisabledIcon(GodImagePressed_Icon);
+            godImageButton.setVisible(true);
+            godImageButton.setOpaque(false);
+            if(index == 0){
+                this.topPowerColumn.add(godImageButton, BorderLayout.WEST);
+                this.topPowerColumn.setOpaque(false);
+            }else {
+                this.topPowerColumn.add(godImageButton, BorderLayout.EAST);
+            }
+            this.opponentPowers.add(godImageButton);
+            this.mainframe.validate();
+
+            NodeList powerDescription = document.getElementsByTagName("PowerDescription");
+            String text = powerDescription.item(0).getTextContent();
+            StringBuilder sb = new StringBuilder(64);
+            sb.append("<html>"+ text +"</html>");
+            this.powerTextContainer.setText(sb.toString());
+
+            godImageButton.addActionListener(new ChangePowerDescription(godImageButton, player.getColor(), sb));
+
         }catch (IOException | ParserConfigurationException | SAXException | URISyntaxException e ){
             System.err.println(e.getMessage());
         }
-
     }
 
 }

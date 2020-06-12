@@ -2,6 +2,10 @@
 <toolcard>
     <title>Hephaestus</title>
     <ImageIconURL>CardHephaestus.png</ImageIconURL>
+    <ImagePressedIconURL>HephaestusCardPressed.png</ImagePressedIconURL>
+    <PowerDescription>Your Build: Your Worker may
+        build one additional block (not
+        dome) on top of your first block.</PowerDescription>
     <imageURL></imageURL>
     <description>Hephaestus description</description>
     <customRule decoratorName="HephaestusRuleDecorator" />
