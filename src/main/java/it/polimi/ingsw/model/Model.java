@@ -102,6 +102,9 @@ public class Model extends Observable<Object> {
     public void notifyStartGame(){
         notifyObserver(this.players);
     }
+    public void notify(Object message){
+        notifyObserver(message);
+    }
 
     public boolean isReachableCell(PlayerMove move){
         return move.getWorker().getWorkerPosition().isClosedTo(board.getCell(move.getRow(),move.getColumn()));
@@ -130,7 +133,8 @@ public class Model extends Observable<Object> {
         deletePlayerFromGame(move.getPlayer().getColor());
         //update turn
         notifyView(move,false);
-        move.getView().reportError(gameMessage.loseMessage);
+        notify(gameMessage.loseMessage);
+        //move.getView().reportError(gameMessage.loseMessage);
         //kill thread of move.getPlayer() ?
     }
     public void deletePlayerFromGame(PlayerColor color){
@@ -150,14 +154,14 @@ public class Model extends Observable<Object> {
     }
 
     public void endMessage(PlayerMove message, Turn turn, Model model){
-        turn.getPlayerTurn(message.getPlayer()).resetStep();
+        turn.getPlayerTurn(message.getPlayer().getID()).resetStep();
         model.endNotifyView(message,false);
     }
     public void setStep(PlayerMove move, Turn turn, Model model){
-        turn.getPlayerTurn(move.getPlayer()).getCurrStep().setType(move.getMoveOrBuild());
-        turn.getPlayerTurn(move.getPlayer()).getCurrStep().setCellFrom(move.getWorker().getWorkerPosition());
-        turn.getPlayerTurn(move.getPlayer()).getCurrStep().setCellTo(model.getBoard().getCell(move.getRow(),move.getColumn()));
-        turn.getPlayerTurn(move.getPlayer()).updateStep();
+        turn.getPlayerTurn(move.getPlayer().getID()).getCurrStep().setType(move.getMoveOrBuild());
+        turn.getPlayerTurn(move.getPlayer().getID()).getCurrStep().setCellFrom(move.getWorker().getWorkerPosition());
+        turn.getPlayerTurn(move.getPlayer().getID()).getCurrStep().setCellTo(model.getBoard().getCell(move.getRow(),move.getColumn()));
+        turn.getPlayerTurn(move.getPlayer().getID()).updateStep();
     }
     public boolean checkStep(PlayerMove move, Turn turn, Model model){
         setFirstStep(move, turn);
@@ -165,7 +169,6 @@ public class Model extends Observable<Object> {
         move.getPlayer().getWorker1().setStuck(false);
         move.getPlayer().getWorker2().setStuck(false);
         //turn.getPlayerTurn(move.getPlayer()).getCurrStep().setCellFrom(move.getWorker().getWorkerPosition());
-
         return true;
     }
     public boolean isPlayerStuck(PlayerMove move){
@@ -173,16 +176,20 @@ public class Model extends Observable<Object> {
     }
 
     public boolean isRightWorker(PlayerMove move, Turn turn){
-        if((!turn.getPlayerTurn(move.getPlayer()).isFirstStep()) && !turn.getPlayerTurn(move.getPlayer()).getTurnWorker().equals(move.getWorker())){
-            move.getView().reportError(gameMessage.wrongWorker);
-            return false;
+        if((!turn.getPlayerTurn(move.getPlayer().getID()).isFirstStep())){
+                if(turn.getPlayerTurn(move.getPlayer().getID()).getTurnWorker().getWorkerNum() != move.getWorker().getWorkerNum()) {
+                    //move.getView().reportError(gameMessage.wrongWorker);
+                    notify(gameMessage.wrongWorker);
+                    return false;
+                }
         }
         return true;
     }
 
     public void setFirstStep(PlayerMove move, Turn turn){
-        if(turn.getPlayerTurn(move.getPlayer()).isFirstStep())
-            turn.getPlayerTurn(move.getPlayer()).setTurnWorker(move.getWorker());
+        if(turn.getPlayerTurn(move.getPlayer().getID()).isFirstStep())
+            turn.getPlayerTurn(move.getPlayer().getID()).setTurnWorker(move.getWorker());
+
     }
     public void setPlayers (Player p1, Player p2, Player p3){
         this.players.add(p1);
@@ -192,5 +199,17 @@ public class Model extends Observable<Object> {
     public void setPlayers (Player p1, Player p2){
         this.players.add(p1);
         this.players.add(p2);
+    }
+    public void setWorkers(SetWorkerPosition worker){
+        System.out.println("MODEL");
+        System.out.println("("+worker.getX()+","+worker.getY()+")");
+        players.forEach(player ->{
+            if(player.getID() == worker.getID()){
+                if(worker.getWorkerNum() == 1)
+                    player.setWorker1(new Worker(worker.getID(), this.getBoard().getCell(worker.getX(), worker.getY()), 1, worker.getColor()));
+                else
+                    player.setWorker2(new Worker(worker.getID(), this.getBoard().getCell(worker.getX(), worker.getY()), 2, worker.getColor()));
+            }
+        });
     }
 }

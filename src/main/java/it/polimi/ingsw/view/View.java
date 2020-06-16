@@ -6,7 +6,9 @@ import it.polimi.ingsw.model.PlayerMoveEnd;
 import it.polimi.ingsw.observ.*;
 import it.polimi.ingsw.server.ClientConnection;
 
-public abstract class View extends Observable<Object> implements Observer<Object> {
+import java.io.Serializable;
+
+public abstract class View extends Observable<Object> implements Observer<Object>, Serializable {
 
     private Player player;
 

@@ -66,7 +66,7 @@ public class PrometheusRuleDecorator extends StandardRuleDecorator {
                 move(move, model, turn);
         }
         else{ //"B"
-            if((turn.getPlayerTurn(move.getPlayer()).getI()==1) && !canBuildInAndThenMove(move, model)){
+            if((turn.getPlayerTurn(move.getPlayer().getID()).getI()==1) && !canBuildInAndThenMove(move, model)){
                 move.getView().reportError(gameMessage.invalidMovePrometheus+"\n"+gameMessage.insertAgain);
                 return;
             }
@@ -91,11 +91,11 @@ public class PrometheusRuleDecorator extends StandardRuleDecorator {
 
     @Override
     public void build(PlayerMove move, Model model, Turn turn) {
-        if(turn.getPlayerTurn(move.getPlayer()).getI()==1){
+        if(turn.getPlayerTurn(move.getPlayer().getID()).getI()==1){
             //Can't go up for this turn
             model.setGoUpLevel(0);
         }
-        if(turn.getPlayerTurn(move.getPlayer()).getI()==2){
+        if(turn.getPlayerTurn(move.getPlayer().getID()).getI()==2){
             move.getPlayer().getMyCard().addCustomStep(2,"END");;
         }
         model.getBoard().getCell(move.getRow(),move.getColumn()).buildInCell();

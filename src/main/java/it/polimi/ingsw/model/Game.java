@@ -26,6 +26,7 @@ public class Game {
         this.model = new Model();
         this.model.setPlayers(player1, player2, player3);
         this.controller = new Controller(model);
+        this.controller.setTurn(new Turn(player1.setMyTurn(),player2.setMyTurn(),player3.setMyTurn()));
         this.model.addObserver(player1View);
         this.model.addObserver(player2View);
         this.model.addObserver(player3View);
@@ -34,7 +35,11 @@ public class Game {
         player3View.addObserver(controller);
         model.setPlayOrder(player1.getColor(), player2.getColor(), player3.getColor());
         controller.setWorkersMessage();
+        player1View.writeToClient(player1View);
+        player2View.writeToClient(player2View);
+        player3View.writeToClient(player3View);
     }
+
     public Game(Player player1, Player player2){
         System.out.println(player1.getID()+" "+ player1.getNickname());
         View player1View = new RemoteView(player1);
@@ -46,13 +51,15 @@ public class Game {
         this.model = new Model();
         this.model.setPlayers(player1, player2);
         this.controller = new Controller(model);
+        this.controller.setTurn(new Turn(player1.setMyTurn(),player2.setMyTurn()));
         this.model.addObserver(player1View);
         this.model.addObserver(player2View);
         player1View.addObserver(controller);
         player2View.addObserver(controller);
         model.setPlayOrder(player1.getColor(), player2.getColor());
         controller.setWorkersMessage();
-        //setWorker(player1View, player1View);
+        player1View.writeToClient(player1View);
+        player2View.writeToClient(player2View);
     }
 
 }

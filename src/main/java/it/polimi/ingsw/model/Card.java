@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 public class Card implements Serializable {
     private String name;
-    private transient ArrayList<String> customSteps;
-    private transient ArrayList<String> standardStep;
-    private transient boolean usingCard;
+    private ArrayList<String> customSteps;
+    private ArrayList<String> standardStep;
+    private boolean usingCard;
 
     public Card (String name){
         this.name=name;

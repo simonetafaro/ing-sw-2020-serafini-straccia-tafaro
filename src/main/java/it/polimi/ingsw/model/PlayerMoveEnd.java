@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.view.View;
 
+
 public class PlayerMoveEnd extends PlayerMove {
     private boolean isEndMessage;
 
@@ -9,4 +10,11 @@ public class PlayerMoveEnd extends PlayerMove {
         super(player, view);
         this.isEndMessage= isEndMessage;
     }
+    public PlayerMoveEnd(Player player, boolean isEndMessage){
+        super(player, null);
+        this.isEndMessage= isEndMessage;
+    }
+
+
+
 }

@@ -4,13 +4,13 @@ import it.polimi.ingsw.view.View;
 
 import java.io.Serializable;
 
-public class PlayerMove implements Serializable {
+public class PlayerMove implements Serializable , Cloneable{
 
     private final int row;
     private final int column;
     private final Player player;
-    private transient Worker worker;
-    private transient final View view;
+    private Worker worker;
+    private final View view;
     private String MoveOrBuild;
 
     public PlayerMove(String pippo){
@@ -44,7 +44,17 @@ public class PlayerMove implements Serializable {
         this.column = column;
         this.view = null;
     }
-
+    public PlayerMove(Player player, int worker, int row, int column, String moveOrBuild) {
+        this.player = player;
+        if(worker==1)
+            this.worker=player.getWorker1();
+        else
+            this.worker=player.getWorker2();
+        this.row = row;
+        this.column = column;
+        this.view = null;
+        this.MoveOrBuild=moveOrBuild;
+    }
     public PlayerMove(Player player, int worker, int row, int column, View view, String moveOrBuild) {
         this.player = player;
         if(worker==1)
@@ -55,6 +65,10 @@ public class PlayerMove implements Serializable {
         this.column = column;
         this.view = view;
         this.MoveOrBuild=moveOrBuild;
+    }
+
+    public void setMoveOrBuild(String moveOrBuild){
+        this.MoveOrBuild = moveOrBuild;
     }
 
     public int getRow() {
@@ -74,5 +88,10 @@ public class PlayerMove implements Serializable {
     }
     public String getMoveOrBuild() {
         return MoveOrBuild;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

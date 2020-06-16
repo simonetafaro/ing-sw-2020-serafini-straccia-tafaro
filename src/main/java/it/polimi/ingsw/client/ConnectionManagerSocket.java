@@ -1,8 +1,11 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerMove;
 import it.polimi.ingsw.utils.CustomDate;
 import it.polimi.ingsw.utils.PlayerColor;
+import it.polimi.ingsw.view.RemoteView;
+import it.polimi.ingsw.view.View;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -33,6 +36,8 @@ public class ConnectionManagerSocket {
     private int order;
     private ClientSocketMessage clientSocket;
     private BoardGUI boardGUI;
+    private View view;
+    private Player player;
     //private ClientData clientData;
 
     protected int clientID;
@@ -330,5 +335,17 @@ public class ConnectionManagerSocket {
     public void sendStringToServer(String playerMove){
         this.clientSocket.sendString(playerMove);
     }
+    public void setView(RemoteView view){
+        this.view = view;
+    }
+    public View getView(){
+        return this.view;
+    }
+    public void setPlayer(Player player){
+        this.player = player;
+    }
 
+    public Player getPlayer() {
+        return player;
+    }
 }

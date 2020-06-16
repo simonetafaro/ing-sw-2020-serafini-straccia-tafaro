@@ -8,9 +8,10 @@ import it.polimi.ingsw.utils.gameMessage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
+import java.io.Serializable;
+import java.util.ArrayList;
 
-public class RemoteView extends View {
+public class RemoteView extends View implements Serializable{
 
 
     private class MessageReceiver implements Observer<String> {
@@ -38,10 +39,10 @@ public class RemoteView extends View {
 
     private ClientConnection clientConnection;
 
-    private ObjectInputStream input;
-    private ObjectOutputStream output;
-    private int id;
-    private Thread readThread;
+    private transient ObjectInputStream input;
+    private transient ObjectOutputStream output;
+    private transient int id;
+    private transient Thread readThread;
 
     public RemoteView(Player player){
         super(player);

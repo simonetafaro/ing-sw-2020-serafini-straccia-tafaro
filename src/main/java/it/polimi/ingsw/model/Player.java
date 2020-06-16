@@ -15,11 +15,11 @@ public class Player implements Serializable {
     private PlayerColor color;
     private transient CustomDate birthDate;
     private String nickname;
-    private transient int ID;
-    private transient Worker worker1;
-    private transient Worker worker2;
+    private int ID;
+    private Worker worker1;
+    private Worker worker2;
     private transient PlayerTurn myTurn;
-    private transient CardRuleDecorator myCardMethod;
+    private CardRuleDecorator myCardMethod;
     private Card myCard;
     private transient Socket socket;
     private transient ObjectInputStream input;

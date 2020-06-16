@@ -6,7 +6,7 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
         if(move instanceof PlayerMoveEnd){
-            if(turn.getPlayerTurn(move.getPlayer()).getI()==3)
+            if(turn.getPlayerTurn(move.getPlayer().getID()).getI()==3)
                 model.endMessage(move,turn,model);
             else
                 move.getView().reportError(gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);

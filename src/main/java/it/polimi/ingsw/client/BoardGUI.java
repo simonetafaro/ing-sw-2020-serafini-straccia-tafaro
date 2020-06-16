@@ -1,8 +1,6 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.PlayerMove;
-import it.polimi.ingsw.model.Worker;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.utils.FileManager;
 import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.SetWorkerPosition;
@@ -23,6 +21,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.BlockingDeque;
 import java.util.regex.Pattern;
 
 public class BoardGUI implements Runnable{
@@ -53,6 +52,21 @@ public class BoardGUI implements Runnable{
     private static final String IMAGE = "images";
     private static final String PATH = SRC + File.separatorChar + MAIN + File.separatorChar + RESOURCES + File.separatorChar + IMAGE + File.separatorChar;
     private static final String PATHFILE = "toolcards/";
+
+    private Worker workerMove;
+
+    private JButton worker1G;
+    private JButton worker2G;
+    private JButton worker1W;
+    private JButton worker2W;
+    private JButton worker1B;
+    private JButton worker2B;
+
+    private JButton moveButton;
+    private JButton buildButton;
+    private JButton domeButton;
+    private JButton doneButton;
+
     private class MainJPanel extends JPanel {
 
         @Override
@@ -82,7 +96,6 @@ public class BoardGUI implements Runnable{
                     updatedHeight, null);
         }
     }
-
     private class PowerColumn extends JPanel {
 
         @Override
@@ -147,7 +160,6 @@ public class BoardGUI implements Runnable{
         }
 
     }
-
     private class ChangePowerDescription implements ActionListener{
         ImageIcon workerImage;
         StringBuilder textDescription;
@@ -188,14 +200,187 @@ public class BoardGUI implements Runnable{
 
         }
     }
+    private class MoveListeners implements MouseListener {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            removeButtonListeners();
+            PlayerMove move = new PlayerMove(BoardGUI.this.connectionManagerSocket.getPlayer(), BoardGUI.this.workerMove.getWorkerNum(), (int) getCell(BoardPanel.getMousePosition().getY()), (int) getCell(BoardPanel.getMousePosition().getX()),"M");
+            //removeWorker(BoardGUI.this.workerMove.getWorkerPosition().getPosX(), BoardGUI.this.workerMove.getWorkerPosition().getPosY());
+            //addWorkerToBoard(BoardGUI.this.workerMove.getWorkerNum(), BoardGUI.this.workerMove.getPlayerColor(),
+            //        (int) getCellY(BoardPanel.getMousePosition().getY()), (int) getCellX(BoardPanel.getMousePosition().getX()));
+            connectionManagerSocket.sendObjectToServer(move);
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+        }
+
+        public double getCell(double x){
+            return (x/100);
+        }
+
+        /*public double getCellY(double y){
+            return (y/100);
+        }
+
+         */
+
+    }
+    private class BuildListeners implements MouseListener {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            removeButtonListeners();
+            PlayerMove move = new PlayerMove(BoardGUI.this.connectionManagerSocket.getPlayer(), BoardGUI.this.workerMove.getWorkerNum(), (int) getCell(BoardPanel.getMousePosition().getY()), (int) getCell(BoardPanel.getMousePosition().getX()),"B");
+            //addLevel(BoardGUI.this.boardButton[(int) getCell(BoardPanel.getMousePosition().getY())][(int) getCell(BoardPanel.getMousePosition().getX())]);
+            connectionManagerSocket.sendObjectToServer(move);
+        }
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+        }
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+        }
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+        }
+
+        public double getCell(double x){
+            return (x/100);
+        }
+        /*
+        public double getCellY(double y){
+            return (y/100);
+        }
+
+         */
+
+    }
+    private class ButtonMoveListeners implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.out.println("ButtonListeners");
+            //BoardGUI.this.worker1.addActionListener(new WorkerListeners());
+            //BoardGUI.this.worker2.addActionListener(new WorkerListeners());
+            //removeWorkerListeners();
+            addMoveListeners();
+        }
+    }
+    private class ButtonBuildListeners implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            //BoardGUI.this.worker1.addActionListener(new WorkerListeners());
+            //BoardGUI.this.worker2.addActionListener(new WorkerListeners());
+            //removeWorkerListeners();
+            addBuildListeners();
+        }
+    }
+    private class ButtonDomeListeners implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
+    }
+    private class ButtonDoneListeners implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            PlayerMoveEnd moveEnd = new PlayerMoveEnd(connectionManagerSocket.getPlayer(), true);
+            connectionManagerSocket.sendObjectToServer(moveEnd);
+        }
+    }
+    private class WorkerListeners implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            System.out.println("workerListeners");
+            int x = (int) getCellX(BoardPanel.getMousePosition().getX());
+            int y = (int) getCellY(BoardPanel.getMousePosition().getY());
+            System.out.println(x+", "+y);
+            System.out.println(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1().getWorkerPosition().getPosX()+", "+BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1().getWorkerPosition().getPosY());
+            System.out.println(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2().getWorkerPosition().getPosX()+", "+BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2().getWorkerPosition().getPosY());
+            Cell workerPosition = new Cell(x, y);
+            if(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1().getWorkerPosition().getPosX() == workerPosition.getPosY() &&
+                    BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1().getWorkerPosition().getPosY() == workerPosition.getPosX()) {
+                System.out.println("uguale a worker1");
+                BoardGUI.this.workerMove = BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1();
+                addButtonListeners();
+            }else if(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2().getWorkerPosition().getPosX() == workerPosition.getPosY() &&
+                        BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2().getWorkerPosition().getPosY() == workerPosition.getPosX()) {
+                System.out.println("uguale a worker2");
+                BoardGUI.this.workerMove = BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2();
+                addButtonListeners();
+            }
+/*
+            BoardGUI.this.name = BoardGUI.this.boardButton[x][y].getComponent(0).getName();
+            System.out.println(name);
+            char color = name.charAt(0);
+            System.out.println(color);
+            char workerN = name.charAt(1);
+            System.out.println(workerN);
+            switch (color) {
+                case 'B':
+                    if (workerN == 'W')
+                        BoardGUI.this.worker = new Worker(workerPosition, 2, PlayerColor.BLUE);
+                    else
+                        BoardGUI.this.worker = new Worker(workerPosition, 1, PlayerColor.BLUE);
+                    break;
+                case 'W':
+                    if (workerN == 'W')
+                        BoardGUI.this.worker = new Worker(workerPosition, 2, PlayerColor.WHITE);
+                    else
+                        BoardGUI.this.worker = new Worker(workerPosition, 1, PlayerColor.WHITE);
+                    break;
+                case 'G':
+                    if (workerN == 'W')
+                        BoardGUI.this.worker = new Worker(workerPosition, 2, PlayerColor.GREY);
+                    else
+                        BoardGUI.this.worker = new Worker(workerPosition, 1, PlayerColor.GREY);
+                    break;
+            }
+ */
+        }
+
+        public double getCellX(double x){
+            return (x/100);
+        }
+
+        public double getCellY(double y){
+            return (y/100);
+        }
+
+
+    }
 
 
     public BoardGUI(JFrame mainframe, ConnectionManagerSocket connectionManagerSocket){
         this.mainframe = mainframe;
         this.workersNum = 0;
         this.connectionManagerSocket = connectionManagerSocket;
-        //this.mainframe.setSize(1280,755);
-        //this.boardButton = new ArrayList<JLayeredPane>();
         this.boardButton = new JLayeredPane[5][5];
 
         mainPanelImage = new ImageIcon(PATH + "BoardBackground.png");
@@ -251,7 +436,6 @@ public class BoardGUI implements Runnable{
         Image worker_Woman_Grey = new ImageIcon(PATH + "Grey_Worker_Woman.png").getImage();
         worker_Woman_Grey_Icon = new ImageIcon(worker_Woman_Grey.getScaledInstance(29,50,Image.SCALE_SMOOTH));
 
-
         for(int x=0; x<5; x++){
             for(int y=0; y<5; y++){
                 boardButton[x][y] = new JLayeredPane();
@@ -277,36 +461,44 @@ public class BoardGUI implements Runnable{
 
         dxPanel.setBackground(new Color(0,0,0,0));
 
-        Image moveButton = new ImageIcon(PATH + "MoveButton.png").getImage();
-        ImageIcon moveButton_Icon = new ImageIcon(moveButton.getScaledInstance(120,120,Image.SCALE_SMOOTH));
-        Image buildButton = new ImageIcon(PATH + "BuildButton.png").getImage();
-        ImageIcon buildButton_Icon = new ImageIcon(buildButton.getScaledInstance(120,120,Image.SCALE_SMOOTH));
-        Image domeButton = new ImageIcon(PATH + "DomeButton.png").getImage();
-        ImageIcon domeButton_Icon = new ImageIcon(domeButton.getScaledInstance(120,87,Image.SCALE_SMOOTH));
-        Image doneButton = new ImageIcon(PATH + "DoneButton.png").getImage();
-        ImageIcon doneButton_Icon = new ImageIcon(doneButton.getScaledInstance(120,118,Image.SCALE_SMOOTH));
+        Image moveImage = new ImageIcon(PATH + "MoveButton.png").getImage();
+        ImageIcon moveButton_Icon = new ImageIcon(moveImage.getScaledInstance(120,120,Image.SCALE_SMOOTH));
+        Image buildImage = new ImageIcon(PATH + "BuildButton.png").getImage();
+        ImageIcon buildButton_Icon = new ImageIcon(buildImage.getScaledInstance(120,120,Image.SCALE_SMOOTH));
+        Image domeImage = new ImageIcon(PATH + "DomeButton.png").getImage();
+        ImageIcon domeButton_Icon = new ImageIcon(domeImage.getScaledInstance(120,87,Image.SCALE_SMOOTH));
+        Image doneImage = new ImageIcon(PATH + "DoneButton.png").getImage();
+        ImageIcon doneButton_Icon = new ImageIcon(doneImage.getScaledInstance(120,118,Image.SCALE_SMOOTH));
 
-        JLabel moveButtonLabel = new JLabel(moveButton_Icon);
-        moveButtonLabel.setVisible(true);
-        moveButtonLabel.setOpaque(true);
-        moveButtonLabel.setBackground(new Color(0,0,0,0));
+        this.moveButton = new JButton(moveButton_Icon);
+        this.moveButton.setVisible(true);
+        this.moveButton.setOpaque(true);
+        this.moveButton.setBorder(null);
+        this.moveButton.setContentAreaFilled(false);
+        this.moveButton.setBackground(new Color(0,0,0,0));
 
-        JLabel buildButtonLabel = new JLabel(buildButton_Icon);
-        buildButtonLabel.setVisible(true);
-        buildButtonLabel.setOpaque(true);
-        buildButtonLabel.setBackground(new Color(0,0,0,0));
+        this.buildButton = new JButton(buildButton_Icon);
+        this.buildButton.setVisible(true);
+        this.buildButton.setOpaque(true);
+        this.buildButton.setBorder(null);
+        this.buildButton.setContentAreaFilled(false);
+        this.buildButton.setBackground(new Color(0,0,0,0));
 
-        JLabel domeButtonLabel = new JLabel(domeButton_Icon);
-        domeButtonLabel.setVisible(true);
-        domeButtonLabel.setOpaque(true);
-        domeButtonLabel.setBackground(new Color(0,0,0,0));
-        domeButtonLabel.setBounds(0, 0, 90, 90);
+        this.domeButton = new JButton(domeButton_Icon);
+        this.domeButton.setVisible(true);
+        this.domeButton.setOpaque(true);
+        this.domeButton.setBorder(null);
+        this.domeButton.setContentAreaFilled(false);
+        this.domeButton.setBackground(new Color(0,0,0,0));
+        this.domeButton.setBounds(0, 0, 90, 90);
 
-        JLabel doneButtonLabel = new JLabel(doneButton_Icon);
-        doneButtonLabel.setVisible(true);
-        doneButtonLabel.setOpaque(true);
-        doneButtonLabel.setBackground(new Color(0,0,0,0));
-        doneButtonLabel.setBounds(0, 0, 90, 90);
+        this.doneButton = new JButton(doneButton_Icon);
+        this.doneButton.setVisible(true);
+        this.doneButton.setOpaque(true);
+        this.doneButton.setBorder(null);
+        this.doneButton.setContentAreaFilled(false);
+        this.doneButton.setBackground(new Color(0,0,0,0));
+        this.doneButton.setBounds(0, 0, 90, 90);
 
         GridBagConstraints gbcButtonColumnConstraint = new GridBagConstraints();
         gbcButtonColumnConstraint.insets = new Insets(0, 0, 0, 40);
@@ -319,10 +511,10 @@ public class BoardGUI implements Runnable{
         buttonColumn.setVisible(true);
         buttonColumn.setOpaque(false);
         buttonColumn.setBackground(new Color(0,0,0,0));
-        buttonColumn.add(moveButtonLabel);
-        buttonColumn.add(buildButtonLabel);
-        buttonColumn.add(domeButtonLabel);
-        buttonColumn.add(doneButtonLabel);
+        buttonColumn.add(this.moveButton);
+        buttonColumn.add(this.buildButton);
+        buttonColumn.add(this.domeButton);
+        buttonColumn.add(this.doneButton);
 
         dxPanel.add(buttonColumn, gbcButtonColumnConstraint);
 
@@ -362,8 +554,6 @@ public class BoardGUI implements Runnable{
         gbcButtonColumnConstraint.anchor = GridBagConstraints.NORTHEAST;
         dxPanel.add(additionalIsland, gbcButtonColumnConstraint);
 
-
-
         powerTextContainer = new JLabel();
         powerTextContainer.setVisible(true);
         powerTextContainer.setPreferredSize(new Dimension(200,250));
@@ -379,7 +569,6 @@ public class BoardGUI implements Runnable{
         gbcButtonColumnConstraint.anchor = GridBagConstraints.SOUTH;
         dxPanel.add(myPowerDescription, gbcButtonColumnConstraint);
         dxPanel.setComponentZOrder(myPowerDescription, 0);
-
 
         dxPanel.setOpaque(false);
         mainPanel.add(dxPanel, gbcDxPanelConstraint);
@@ -431,38 +620,6 @@ public class BoardGUI implements Runnable{
     public void incrementWorkerNum(){
         this.workersNum++;
     }
-    public void addLevel1(JLayeredPane currCell){
-        JLabel l1 = new JLabel(level1_Icon);
-        l1.setVisible(true);
-        l1.setOpaque(true);
-        l1.setBackground(new Color(0,0,0,0));
-        l1.setBounds(0, 0, 90, 90);
-        currCell.add(l1, -1);
-    }
-    public void addLevel2(JLayeredPane currCell){
-        JLabel lv2 = new JLabel(level2_Icon);
-        lv2.setVisible(true);
-        lv2.setOpaque(true);
-        lv2.setBackground(new Color(0,0,0,0));
-        lv2.setBounds(7, 7, 75, 75);
-        currCell.add(lv2,0);
-    }
-    public void addLevel3(JLayeredPane currCell){
-        JLabel lv3 = new JLabel(level3_Icon);
-        lv3.setVisible(true);
-        lv3.setOpaque(true);
-        lv3.setBackground(new Color(0,0,0,0));
-        lv3.setBounds(15, 15, 60, 60);
-        currCell.add(lv3,0);
-    }
-    public void addDome(JLayeredPane currCell){
-        JLabel dome = new JLabel(dome_Icon);
-        dome.setVisible(true);
-        dome.setOpaque(true);
-        dome.setBackground(new Color(0,0,0,0));
-        dome.setBounds(22, 22, 45, 45);
-        currCell.add(dome,0);
-    }
     public void addWorkerMan(JLayeredPane currCell){
         JLabel worker = new JLabel(worker_Man_Blue_Icon);
         worker.setVisible(true);
@@ -478,26 +635,6 @@ public class BoardGUI implements Runnable{
         worker.setBackground(new Color(0,0,0,0));
         worker.setBounds(30, 20, 29, 50);
         currCell.add(worker,0);
-    }
-    public void addWorkerToBoard(int workerNum, PlayerColor color, int x, int y){
-        JLabel worker = null;
-        switch (color){
-            case WHITE: worker = (workerNum == 1 ? new JLabel(worker_Man_White_Icon) : new JLabel(worker_Woman_White_Icon));
-                        break;
-            case GREY: worker = (workerNum == 1 ? new JLabel(worker_Man_Grey_Icon) : new JLabel(worker_Woman_Grey_Icon));
-                        break;
-            case BLUE: worker = (workerNum == 1 ? new JLabel(worker_Man_Blue_Icon) : new JLabel(worker_Woman_Blue_Icon));
-                        break;
-        }
-
-        worker.setVisible(true);
-        worker.setOpaque(false);
-        worker.setBackground(new Color(0,0,0,0));
-        worker.setBounds(30, 20, 29, 50);
-        boardButton[x][y].add(worker,0);
-    }
-    public void removeWorker(JLayeredPane currCell){
-        currCell.remove(0);
     }
 
     public void addAdditionalIsland(){
@@ -521,11 +658,12 @@ public class BoardGUI implements Runnable{
                     createPlayerInfo((Player) p, f, index);
                     index ++;
                 }else{
-                    this.player = (Player) p;
+                    this.connectionManagerSocket.setPlayer((Player)p);;
                     addMyPowerInfo((Player) p, f);
                 }
             }
         }
+        addWorkerListeners();
     }
     public void addMyPowerInfo (Player player, FileManager fileFinder){
         try {
@@ -585,6 +723,242 @@ public class BoardGUI implements Runnable{
         }
     }
 
+    public void addLevel1(JLayeredPane currCell){
+        JLabel lv1 = new JLabel(level1_Icon);
+        lv1.setVisible(true);
+        lv1.setOpaque(false);
+        lv1.setBorder(null);
+        lv1.setBackground(new Color(0,0,0,0));
+        lv1.setBounds(0, 0, 90, 90);
+        currCell.add(lv1, 1,-1);
+    }
+    public void addLevel2(JLayeredPane currCell){
+        JLabel lv2 = new JLabel(level2_Icon);
+        lv2.setVisible(true);
+        lv2.setOpaque(false);
+        lv2.setBorder(null);
+        lv2.setBackground(new Color(0,0,0,0));
+        lv2.setBounds(7, 7, 75, 75);
+        currCell.add(lv2,2,0);
+    }
+    public void addLevel3(JLayeredPane currCell){
+        JLabel lv3 = new JLabel(level3_Icon);
+        lv3.setVisible(true);
+        lv3.setOpaque(false);
+        lv3.setBorder(null);
+        lv3.setBackground(new Color(0,0,0,0));
+        lv3.setBounds(15, 15, 60, 60);
+        currCell.add(lv3,3,0);
+    }
+    public void addDome(JLayeredPane currCell){
+        JLabel dome = new JLabel(dome_Icon);
+        dome.setVisible(true);
+        dome.setOpaque(false);
+        dome.setBorder(null);
+        dome.setBackground(new Color(0,0,0,0));
+        dome.setBounds(22, 22, 45, 45);
+        currCell.add(dome,4,0);
+    }
+    public void addLevel(JLayeredPane currCell){
+        int position = currCell.highestLayer();
+        switch (position){
+            case 0:
+                addLevel1(currCell);
+                break;
+            case 1:
+                addLevel2(currCell);
+                break;
+            case 2:
+                addLevel3(currCell);
+                break;
+            case 3:
+                addDome(currCell);
+                break;
+        }
+
+    }
+/*
+    public void addWorkerToBoard(int workerNum, PlayerColor color, int x, int y){
+        JLabel worker = null;
+        switch (color){
+            case WHITE: worker = (workerNum == 1 ? new JLabel(worker_Man_White_Icon) : new JLabel(worker_Woman_White_Icon));
+                break;
+            case GREY: worker = (workerNum == 1 ? new JLabel(worker_Man_Grey_Icon) : new JLabel(worker_Woman_Grey_Icon));
+                break;
+            case BLUE: worker = (workerNum == 1 ? new JLabel(worker_Man_Blue_Icon) : new JLabel(worker_Woman_Blue_Icon));
+                break;
+        }
+
+        worker.setVisible(true);
+        worker.setOpaque(false);
+        worker.setBackground(new Color(0,0,0,0));
+        worker.setBounds(30, 20, 29, 50);
+        boardButton[x][y].add(worker,0);
+    }
+
+ */
+    public void addWorkerToBoard(int workerNum, PlayerColor color, int x, int y){
+        switch (color){
+            case WHITE: if(workerNum == 1) {
+                            this.worker1W = new JButton(worker_Man_White_Icon);
+                            addReadyWorker(this.worker1W,x,y);
+                        } else{
+                            this.worker2W = new JButton(worker_Woman_White_Icon);
+                            addReadyWorker(this.worker2W,x,y);
+                        }
+                        break;
+            case GREY:  if(workerNum == 1) {
+                            this.worker1G = new JButton(worker_Man_Grey_Icon);
+                            addReadyWorker(this.worker1G,x,y);
+                        } else{
+                            this.worker2G = new JButton(worker_Woman_Grey_Icon);
+                            addReadyWorker(this.worker2G,x,y);
+                        }
+                        break;
+            case BLUE:  if(workerNum == 1) {
+                            this.worker1B = new JButton(worker_Man_Blue_Icon);
+                            addReadyWorker(this.worker1B,x,y);
+                        } else{
+                            this.worker2B = new JButton(worker_Woman_Blue_Icon);
+                            addReadyWorker(this.worker2B,x,y);
+                        }
+                        break;
+        }
+    }
+    public void removeWorker(int x, int y){
+        //this.boardButton[x][y].getComponent(0).setVisible(false);
+        //this.boardButton[x][y].remove(0);
+        /*
+        if(this.workerMove.getWorkerNum()==1)
+            boardButton[x][y].remove(this.worker1);
+        else
+            boardButton[x][y].remove(this.worker2);
+
+         */
+        //int pos = boardButton[x][y].getLayer(boardButton[x][y].getComponent(0));
+        //boardButton[x][y].remove(boardButton[x][y].getComponent(5));
+        //boardButton[x][y].getComponent(0).setVisible(false);
+        //boardButton[x][y].remove(boardButton[x][y].getComponent(0));
+    }
+    public void removeWorker(JButton worker){
+        int layer = 0;
+        for(int x=0; x<5; x++){
+            for(int y=0; y<5; y++){
+                layer = boardButton[x][y].highestLayer();
+                if(layer == 5){
+                    if(boardButton[x][y].getComponent(0).equals(worker)) {
+                        boardButton[x][y].getComponent(0).setVisible(false);
+                        boardButton[x][y].remove(0);
+                    }
+                }
+            }
+        }
+    }
+    public void addReadyWorker(JButton worker, int x , int y){
+        worker.setVisible(true);
+        worker.setOpaque(false);
+        worker.setBorder(null);
+        worker.setContentAreaFilled(false);
+        worker.setBackground(new Color(0,0,0,0));
+        worker.setBounds(30, 20, 29, 50);
+        boardButton[x][y].add(worker,5,0);
+        boardButton[x][y].setLayer(worker,5);
+    }
+
+    public void addMoveListeners(){
+        for(int x=0; x<5; x++){
+            for(int y=0; y<5; y++){
+                this.boardButton[x][y].addMouseListener(new MoveListeners());
+            }
+        }
+    }
+    public void addBuildListeners(){
+        for(int x=0; x<5; x++){
+            for(int y=0; y<5; y++){
+                this.boardButton[x][y].addMouseListener(new BuildListeners());
+            }
+        }
+    }
+    public void addButtonListeners(){
+        this.moveButton.addActionListener(new ButtonMoveListeners());
+        this.buildButton.addActionListener(new ButtonBuildListeners());
+        this.domeButton.addActionListener(new ButtonDomeListeners());
+        this.doneButton.addActionListener(new ButtonDoneListeners());
+
+    }
+    public void addWorkerListeners(){
+        if(connectionManagerSocket.getPlayerColorEnum().equals(PlayerColor.BLUE)){
+            this.worker1B.addActionListener(new WorkerListeners());
+            this.worker2B.addActionListener(new WorkerListeners());
+        }
+        if(connectionManagerSocket.getPlayerColorEnum().equals(PlayerColor.GREY)){
+            this.worker1G.addActionListener(new WorkerListeners());
+            this.worker2G.addActionListener(new WorkerListeners());
+        }
+        if(connectionManagerSocket.getPlayerColorEnum().equals(PlayerColor.WHITE)){
+            this.worker1W.addActionListener(new WorkerListeners());
+            this.worker2W.addActionListener(new WorkerListeners());
+        }
+
+    }
+    public void removeButtonListeners(){
+        for(int x=0; x<5; x++){
+            for(int y=0; y<5; y++){
+                this.boardButton[x][y].removeMouseListener(boardButton[x][y].getMouseListeners()[0]);
+            }
+
+        }
+    }
+    public void removeWorkerListeners(){
+        if(connectionManagerSocket.getPlayerColorEnum().equals(PlayerColor.BLUE)){
+            this.worker1B.removeActionListener(this.worker1B.getActionListeners()[0]);
+            this.worker2B.removeActionListener(this.worker2B.getActionListeners()[0]);
+        }
+        if(connectionManagerSocket.getPlayerColorEnum().equals(PlayerColor.GREY)){
+            this.worker1G.removeActionListener(this.worker1G.getActionListeners()[0]);
+            this.worker2G.removeActionListener(this.worker2G.getActionListeners()[0]);
+        }
+        if(connectionManagerSocket.getPlayerColorEnum().equals(PlayerColor.WHITE)){
+            this.worker1W.removeActionListener(this.worker1W.getActionListeners()[0]);
+            this.worker2W.removeActionListener(this.worker2W.getActionListeners()[0]);
+        }
+    }
+
+    public void showMove(PlayerMove move){
+        if(move.getPlayer().getColor().equals(PlayerColor.BLUE)){
+            if(move.getWorker().getWorkerNum()==1){
+                removeWorker(this.worker1B);
+                addReadyWorker(this.worker1B,move.getRow(), move.getColumn());
+            }
+            else{
+                removeWorker(this.worker2B);
+                addReadyWorker(this.worker2B,move.getRow(), move.getColumn());
+            }
+        }
+        if(move.getPlayer().getColor().equals(PlayerColor.WHITE)){
+            if(move.getWorker().getWorkerNum()==1){
+                removeWorker(this.worker1W);
+                addReadyWorker(this.worker1W,move.getRow(), move.getColumn());
+            }
+            else{
+                removeWorker(this.worker2W);
+                addReadyWorker(this.worker2W,move.getRow(), move.getColumn());
+            }
+        }
+        if(move.getPlayer().getColor().equals(PlayerColor.GREY)){
+            if(move.getWorker().getWorkerNum()==1){
+                removeWorker(this.worker1G);
+                addReadyWorker(this.worker1G,move.getRow(), move.getColumn());
+            }
+            else{
+                removeWorker(this.worker2G);
+                addReadyWorker(this.worker2G,move.getRow(), move.getColumn());
+            }
+        }
+    }
+    public void showBuild(PlayerMove move){
+        addLevel(BoardGUI.this.boardButton[move.getRow()][move.getColumn()]);
+    }
 }
 
 
