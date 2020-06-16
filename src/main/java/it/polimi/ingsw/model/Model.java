@@ -155,7 +155,8 @@ public class Model extends Observable<Object> {
 
     public void endMessage(PlayerMove message, Turn turn, Model model){
         turn.getPlayerTurn(message.getPlayer().getID()).resetStep();
-        model.endNotifyView(message,false);
+        model.notify(message);
+        //model.endNotifyView(message,false);
     }
     public void setStep(PlayerMove move, Turn turn, Model model){
         turn.getPlayerTurn(move.getPlayer().getID()).getCurrStep().setType(move.getMoveOrBuild());

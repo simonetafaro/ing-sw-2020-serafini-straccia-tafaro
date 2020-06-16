@@ -3,6 +3,7 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.model.Cell;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerMove;
+import it.polimi.ingsw.model.PlayerMoveEnd;
 import it.polimi.ingsw.utils.SetWorkerPosition;
 import it.polimi.ingsw.view.RemoteView;
 import it.polimi.ingsw.view.View;
@@ -73,8 +74,13 @@ public class ClientSocketMessage{
                         }
                         if(o instanceof PlayerMove) {
                             System.out.println("ho ricevuto una playremove");
-                            parseInput((PlayerMove) o);
+                            if(o instanceof PlayerMoveEnd) {
+                            }
+                            else{
+                                parseInput((PlayerMove) o);
+                            }
                         }
+
                         if(o instanceof ArrayList){
                             //connectionManagerSocket.getBoardGUI().addWorkerListeners();
                             connectionManagerSocket.getBoardGUI().populatePlayersInfo((ArrayList) o);

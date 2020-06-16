@@ -204,12 +204,15 @@ public class BoardGUI implements Runnable{
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            removeButtonListeners();
-            PlayerMove move = new PlayerMove(BoardGUI.this.connectionManagerSocket.getPlayer(), BoardGUI.this.workerMove.getWorkerNum(), (int) getCell(BoardPanel.getMousePosition().getY()), (int) getCell(BoardPanel.getMousePosition().getX()),"M");
-            //removeWorker(BoardGUI.this.workerMove.getWorkerPosition().getPosX(), BoardGUI.this.workerMove.getWorkerPosition().getPosY());
-            //addWorkerToBoard(BoardGUI.this.workerMove.getWorkerNum(), BoardGUI.this.workerMove.getPlayerColor(),
-            //        (int) getCellY(BoardPanel.getMousePosition().getY()), (int) getCellX(BoardPanel.getMousePosition().getX()));
-            connectionManagerSocket.sendObjectToServer(move);
+            if(e.getClickCount()<2) {
+                removeButtonListeners();
+                System.out.println("mouseLiatenres");
+                PlayerMove move = new PlayerMove(BoardGUI.this.connectionManagerSocket.getPlayer(), BoardGUI.this.workerMove.getWorkerNum(), (int) getCell(BoardPanel.getMousePosition().getY()), (int) getCell(BoardPanel.getMousePosition().getX()), "M");
+                //removeWorker(BoardGUI.this.workerMove.getWorkerPosition().getPosX(), BoardGUI.this.workerMove.getWorkerPosition().getPosY());
+                //addWorkerToBoard(BoardGUI.this.workerMove.getWorkerNum(), BoardGUI.this.workerMove.getPlayerColor(),
+                //        (int) getCellY(BoardPanel.getMousePosition().getY()), (int) getCellX(BoardPanel.getMousePosition().getX()));
+                connectionManagerSocket.sendObjectToServer(move);
+            }
         }
 
         @Override
@@ -247,10 +250,12 @@ public class BoardGUI implements Runnable{
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            removeButtonListeners();
-            PlayerMove move = new PlayerMove(BoardGUI.this.connectionManagerSocket.getPlayer(), BoardGUI.this.workerMove.getWorkerNum(), (int) getCell(BoardPanel.getMousePosition().getY()), (int) getCell(BoardPanel.getMousePosition().getX()),"B");
-            //addLevel(BoardGUI.this.boardButton[(int) getCell(BoardPanel.getMousePosition().getY())][(int) getCell(BoardPanel.getMousePosition().getX())]);
-            connectionManagerSocket.sendObjectToServer(move);
+            if(e.getClickCount()<2) {
+                removeButtonListeners();
+                PlayerMove move = new PlayerMove(BoardGUI.this.connectionManagerSocket.getPlayer(), BoardGUI.this.workerMove.getWorkerNum(), (int) getCell(BoardPanel.getMousePosition().getY()), (int) getCell(BoardPanel.getMousePosition().getX()), "B");
+                //addLevel(BoardGUI.this.boardButton[(int) getCell(BoardPanel.getMousePosition().getY())][(int) getCell(BoardPanel.getMousePosition().getX())]);
+                connectionManagerSocket.sendObjectToServer(move);
+            }
         }
         @Override
         public void mousePressed(MouseEvent e) {
@@ -308,7 +313,9 @@ public class BoardGUI implements Runnable{
     private class ButtonDoneListeners implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
+            System.out.println("actionDonelisteners");
             PlayerMoveEnd moveEnd = new PlayerMoveEnd(connectionManagerSocket.getPlayer(), true);
+            //removeMoveListeners();
             connectionManagerSocket.sendObjectToServer(moveEnd);
         }
     }
@@ -921,6 +928,14 @@ public class BoardGUI implements Runnable{
         if(connectionManagerSocket.getPlayerColorEnum().equals(PlayerColor.WHITE)){
             this.worker1W.removeActionListener(this.worker1W.getActionListeners()[0]);
             this.worker2W.removeActionListener(this.worker2W.getActionListeners()[0]);
+        }
+    }
+    public void removeMoveListeners(){
+        for(int x=0; x<5; x++){
+            for(int y=0; y<5; y++){
+                this.boardButton[x][y].removeMouseListener(this.boardButton[x][y].getMouseListeners()[0]);
+                this.boardButton[x][y].removeMouseListener(this.boardButton[x][y].getMouseListeners()[0]);
+            }
         }
     }
 

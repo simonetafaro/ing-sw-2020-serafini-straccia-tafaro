@@ -104,6 +104,9 @@ public class RemoteView extends View implements Serializable{
     @Override
     public void update(Object message) {
 
+        if(message instanceof MoveMessage){
+
+        }
         writeToClient(message);
         /*Update chiamata dalla notify del model quando effettuo un cambiamento sul model
          * Il paramentro che ricevo contiene la nuova board aggiornata,

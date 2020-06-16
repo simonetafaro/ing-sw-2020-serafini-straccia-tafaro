@@ -115,7 +115,6 @@ public class ApolloRuleDecorator extends StandardRuleDecorator implements Serial
             move.getWorker().setWorkerPosition(model.getBoard().getCell(move.getRow(),move.getColumn()));
             (model.getBoard().getCell(move.getRow(),move.getColumn())).setFreeSpace(false);
             model.getBoard().getCell(move.getRow(),move.getColumn()).setCurrWorker(move.getWorker());
-
         }
 
         //model.notify(move);
