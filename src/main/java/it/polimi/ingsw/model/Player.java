@@ -19,7 +19,7 @@ public class Player implements Serializable {
     private Worker worker1;
     private Worker worker2;
     private transient PlayerTurn myTurn;
-    private CardRuleDecorator myCardMethod;
+    private transient CardRuleDecorator myCardMethod;
     private Card myCard;
     private transient Socket socket;
     private transient ObjectInputStream input;

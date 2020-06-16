@@ -20,6 +20,7 @@ public class Controller implements Observer<Object> {
     }
 
     private synchronized void performMove(PlayerMove move){
+        move.setPlayer(model.getPlayerFromColor(move.getColor()));
         if(!isPlayerTurn(move.getPlayer())){
             //move.getView().reportError(gameMessage.wrongTurnMessage+"\n"+gameMessage.waitMessage);
             this.model.notify(gameMessage.wrongTurnMessage+"\n"+gameMessage.waitMessage);

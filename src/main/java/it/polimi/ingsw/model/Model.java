@@ -213,4 +213,12 @@ public class Model extends Observable<Object> {
             }
         });
     }
+
+    public Player getPlayerFromColor(PlayerColor color){
+        for (Player player : this.players) {
+            if(player.getColor().equals(color))
+                return player;
+        }
+        return null;
+    }
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.view.View;
 
 import java.io.Serializable;
@@ -8,10 +9,11 @@ public class PlayerMove implements Serializable , Cloneable{
 
     private final int row;
     private final int column;
-    private final Player player;
+    private Player player;
     private Worker worker;
     private final View view;
     private String MoveOrBuild;
+    private PlayerColor color;
 
     public PlayerMove(String pippo){
         this.MoveOrBuild=pippo;
@@ -45,7 +47,8 @@ public class PlayerMove implements Serializable , Cloneable{
         this.view = null;
     }
     public PlayerMove(Player player, int worker, int row, int column, String moveOrBuild) {
-        this.player = player;
+        this.player = null;
+        this.color = player.getColor();
         if(worker==1)
             this.worker=player.getWorker1();
         else
@@ -55,6 +58,8 @@ public class PlayerMove implements Serializable , Cloneable{
         this.view = null;
         this.MoveOrBuild=moveOrBuild;
     }
+
+
     public PlayerMove(Player player, int worker, int row, int column, View view, String moveOrBuild) {
         this.player = player;
         if(worker==1)
@@ -88,6 +93,14 @@ public class PlayerMove implements Serializable , Cloneable{
     }
     public String getMoveOrBuild() {
         return MoveOrBuild;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public PlayerColor getColor() {
+        return color;
     }
 
     @Override
