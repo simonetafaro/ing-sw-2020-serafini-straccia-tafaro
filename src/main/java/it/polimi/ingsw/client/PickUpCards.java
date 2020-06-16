@@ -556,7 +556,7 @@ public class PickUpCards implements Runnable {
         }else{
             playButton.addActionListener(new ChooseCardActionListener());
         }
-        connectionManagerSocket.receiveCard(this);
+        connectionManagerSocket.receiveCard(this, null);
     }
 
     public static void main(String[] args) {

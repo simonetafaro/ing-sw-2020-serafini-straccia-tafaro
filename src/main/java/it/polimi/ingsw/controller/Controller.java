@@ -39,9 +39,10 @@ public class Controller implements Observer<Object> {
     }
 
     public void setWorker(SetWorkerPosition worker){
-        if(!model.getBoard().getCell(worker.getX(), worker.getY()).isFree())
+        if(!model.getBoard().getCell(worker.getX(), worker.getY()).isFree()) {
+            model.notifyOccupiedCell();
             return;
-
+        }
         Player currPlayer = model.getPlayer(worker.getID());
         if(worker.getWorkerNum() == 1 )
             currPlayer.setWorker1(new Worker(worker.getID(), model.getBoard().getCell(worker.getX(), worker.getY()), 1, worker.getColor()));

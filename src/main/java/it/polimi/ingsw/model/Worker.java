@@ -21,6 +21,7 @@ public class Worker implements Serializable {
         position.setCurrWorker(this);
     }
 
+
     public Worker(Cell position, int number, PlayerColor color){
         this.ID = 0;
         this.currentPosition = position;

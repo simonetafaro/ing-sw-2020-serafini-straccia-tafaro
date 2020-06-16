@@ -102,6 +102,9 @@ public class Model extends Observable<Object> {
     public void notifyStartGame(){
         notifyObserver(this.players);
     }
+    public void notifyOccupiedCell(){
+        notifyObserver(getTurn() + " workerOccupiedCell");
+    }
 
     public boolean isReachableCell(PlayerMove move){
         return move.getWorker().getWorkerPosition().isClosedTo(board.getCell(move.getRow(),move.getColumn()));
