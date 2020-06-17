@@ -4,7 +4,7 @@ import it.polimi.ingsw.utils.gameMessage;
 
 import java.io.Serializable;
 
-public class ApolloRuleDecorator extends StandardRuleDecorator implements Serializable {
+public class ApolloRuleDecorator extends StandardRuleDecorator {
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
 
@@ -117,8 +117,8 @@ public class ApolloRuleDecorator extends StandardRuleDecorator implements Serial
             model.getBoard().getCell(move.getRow(),move.getColumn()).setCurrWorker(move.getWorker());
         }
 
-        //model.notify(move);
-        model.notifyView(move,hasWon);
+        model.notify(move);
+        //model.notifyView(move,hasWon);
     }
     public void switchWorkerPosition(PlayerMove move, Model model){
         Worker tempWorker;

@@ -65,12 +65,16 @@ public class Model extends Observable<Object> {
     }
 
     public void endNotifyView(PlayerMove move, boolean hasWon){
-        try {
+        //try {
             PlayerColor nextTurn = playOrder_List.get((playOrder_List.indexOf(turn)+1)%playOrder_List.size());
-            notifyObserver(new MoveMessage((Board) board.clone(), move.getPlayer(), hasWon, nextTurn));
+            //notifyObserver(new MoveMessage((Board) board.clone(), move.getPlayer(), hasWon, nextTurn));
+            notify(move);
+            /*
         }catch (CloneNotSupportedException e){
             System.err.println(e.getMessage());
         }
+
+             */
         updateTurn();
     }
     public void notifyView(PlayerMove move, boolean hasWon){
@@ -155,8 +159,8 @@ public class Model extends Observable<Object> {
 
     public void endMessage(PlayerMove message, Turn turn, Model model){
         turn.getPlayerTurn(message.getPlayer().getID()).resetStep();
-        model.notify(message);
-        //model.endNotifyView(message,false);
+        //model.notify(message);
+        model.endNotifyView(message,false);
     }
     public void setStep(PlayerMove move, Turn turn, Model model){
         turn.getPlayerTurn(move.getPlayer().getID()).getCurrStep().setType(move.getMoveOrBuild());

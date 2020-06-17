@@ -7,8 +7,8 @@ import java.io.Serializable;
 
 public class PlayerMove implements Serializable , Cloneable{
 
-    private final int row;
-    private final int column;
+    private int row;
+    private int column;
     private Player player;
     private Worker worker;
     private final View view;
@@ -58,7 +58,14 @@ public class PlayerMove implements Serializable , Cloneable{
         this.view = null;
         this.MoveOrBuild=moveOrBuild;
     }
-
+    public PlayerMove(Player player){
+        this.worker = null;
+        this.player = player;
+        this.color = player.getColor();
+        this.row = -1;
+        this.column = -1;
+        this.view = null;
+    }
 
     public PlayerMove(Player player, int worker, int row, int column, View view, String moveOrBuild) {
         this.player = player;
@@ -74,6 +81,15 @@ public class PlayerMove implements Serializable , Cloneable{
 
     public void setMoveOrBuild(String moveOrBuild){
         this.MoveOrBuild = moveOrBuild;
+    }
+    public void setWorker(Worker worker){
+        this.worker = worker;
+    }
+    public void setRow(int row){
+        this.row = row;
+    }
+    public void setColumn(int column){
+        this.column = column;
     }
 
     public int getRow() {

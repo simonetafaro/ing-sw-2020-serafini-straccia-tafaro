@@ -4,7 +4,7 @@ import it.polimi.ingsw.utils.gameMessage;
 
 import java.io.Serializable;
 
-public class ArtemisRuleDecorator extends StandardRuleDecorator implements Serializable {
+public class ArtemisRuleDecorator extends StandardRuleDecorator {
 
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {

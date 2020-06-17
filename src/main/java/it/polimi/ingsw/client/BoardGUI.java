@@ -9,7 +9,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,8 +20,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.concurrent.BlockingDeque;
-import java.util.regex.Pattern;
 
 public class BoardGUI implements Runnable{
 
@@ -54,6 +51,8 @@ public class BoardGUI implements Runnable{
     private static final String PATHFILE = "toolcards/";
 
     private Worker workerMove;
+    private PlayerMove move;
+    private PlayerMove moveEnd;
 
     private JButton worker1G;
     private JButton worker2G;
@@ -204,15 +203,20 @@ public class BoardGUI implements Runnable{
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            if(e.getClickCount()<2) {
-                removeButtonListeners();
-                System.out.println("mouseLiatenres");
-                PlayerMove move = new PlayerMove(BoardGUI.this.connectionManagerSocket.getPlayer(), BoardGUI.this.workerMove.getWorkerNum(), (int) getCell(BoardPanel.getMousePosition().getY()), (int) getCell(BoardPanel.getMousePosition().getX()), "M");
-                //removeWorker(BoardGUI.this.workerMove.getWorkerPosition().getPosX(), BoardGUI.this.workerMove.getWorkerPosition().getPosY());
-                //addWorkerToBoard(BoardGUI.this.workerMove.getWorkerNum(), BoardGUI.this.workerMove.getPlayerColor(),
-                //        (int) getCellY(BoardPanel.getMousePosition().getY()), (int) getCellX(BoardPanel.getMousePosition().getX()));
-                connectionManagerSocket.sendObjectToServer(move);
-            }
+            //removeButtonListeners();
+            System.out.println("mouseLiatenres");
+            int column = (int) getCellX(BoardPanel.getMousePosition().getX());
+            int row = (int) getCellY(BoardPanel.getMousePosition().getY());
+            System.out.println(column+row);
+            BoardGUI.this.move.setRow(row);
+            BoardGUI.this.move.setColumn(column);
+            verifyPlayerMove();
+
+            //PlayerMove move = new PlayerMove(BoardGUI.this.connectionManagerSocket.getPlayer(), BoardGUI.this.workerMove.getWorkerNum(), (int) getCell(BoardPanel.getMousePosition().getY()), (int) getCell(BoardPanel.getMousePosition().getX()), "M");
+            //removeWorker(BoardGUI.this.workerMove.getWorkerPosition().getPosX(), BoardGUI.this.workerMove.getWorkerPosition().getPosY());
+            //addWorkerToBoard(BoardGUI.this.workerMove.getWorkerNum(), BoardGUI.this.workerMove.getPlayerColor(),
+            //        (int) getCellY(BoardPanel.getMousePosition().getY()), (int) getCellX(BoardPanel.getMousePosition().getX()));
+            //connectionManagerSocket.sendObjectToServer(move);
         }
 
         @Override
@@ -235,27 +239,27 @@ public class BoardGUI implements Runnable{
 
         }
 
-        public double getCell(double x){
+        public double getCellX(double x){
             return (x/100);
         }
 
-        /*public double getCellY(double y){
+        public double getCellY(double y){
             return (y/100);
         }
-
-         */
 
     }
     private class BuildListeners implements MouseListener {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            if(e.getClickCount()<2) {
-                removeButtonListeners();
-                PlayerMove move = new PlayerMove(BoardGUI.this.connectionManagerSocket.getPlayer(), BoardGUI.this.workerMove.getWorkerNum(), (int) getCell(BoardPanel.getMousePosition().getY()), (int) getCell(BoardPanel.getMousePosition().getX()), "B");
-                //addLevel(BoardGUI.this.boardButton[(int) getCell(BoardPanel.getMousePosition().getY())][(int) getCell(BoardPanel.getMousePosition().getX())]);
-                connectionManagerSocket.sendObjectToServer(move);
-            }
+            //removeButtonListeners();
+            int column = (int) getCell(BoardPanel.getMousePosition().getX());
+            int row = (int) getCell(BoardPanel.getMousePosition().getY());
+            BoardGUI.this.move.setRow(row);
+            BoardGUI.this.move.setColumn(column);
+
+            //addLevel(BoardGUI.this.boardButton[(int) getCell(BoardPanel.getMousePosition().getY())][(int) getCell(BoardPanel.getMousePosition().getX())]);
+            //connectionManagerSocket.sendObjectToServer(move);
         }
         @Override
         public void mousePressed(MouseEvent e) {
@@ -292,16 +296,20 @@ public class BoardGUI implements Runnable{
             //BoardGUI.this.worker1.addActionListener(new WorkerListeners());
             //BoardGUI.this.worker2.addActionListener(new WorkerListeners());
             //removeWorkerListeners();
-            addMoveListeners();
+            BoardGUI.this.move.setMoveOrBuild("M");
+            verifyPlayerMove();
+
         }
     }
     private class ButtonBuildListeners implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
+            BoardGUI.this.move.setMoveOrBuild("B");
+            verifyPlayerMove();
             //BoardGUI.this.worker1.addActionListener(new WorkerListeners());
             //BoardGUI.this.worker2.addActionListener(new WorkerListeners());
             //removeWorkerListeners();
-            addBuildListeners();
+
         }
     }
     private class ButtonDomeListeners implements ActionListener{
@@ -314,9 +322,10 @@ public class BoardGUI implements Runnable{
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("actionDonelisteners");
-            PlayerMoveEnd moveEnd = new PlayerMoveEnd(connectionManagerSocket.getPlayer(), true);
+            BoardGUI.this.moveEnd = new PlayerMoveEnd(connectionManagerSocket.getPlayer(), true);
             //removeMoveListeners();
-            connectionManagerSocket.sendObjectToServer(moveEnd);
+            //onnectionManagerSocket.sendObjectToServer(moveEnd);
+            verifyPlayerMove();
         }
     }
     private class WorkerListeners implements ActionListener {
@@ -324,24 +333,21 @@ public class BoardGUI implements Runnable{
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            System.out.println("workerListeners");
+            System.out.println("workerlisteners");
             int x = (int) getCellX(BoardPanel.getMousePosition().getX());
             int y = (int) getCellY(BoardPanel.getMousePosition().getY());
-            System.out.println(x+", "+y);
-            System.out.println(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1().getWorkerPosition().getPosX()+", "+BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1().getWorkerPosition().getPosY());
-            System.out.println(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2().getWorkerPosition().getPosX()+", "+BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2().getWorkerPosition().getPosY());
             Cell workerPosition = new Cell(x, y);
+            System.out.println(x+y);
             if(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1().getWorkerPosition().getPosX() == workerPosition.getPosY() &&
                     BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1().getWorkerPosition().getPosY() == workerPosition.getPosX()) {
-                System.out.println("uguale a worker1");
-                BoardGUI.this.workerMove = BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1();
-                addButtonListeners();
+                BoardGUI.this.move.setWorker(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1());
+                //BoardGUI.this.workerMove = BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1();
             }else if(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2().getWorkerPosition().getPosX() == workerPosition.getPosY() &&
                         BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2().getWorkerPosition().getPosY() == workerPosition.getPosX()) {
-                System.out.println("uguale a worker2");
-                BoardGUI.this.workerMove = BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2();
-                addButtonListeners();
+                //BoardGUI.this.workerMove = BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2();
+                BoardGUI.this.move.setWorker(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2());
             }
+            verifyPlayerMove();
 /*
             BoardGUI.this.name = BoardGUI.this.boardButton[x][y].getComponent(0).getName();
             System.out.println(name);
@@ -376,9 +382,12 @@ public class BoardGUI implements Runnable{
             return (x/100);
         }
 
+
         public double getCellY(double y){
             return (y/100);
         }
+
+
 
 
     }
@@ -581,6 +590,8 @@ public class BoardGUI implements Runnable{
         mainPanel.add(dxPanel, gbcDxPanelConstraint);
         mainPanel.add(BoardPanel, gbcBoardConstraint);
 
+        //this.move = new PlayerMove(connectionManagerSocket.getPlayer());
+
         mainPanel.setVisible(true);
         mainframe.setVisible(true);
         mainframe.setResizable(false);
@@ -670,6 +681,9 @@ public class BoardGUI implements Runnable{
                 }
             }
         }
+        this.move = new PlayerMove(connectionManagerSocket.getPlayer());
+        addMoveListeners();
+        addButtonListeners();
         addWorkerListeners();
     }
     public void addMyPowerInfo (Player player, FileManager fileFinder){
@@ -973,6 +987,21 @@ public class BoardGUI implements Runnable{
     }
     public void showBuild(PlayerMove move){
         addLevel(BoardGUI.this.boardButton[move.getRow()][move.getColumn()]);
+    }
+
+    public void verifyPlayerMove() {
+        if(this.moveEnd != null){
+            System.out.println("playermoveend diversa da null");
+            connectionManagerSocket.sendObjectToServer(moveEnd);
+            BoardGUI.this.moveEnd = null;
+        }
+        else{
+            if(BoardGUI.this.move.getPlayer()!= null && BoardGUI.this.move.getRow()!= -1 && BoardGUI.this.move.getColumn()!= -1 && BoardGUI.this.move.getWorker()!=null) {
+                System.out.println("playermove diversa da null");
+                connectionManagerSocket.sendObjectToServer(move);
+                BoardGUI.this.move = new PlayerMove(connectionManagerSocket.getPlayer());
+            }
+        }
     }
 }
 

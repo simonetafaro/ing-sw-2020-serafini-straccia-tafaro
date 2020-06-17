@@ -38,7 +38,6 @@ public class Controller implements Observer<Object> {
             setWorker((SetWorkerPosition) message);
         }
         if(message instanceof PlayerMove) {
-            System.out.println("Sono nell'instanceOf");
             //updateDataPlayerMove((PlayerMove) message);
             performMove((PlayerMove) message);
         }

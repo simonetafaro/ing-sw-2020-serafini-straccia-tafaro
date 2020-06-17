@@ -11,7 +11,7 @@ public class PlayerMoveEnd extends PlayerMove {
         this.isEndMessage= isEndMessage;
     }
     public PlayerMoveEnd(Player player, boolean isEndMessage){
-        super(player, null);
+        super(player);
         this.isEndMessage= isEndMessage;
     }
 

@@ -73,7 +73,6 @@ public class ClientSocketMessage{
                             System.out.println(o);
                         }
                         if(o instanceof PlayerMove) {
-                            System.out.println("ho ricevuto una playremove");
                             if(o instanceof PlayerMoveEnd) {
                             }
                             else{
