@@ -87,11 +87,10 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
         //check if is second step, in this case check is the cell where i want to move in is different from the cell of first step
         boolean hasWon = model.hasWon(move);
 
-        if(turn.getPlayerTurn(move.getPlayer().getID()).getI()==2){
+        if(turn.getPlayerTurn(move.getPlayer()).getI()==2){
             //is the second move for this player, so he wants to use the card
-            if(model.getBoard().getCell(move.getRow(),move.getColumn()).equals(turn.getPlayerTurn(move.getPlayer().getID()).getStepI(1).getCellFrom())){
-                model.notify(gameMessage.invalidMoveArtemis+"\n"+gameMessage.insertAgain);
-                //move.getView().reportError(gameMessage.invalidMoveArtemis+"\n"+gameMessage.insertAgain);
+            if(model.getBoard().getCell(move.getRow(),move.getColumn()).equals(turn.getPlayerTurn(move.getPlayer()).getStepI(1).getCellFrom())){
+                model.sendError(move.getColor().toString()+" "+gameMessage.invalidMoveArtemis+"\n"+gameMessage.insertAgain);
                 return;
             }
             move.getPlayer().getMyCard().setUsingCard(true);
@@ -106,30 +105,29 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
         model.getBoard().getCell(move.getRow(),move.getColumn()).setCurrWorker(move.getWorker());
 
 
-        model.notify(move);
-        //model.notifyView(move,hasWon);
+        model.notifyView(move,hasWon);
     }
 
     @Override
     public void build(PlayerMove move, Model model, Turn turn) {
-        if(turn.getPlayerTurn(move.getPlayer().getID()).getI()==2){
+        if(turn.getPlayerTurn(move.getPlayer()).getI()==2){
             move.getPlayer().getMyCard().addCustomStep(2,"END");
         }
         model.getBoard().getCell(move.getRow(),move.getColumn()).buildInCell();
         model.setStep(move, turn, model);
-        model.notify(move);
-        //model.notifyView(move,false);
+
+        model.notifyView(move,false);
     }
     public boolean checkStepType(PlayerMove message, Turn turn){
         if(message.getPlayer().getMyCard().isUsingCard())
-            return message.getMoveOrBuild().equals(message.getPlayer().getMyCard().getStepLetter(turn.getPlayerTurn(message.getPlayer().getID()).getI()));
+            return message.getMoveOrBuild().equals(message.getPlayer().getMyCard().getStepLetter(turn.getPlayerTurn(message.getPlayer()).getI()));
         else
-            return  message.getMoveOrBuild().equals(message.getPlayer().getMyCard().getStandardStepLetter(turn.getPlayerTurn(message.getPlayer().getID()).getI()))
-                    || message.getMoveOrBuild().equals(message.getPlayer().getMyCard().getStepLetter(turn.getPlayerTurn(message.getPlayer().getID()).getI()));
+            return  message.getMoveOrBuild().equals(message.getPlayer().getMyCard().getStandardStepLetter(turn.getPlayerTurn(message.getPlayer()).getI()))
+                    || message.getMoveOrBuild().equals(message.getPlayer().getMyCard().getStepLetter(turn.getPlayerTurn(message.getPlayer()).getI()));
     }
     public boolean isEndAllowed(PlayerMove move, Turn turn){
-        return move.getPlayer().getMyCard().isUsingCard() ? (move.getPlayer().getMyCard().getStepLetter(turn.getPlayerTurn(move.getPlayer().getID()).getI())).equals("END") :
-                (move.getPlayer().getMyCard().getStandardStepLetter(turn.getPlayerTurn(move.getPlayer().getID()).getI())).equals("END");
+        return move.getPlayer().getMyCard().isUsingCard() ? (move.getPlayer().getMyCard().getStepLetter(turn.getPlayerTurn(move.getPlayer()).getI())).equals("END") :
+                (move.getPlayer().getMyCard().getStandardStepLetter(turn.getPlayerTurn(move.getPlayer()).getI())).equals("END");
     }
 
 }

@@ -14,6 +14,7 @@ public class PlayerMove implements Serializable , Cloneable{
     private final View view;
     private String MoveOrBuild;
     private PlayerColor color;
+    private boolean useDome;
 
     public PlayerMove(String pippo){
         this.MoveOrBuild=pippo;
@@ -65,7 +66,9 @@ public class PlayerMove implements Serializable , Cloneable{
         this.row = -1;
         this.column = -1;
         this.view = null;
+        this.useDome = false;
     }
+
 
     public PlayerMove(Player player, int worker, int row, int column, View view, String moveOrBuild) {
         this.player = player;
@@ -77,6 +80,13 @@ public class PlayerMove implements Serializable , Cloneable{
         this.column = column;
         this.view = view;
         this.MoveOrBuild=moveOrBuild;
+    }
+
+    public boolean isUseDome() {
+        return useDome;
+    }
+    public void setUseDome(boolean useDome) {
+        this.useDome = useDome;
     }
 
     public void setMoveOrBuild(String moveOrBuild){

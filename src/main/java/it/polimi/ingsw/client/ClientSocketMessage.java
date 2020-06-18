@@ -1,13 +1,11 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.model.Cell;
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.PlayerMove;
-import it.polimi.ingsw.model.PlayerMoveEnd;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.utils.SetWorkerPosition;
 import it.polimi.ingsw.view.RemoteView;
 import it.polimi.ingsw.view.View;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -17,7 +15,6 @@ import java.util.List;
 
 public class ClientSocketMessage{
 
-    private Socket socket;
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
     private ConnectionManagerSocket connectionManagerSocket;
@@ -58,7 +55,6 @@ public class ClientSocketMessage{
         Thread t=new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("clietsocketmessage");
                 while(true) {
                     try {
                         Object o = ClientSocketMessage.this.inputStream.readObject();
@@ -66,26 +62,24 @@ public class ClientSocketMessage{
                             updateBoard((SetWorkerPosition) o);
                         }
                         if(o instanceof String){
-                            if(((String) o).contains(connectionManagerSocket.getPlayerColor().toUpperCase())){
-                                System.out.println("setto i workers");
-                                connectionManagerSocket.getBoardGUI().setWorkers();
+                            System.out.println((String) o);
+                            if(((String) o).contains(connectionManagerSocket.getPlayerColorEnum().toString())){
+                                if(((String) o).contains("setWorkers"))
+                                    connectionManagerSocket.getBoardGUI().setWorkers();
+
+                                String message = ((String) o).replace(connectionManagerSocket.getPlayerColorEnum().toString(), "");
+                                connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox(message, "received from server");
                             }
-                            System.out.println(o);
                         }
-                        if(o instanceof PlayerMove) {
-                            if(o instanceof PlayerMoveEnd) {
+                        if(o instanceof MoveMessage){
+                            if(((MoveMessage) o).getMove() instanceof PlayerMoveEnd) {
                             }
                             else{
-                                parseInput((PlayerMove) o);
+                                scanBoard((MoveMessage) o);
                             }
                         }
-
                         if(o instanceof ArrayList){
-                            //connectionManagerSocket.getBoardGUI().addWorkerListeners();
                             connectionManagerSocket.getBoardGUI().populatePlayersInfo((ArrayList) o);
-                        }
-                        if(o instanceof RemoteView){
-                            connectionManagerSocket.setView((RemoteView) o);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -96,34 +90,54 @@ public class ClientSocketMessage{
             }
         });t.start();
     }
+    public void scanBoard(MoveMessage message){
+        Board board = message.getBoard();
+        for(int x = 0; x<5; x++){
+            for(int y=0; y<5; y++){
+                for (Component component : connectionManagerSocket.getBoardGUI().getBoardButton(x, y).getComponents()) {
+                    component.setVisible(false);
+                }
+                connectionManagerSocket.getBoardGUI().getBoardButton(x,y).removeAll();
+                int level = board.getCell(x,y).getLevel();
+                for(int j=0; j<level; j++){
+                    connectionManagerSocket.getBoardGUI().addLevelToBoard(j+1,connectionManagerSocket.getBoardGUI().getBoardButton(x,y));
+                }
+                if(board.getCell(x,y).getCurrWorker()!=null) {
+                    if (board.getCell(x, y).getCurrWorker().getPlayerColor().equals(connectionManagerSocket.getPlayerColorEnum())) {
+                        //updateDataPlayer(message, x, y);
 
-    public void parseInput(PlayerMove move){
-        if(move.getMoveOrBuild().equals("M")){
-            connectionManagerSocket.getBoardGUI().showMove(move);
-            if(move.getPlayer().getID() == connectionManagerSocket.getclientID())
-                updateDataPlayer(move);
-        }
-        if(move.getMoveOrBuild().equals("B")){
-            connectionManagerSocket.getBoardGUI().showBuild(move);
+                        if(board.getCell(x,y).getCurrWorker().getWorkerNum() == 1){
+                            connectionManagerSocket.getBoardGUI().getBoardButton(x,y).add(connectionManagerSocket.getBoardGUI().getWorker1());
+                            connectionManagerSocket.getBoardGUI().getWorker1().setVisible(true);
+                            Cell newPosition = new Cell(x,y);
+                            connectionManagerSocket.getPlayer().getWorker1().setWorkerPosition(newPosition);
+
+                        }
+                        else{
+                            connectionManagerSocket.getBoardGUI().getBoardButton(x,y).add(connectionManagerSocket.getBoardGUI().getWorker2());
+                            connectionManagerSocket.getBoardGUI().getWorker2().setVisible(true);
+                            Cell newPosition = new Cell(x,y);
+                            connectionManagerSocket.getPlayer().getWorker2().setWorkerPosition(newPosition);
+                        }
+                    }
+                    else
+                        connectionManagerSocket.getBoardGUI().addWorker(board.getCell(x,y).getCurrWorker().getPlayerColor(), board.getCell(x,y).getCurrWorker().getWorkerNum(), x, y);
+
+                }
+                connectionManagerSocket.getBoardGUI().getBoardButton(x,y).revalidate();
+            }
         }
     }
+
     public void updateBoard(SetWorkerPosition o){
         if(o.getID() == connectionManagerSocket.getclientID()){
             connectionManagerSocket.getBoardGUI().incrementWorkerNum();
             if(connectionManagerSocket.getBoardGUI().getWorkersNum() == 2)
                 connectionManagerSocket.getBoardGUI().removeSetWorkersListener();
+            connectionManagerSocket.getBoardGUI().addMyWorkerToBoard(o.getWorkerNum(), o.getColor(), o.getX(), o.getY());
         }
-        connectionManagerSocket.getBoardGUI().addWorkerToBoard(o.getWorkerNum(), o.getColor(), o.getX(), o.getY());
-    }
-    public void updateDataPlayer(PlayerMove move){
-        if(move.getWorker().getWorkerNum()==1){
-            Cell newPosition = new Cell(move.getRow(),move.getColumn());
-            connectionManagerSocket.getPlayer().getWorker1().setWorkerPosition(newPosition);
+        else {
+            connectionManagerSocket.getBoardGUI().addWorker(o.getColor(), o.getWorkerNum(), o.getX(), o.getY());
         }
-        else{
-            Cell newPosition = new Cell(move.getRow(),move.getColumn());
-            connectionManagerSocket.getPlayer().getWorker2().setWorkerPosition(newPosition);
-        }
-        connectionManagerSocket.getPlayer().getMyCard().setUsingCard(move.getPlayer().getMyCard().isUsingCard());
     }
 }

@@ -9,45 +9,36 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
     public void play(PlayerMove move, Turn turn, Model model) {
 
             if(move instanceof PlayerMoveEnd){
-                if(turn.getPlayerTurn(move.getPlayer().getID()).getI()==3) {
+                if(turn.getPlayerTurn(move.getPlayer()).getI()==3) {
                     model.endMessage(move, turn, model);
                 }
                 else {
-                    model.notify(gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
-                    //move.getView().reportError(gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
+                    model.sendError(move.getColor().toString()+" "+gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
                 }return;
             }
-            System.out.println("A");
 
             if(!model.isRightWorker(move, turn)){
-                model.notify(gameMessage.insertAgain);
-                //move.getView().reportError(gameMessage.insertAgain);
+                model.sendError(move.getColor().toString()+" "+gameMessage.insertAgain);
                 return;
             }
 
-            System.out.println("B");
 
             if(move.getRow()<0 || move.getRow()>=5 || move.getColumn()<0 || move.getColumn()>=5){
-                model.notify(gameMessage.wrongInputMessage+"\n"+gameMessage.insertAgain);
-                //move.getView().reportError(gameMessage.wrongInputMessage+"\n"+gameMessage.insertAgain);
+                model.sendError(move.getColor().toString()+" "+gameMessage.wrongInputMessage+"\n"+gameMessage.insertAgain);
                 return;
             }
 
-            System.out.println("C");
 
             if(!checkStepType(move,turn)){
-                model.notify(gameMessage.wrongStepMessage+"\n"+gameMessage.insertAgain);
-                //move.getView().reportError(gameMessage.wrongStepMessage+"\n"+gameMessage.insertAgain);
+                model.sendError(move.getColor().toString()+" "+ gameMessage.wrongStepMessage+"\n"+gameMessage.insertAgain);
                 return;
             }
-            System.out.println("D");
 
             //se apollo ha worker vicino ed è stack non è really stack
             if(!hasFreeCellClosed(move.getWorker().getWorkerPosition(), model.getBoard().getPlayingBoard())){
                 //this worker is stuck
                 move.getWorker().setStuck(true);
-                model.notify(gameMessage.workerStuck+"\n"+gameMessage.insertAgain);
-                //move.getView().reportError(gameMessage.workerStuck+"\n"+gameMessage.insertAgain);
+                model.sendError(move.getColor().toString()+" "+gameMessage.workerStuck+"\n"+gameMessage.insertAgain);
                 //check if both worker1 && worker2 are stuck player lose
                 if(model.isPlayerStuck(move)){
                     //this player lose, both workers are stuck
@@ -56,42 +47,34 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
                 return;
             }
 
-            System.out.println("E");
 
             if(!model.isReachableCell(move)){
-                model.notify(gameMessage.notReachableCellMessage+"\n"+gameMessage.insertAgain);
-                //move.getView().reportError(gameMessage.notReachableCellMessage+"\n"+gameMessage.insertAgain);
+                model.sendError(move.getColor().toString()+" "+gameMessage.notReachableCellMessage+"\n"+gameMessage.insertAgain);
                 return;
             }
 
-            System.out.println("F");
 
             if(move.getMoveOrBuild().equals("M") ){
                 //per apollo anche le celle con un worker sono empty
                 if(!isEmptyCell(move, model)){
                     //read worker position and check if there are some empty cell where he can move in.
-                    model.notify(gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
-                    //move.getView().reportError(gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
+                    model.sendError(move.getColor().toString()+" "+gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
                     return;
                 }
                 if(!canBuildFromCellTo(move, model)){
-                    model.notify(gameMessage.invalidMove+"\n"+gameMessage.insertAgain);
-                    //move.getView().reportError(gameMessage.invalidMove+"\n"+gameMessage.insertAgain);
+                    model.sendError(move.getColor().toString()+" "+gameMessage.invalidMove+"\n"+gameMessage.insertAgain);
                     return;
                 }
                 if(!model.isLevelDifferenceAllowed(move)){
-                    model.notify(gameMessage.tooHighCellMessage+"\n"+gameMessage.insertAgain);
-                    //move.getView().reportError(gameMessage.tooHighCellMessage+"\n"+gameMessage.insertAgain);
+                    model.sendError(move.getColor().toString()+" "+gameMessage.tooHighCellMessage+"\n"+gameMessage.insertAgain);
                     return;
                 }
-                System.out.println("G");
                 if(model.checkStep(move, turn, model))
                     move(move, model, turn);
             }
             else{ //"B"
                 if(!model.isEmptyCell(move)){
-                    model.notify(gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
-                    //move.getView().reportError(gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
+                    model.sendError(move.getColor().toString()+" "+gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
                     return;
                 }
                 if(model.checkStep(move, turn, model))
@@ -117,12 +100,11 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
             model.getBoard().getCell(move.getRow(),move.getColumn()).setCurrWorker(move.getWorker());
         }
 
-        model.notify(move);
-        //model.notifyView(move,hasWon);
+        model.notifyView(move,hasWon);
     }
     public void switchWorkerPosition(PlayerMove move, Model model){
         Worker tempWorker;
-        Cell from = move.getWorker().getWorkerPosition();
+        Cell from = model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(), move.getWorker().getWorkerPosition().getPosY());
         Cell to = model.getBoard().getCell(move.getRow(), move.getColumn());
 
         tempWorker = to.getCurrWorker();

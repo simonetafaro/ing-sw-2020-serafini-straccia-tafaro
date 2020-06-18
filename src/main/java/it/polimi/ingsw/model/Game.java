@@ -35,9 +35,6 @@ public class Game {
         player3View.addObserver(controller);
         model.setPlayOrder(player1.getColor(), player2.getColor(), player3.getColor());
         controller.setWorkersMessage();
-        player1View.writeToClient(player1View);
-        player2View.writeToClient(player2View);
-        player3View.writeToClient(player3View);
     }
 
     public Game(Player player1, Player player2){
@@ -58,8 +55,6 @@ public class Game {
         player2View.addObserver(controller);
         model.setPlayOrder(player1.getColor(), player2.getColor());
         controller.setWorkersMessage();
-        player1View.writeToClient(player1View);
-        player2View.writeToClient(player2View);
     }
 
 }

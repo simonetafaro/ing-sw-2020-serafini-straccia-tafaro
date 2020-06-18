@@ -84,6 +84,11 @@ public class Model extends Observable<Object> {
             System.err.println(e.getMessage());
         }
     }
+
+    public void sendError(String s){
+        notifyObserver(s);
+    }
+
     public void notifySetWorker(SetWorkerPosition worker){
         notifyObserver(worker);
         players.forEach((player)-> {
@@ -158,15 +163,15 @@ public class Model extends Observable<Object> {
     }
 
     public void endMessage(PlayerMove message, Turn turn, Model model){
-        turn.getPlayerTurn(message.getPlayer().getID()).resetStep();
+        turn.getPlayerTurn(message.getPlayer()).resetStep();
         //model.notify(message);
         model.endNotifyView(message,false);
     }
     public void setStep(PlayerMove move, Turn turn, Model model){
-        turn.getPlayerTurn(move.getPlayer().getID()).getCurrStep().setType(move.getMoveOrBuild());
-        turn.getPlayerTurn(move.getPlayer().getID()).getCurrStep().setCellFrom(move.getWorker().getWorkerPosition());
-        turn.getPlayerTurn(move.getPlayer().getID()).getCurrStep().setCellTo(model.getBoard().getCell(move.getRow(),move.getColumn()));
-        turn.getPlayerTurn(move.getPlayer().getID()).updateStep();
+        turn.getPlayerTurn(move.getPlayer()).getCurrStep().setType(move.getMoveOrBuild());
+        turn.getPlayerTurn(move.getPlayer()).getCurrStep().setCellFrom(move.getWorker().getWorkerPosition());
+        turn.getPlayerTurn(move.getPlayer()).getCurrStep().setCellTo(model.getBoard().getCell(move.getRow(),move.getColumn()));
+        turn.getPlayerTurn(move.getPlayer()).updateStep();
     }
     public boolean checkStep(PlayerMove move, Turn turn, Model model){
         setFirstStep(move, turn);
@@ -181,8 +186,8 @@ public class Model extends Observable<Object> {
     }
 
     public boolean isRightWorker(PlayerMove move, Turn turn){
-        if((!turn.getPlayerTurn(move.getPlayer().getID()).isFirstStep())){
-                if(turn.getPlayerTurn(move.getPlayer().getID()).getTurnWorker().getWorkerNum() != move.getWorker().getWorkerNum()) {
+        if((!turn.getPlayerTurn(move.getPlayer()).isFirstStep())){
+                if(turn.getPlayerTurn(move.getPlayer()).getTurnWorker().getWorkerNum() != move.getWorker().getWorkerNum()) {
                     //move.getView().reportError(gameMessage.wrongWorker);
                     notify(gameMessage.wrongWorker);
                     return false;
@@ -192,8 +197,8 @@ public class Model extends Observable<Object> {
     }
 
     public void setFirstStep(PlayerMove move, Turn turn){
-        if(turn.getPlayerTurn(move.getPlayer().getID()).isFirstStep())
-            turn.getPlayerTurn(move.getPlayer().getID()).setTurnWorker(move.getWorker());
+        if(turn.getPlayerTurn(move.getPlayer()).isFirstStep())
+            turn.getPlayerTurn(move.getPlayer()).setTurnWorker(move.getWorker());
 
     }
     public void setPlayers (Player p1, Player p2, Player p3){

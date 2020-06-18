@@ -44,9 +44,9 @@ public class Controller implements Observer<Object> {
     }
 
     public void updateDataPlayerMove(PlayerMove move){
-        if(turn.getPlayerTurn(move.getPlayer().getID()).isFirstStep()) {
+        if(turn.getPlayerTurn(move.getPlayer()).isFirstStep()) {
             System.out.println("sono nell'if");
-            turn.getPlayerTurn(move.getPlayer().getID()).setTurnWorker(move.getWorker());
+            turn.getPlayerTurn(move.getPlayer()).setTurnWorker(move.getWorker());
         }
     }
     public void setWorker(SetWorkerPosition worker){

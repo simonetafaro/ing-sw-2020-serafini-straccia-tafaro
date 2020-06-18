@@ -3,35 +3,36 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.utils.gameMessage;
 
 public class MinotaurRuleDecorator extends StandardRuleDecorator {
+
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
         if(move instanceof PlayerMoveEnd){
-            if(turn.getPlayerTurn(move.getPlayer().getID()).getI()==3)
+            if(turn.getPlayerTurn(move.getPlayer()).getI()==3)
                 model.endMessage(move,turn,model);
             else
-                move.getView().reportError(gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
+                model.sendError(move.getColor().toString()+" "+gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
             return;
         }
 
         if(!model.isRightWorker(move, turn)){
-            move.getView().reportError(gameMessage.insertAgain);
+            model.sendError(move.getColor().toString()+" "+gameMessage.insertAgain);
             return;
         }
 
         if(move.getRow()<0 || move.getRow()>=5 || move.getColumn()<0 || move.getColumn()>=5){
-            move.getView().reportError(gameMessage.wrongInputMessage+"\n"+gameMessage.insertAgain);
+            model.sendError(move.getColor().toString()+" "+gameMessage.wrongInputMessage+"\n"+gameMessage.insertAgain);
             return;
         }
 
         if(!checkStepType(move,turn)){
-            move.getView().reportError(gameMessage.wrongStepMessage+"\n"+gameMessage.insertAgain);
+            model.sendError(move.getColor().toString()+" "+gameMessage.wrongStepMessage+"\n"+gameMessage.insertAgain);
             return;
         }
 
         if(!hasFreeCellClosed(move.getWorker().getWorkerPosition(), model.getBoard().getPlayingBoard())){
             //this worker is stuck
             move.getWorker().setStuck(true);
-            move.getView().reportError(gameMessage.workerStuck+"\n"+gameMessage.insertAgain);
+            model.sendError(move.getColor().toString()+" "+gameMessage.workerStuck+"\n"+gameMessage.insertAgain);
             //check if both worker1 && worker2 are stuck player lose
             if(model.isPlayerStuck(move)){
                 //this player lose, both workers are stuck
@@ -41,17 +42,17 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
         }
 
         if(!model.isReachableCell(move)){
-            move.getView().reportError(gameMessage.notReachableCellMessage+"\n"+gameMessage.insertAgain);
+            model.sendError(move.getColor().toString()+" "+gameMessage.notReachableCellMessage+"\n"+gameMessage.insertAgain);
             return;
         }
 
         if(move.getMoveOrBuild().equals("M") ){
             if(!isEmptyCell(move, model)){
-                move.getView().reportError(gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
+                model.sendError(move.getColor().toString()+" "+gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
                 return;
             }
             if(!model.isLevelDifferenceAllowed(move)){
-                move.getView().reportError(gameMessage.tooHighCellMessage+"\n"+gameMessage.insertAgain);
+                model.sendError(move.getColor().toString()+" "+gameMessage.tooHighCellMessage+"\n"+gameMessage.insertAgain);
                 return;
             }
             if(model.checkStep(move, turn, model))
@@ -59,7 +60,7 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
         }
         else{ //"B"
             if(!model.isEmptyCell(move)){
-                move.getView().reportError(gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
+                model.sendError(move.getColor().toString()+" "+gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
                 return;
             }
             if(model.checkStep(move, turn, model))
@@ -80,12 +81,12 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
             move.getWorker().setWorkerPosition(model.getBoard().getCell(move.getRow(),move.getColumn()));
             (model.getBoard().getCell(move.getRow(),move.getColumn())).setFreeSpace(false);
             model.getBoard().getCell(move.getRow(),move.getColumn()).setCurrWorker(move.getWorker());
+
         }
         model.notifyView(move,hasWon);
     }
-
     public void pushWorkerPosition(PlayerMove move, Model model){
-        Cell from = move.getWorker().getWorkerPosition();
+        Cell from = model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(), move.getWorker().getWorkerPosition().getPosY());
         Cell to = model.getBoard().getCell(move.getRow(), move.getColumn());
 
         Cell pushingInCell = pushingInCell(from, to, model.getBoard().getPlayingBoard());
@@ -98,8 +99,8 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
         from.setFreeSpace(true);
         from.setCurrWorker(null);
         move.getWorker().setWorkerPosition(model.getBoard().getCell(move.getRow(),move.getColumn()));
-    }
 
+    }
     public boolean hasFreeCellClosed(Cell from, Cell[][] board){
         boolean bool=false;
         for(int i=-1; i<2; i++){
@@ -117,7 +118,6 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
         }
         return bool;
     }
-
     public boolean isEmptyCell(PlayerMove move, Model model){
         Cell to = model.getBoard().getCell(move.getRow(),move.getColumn());
         return to.isFree() ||
@@ -165,7 +165,6 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
                 return board[to.getPosX()+1][to.getPosY()-1].isFree();
         }
     }
-
     public Cell pushingInCell(Cell from, Cell to, Cell[][] board){
 
         if(from.getPosY()==to.getPosY()){
@@ -196,7 +195,6 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
         }
 
     }
-
     public boolean isMinotaurWorker(Cell from, Worker to){
         return from.getCurrWorker().getColor()==to.getColor();
     }

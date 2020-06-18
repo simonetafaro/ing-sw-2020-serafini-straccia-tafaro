@@ -35,14 +35,13 @@ public class BoardGUI implements Runnable{
                         worker_Man_Grey_Icon, worker_Woman_Grey_Icon;
     private JLabel additionalIsland;
     private JLayeredPane[][] boardButton;
-    private  JPanel BoardPanel;
+    private JPanel BoardPanel;
     private JPanel powerColumn;
     private JPanel topPowerColumn;
     private List<JRadioButton> opponentPowers;
     private int workersNum;
     private JLabel powerTextContainer;
     private JLabel myPowerDescription;
-    private Player player;
     private static final String SRC = "src";
     private static final String MAIN = "main";
     private static final String RESOURCES = "resources";
@@ -50,21 +49,17 @@ public class BoardGUI implements Runnable{
     private static final String PATH = SRC + File.separatorChar + MAIN + File.separatorChar + RESOURCES + File.separatorChar + IMAGE + File.separatorChar;
     private static final String PATHFILE = "toolcards/";
 
-    private Worker workerMove;
     private PlayerMove move;
     private PlayerMove moveEnd;
 
-    private JButton worker1G;
-    private JButton worker2G;
-    private JButton worker1W;
-    private JButton worker2W;
-    private JButton worker1B;
-    private JButton worker2B;
+    public JButton worker1;
+    public JButton worker2;
 
     private JButton moveButton;
     private JButton buildButton;
     private JButton domeButton;
     private JButton doneButton;
+    private PopUpBox popUpBox;
 
     private class MainJPanel extends JPanel {
 
@@ -128,8 +123,8 @@ public class BoardGUI implements Runnable{
     private class SetWorker implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
-                int x = (int) getCellX(BoardPanel.getMousePosition().getX());
-                int y = (int) getCellY(BoardPanel.getMousePosition().getY());
+                int x = (int) getCell(BoardPanel.getMousePosition().getX());
+                int y = (int) getCell(BoardPanel.getMousePosition().getY());
                 connectionManagerSocket.sendObjectToServer(new SetWorkerPosition(y, x, connectionManagerSocket.getPlayerColorEnum(), connectionManagerSocket.getclientID(), BoardGUI.this.workersNum+1));
 
         }
@@ -150,14 +145,9 @@ public class BoardGUI implements Runnable{
 
         }
 
-        public double getCellX(double x){
+        public double getCell(double x){
             return (x/100);
         }
-
-        public double getCellY(double y){
-            return (y/100);
-        }
-
     }
     private class ChangePowerDescription implements ActionListener{
         ImageIcon workerImage;
@@ -186,10 +176,6 @@ public class BoardGUI implements Runnable{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            /*
-            BoardGUI.this.opponentColor.removeAll();
-            BoardGUI.this.opponentColor.add(workerImage);
-            */
             BoardGUI.this.opponentPowers.forEach((button) -> {
                 button.setEnabled(true);
             });
@@ -203,37 +189,28 @@ public class BoardGUI implements Runnable{
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            //removeButtonListeners();
-            System.out.println("mouseLiatenres");
             int column = (int) getCellX(BoardPanel.getMousePosition().getX());
             int row = (int) getCellY(BoardPanel.getMousePosition().getY());
-            System.out.println(column+row);
-            BoardGUI.this.move.setRow(row);
-            BoardGUI.this.move.setColumn(column);
-            verifyPlayerMove();
 
-            //PlayerMove move = new PlayerMove(BoardGUI.this.connectionManagerSocket.getPlayer(), BoardGUI.this.workerMove.getWorkerNum(), (int) getCell(BoardPanel.getMousePosition().getY()), (int) getCell(BoardPanel.getMousePosition().getX()), "M");
-            //removeWorker(BoardGUI.this.workerMove.getWorkerPosition().getPosX(), BoardGUI.this.workerMove.getWorkerPosition().getPosY());
-            //addWorkerToBoard(BoardGUI.this.workerMove.getWorkerNum(), BoardGUI.this.workerMove.getPlayerColor(),
-            //        (int) getCellY(BoardPanel.getMousePosition().getY()), (int) getCellX(BoardPanel.getMousePosition().getX()));
-            //connectionManagerSocket.sendObjectToServer(move);
+            if((BoardGUI.this.move.getWorker() != null) && (BoardGUI.this.move.getMoveOrBuild() != null)) {
+                BoardGUI.this.move.setRow(row);
+                BoardGUI.this.move.setColumn(column);
+                verifyPlayerMove();
+            }else
+                BoardGUI.this.wrongStepSequence();
         }
-
         @Override
         public void mousePressed(MouseEvent e) {
 
         }
-
         @Override
         public void mouseReleased(MouseEvent e) {
 
         }
-
         @Override
         public void mouseEntered(MouseEvent e) {
 
         }
-
         @Override
         public void mouseExited(MouseEvent e) {
 
@@ -242,79 +219,48 @@ public class BoardGUI implements Runnable{
         public double getCellX(double x){
             return (x/100);
         }
-
         public double getCellY(double y){
             return (y/100);
         }
-
-    }
-    private class BuildListeners implements MouseListener {
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            //removeButtonListeners();
-            int column = (int) getCell(BoardPanel.getMousePosition().getX());
-            int row = (int) getCell(BoardPanel.getMousePosition().getY());
-            BoardGUI.this.move.setRow(row);
-            BoardGUI.this.move.setColumn(column);
-
-            //addLevel(BoardGUI.this.boardButton[(int) getCell(BoardPanel.getMousePosition().getY())][(int) getCell(BoardPanel.getMousePosition().getX())]);
-            //connectionManagerSocket.sendObjectToServer(move);
-        }
-        @Override
-        public void mousePressed(MouseEvent e) {
-
-        }
-        @Override
-        public void mouseReleased(MouseEvent e) {
-
-        }
-        @Override
-        public void mouseEntered(MouseEvent e) {
-
-        }
-        @Override
-        public void mouseExited(MouseEvent e) {
-
-        }
-
-        public double getCell(double x){
-            return (x/100);
-        }
-        /*
-        public double getCellY(double y){
-            return (y/100);
-        }
-
-         */
 
     }
     private class ButtonMoveListeners implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
+            //BoardGUI.this.popUpBox.infoBox("YOUR INFORMATION HERE", "TITLE BAR MESSAGE");
             System.out.println("ButtonListeners");
             //BoardGUI.this.worker1.addActionListener(new WorkerListeners());
             //BoardGUI.this.worker2.addActionListener(new WorkerListeners());
             //removeWorkerListeners();
-            BoardGUI.this.move.setMoveOrBuild("M");
-            verifyPlayerMove();
-
+            if(BoardGUI.this.move.getWorker() != null) {
+                System.out.println("set Move");
+                BoardGUI.this.move.setMoveOrBuild("M");
+                verifyPlayerMove();
+            }else
+                BoardGUI.this.wrongStepSequence();
         }
     }
     private class ButtonBuildListeners implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-            BoardGUI.this.move.setMoveOrBuild("B");
-            verifyPlayerMove();
-            //BoardGUI.this.worker1.addActionListener(new WorkerListeners());
-            //BoardGUI.this.worker2.addActionListener(new WorkerListeners());
-            //removeWorkerListeners();
-
+            if(BoardGUI.this.move.getWorker() != null) {
+                BoardGUI.this.move.setMoveOrBuild("B");
+                verifyPlayerMove();
+            }else
+                BoardGUI.this.wrongStepSequence();
         }
     }
     private class ButtonDomeListeners implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
+            if(BoardGUI.this.connectionManagerSocket.getPlayer().getMyCard().getName().equals("Atlas")){
+                if(BoardGUI.this.move.getWorker() != null) {
+                    BoardGUI.this.move.setMoveOrBuild("DOME");
+                    verifyPlayerMove();
+                }
+            }else{
+                BoardGUI.this.popUpBox.infoBox("You can't use this button. Only with Atlas you can build Dome everywhere", "DomeButton");
+            }
 
         }
     }
@@ -323,8 +269,6 @@ public class BoardGUI implements Runnable{
         public void actionPerformed(ActionEvent e) {
             System.out.println("actionDonelisteners");
             BoardGUI.this.moveEnd = new PlayerMoveEnd(connectionManagerSocket.getPlayer(), true);
-            //removeMoveListeners();
-            //onnectionManagerSocket.sendObjectToServer(moveEnd);
             verifyPlayerMove();
         }
     }
@@ -332,72 +276,54 @@ public class BoardGUI implements Runnable{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-
-            System.out.println("workerlisteners");
             int x = (int) getCellX(BoardPanel.getMousePosition().getX());
             int y = (int) getCellY(BoardPanel.getMousePosition().getY());
             Cell workerPosition = new Cell(x, y);
-            System.out.println(x+y);
-            if(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1().getWorkerPosition().getPosX() == workerPosition.getPosY() &&
-                    BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1().getWorkerPosition().getPosY() == workerPosition.getPosX()) {
-                BoardGUI.this.move.setWorker(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1());
-                //BoardGUI.this.workerMove = BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1();
-            }else if(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2().getWorkerPosition().getPosX() == workerPosition.getPosY() &&
-                        BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2().getWorkerPosition().getPosY() == workerPosition.getPosX()) {
-                //BoardGUI.this.workerMove = BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2();
-                BoardGUI.this.move.setWorker(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2());
+            System.out.println(x + y);
+            //reset PlayerMove when click on worker different from worker already selected
+
+            if (BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1().getWorkerPosition().getPosX() == workerPosition.getPosY() && BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1().getWorkerPosition().getPosY() == workerPosition.getPosX()) {
+                if (BoardGUI.this.move.getWorker() == null) {
+                    System.out.println("set Worker1");
+                    BoardGUI.this.move.setWorker(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1());
+                }else {
+                    if (!BoardGUI.this.move.getWorker().equals(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1())) {
+                        System.out.println("resetWorker");
+                        BoardGUI.this.move = new PlayerMove(connectionManagerSocket.getPlayer());
+                        BoardGUI.this.move.setWorker(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1());
+                    }
+                }
+            }
+            else {
+                if(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2().getWorkerPosition().getPosX() == workerPosition.getPosY() && BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2().getWorkerPosition().getPosY() == workerPosition.getPosX()) {
+                    if(BoardGUI.this.move.getWorker() == null) {
+                        System.out.println("set Worker2");
+                        BoardGUI.this.move.setWorker(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2());
+                    }else {
+                        if(!BoardGUI.this.move.getWorker().equals(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2())){
+                            System.out.println("resetWorker");
+                            BoardGUI.this.move = new PlayerMove(connectionManagerSocket.getPlayer());
+                            BoardGUI.this.move.setWorker(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2());
+                        }
+                    }
+                }
             }
             verifyPlayerMove();
-/*
-            BoardGUI.this.name = BoardGUI.this.boardButton[x][y].getComponent(0).getName();
-            System.out.println(name);
-            char color = name.charAt(0);
-            System.out.println(color);
-            char workerN = name.charAt(1);
-            System.out.println(workerN);
-            switch (color) {
-                case 'B':
-                    if (workerN == 'W')
-                        BoardGUI.this.worker = new Worker(workerPosition, 2, PlayerColor.BLUE);
-                    else
-                        BoardGUI.this.worker = new Worker(workerPosition, 1, PlayerColor.BLUE);
-                    break;
-                case 'W':
-                    if (workerN == 'W')
-                        BoardGUI.this.worker = new Worker(workerPosition, 2, PlayerColor.WHITE);
-                    else
-                        BoardGUI.this.worker = new Worker(workerPosition, 1, PlayerColor.WHITE);
-                    break;
-                case 'G':
-                    if (workerN == 'W')
-                        BoardGUI.this.worker = new Worker(workerPosition, 2, PlayerColor.GREY);
-                    else
-                        BoardGUI.this.worker = new Worker(workerPosition, 1, PlayerColor.GREY);
-                    break;
-            }
- */
         }
-
         public double getCellX(double x){
             return (x/100);
         }
-
-
         public double getCellY(double y){
             return (y/100);
         }
-
-
-
-
     }
-
 
     public BoardGUI(JFrame mainframe, ConnectionManagerSocket connectionManagerSocket){
         this.mainframe = mainframe;
         this.workersNum = 0;
         this.connectionManagerSocket = connectionManagerSocket;
         this.boardButton = new JLayeredPane[5][5];
+        this.popUpBox = new PopUpBox();
 
         mainPanelImage = new ImageIcon(PATH + "BoardBackground.png");
         mainPanelImageScaled = mainPanelImage.getImage();
@@ -625,6 +551,10 @@ public class BoardGUI implements Runnable{
             }
         }
     }
+
+    public JLayeredPane getBoardButton(int x, int y){
+        return this.boardButton[x][y];
+    }
     public void removeSetWorkersListener(){
         //this.workersNum = 0;
         for(int x=0; x<5; x++){
@@ -635,24 +565,12 @@ public class BoardGUI implements Runnable{
         }
     }
 
+
+    public void validateFrame(){
+        this.mainframe.validate();
+    }
     public void incrementWorkerNum(){
         this.workersNum++;
-    }
-    public void addWorkerMan(JLayeredPane currCell){
-        JLabel worker = new JLabel(worker_Man_Blue_Icon);
-        worker.setVisible(true);
-        worker.setOpaque(true);
-        worker.setBackground(new Color(0,0,0,0));
-        worker.setBounds(30, 20, 29, 50);
-        currCell.add(worker,0);
-    }
-    public void addWorkerWoman(JLayeredPane currCell){
-        JLabel worker = new JLabel(worker_Woman_Blue_Icon);
-        worker.setVisible(true);
-        worker.setOpaque(true);
-        worker.setBackground(new Color(0,0,0,0));
-        worker.setBounds(30, 20, 29, 50);
-        currCell.add(worker,0);
     }
 
     public void addAdditionalIsland(){
@@ -744,6 +662,18 @@ public class BoardGUI implements Runnable{
         }
     }
 
+    public void addLevelToBoard(int j, JLayeredPane cell){
+        switch (j){
+            case 1: addLevel1(cell);
+                break;
+            case 2: addLevel2(cell);
+                break;
+            case 3: addLevel3(cell);
+                break;
+            case 4: addDome(cell);
+                break;
+        }
+    }
     public void addLevel1(JLayeredPane currCell){
         JLabel lv1 = new JLabel(level1_Icon);
         lv1.setVisible(true);
@@ -780,99 +710,55 @@ public class BoardGUI implements Runnable{
         dome.setBounds(22, 22, 45, 45);
         currCell.add(dome,4,0);
     }
-    public void addLevel(JLayeredPane currCell){
-        int position = currCell.highestLayer();
-        switch (position){
-            case 0:
-                addLevel1(currCell);
-                break;
-            case 1:
-                addLevel2(currCell);
-                break;
-            case 2:
-                addLevel3(currCell);
-                break;
-            case 3:
-                addDome(currCell);
-                break;
-        }
 
-    }
-/*
-    public void addWorkerToBoard(int workerNum, PlayerColor color, int x, int y){
-        JLabel worker = null;
-        switch (color){
-            case WHITE: worker = (workerNum == 1 ? new JLabel(worker_Man_White_Icon) : new JLabel(worker_Woman_White_Icon));
-                break;
-            case GREY: worker = (workerNum == 1 ? new JLabel(worker_Man_Grey_Icon) : new JLabel(worker_Woman_Grey_Icon));
-                break;
-            case BLUE: worker = (workerNum == 1 ? new JLabel(worker_Man_Blue_Icon) : new JLabel(worker_Woman_Blue_Icon));
-                break;
-        }
-
-        worker.setVisible(true);
-        worker.setOpaque(false);
-        worker.setBackground(new Color(0,0,0,0));
-        worker.setBounds(30, 20, 29, 50);
-        boardButton[x][y].add(worker,0);
-    }
-
- */
-    public void addWorkerToBoard(int workerNum, PlayerColor color, int x, int y){
+    public void addMyWorkerToBoard(int workerNum, PlayerColor color, int x, int y){
         switch (color){
             case WHITE: if(workerNum == 1) {
-                            this.worker1W = new JButton(worker_Man_White_Icon);
-                            addReadyWorker(this.worker1W,x,y);
+                            this.worker1 = new JButton(worker_Man_White_Icon);
+                            addReadyWorker(this.worker1,x,y);
                         } else{
-                            this.worker2W = new JButton(worker_Woman_White_Icon);
-                            addReadyWorker(this.worker2W,x,y);
+                            this.worker2 = new JButton(worker_Woman_White_Icon);
+                            addReadyWorker(this.worker2,x,y);
                         }
                         break;
             case GREY:  if(workerNum == 1) {
-                            this.worker1G = new JButton(worker_Man_Grey_Icon);
-                            addReadyWorker(this.worker1G,x,y);
+                            this.worker1 = new JButton(worker_Man_Grey_Icon);
+                            addReadyWorker(this.worker1,x,y);
                         } else{
-                            this.worker2G = new JButton(worker_Woman_Grey_Icon);
-                            addReadyWorker(this.worker2G,x,y);
+                            this.worker2 = new JButton(worker_Woman_Grey_Icon);
+                            addReadyWorker(this.worker2,x,y);
                         }
                         break;
             case BLUE:  if(workerNum == 1) {
-                            this.worker1B = new JButton(worker_Man_Blue_Icon);
-                            addReadyWorker(this.worker1B,x,y);
+                            this.worker1 = new JButton(worker_Man_Blue_Icon);
+                            addReadyWorker(this.worker1,x,y);
                         } else{
-                            this.worker2B = new JButton(worker_Woman_Blue_Icon);
-                            addReadyWorker(this.worker2B,x,y);
+                            this.worker2 = new JButton(worker_Woman_Blue_Icon);
+                            addReadyWorker(this.worker2,x,y);
                         }
                         break;
         }
     }
-    public void removeWorker(int x, int y){
-        //this.boardButton[x][y].getComponent(0).setVisible(false);
-        //this.boardButton[x][y].remove(0);
-        /*
-        if(this.workerMove.getWorkerNum()==1)
-            boardButton[x][y].remove(this.worker1);
-        else
-            boardButton[x][y].remove(this.worker2);
-
-         */
-        //int pos = boardButton[x][y].getLayer(boardButton[x][y].getComponent(0));
-        //boardButton[x][y].remove(boardButton[x][y].getComponent(5));
-        //boardButton[x][y].getComponent(0).setVisible(false);
-        //boardButton[x][y].remove(boardButton[x][y].getComponent(0));
-    }
-    public void removeWorker(JButton worker){
-        int layer = 0;
-        for(int x=0; x<5; x++){
-            for(int y=0; y<5; y++){
-                layer = boardButton[x][y].highestLayer();
-                if(layer == 5){
-                    if(boardButton[x][y].getComponent(0).equals(worker)) {
-                        boardButton[x][y].getComponent(0).setVisible(false);
-                        boardButton[x][y].remove(0);
-                    }
-                }
+    public void addWorker(PlayerColor color, int workerNum, int x, int y){
+        switch (color){
+            case WHITE: if(workerNum == 1) {
+                addWorkerToBoard(worker_Man_White_Icon,x ,y);
+            } else{
+                addWorkerToBoard(worker_Woman_White_Icon,x ,y);
             }
+                break;
+            case GREY:  if(workerNum == 1) {
+                addWorkerToBoard(worker_Man_Grey_Icon,x ,y);
+            } else{
+                addWorkerToBoard(worker_Woman_Grey_Icon,x ,y);
+            }
+                break;
+            case BLUE:  if(workerNum == 1) {
+                addWorkerToBoard(worker_Man_Blue_Icon,x ,y);
+            } else{
+                addWorkerToBoard(worker_Woman_Blue_Icon,x ,y);
+            }
+                break;
         }
     }
     public void addReadyWorker(JButton worker, int x , int y){
@@ -885,6 +771,15 @@ public class BoardGUI implements Runnable{
         boardButton[x][y].add(worker,5,0);
         boardButton[x][y].setLayer(worker,5);
     }
+    public void addWorkerToBoard(ImageIcon icon, int x, int y){
+        JLabel worker = new JLabel(icon);
+        worker.setVisible(true);
+        worker.setOpaque(true);
+        worker.setBackground(new Color(0,0,0,0));
+        worker.setBounds(30, 20, 29, 50);
+        this.boardButton[x][y].add(worker,5,0);
+        this.boardButton[x][y].setLayer(worker,5);
+    }
 
     public void addMoveListeners(){
         for(int x=0; x<5; x++){
@@ -893,117 +788,56 @@ public class BoardGUI implements Runnable{
             }
         }
     }
-    public void addBuildListeners(){
-        for(int x=0; x<5; x++){
-            for(int y=0; y<5; y++){
-                this.boardButton[x][y].addMouseListener(new BuildListeners());
-            }
-        }
-    }
     public void addButtonListeners(){
         this.moveButton.addActionListener(new ButtonMoveListeners());
         this.buildButton.addActionListener(new ButtonBuildListeners());
-        this.domeButton.addActionListener(new ButtonDomeListeners());
         this.doneButton.addActionListener(new ButtonDoneListeners());
-
+        if(connectionManagerSocket.getPlayer().getMyCard().getName().equals("Atlas"))
+            this.domeButton.addActionListener(new ButtonDomeListeners());
     }
     public void addWorkerListeners(){
-        if(connectionManagerSocket.getPlayerColorEnum().equals(PlayerColor.BLUE)){
-            this.worker1B.addActionListener(new WorkerListeners());
-            this.worker2B.addActionListener(new WorkerListeners());
-        }
-        if(connectionManagerSocket.getPlayerColorEnum().equals(PlayerColor.GREY)){
-            this.worker1G.addActionListener(new WorkerListeners());
-            this.worker2G.addActionListener(new WorkerListeners());
-        }
-        if(connectionManagerSocket.getPlayerColorEnum().equals(PlayerColor.WHITE)){
-            this.worker1W.addActionListener(new WorkerListeners());
-            this.worker2W.addActionListener(new WorkerListeners());
-        }
-
-    }
-    public void removeButtonListeners(){
-        for(int x=0; x<5; x++){
-            for(int y=0; y<5; y++){
-                this.boardButton[x][y].removeMouseListener(boardButton[x][y].getMouseListeners()[0]);
-            }
-
-        }
-    }
-    public void removeWorkerListeners(){
-        if(connectionManagerSocket.getPlayerColorEnum().equals(PlayerColor.BLUE)){
-            this.worker1B.removeActionListener(this.worker1B.getActionListeners()[0]);
-            this.worker2B.removeActionListener(this.worker2B.getActionListeners()[0]);
-        }
-        if(connectionManagerSocket.getPlayerColorEnum().equals(PlayerColor.GREY)){
-            this.worker1G.removeActionListener(this.worker1G.getActionListeners()[0]);
-            this.worker2G.removeActionListener(this.worker2G.getActionListeners()[0]);
-        }
-        if(connectionManagerSocket.getPlayerColorEnum().equals(PlayerColor.WHITE)){
-            this.worker1W.removeActionListener(this.worker1W.getActionListeners()[0]);
-            this.worker2W.removeActionListener(this.worker2W.getActionListeners()[0]);
-        }
-    }
-    public void removeMoveListeners(){
-        for(int x=0; x<5; x++){
-            for(int y=0; y<5; y++){
-                this.boardButton[x][y].removeMouseListener(this.boardButton[x][y].getMouseListeners()[0]);
-                this.boardButton[x][y].removeMouseListener(this.boardButton[x][y].getMouseListeners()[0]);
-            }
-        }
-    }
-
-    public void showMove(PlayerMove move){
-        if(move.getPlayer().getColor().equals(PlayerColor.BLUE)){
-            if(move.getWorker().getWorkerNum()==1){
-                removeWorker(this.worker1B);
-                addReadyWorker(this.worker1B,move.getRow(), move.getColumn());
-            }
-            else{
-                removeWorker(this.worker2B);
-                addReadyWorker(this.worker2B,move.getRow(), move.getColumn());
-            }
-        }
-        if(move.getPlayer().getColor().equals(PlayerColor.WHITE)){
-            if(move.getWorker().getWorkerNum()==1){
-                removeWorker(this.worker1W);
-                addReadyWorker(this.worker1W,move.getRow(), move.getColumn());
-            }
-            else{
-                removeWorker(this.worker2W);
-                addReadyWorker(this.worker2W,move.getRow(), move.getColumn());
-            }
-        }
-        if(move.getPlayer().getColor().equals(PlayerColor.GREY)){
-            if(move.getWorker().getWorkerNum()==1){
-                removeWorker(this.worker1G);
-                addReadyWorker(this.worker1G,move.getRow(), move.getColumn());
-            }
-            else{
-                removeWorker(this.worker2G);
-                addReadyWorker(this.worker2G,move.getRow(), move.getColumn());
-            }
-        }
-    }
-    public void showBuild(PlayerMove move){
-        addLevel(BoardGUI.this.boardButton[move.getRow()][move.getColumn()]);
+        this.worker1.addActionListener(new WorkerListeners());
+        this.worker2.addActionListener(new WorkerListeners());
     }
 
     public void verifyPlayerMove() {
         if(this.moveEnd != null){
-            System.out.println("playermoveend diversa da null");
             connectionManagerSocket.sendObjectToServer(moveEnd);
             BoardGUI.this.moveEnd = null;
         }
         else{
-            if(BoardGUI.this.move.getPlayer()!= null && BoardGUI.this.move.getRow()!= -1 && BoardGUI.this.move.getColumn()!= -1 && BoardGUI.this.move.getWorker()!=null) {
-                System.out.println("playermove diversa da null");
+            if(BoardGUI.this.move.getPlayer()!= null && BoardGUI.this.move.getRow()!= -1 && BoardGUI.this.move.getColumn()!= -1
+                    && BoardGUI.this.move.getWorker()!=null && BoardGUI.this.move.getMoveOrBuild()!=null) {
                 connectionManagerSocket.sendObjectToServer(move);
                 BoardGUI.this.move = new PlayerMove(connectionManagerSocket.getPlayer());
             }
         }
     }
+
+    public JButton getWorker1(){
+        return this.worker1;
+    }
+    public JButton getWorker2(){
+        return this.worker2;
+    }
+
+    public PopUpBox getPopUpBox() {
+        return popUpBox;
+    }
+
+    public void wrongStepSequence(){
+        this.popUpBox.infoBox("Wrong sequence! \n You should select your worker first, than select the action you would like to perform and last you click the cell!", "WrongStepMethod");
+    }
+    public class PopUpBox {
+
+        public void infoBox(String infoMessage, String titleBar)
+        {
+            JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
 }
+
 
 
 

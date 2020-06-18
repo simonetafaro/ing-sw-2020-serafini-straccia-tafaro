@@ -14,7 +14,7 @@ class TurnTest {
         PlayerTurn playerTurn2 = new PlayerTurn(player2);
         Turn turn = new Turn(playerTurn1,playerTurn2);
 
-        assertEquals(turn.getPlayerTurn(player1.getID()),playerTurn1);
-        assertEquals(turn.getPlayerTurn(player2.getID()),playerTurn2);
+        assertEquals(turn.getPlayerTurn(player1),playerTurn1);
+        assertEquals(turn.getPlayerTurn(player2),playerTurn2);
     }
 }

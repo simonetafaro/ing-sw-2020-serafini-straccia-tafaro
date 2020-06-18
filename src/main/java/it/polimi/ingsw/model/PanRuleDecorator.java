@@ -12,6 +12,8 @@ public class PanRuleDecorator extends StandardRuleDecorator {
         move.getWorker().setWorkerPosition(model.getBoard().getCell(move.getRow(),move.getColumn()));
         (model.getBoard().getCell(move.getRow(),move.getColumn())).setFreeSpace(false);
         model.getBoard().getCell(move.getRow(),move.getColumn()).setCurrWorker(move.getWorker());
+
+
         model.notifyView(move,hasWon);
     }
 
