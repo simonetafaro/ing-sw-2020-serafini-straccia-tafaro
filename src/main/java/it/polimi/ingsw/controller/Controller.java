@@ -23,7 +23,7 @@ public class Controller implements Observer<Object> {
         move.setPlayer(model.getPlayerFromColor(move.getColor()));
         if(!isPlayerTurn(move.getPlayer())){
             //move.getView().reportError(gameMessage.wrongTurnMessage+"\n"+gameMessage.waitMessage);
-            this.model.notify(gameMessage.wrongTurnMessage+"\n"+gameMessage.waitMessage);
+            this.model.notify(move.getColor()+" "+ gameMessage.wrongTurnMessage+"\n"+gameMessage.waitMessage);
             return;
         }
         move.getPlayer().getMyCardMethod().play(move, turn, model);

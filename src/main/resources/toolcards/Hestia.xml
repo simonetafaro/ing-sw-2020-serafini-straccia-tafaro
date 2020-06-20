@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Hestia</title>
+
+    <ImageIconURL>CardHestia.png</ImageIconURL>
+    <ImagePressedIconURL>HestiaCardPressed.png</ImagePressedIconURL>
+    <PowerDescription></PowerDescription>
+
     <imageURL></imageURL>
     <description>Hestia description</description>
     <customRule decoratorName="HestiaRuleDecorator" />

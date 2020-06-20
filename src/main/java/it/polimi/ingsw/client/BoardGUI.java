@@ -255,7 +255,7 @@ public class BoardGUI implements Runnable{
         public void actionPerformed(ActionEvent e) {
             if(BoardGUI.this.connectionManagerSocket.getPlayer().getMyCard().getName().equals("Atlas")){
                 if(BoardGUI.this.move.getWorker() != null) {
-                    BoardGUI.this.move.setMoveOrBuild("DOME");
+                    BoardGUI.this.move.setMoveOrBuild("D");
                     verifyPlayerMove();
                 }
             }else{

@@ -9,7 +9,7 @@
     <description>Apollo description</description>
     <customRule decoratorName="AtlasRuleDecorator" />
     <controllerStep State="M"/>
-    <controllerStep State="B"/>
+    <controllerStep State="D"/>
     <controllerStep State="END"/>
 
 </toolcard>

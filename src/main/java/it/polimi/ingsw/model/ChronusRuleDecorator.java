@@ -2,7 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
-public class CronusRuleDecorator extends StandardRuleDecorator {
+public class ChronusRuleDecorator extends StandardRuleDecorator {
 
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {

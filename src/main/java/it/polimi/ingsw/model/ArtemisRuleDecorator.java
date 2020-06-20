@@ -16,25 +16,25 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
                 move.getPlayer().getMyCard().addCustomStep(2, "B");
             }
             else {
-                model.notify(gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
+                model.sendError(move.getColor().toString()+" "+gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
                 //move.getView().reportError(gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
             }return;
         }
 
         if(!model.isRightWorker(move, turn)){
-            model.notify(gameMessage.insertAgain);
+            model.sendError(move.getColor().toString()+" "+gameMessage.insertAgain);
             //move.getView().reportError(gameMessage.insertAgain);
             return;
         }
 
         if(!checkStepType(move,turn)){
-            model.notify(gameMessage.wrongStepMessage+"\n"+gameMessage.insertAgain);
+            model.sendError(move.getColor().toString()+" "+gameMessage.wrongStepMessage+"\n"+gameMessage.insertAgain);
             //move.getView().reportError(gameMessage.wrongStepMessage+"\n"+gameMessage.insertAgain);
             return;
         }
 
         if(move.getRow()<0 || move.getRow()>=5 || move.getColumn()<0 || move.getColumn()>=5){
-            model.notify(gameMessage.wrongInputMessage+"\n"+gameMessage.insertAgain);
+            model.sendError(move.getColor().toString()+" "+gameMessage.wrongInputMessage+"\n"+gameMessage.insertAgain);
             //move.getView().reportError(gameMessage.wrongInputMessage+"\n"+gameMessage.insertAgain);
             return;
         }
@@ -42,7 +42,7 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
         if(!move.getWorker().getWorkerPosition().hasFreeCellClosed(model.getBoard().getPlayingBoard())){
             //this worker is stuck
             move.getWorker().setStuck(true);
-            model.notify(gameMessage.workerStuck+"\n"+gameMessage.insertAgain);
+            model.sendError(move.getColor().toString()+" "+gameMessage.workerStuck+"\n"+gameMessage.insertAgain);
             //move.getView().reportError(gameMessage.workerStuck+"\n"+gameMessage.insertAgain);
             //check if both worker1 && worker2 are stuck player lose
             if(model.isPlayerStuck(move)){
@@ -53,21 +53,21 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
         }
 
         if(!model.isReachableCell(move)){
-            model.notify(gameMessage.notReachableCellMessage+"\n"+gameMessage.insertAgain);
+            model.sendError(move.getColor().toString()+" "+gameMessage.notReachableCellMessage+"\n"+gameMessage.insertAgain);
             //move.getView().reportError(gameMessage.notReachableCellMessage+"\n"+gameMessage.insertAgain);
             return;
         }
 
         if(!model.isEmptyCell(move)){
             //read worker position and check if there are some empty cell where he can move in.
-            model.notify(gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
+            model.sendError(move.getColor().toString()+" "+gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
             //move.getView().reportError(gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
             return;
         }
 
         if(move.getMoveOrBuild().equals("M") ){
             if(!model.isLevelDifferenceAllowed(move)){
-                model.notify(gameMessage.tooHighCellMessage+"\n"+gameMessage.insertAgain);
+                model.sendError(move.getColor().toString()+" "+gameMessage.tooHighCellMessage+"\n"+gameMessage.insertAgain);
                 //move.getView().reportError(gameMessage.tooHighCellMessage+"\n"+gameMessage.insertAgain);
                 return;
             }

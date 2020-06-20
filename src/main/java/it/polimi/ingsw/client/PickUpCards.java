@@ -2,6 +2,7 @@ package it.polimi.ingsw.client;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -48,6 +49,21 @@ public class PickUpCards implements Runnable {
     private ImageIcon PrometheusText;
     private ImageIcon PrometheusImage;
     private JCheckBox PrometheusButton;
+    private ImageIcon SeleneText;
+    private ImageIcon SeleneImage;
+    private JCheckBox SeleneButton;
+    private ImageIcon ZeusText;
+    private ImageIcon ZeusImage;
+    private JCheckBox ZeusButton;
+    private ImageIcon PoseidonText;
+    private ImageIcon PoseidonImage;
+    private JCheckBox PoseidonButton;
+    private ImageIcon HestiaText;
+    private ImageIcon HestiaImage;
+    private JCheckBox HestiaButton;
+    private ImageIcon ChronusText;
+    private ImageIcon ChronusImage;
+    private JCheckBox ChronusButton;
 
     private ImageIcon MinotaurCard_Icon_Pressed;
     private ImageIcon MinotaurCard_Icon;
@@ -67,6 +83,17 @@ public class PickUpCards implements Runnable {
     private ImageIcon AthenaCard_Icon;
     private ImageIcon ArtemisCard_Icon_Pressed;
     private ImageIcon ArtemisCard_Icon;
+    private ImageIcon SeleneCard_Icon_Pressed;
+    private ImageIcon SeleneCard_Icon;
+    private ImageIcon ZeusCard_Icon_Pressed;
+    private ImageIcon ZeusCard_Icon;
+    private ImageIcon ChronusCard_Icon_Pressed;
+    private ImageIcon ChronusCard_Icon;
+    private ImageIcon HestiaCard_Icon_Pressed;
+    private ImageIcon HestiaCard_Icon;
+    private ImageIcon PoseidonCard_Icon_Pressed;
+    private ImageIcon PoseidonCard_Icon;
+
 
     private JLabel ImageContainer;
     private JLabel logoLabel;
@@ -295,6 +322,17 @@ public class PickUpCards implements Runnable {
                         connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID() + " Athena");
                     if (ButtonName.equals(HephaestusButton))
                         connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID() + " Hephaestus");
+                    if (ButtonName.equals(ZeusButton))
+                        connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID() + " Zeus");
+                    if (ButtonName.equals(ChronusButton))
+                        connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID() + " Chronus");
+                    if (ButtonName.equals(SeleneButton))
+                        connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID() + " Selene");
+                    if (ButtonName.equals(HestiaButton))
+                        connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID() + " Hestia");
+                    if (ButtonName.equals(PoseidonButton))
+                        connectionManagerSocket.sendObjectToServer(connectionManagerSocket.getclientID() + " Poseidon");
+
                 }
             });
             //connectionManagerSocket.close();
@@ -345,6 +383,13 @@ public class PickUpCards implements Runnable {
         AtlasText = new ImageIcon(PATH + "Atlas_Text.png");
         MinotaurText = new ImageIcon(PATH + "Minotaur_Text.png");
 
+        ZeusText = new ImageIcon(PATH + "Minotaur_Text.png");
+        HestiaText = new ImageIcon(PATH + "Minotaur_Text.png");
+        PoseidonText = new ImageIcon(PATH + "Minotaur_Text.png");
+        SeleneText = new ImageIcon(PATH + "Minotaur_Text.png");
+        ChronusText = new ImageIcon(PATH + "Minotaur_Text.png");
+
+
         logoLabel = new JLabel();
         logoLabel.setBorder(new EmptyBorder(12, 0, 30, 0));
         logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -385,6 +430,12 @@ public class PickUpCards implements Runnable {
         PrometheusImage = new ImageIcon(PATH + "Prometheus_Image.png");
         ApolloImage = new ImageIcon(PATH + "Apollo_Image.png");
 
+        ZeusImage = new ImageIcon(PATH + "Apollo_Image.png");
+        ChronusImage = new ImageIcon(PATH + "Apollo_Image.png");
+        PoseidonImage = new ImageIcon(PATH + "Apollo_Image.png");
+        HestiaImage = new ImageIcon(PATH + "Apollo_Image.png");
+        SeleneImage = new ImageIcon(PATH + "Apollo_Image.png");
+
         ImageContainer = new JLabel();
         ImageContainer.setBackground(new Color(0,0,0,0));
         centralPanel.add(ImageContainer, gbcCardsImageLabel);
@@ -405,7 +456,7 @@ public class PickUpCards implements Runnable {
         gbcCardsLabel.gridx = 0;
         gbcCardsLabel.gridy = 0;
 
-        JPanel card = new JPanel(new GridLayout(3,3,5,5));
+        JPanel card = new JPanel(new GridLayout(5,3,5,5));
         card.setBackground(new Color(0,0,0,0));
         card.setOpaque(false);
 
@@ -508,6 +559,61 @@ public class PickUpCards implements Runnable {
         MinotaurButton.setIcon(MinotaurCard_Icon);
         card.add(MinotaurButton);
 
+        Image SeleneCard = new ImageIcon(PATH + "CardMinotaur.png").getImage();
+        SeleneCard_Icon = new ImageIcon(SeleneCard);
+        Image SeleneCard_pressed = new ImageIcon(PATH + "MinotaurCardPressed.png").getImage();
+        SeleneCard_Icon_Pressed = new ImageIcon(SeleneCard_pressed);
+        SeleneButton = new JCheckBox();
+        SeleneButton.setBackground(new Color(0,0,0,0));
+        SeleneButton.setOpaque(false);
+        SeleneButton.setHorizontalAlignment(SwingConstants.CENTER);
+        SeleneButton.setIcon(SeleneCard_Icon);
+        card.add(SeleneButton);
+
+        Image PoseidonCard = new ImageIcon(PATH + "CardMinotaur.png").getImage();
+        PoseidonCard_Icon = new ImageIcon(PoseidonCard);
+        Image PoseidonCard_pressed = new ImageIcon(PATH + "MinotaurCardPressed.png").getImage();
+        PoseidonCard_Icon_Pressed = new ImageIcon(PoseidonCard_pressed);
+        PoseidonButton = new JCheckBox();
+        PoseidonButton.setBackground(new Color(0,0,0,0));
+        PoseidonButton.setOpaque(false);
+        PoseidonButton.setHorizontalAlignment(SwingConstants.CENTER);
+        PoseidonButton.setIcon(PoseidonCard_Icon);
+        card.add(PoseidonButton);
+
+        Image ZeusCard = new ImageIcon(PATH + "CardMinotaur.png").getImage();
+        ZeusCard_Icon = new ImageIcon(ZeusCard);
+        Image ZeusCard_pressed = new ImageIcon(PATH + "MinotaurCardPressed.png").getImage();
+        ZeusCard_Icon_Pressed = new ImageIcon(ZeusCard_pressed);
+        ZeusButton = new JCheckBox();
+        ZeusButton.setBackground(new Color(0,0,0,0));
+        ZeusButton.setOpaque(false);
+        ZeusButton.setHorizontalAlignment(SwingConstants.CENTER);
+        ZeusButton.setIcon(ZeusCard_Icon);
+        card.add(ZeusButton);
+
+        Image ChronusCard = new ImageIcon(PATH + "CardMinotaur.png").getImage();
+        ChronusCard_Icon = new ImageIcon(ChronusCard);
+        Image ChronusCard_pressed = new ImageIcon(PATH + "MinotaurCardPressed.png").getImage();
+        ChronusCard_Icon_Pressed = new ImageIcon(ChronusCard_pressed);
+        ChronusButton = new JCheckBox();
+        ChronusButton.setBackground(new Color(0,0,0,0));
+        ChronusButton.setOpaque(false);
+        ChronusButton.setHorizontalAlignment(SwingConstants.CENTER);
+        ChronusButton.setIcon(ChronusCard_Icon);
+        card.add(ChronusButton);
+
+        Image HestiaCard = new ImageIcon(PATH + "CardMinotaur.png").getImage();
+        HestiaCard_Icon = new ImageIcon(HestiaCard);
+        Image HestiaCard_pressed = new ImageIcon(PATH + "MinotaurCardPressed.png").getImage();
+        HestiaCard_Icon_Pressed = new ImageIcon(HestiaCard_pressed);
+        HestiaButton = new JCheckBox();
+        HestiaButton.setBackground(new Color(0,0,0,0));
+        HestiaButton.setOpaque(false);
+        HestiaButton.setHorizontalAlignment(SwingConstants.CENTER);
+        HestiaButton.setIcon(HestiaCard_Icon);
+        card.add(HestiaButton);
+
         buttonList.add(MinotaurButton);
         buttonList.add(ApolloButton);
         buttonList.add(ArtemisButton);
@@ -517,11 +623,25 @@ public class PickUpCards implements Runnable {
         buttonList.add(PrometheusButton);
         buttonList.add(AtlasButton);
         buttonList.add(AthenaButton);
+        buttonList.add(SeleneButton);
+        buttonList.add(PoseidonButton);
+        buttonList.add(ZeusButton);
+        buttonList.add(ChronusButton);
+        buttonList.add(HestiaButton);
 
-        if(firstPlayer == false){
+        if(!firstPlayer){
             buttonList.forEach((GodButton) -> GodButton.setEnabled(false));
         }
-        eastPanel.add(card, gbcCardsLabel);
+
+        JScrollPane cardScroll = new ModernScrollPane(card,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        cardScroll.setMinimumSize(new Dimension(360,360));
+        cardScroll.getViewport().setBackground(new Color(0,0,0,0));
+        cardScroll.setBorder(BorderFactory.createEmptyBorder());
+        cardScroll.setOpaque(false);
+
+        eastPanel.add(cardScroll, gbcCardsLabel);
 
 
         Image play = new ImageIcon(PATH + "start-game-button.png").getImage().getScaledInstance(169,91, Image.SCALE_SMOOTH);
@@ -561,6 +681,12 @@ public class PickUpCards implements Runnable {
             PrometheusButton.addActionListener(new PickGodActionListener(PrometheusButton, PrometheusCard_Icon_Pressed, PrometheusCard_Icon, PrometheusText, PrometheusImage, "Prometheus"));
             DemeterButton.addActionListener(new PickGodActionListener(DemeterButton, DemeterCard_Icon_Pressed, DemeterCard_Icon, DemeterText, DemeterImage, "Demeter"));
             ApolloButton.addActionListener(new PickGodActionListener(ApolloButton, ApolloCard_Icon_Pressed, ApolloCard_Icon, ApolloText, ApolloImage, "Apollo"));
+            SeleneButton.addActionListener(new PickGodActionListener(SeleneButton, SeleneCard_Icon_Pressed, SeleneCard_Icon, SeleneText, SeleneImage, "Selene"));
+            PoseidonButton.addActionListener(new PickGodActionListener(PoseidonButton, PoseidonCard_Icon_Pressed, PoseidonCard_Icon, PoseidonText, PoseidonImage, "Poseidon"));
+            ZeusButton.addActionListener(new PickGodActionListener(ZeusButton, ZeusCard_Icon_Pressed, ZeusCard_Icon, ZeusText, ZeusImage, "Zeus"));
+            ChronusButton.addActionListener(new PickGodActionListener(ChronusButton, ChronusCard_Icon_Pressed, ChronusCard_Icon, ChronusText, ChronusImage, "Chronus"));
+            HestiaButton.addActionListener(new PickGodActionListener(HestiaButton, HestiaCard_Icon_Pressed, HestiaCard_Icon, HestiaText, HestiaImage, "Hestia"));
+
             playButton.addActionListener(new PlayActionListener());
 
         }else{
@@ -619,7 +745,188 @@ public class PickUpCards implements Runnable {
                                     PrometheusButton.addActionListener(new ChooseYourCardListener(PrometheusButton, PrometheusCard_Icon_Pressed, PrometheusText, PrometheusImage, "Prometheus", PrometheusCard_Icon));
                                     ActiveCardList.put(PrometheusButton, PrometheusCard_Icon);
                                     break;
+                case "Zeus":    ZeusButton.setEnabled(true);
+                                ZeusButton.addActionListener(new ChooseYourCardListener(ZeusButton, ZeusCard_Icon_Pressed, ZeusText, ZeusImage, "Zeus", ZeusCard_Icon));
+                                ActiveCardList.put(ZeusButton, ZeusCard_Icon);
+                                break;
+                case "Hestia":  HestiaButton.setEnabled(true);
+                                HestiaButton.addActionListener(new ChooseYourCardListener(HestiaButton, HestiaCard_Icon_Pressed, HestiaText, HestiaImage, "Hestia", HestiaCard_Icon));
+                                ActiveCardList.put(HestiaButton, HestiaCard_Icon);
+                                break;
+                case "Chronus": ChronusButton.setEnabled(true);
+                                ChronusButton.addActionListener(new ChooseYourCardListener(ChronusButton, ChronusCard_Icon_Pressed, ChronusText, ChronusImage, "Chronus", ChronusCard_Icon));
+                                ActiveCardList.put(ChronusButton, ChronusCard_Icon);
+                                break;
+                case "Poseidon":    PoseidonButton.setEnabled(true);
+                                    PoseidonButton.addActionListener(new ChooseYourCardListener(PoseidonButton, PoseidonCard_Icon_Pressed, PoseidonText, PoseidonImage, "Poseidon", PoseidonCard_Icon));
+                                    ActiveCardList.put(PoseidonButton, PoseidonCard_Icon);
+                                    break;
+                case "Selene":  SeleneButton.setEnabled(true);
+                                SeleneButton.addActionListener(new ChooseYourCardListener(SeleneButton, SeleneCard_Icon_Pressed, SeleneText, SeleneImage, "Selene", SeleneCard_Icon));
+                                ActiveCardList.put(SeleneButton, SeleneCard_Icon);
+                                break;
             }
         });
+    }
+
+    public class ModernScrollPane extends JScrollPane {
+
+        private static final long serialVersionUID = 8607734981506765935L;
+
+        private static final int SCROLL_BAR_ALPHA_ROLLOVER = 100;
+        private static final int SCROLL_BAR_ALPHA = 50;
+        private static final int THUMB_SIZE = 8;
+        private static final int SB_SIZE = 10;
+        private final Color THUMB_COLOR = Color.BLACK;
+
+        public ModernScrollPane(Component view) {
+            this(view, VERTICAL_SCROLLBAR_AS_NEEDED, HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        }
+
+        public ModernScrollPane(int vsbPolicy, int hsbPolicy) {
+            this(null, vsbPolicy, hsbPolicy);
+        }
+
+        public ModernScrollPane(Component view, int vsbPolicy, int hsbPolicy) {
+
+            setBorder(null);
+
+            // Set ScrollBar UI
+            JScrollBar verticalScrollBar = getVerticalScrollBar();
+            verticalScrollBar.setOpaque(false);
+            verticalScrollBar.setUI(new ModernScrollBarUI(this));
+
+            JScrollBar horizontalScrollBar = getHorizontalScrollBar();
+            horizontalScrollBar.setOpaque(false);
+            horizontalScrollBar.setUI(new ModernScrollBarUI(this));
+
+            setLayout(new ScrollPaneLayout() {
+                private static final long serialVersionUID = 5740408979909014146L;
+
+                @Override
+                public void layoutContainer(Container parent) {
+                    Rectangle availR = ((JScrollPane) parent).getBounds();
+                    availR.x = availR.y = 0;
+
+                    // viewport
+                    Insets insets = parent.getInsets();
+                    availR.x = insets.left;
+                    availR.y = insets.top;
+                    availR.width -= insets.left + insets.right;
+                    availR.height -= insets.top + insets.bottom;
+                    if (viewport != null) {
+                        viewport.setBounds(availR);
+                    }
+
+                    boolean vsbNeeded = isVerticalScrollBarfNecessary();
+                    boolean hsbNeeded = isHorizontalScrollBarNecessary();
+
+                    // vertical scroll bar
+                    Rectangle vsbR = new Rectangle();
+                    vsbR.width = SB_SIZE;
+                    vsbR.height = availR.height - (hsbNeeded ? vsbR.width : 0);
+                    vsbR.x = availR.x + availR.width - vsbR.width;
+                    vsbR.y = availR.y;
+                    if (vsb != null) {
+                        vsb.setBounds(vsbR);
+                    }
+
+                    // horizontal scroll bar
+                    Rectangle hsbR = new Rectangle();
+                    hsbR.height = SB_SIZE;
+                    hsbR.width = availR.width - (vsbNeeded ? hsbR.height : 0);
+                    hsbR.x = availR.x;
+                    hsbR.y = availR.y + availR.height - hsbR.height;
+                    if (hsb != null) {
+                        hsb.setBounds(hsbR);
+                    }
+                }
+            });
+
+            // Layering
+            setComponentZOrder(getVerticalScrollBar(), 0);
+            setComponentZOrder(getHorizontalScrollBar(), 1);
+            setComponentZOrder(getViewport(), 2);
+
+            viewport.setView(view);
+        }
+        private boolean isVerticalScrollBarfNecessary() {
+            Rectangle viewRect = viewport.getViewRect();
+            Dimension viewSize = viewport.getViewSize();
+            return viewSize.getHeight() > viewRect.getHeight();
+        }
+
+        private boolean isHorizontalScrollBarNecessary() {
+            Rectangle viewRect = viewport.getViewRect();
+            Dimension viewSize = viewport.getViewSize();
+            return viewSize.getWidth() > viewRect.getWidth();
+        }
+
+        /**
+         * Class extending the BasicScrollBarUI and overrides all necessary methods
+         */
+        private class ModernScrollBarUI extends BasicScrollBarUI {
+
+            private JScrollPane sp;
+
+            public ModernScrollBarUI(ModernScrollPane sp) {
+                this.sp = sp;
+            }
+
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+                return new InvisibleScrollBarButton();
+            }
+
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+                return new InvisibleScrollBarButton();
+            }
+
+            @Override
+            protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
+            }
+
+            @Override
+            protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
+                int alpha = isThumbRollover() ? SCROLL_BAR_ALPHA_ROLLOVER : SCROLL_BAR_ALPHA;
+                int orientation = scrollbar.getOrientation();
+                int x = thumbBounds.x;
+                int y = thumbBounds.y;
+
+                int width = orientation == JScrollBar.VERTICAL ? THUMB_SIZE : thumbBounds.width;
+                width = Math.max(width, THUMB_SIZE);
+
+                int height = orientation == JScrollBar.VERTICAL ? thumbBounds.height : THUMB_SIZE;
+                height = Math.max(height, THUMB_SIZE);
+
+                Graphics2D graphics2D = (Graphics2D) g.create();
+                graphics2D.setColor(new Color(THUMB_COLOR.getRed(), THUMB_COLOR.getGreen(), THUMB_COLOR.getBlue(), alpha));
+                graphics2D.fillRect(x, y, width, height);
+                graphics2D.dispose();
+            }
+
+            @Override
+            protected void setThumbBounds(int x, int y, int width, int height) {
+                super.setThumbBounds(x, y, width, height);
+                sp.repaint();
+            }
+
+            /**
+             * Invisible Buttons, to hide scroll bar buttons
+             */
+            private class InvisibleScrollBarButton extends JButton {
+
+                private static final long serialVersionUID = 1552427919226628689L;
+
+                private InvisibleScrollBarButton() {
+                    setOpaque(false);
+                    setFocusable(false);
+                    setFocusPainted(false);
+                    setBorderPainted(false);
+                    setBorder(BorderFactory.createEmptyBorder());
+                }
+            }
+        }
     }
 }

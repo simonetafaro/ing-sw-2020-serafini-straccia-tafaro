@@ -6,7 +6,7 @@ public class AtlasRuleDecorator extends StandardRuleDecorator {
 
     @Override
     public void build(PlayerMove move, Model model, Turn turn) {
-        if(move.getMoveOrBuild().equals("DOME")){
+        if(move.getMoveOrBuild().equals("D")){
             model.getBoard().getCell(move.getRow(),move.getColumn()).setLevel(4);
         }else{
             model.getBoard().getCell(move.getRow(),move.getColumn()).buildInCell();

@@ -88,7 +88,7 @@ public class SeleneRuleDecorator extends StandardRuleDecorator {
         else {
             if(move.getWorker().getWorkerNum()==1){
                 model.sendError(move.getColor().toString()+" "+gameMessage.atlasCard);
-                if(move.getMoveOrBuild().equals("DOME")){
+                if(move.getMoveOrBuild().equals("D")){
                     model.getBoard().getCell(move.getRow(),move.getColumn()).setLevel(4);
                 }else{
                     model.getBoard().getCell(move.getRow(),move.getColumn()).buildInCell();

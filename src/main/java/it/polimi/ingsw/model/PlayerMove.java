@@ -46,6 +46,7 @@ public class PlayerMove implements Serializable , Cloneable{
         this.row = row;
         this.column = column;
         this.view = null;
+        this.color = player.getColor();
     }
     public PlayerMove(Player player, int worker, int row, int column, String moveOrBuild) {
         this.player = null;

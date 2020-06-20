@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.SetWorkerPosition;
 
 import java.awt.*;
@@ -16,13 +17,14 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
     private ConnectionManagerSocket connectionManagerSocket;
-
+    private boolean active;
 
     public ClientSocketMessageGUI(ConnectionManagerSocket connectionManagerSocket, ObjectInputStream input, ObjectOutputStream output) {
         super();
         this.inputStream = input;
         this.outputStream = output;
         this.connectionManagerSocket = connectionManagerSocket;
+        this.active = true;
     }
     public void initialize(){
         readFromServer();
@@ -58,7 +60,7 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
         Thread t=new Thread(new Runnable() {
             @Override
             public void run() {
-                while(true) {
+                while(isActive()) {
                     try {
                         Object o = ClientSocketMessageGUI.this.inputStream.readObject();
                         if(o instanceof SetWorkerPosition){
@@ -75,11 +77,10 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
                             }
                         }
                         if(o instanceof MoveMessage){
-                            if(((MoveMessage) o).getMove() instanceof PlayerMoveEnd) {
-                            }
-                            else{
-                                scanBoard((MoveMessage) o);
-                            }
+                            if(((MoveMessage) o).isHasWon())
+                                gameOver(((MoveMessage)o).getPlayer().getColor());
+                            scanBoard((MoveMessage) o);
+
                         }
                         if(o instanceof ArrayList){
                             if (((ArrayList) o).get(0) instanceof Player)
@@ -94,16 +95,6 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
             }
         });t.start();
     }
-
-    /*public void updateBoard(SetWorkerPosition o){
-        if(o.getID() == connectionManagerSocket.getclientID()){
-            connectionManagerSocket.getBoardGUI().incrementWorkerNum();
-            if(connectionManagerSocket.getBoardGUI().getWorkersNum() == 2)
-                connectionManagerSocket.getBoardGUI().removeSetWorkersListener();
-        }
-        connectionManagerSocket.getBoardGUI().addWorkerToBoard(o.getWorkerNum(), o.getColor(), o.getX(), o.getY());
-    }*/
-
     public void scanBoard(MoveMessage message){
         Board board = message.getBoard();
         for(int x = 0; x<5; x++){
@@ -123,15 +114,13 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
                         if(board.getCell(x,y).getCurrWorker().getWorkerNum() == 1){
                             connectionManagerSocket.getBoardGUI().getBoardButton(x,y).add(connectionManagerSocket.getBoardGUI().getWorker1());
                             connectionManagerSocket.getBoardGUI().getWorker1().setVisible(true);
-                            Cell newPosition = new Cell(x,y);
-                            connectionManagerSocket.getPlayer().getWorker1().setWorkerPosition(newPosition);
+                            connectionManagerSocket.getPlayer().getWorker1().setWorkerPosition(board.getCell(x,y));
 
                         }
                         else{
                             connectionManagerSocket.getBoardGUI().getBoardButton(x,y).add(connectionManagerSocket.getBoardGUI().getWorker2());
                             connectionManagerSocket.getBoardGUI().getWorker2().setVisible(true);
-                            Cell newPosition = new Cell(x,y);
-                            connectionManagerSocket.getPlayer().getWorker2().setWorkerPosition(newPosition);
+                            connectionManagerSocket.getPlayer().getWorker2().setWorkerPosition(board.getCell(x,y));
                         }
                     }
                     else
@@ -142,7 +131,6 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
             }
         }
     }
-
     public void updateBoard(SetWorkerPosition o){
         if(o.getID() == connectionManagerSocket.getclientID()){
             connectionManagerSocket.getBoardGUI().incrementWorkerNum();
@@ -153,5 +141,18 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
         else {
             connectionManagerSocket.getBoardGUI().addWorker(o.getColor(), o.getWorkerNum(), o.getX(), o.getY());
         }
+    }
+    public void gameOver (PlayerColor color){
+        if(color.equals(connectionManagerSocket.getPlayerColorEnum())){
+            connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox("YOU WIN!", "Message From Server - Game Over");
+        } else {
+            connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox("YOU LOSE!", "Message From Server - Game Over");
+        }
+        this.active = false;
+        connectionManagerSocket.close();
+        connectionManagerSocket.disposeAll();
+    }
+    public boolean isActive(){
+        return active;
     }
 }

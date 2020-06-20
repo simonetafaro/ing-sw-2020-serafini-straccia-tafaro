@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolcard>
+    <title>Chronus</title>
+    <ImageIconURL>CardChronus.png</ImageIconURL>
+    <ImagePressedIconURL>ChronusCardPressed.png</ImagePressedIconURL>
+    <PowerDescription></PowerDescription>
+
+    <imageURL></imageURL>
+    <description>Chronus description</description>
+    <customRule decoratorName="ChronusRuleDecorator" />
+    <controllerStep State="M"/>
+    <controllerStep State="B"/>
+    <controllerStep State="END"/>
+</toolcard>

@@ -11,7 +11,7 @@ public class Deck {
         this.deck.put("Artemis", false);
         this.deck.put("Athena", false);
         this.deck.put("Atlas", false);
-        this.deck.put("Cronus",false);
+        this.deck.put("Chronus",false);
         this.deck.put("Demeter", false);
         this.deck.put("Hephaestus", false);
         this.deck.put("Hestia",false);

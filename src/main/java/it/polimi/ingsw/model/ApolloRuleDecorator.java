@@ -53,6 +53,10 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
                 return;
             }
 
+            if(move.getMoveOrBuild().equals("D")){
+                model.sendError(move.getColor().toString()+" "+gameMessage.notReachableCellMessage+"\n"+gameMessage.insertAgain);
+                return;
+            }
 
             if(move.getMoveOrBuild().equals("M") ){
                 //per apollo anche le celle con un worker sono empty

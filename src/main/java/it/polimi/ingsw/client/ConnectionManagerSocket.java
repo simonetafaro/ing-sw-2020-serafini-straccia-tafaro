@@ -4,15 +4,22 @@ import it.polimi.ingsw.ClientCLIMain;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerMove;
 import it.polimi.ingsw.utils.CustomDate;
+import it.polimi.ingsw.utils.FileManager;
 import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.view.RemoteView;
 import it.polimi.ingsw.view.View;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
+import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -366,7 +373,6 @@ public class ConnectionManagerSocket {
         this.clientSocket = new ClientSocketMessageGUI(this, input, output);
         this.clientSocket.initialize();
     }
-
     public Thread initializeMessageSocketCLI(ClientCLIMain BoardCLI){
         this.boardCLI = BoardCLI;
         this.clientSocket = new ClientSocketMessageCLI(this, input, output);
@@ -403,12 +409,41 @@ public class ConnectionManagerSocket {
     public Player getPlayer() {
         return player;
     }
-
     public ClientCLIMain getBoardCLI() {
         return boardCLI;
     }
-
     public void setBoardCLI(ClientCLIMain boardCLI) {
         this.boardCLI = boardCLI;
+    }
+
+    public void printOpponentInformation(ArrayList players){
+        FileManager f = new FileManager();
+        String PATHFILE = "toolcards/";
+
+        System.out.println("Opponents information :");
+        players.forEach( (player) -> {
+            if(((Player) player).getID() == this.getclientID()){
+                System.out.println("ME -> "+((Player) player).getColor());
+                this.setPlayer(((Player) player));
+            } else
+                System.out.println(((Player) player).getNickname() + " "+((Player) player).getColor());
+
+            try{
+                Document document = f.getFileDocument(PATHFILE.concat(((Player) player).getMyCard().getName()).concat(".xml"));
+                NodeList GodDescription = document.getElementsByTagName("PowerDescription");
+                System.out.println(((Player) player).getMyCard().getName()+": "+GodDescription.item(0).getTextContent());
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            } catch (SAXException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+    public void disposeAll(){
+        this.mainFrame.dispose();
     }
 }

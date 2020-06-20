@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Poseidon</title>
+
+    <ImageIconURL>CardPoseidon.png</ImageIconURL>
+    <ImagePressedIconURL>PoseidonCardPressed.png</ImagePressedIconURL>
+    <PowerDescription></PowerDescription>
     <imageURL></imageURL>
     <description>Poseidon description</description>
     <customRule decoratorName="PoseidonRuleDecorator" />

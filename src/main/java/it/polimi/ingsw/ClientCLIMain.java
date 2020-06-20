@@ -168,6 +168,9 @@ public class ClientCLIMain{
     public void printBoard(){
         this.board.printBoard();
     }
+    public void setBoard(Board board){
+        this.board = board;
+    }
     public void incrementWorkerNum(){
         this.workersNum ++;
     }

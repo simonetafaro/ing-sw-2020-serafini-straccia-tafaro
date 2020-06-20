@@ -95,10 +95,10 @@ public class Model extends Observable<Object> {
             if(player.getID() == worker.getID()){
                 if(player.getWorker1() != null && player.getWorker2() != null){
                     if(player.getColor().equals(playOrder_List.get(playOrder_List.size()-1))){
-                        updateTurn();
                         notifyStartGame();
-                    }else{
                         updateTurn();
+                    }else{
+                        updateTurnSetupPhase();
                         notifySetWorkers();
                     }
                 }
@@ -129,7 +129,12 @@ public class Model extends Observable<Object> {
 
     public void updateTurn(){
         turn=playOrder_List.get((playOrder_List.indexOf(turn)+1)%playOrder_List.size());
+        notifyObserver(getTurn() + " Is your Turn!");
     }
+    public void updateTurnSetupPhase(){
+        turn=playOrder_List.get((playOrder_List.indexOf(turn)+1)%playOrder_List.size());
+    }
+
     public void deletePlayer(PlayerMove move){
         if(playOrder_List.size()==2){
             endGamePlayerStuck(move);
