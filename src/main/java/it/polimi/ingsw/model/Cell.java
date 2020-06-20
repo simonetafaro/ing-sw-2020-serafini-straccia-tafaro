@@ -9,7 +9,7 @@ public class Cell implements Cloneable, Serializable {
     private int level;
     private boolean freeSpace;
     private Worker currWorker;
-
+    private boolean cronusRule;
     public Cell(){}
     public Cell(int posX, int posY){
         this.posX = posX;
@@ -33,8 +33,13 @@ public class Cell implements Cloneable, Serializable {
     public void setLevel(int level){
         this.level=level;
         if(this.level==4){
+            this.cronusRule = true;
             this.setFreeSpace(false);
         }
+    }
+
+    public boolean isCronusRule() {
+        return cronusRule;
     }
 
     public int getPosX(){

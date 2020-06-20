@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolcard>
+    <title>Poseidon</title>
+    <imageURL></imageURL>
+    <description>Poseidon description</description>
+    <customRule decoratorName="PoseidonRuleDecorator" />
+    <controllerStep State="M"/>
+    <controllerStep State="B"/>
+    <controllerStep State="B"/>
+    <controllerStep State="B"/>
+    <controllerStep State="B"/>
+    <controllerStep State="END"/>
+</toolcard>

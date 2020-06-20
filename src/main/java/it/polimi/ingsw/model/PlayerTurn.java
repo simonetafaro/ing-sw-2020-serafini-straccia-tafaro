@@ -10,6 +10,7 @@ public class PlayerTurn {
     private Step currStep;
     private int i;
 
+
     public PlayerTurn(Player player){
         this.turnPlayer=player;
         steps[0]=new Step();

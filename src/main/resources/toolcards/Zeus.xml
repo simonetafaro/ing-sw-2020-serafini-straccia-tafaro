@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolcard>
+    <title>Zeus</title>
+    <imageURL></imageURL>
+    <description>Zeus description</description>
+    <customRule decoratorName="ZeusRuleDecorator" />
+    <controllerStep State="M"/>
+    <controllerStep State="B"/>
+    <controllerStep State="END"/>
+</toolcard>

@@ -22,5 +22,6 @@ public class gameMessage {
     public static String endYourTurn = "Please, end your turn first!";
     public static String notReachableCellMessage = "The chosen cell is not reachable from your position!";
     public static String tooHighCellMessage = "The chosen cell is too high!";
-
+    public static String invalidMoveHestia="You cannot build in perimetral space ";
+    public static String invalidBuildPoseidon="You cannot build another time ,your worker is too high";
 }
