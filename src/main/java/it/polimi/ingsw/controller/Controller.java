@@ -49,10 +49,12 @@ public class Controller implements Observer<Object> {
             turn.getPlayerTurn(move.getPlayer()).setTurnWorker(move.getWorker());
         }
     }
-    public void setWorker(SetWorkerPosition worker){
-        if(!model.getBoard().getCell(worker.getX(), worker.getY()).isFree())
-            return;
 
+    public void setWorker(SetWorkerPosition worker){
+        if(!model.getBoard().getCell(worker.getX(), worker.getY()).isFree()){
+            model.notifyOccupiedCell();
+            return;
+        }
         model.setWorkers(worker);
         /*
         Player currPlayer = model.getPlayer(worker.getID());

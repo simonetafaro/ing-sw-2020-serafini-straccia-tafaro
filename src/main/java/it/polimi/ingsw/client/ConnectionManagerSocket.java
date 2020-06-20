@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.ClientCLIMain;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerMove;
 import it.polimi.ingsw.utils.CustomDate;
@@ -27,7 +28,7 @@ public class ConnectionManagerSocket {
     private Socket socket;
     private ObjectOutputStream output;
     private ObjectInputStream input;
-    private String playerColor;
+    private String playerColor, temporaryColor;
     private JFrame mainFrame;
     private Thread t, cardThread;
     private static final String SERVER_ADDRESS = "127.0.0.1";
@@ -36,6 +37,7 @@ public class ConnectionManagerSocket {
     private int order;
     private ClientSocketMessage clientSocket;
     private BoardGUI boardGUI;
+    private ClientCLIMain boardCLI;
     private View view;
     private Player player;
     //private ClientData clientData;
@@ -49,7 +51,7 @@ public class ConnectionManagerSocket {
         this.executor = Executors.newCachedThreadPool();
         this.myColor = null;
         this.clientID = 0;
-        this.playerColor = null;
+        this.playerColor = "null";
         this.boardGUI = null;
         //this.clientData = new ClientData();
     }
@@ -168,8 +170,9 @@ public class ConnectionManagerSocket {
     public void setColor(String color, showPopUpColor guiInstance){
         System.out.println("colore"+color);
         try{
-            this.playerColor = color;
-            switch (playerColor.toUpperCase()){
+            //this.playerColor = color;
+            this.temporaryColor = color;
+            switch (color.toUpperCase()){
                 case "WHITE": this.myColor = PlayerColor.WHITE;
                 case "BLUE": this.myColor = PlayerColor.BLUE;
                 case "GREY": this.myColor = PlayerColor.GREY;
@@ -199,8 +202,18 @@ public class ConnectionManagerSocket {
         t.start();
         return t;
     }
+    public void resetPlayerColor(){
+        synchronized (playerColor){
+            this.playerColor = "null";
+        }
+    }
     public String getPlayerColor() {
-        return this.playerColor;
+        synchronized (playerColor){
+            return this.playerColor;
+        }
+    }
+    public String getTemporaryColor() {
+        return this.temporaryColor;
     }
     public PlayerColor getPlayerColorEnum(){
         switch (playerColor.toUpperCase()){
@@ -212,24 +225,34 @@ public class ConnectionManagerSocket {
     }
 
     private boolean handleColorResponse(String colorResult, showPopUpColor guiInstance) throws IOException {
-        if(colorResult.toUpperCase().equals(Integer.toString(getclientID())+" "+getPlayerColor())){
+        if(colorResult.toUpperCase().equals(Integer.toString(getclientID())+" "+getTemporaryColor())){
             System.out.println("color ok");
-            guiInstance.closeGUI();
+            if (guiInstance != null)
+                guiInstance.closeGUI();
+            this.playerColor = this.temporaryColor;
             return true;
         }
         if(colorResult.contains("white")){
-            guiInstance.lock("white");
+            if (guiInstance != null)
+                guiInstance.lock("white");
+            else
+                System.out.println("white already chosen");
         }
         if(colorResult.contains("blue")){
-            guiInstance.lock("blue");
+            if (guiInstance != null)
+                guiInstance.lock("blue");
+            else
+                System.out.println("blue already chosen");
         }
         if(colorResult.contains("grey")){
-            guiInstance.lock("grey");
+            if (guiInstance != null)
+                guiInstance.lock("grey");
+            else
+                System.out.println("grey already chosen");
         }
+        this.playerColor = "reset";
         return false;
-
     }
-
     public void waitForFirstPlayer() throws IOException{
         String orderPlayer = null;
         do{
@@ -245,14 +268,15 @@ public class ConnectionManagerSocket {
             this.order = 1;
         if(orderPlayer.equals("thirdPlayer: "+ this.clientID))
             this.order = 2;
-
-        if(orderPlayer.equals("firstPlayer: "+ this.clientID))
-            SwingUtilities.invokeLater(new PickUpCards(mainFrame,playerNumber, this, true));
-        else
-            SwingUtilities.invokeLater(new PickUpCards(mainFrame,playerNumber, this, false));
+        if(this.mainFrame != null) {
+            if (orderPlayer.equals("firstPlayer: " + this.clientID))
+                SwingUtilities.invokeLater(new PickUpCards(mainFrame, playerNumber, this, true));
+            else
+                SwingUtilities.invokeLater(new PickUpCards(mainFrame, playerNumber, this, false));
+        }
     }
 
-    public Thread receiveCard(PickUpCards guiInstance){
+    public Thread receiveCard(PickUpCards guiInstance, ClientCLIMain cliInstance){
         this.cardThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -265,11 +289,29 @@ public class ConnectionManagerSocket {
                             ArrayList cards = null;
                             cards = (ArrayList) obj;
                             if(cards.size() == playerNumber && ConnectionManagerSocket.this.order == 1){
-                                guiInstance.updateGodImage(cards);
+                                System.out.println("1");
+                                if(guiInstance != null)
+                                    guiInstance.updateGodImage(cards);
+                                else{
+                                    System.out.println("Please choose one of these cards:");
+                                    for (Object card : cards) {
+                                        System.out.println((String) card);
+                                    }
+                                    cliInstance.chooseCard(cards);
+                                }
                                 break;
                             }
                             if((cards.size() == (playerNumber-1)) && ConnectionManagerSocket.this.order == 2){
-                                guiInstance.updateGodImage(cards);
+                                System.out.println("2");
+                                if(guiInstance != null)
+                                    guiInstance.updateGodImage(cards);
+                                else{
+                                    System.out.println("Please choose one of these cards:");
+                                    for (Object card : cards) {
+                                        System.out.println((String) card);
+                                    }
+                                    cliInstance.chooseCard(cards);
+                                }
                                 break;
                             }
                             if(ConnectionManagerSocket.this.order == 0)
@@ -281,6 +323,7 @@ public class ConnectionManagerSocket {
                         System.err.println(e.getMessage());
                     }
                 }
+                System.out.println("thread receiveCard morto");
             }
         });
         this.cardThread.start();
@@ -292,6 +335,9 @@ public class ConnectionManagerSocket {
         return cardThread;
     }
 
+    public int getOrder() {
+        return order;
+    }
     public void close() {
         try {
             this.socket.close();
@@ -317,9 +363,16 @@ public class ConnectionManagerSocket {
 
     public void initializeMessageSocket(BoardGUI boardGUI){
         this.boardGUI = boardGUI;
-        this.clientSocket = new ClientSocketMessage(this, input, output);
+        this.clientSocket = new ClientSocketMessageGUI(this, input, output);
         this.clientSocket.initialize();
     }
+
+    public Thread initializeMessageSocketCLI(ClientCLIMain BoardCLI){
+        this.boardCLI = BoardCLI;
+        this.clientSocket = new ClientSocketMessageCLI(this, input, output);
+        return this.clientSocket.initializeCLI();
+    }
+
     public void openBoardGui(){
         mainFrame.getContentPane().removeAll();
         SwingUtilities.invokeLater(new BoardGUI(mainFrame,ConnectionManagerSocket.this));
@@ -349,5 +402,13 @@ public class ConnectionManagerSocket {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public ClientCLIMain getBoardCLI() {
+        return boardCLI;
+    }
+
+    public void setBoardCLI(ClientCLIMain boardCLI) {
+        this.boardCLI = boardCLI;
     }
 }
