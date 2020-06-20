@@ -236,15 +236,15 @@ public class SocketClientConnection  extends Observable<String> implements Clien
                                     activeServer.createTwoPlayersMatch(activeServer.getTwoPlayerMatch().get(0),activeServer.getTwoPlayerMatch().get(1));
                                     activeServer.getTwoPlayerMatch().clear();
                                 }
-
+                                break;
                         case 3: activeServer.getThreePlayerMatch().add(player);
                                 output.writeObject(new String("VALID NUMBER:" +playerNumber));
                                 output.flush();
                                 if(activeServer.getThreePlayerMatch().size() == 3){
                                     activeServer.createThreePlayersMatch(activeServer.getThreePlayerMatch().get(0),activeServer.getThreePlayerMatch().get(1), activeServer.getThreePlayerMatch().get(2));
                                     activeServer.getThreePlayerMatch().clear();
-
                                 }
+                                break;
                     }
 
                     activeServer.getClientConnectionOutput().put(clientId, output);

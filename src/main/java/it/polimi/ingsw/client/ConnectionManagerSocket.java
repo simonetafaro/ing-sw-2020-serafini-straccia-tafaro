@@ -29,7 +29,7 @@ public class ConnectionManagerSocket {
     private ObjectInputStream input;
     private String playerColor;
     private JFrame mainFrame;
-    private Thread t;
+    private Thread t, cardThread;
     private static final String SERVER_ADDRESS = "127.0.0.1";
     private static final int SOCKET_PORT = 12345;
     private static final int SOCKET_MESSAGE_PORT = 14456;
@@ -253,7 +253,7 @@ public class ConnectionManagerSocket {
     }
 
     public Thread receiveCard(PickUpCards guiInstance){
-        t = new Thread(new Runnable() {
+        this.cardThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 int i= 1;
@@ -265,12 +265,10 @@ public class ConnectionManagerSocket {
                             ArrayList cards = null;
                             cards = (ArrayList) obj;
                             if(cards.size() == playerNumber && ConnectionManagerSocket.this.order == 1){
-                                System.out.println("1");
                                 guiInstance.updateGodImage(cards);
                                 break;
                             }
                             if((cards.size() == (playerNumber-1)) && ConnectionManagerSocket.this.order == 2){
-                                System.out.println("2");
                                 guiInstance.updateGodImage(cards);
                                 break;
                             }
@@ -285,9 +283,13 @@ public class ConnectionManagerSocket {
                 }
             }
         });
-        t.start();
+        this.cardThread.start();
 
-        return t;
+        return this.cardThread;
+    }
+
+    public Thread getCardThread() {
+        return cardThread;
     }
 
     public void close() {

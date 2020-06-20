@@ -79,7 +79,8 @@ public class ClientSocketMessage{
                             }
                         }
                         if(o instanceof ArrayList){
-                            connectionManagerSocket.getBoardGUI().populatePlayersInfo((ArrayList) o);
+                            if (((ArrayList) o).get(0) instanceof Player)
+                                connectionManagerSocket.getBoardGUI().populatePlayersInfo((ArrayList) o);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -124,7 +125,7 @@ public class ClientSocketMessage{
                         connectionManagerSocket.getBoardGUI().addWorker(board.getCell(x,y).getCurrWorker().getPlayerColor(), board.getCell(x,y).getCurrWorker().getWorkerNum(), x, y);
 
                 }
-                connectionManagerSocket.getBoardGUI().getBoardButton(x,y).revalidate();
+                connectionManagerSocket.getBoardGUI().getBoardButton(x,y).repaint();
             }
         }
     }

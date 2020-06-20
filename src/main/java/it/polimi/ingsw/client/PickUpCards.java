@@ -223,6 +223,11 @@ public class PickUpCards implements Runnable {
         @Override
         public void actionPerformed(ActionEvent e) {
             connectionManagerSocket.sendObjectToServer(deck);
+            try{
+                connectionManagerSocket.getCardThread().join();
+            }catch (InterruptedException thread){
+                System.err.println(thread.getMessage());
+            }
             connectionManagerSocket.openBoardGui();
         }
     }
@@ -293,6 +298,11 @@ public class PickUpCards implements Runnable {
                 }
             });
             //connectionManagerSocket.close();
+            try{
+                connectionManagerSocket.getCardThread().join();
+            }catch (InterruptedException thread){
+                System.err.println(thread.getMessage());
+            }
             connectionManagerSocket.openBoardGui();
         }
     }
@@ -606,7 +616,7 @@ public class PickUpCards implements Runnable {
                             ActiveCardList.put(PanButton, PanCard_Icon);
                             break;
                 case "Prometheus":  PrometheusButton.setEnabled(true);
-                                    PrometheusButton.addActionListener(new ChooseYourCardListener(PrometheusButton, PrometheusCard_Icon_Pressed, PrometheusText, PanImage, "Prometheus", PrometheusCard_Icon));
+                                    PrometheusButton.addActionListener(new ChooseYourCardListener(PrometheusButton, PrometheusCard_Icon_Pressed, PrometheusText, PrometheusImage, "Prometheus", PrometheusCard_Icon));
                                     ActiveCardList.put(PrometheusButton, PrometheusCard_Icon);
                                     break;
             }

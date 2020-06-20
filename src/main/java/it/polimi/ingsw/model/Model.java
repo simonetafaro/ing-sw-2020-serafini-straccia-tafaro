@@ -211,8 +211,6 @@ public class Model extends Observable<Object> {
         this.players.add(p2);
     }
     public void setWorkers(SetWorkerPosition worker){
-        System.out.println("MODEL");
-        System.out.println("("+worker.getX()+","+worker.getY()+")");
         players.forEach(player ->{
             if(player.getID() == worker.getID()){
                 if(worker.getWorkerNum() == 1)
