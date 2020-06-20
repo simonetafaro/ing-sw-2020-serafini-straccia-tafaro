@@ -792,7 +792,7 @@ public class BoardGUI implements Runnable{
         this.moveButton.addActionListener(new ButtonMoveListeners());
         this.buildButton.addActionListener(new ButtonBuildListeners());
         this.doneButton.addActionListener(new ButtonDoneListeners());
-        if(connectionManagerSocket.getPlayer().getMyCard().getName().equals("Atlas"))
+        if(connectionManagerSocket.getPlayer().getMyCard().getName().equals("Atlas") || connectionManagerSocket.getPlayer().getMyCard().getName().equals("Selene"))
             this.domeButton.addActionListener(new ButtonDomeListeners());
     }
     public void addWorkerListeners(){
