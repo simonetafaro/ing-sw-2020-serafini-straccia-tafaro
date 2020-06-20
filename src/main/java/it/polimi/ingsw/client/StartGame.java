@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client;
+/*package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.utils.*;
@@ -171,7 +171,7 @@ public class StartGame implements Runnable{
                 }
             }
 
-            /*
+
             ClientGUIThread guiThread = new ClientGUIThread();
             LOGGER.debug("Gui thread created");
             guiThread.setConnectionManager(connectionManager);
@@ -181,7 +181,7 @@ public class StartGame implements Runnable{
             LOGGER.debug("Gui thread started, killing welcome frame");
             main.dispose();
             LOGGER.debug("Gui welcome killed");
-            */
+
         }
     }
 
@@ -484,12 +484,13 @@ public class StartGame implements Runnable{
         playButton.addActionListener(new PlayActionListener());
     }
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
         }catch (Exception e) {
             System.err.println(e.getMessage());
         }
         SwingUtilities.invokeLater(new StartGame());
-    }*/
+    }
 }
+*/

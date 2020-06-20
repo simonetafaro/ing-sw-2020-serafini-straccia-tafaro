@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.client.ClientGUIParameters;
-import it.polimi.ingsw.client.StartGame;
+//import it.polimi.ingsw.client.ClientGUIParameters;
+//import it.polimi.ingsw.client.StartGame;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.observ.Observable;
 import it.polimi.ingsw.utils.ErrorMessage;
@@ -93,23 +93,14 @@ public class SocketClientConnection  extends Observable<String> implements Clien
             out = new ObjectOutputStream(socket.getOutputStream());
 
             //TODO while on GUIOrCLI input
-            send("Do you want to use CLI or GUI");
-            String GuiOrCli = in.nextLine().toUpperCase();
-            if(GuiOrCli.equals("CLI")){
+            //send("Do you want to use CLI or GUI");
                 send("What is your name?");
                 String move = in.nextLine();
                 player.setNickname(move);
                 server.getStartController().setPlayerBirthDate(this,player,in);
                 server.getStartController().setPlayerColor(this,player,in);
                 server.lobby(this, player);
-            }else{
-                if(GuiOrCli.equals("GUI")){
-                    send(new ClientGUIParameters(true));
-                    setupGUIPlayer();
-                }else{
-                    //error choose cli or gui
-                }
-            }
+
 
         }catch (IOException | NoSuchElementException e) {
             System.err.println("Error!" + e.getMessage());
@@ -138,7 +129,7 @@ public class SocketClientConnection  extends Observable<String> implements Clien
         t.start();
     }
 
-    public void setupGUIPlayer(){
+   /* public void setupGUIPlayer(){
         ObjectInputStream socketIn;
         boolean finish= true;
         try{
@@ -162,5 +153,5 @@ public class SocketClientConnection  extends Observable<String> implements Clien
             System.err.println(e.getMessage());
         }
         //socket.nextObject();
-    }
+    }*/
 }

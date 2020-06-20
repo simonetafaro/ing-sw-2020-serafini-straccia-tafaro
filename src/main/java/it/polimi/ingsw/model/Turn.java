@@ -7,6 +7,9 @@ public class Turn {
 
     private Map<Player, PlayerTurn> turns = new HashMap<>();
 
+    public Turn (PlayerTurn playerTurn){
+        turns.put(playerTurn.getTurnPlayer(),playerTurn);
+    }
     public Turn(PlayerTurn playerTurn1, PlayerTurn playerTurn2){
         turns.put(playerTurn1.getTurnPlayer(), playerTurn1);
         turns.put(playerTurn2.getTurnPlayer(), playerTurn2);

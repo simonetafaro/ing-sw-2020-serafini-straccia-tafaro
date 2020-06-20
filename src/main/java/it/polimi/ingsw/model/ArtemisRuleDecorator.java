@@ -116,7 +116,7 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
                     || message.getMoveOrBuild().equals(message.getPlayer().getMyCard().getStepLetter(turn.getPlayerTurn(message.getPlayer()).getI()));
     }
 
-    public boolean isEndAllowed(PlayerMove move, Turn turn){
+   public boolean isEndAllowed(PlayerMove move, Turn turn){
         return move.getPlayer().getMyCard().isUsingCard() ? (move.getPlayer().getMyCard().getStepLetter(turn.getPlayerTurn(move.getPlayer()).getI())).equals("END") :
                 (move.getPlayer().getMyCard().getStandardStepLetter(turn.getPlayerTurn(move.getPlayer()).getI())).equals("END");
     }

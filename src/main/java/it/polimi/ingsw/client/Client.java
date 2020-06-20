@@ -38,9 +38,7 @@ public class Client {
                 try {
                     while (isActive()) {
                         Object inputObject = socketIn.readObject();
-                        if(inputObject instanceof ClientGUIParameters){
-                            StartGame startGame = new StartGame(socket, socketIn);
-                        }else{
+
                             if(inputObject instanceof String){
                                 System.out.println((String)inputObject);
                             } else if (inputObject instanceof Board){
@@ -48,7 +46,7 @@ public class Client {
                             } else {
                                 throw new IllegalArgumentException();
                             }
-                        }
+
                     }
                 }catch (Exception e){
                     //System.out.println("fine della read");

@@ -11,11 +11,16 @@ public class Deck {
         this.deck.put("Artemis", false);
         this.deck.put("Athena", false);
         this.deck.put("Atlas", false);
+        this.deck.put("Cronus",false);
         this.deck.put("Demeter", false);
         this.deck.put("Hephaestus", false);
+        this.deck.put("Hestia",false);
         this.deck.put("Minotaur", false);
         this.deck.put("Pan", false);
+        this.deck.put("Poseidon", false);
         this.deck.put("Prometheus", false);
+        this.deck.put("Selene",false);
+        this.deck.put("Zeus", false);
     }
 
     public boolean validCard(String cardName){

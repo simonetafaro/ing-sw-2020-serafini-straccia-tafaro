@@ -8,6 +8,7 @@ public class Board implements Cloneable, Serializable {
     private static final int N_COLS = 5;
     private Cell[][] board;
 
+
     public Board() {
         this.board = new Cell[N_COLS][N_COLS];
         for (int i = 0; i < N_ROWS; i++) {

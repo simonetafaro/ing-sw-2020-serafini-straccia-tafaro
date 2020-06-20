@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import java.io.Serializable;
+import java.security.PrivateKey;
 
 public class Cell implements Cloneable, Serializable {
 
@@ -8,6 +9,7 @@ public class Cell implements Cloneable, Serializable {
     private int posY;
     private int level;
     private boolean freeSpace;
+    private boolean cronusRule;
     private Worker currWorker;
 
     public Cell(){}
@@ -16,6 +18,10 @@ public class Cell implements Cloneable, Serializable {
         this.posY = posY;
         this.level=0;
         this.currWorker = null;
+    }
+
+    public boolean isCronusRule() {
+        return cronusRule;
     }
 
     public void setCurrWorker(Worker currWorker) {
@@ -36,7 +42,6 @@ public class Cell implements Cloneable, Serializable {
             this.setFreeSpace(false);
         }
     }
-
     public int getPosX(){
         return this.posX;
     }
@@ -57,6 +62,7 @@ public class Cell implements Cloneable, Serializable {
         this.level++;
         if(this.level==4){
             this.setFreeSpace(false);
+            cronusRule=true;
         }
     }
     public void deleteCurrWorker(){

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class PlayerTurn {
 
-    private Step[] steps= new Step[4];
+    private Step[] steps= new Step[6];
     private Player turnPlayer;
     private Worker worker;
     private Step currStep;
@@ -15,6 +15,8 @@ public class PlayerTurn {
         steps[0]=new Step();
         steps[1]=new Step();
         steps[2]=new Step();
+        steps[3]=new Step();
+        steps[4]=new Step();
         this.i=0;
         currStep = steps[i];
         this.worker= null;
@@ -48,7 +50,6 @@ public class PlayerTurn {
     public Worker getTurnWorker() {
         return this.worker;
     }
-
     public Step getStepI(int i){
         //TODO manage array out of bound exception
         return steps[i-1];
