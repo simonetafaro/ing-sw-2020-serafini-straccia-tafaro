@@ -11,16 +11,16 @@ public class PrometheusRuleDecorator extends StandardRuleDecorator {
             if(isEndAllowed(move, turn)) {
                 model.endMessage(move,turn,model);
                 move.getPlayer().getMyCard().setUsingCard(false);
-                move.getPlayer().getMyCard().addCustomStep(2, "B");
+                move.getPlayer().getMyCard().setCustomSteps(2, "B");
                 model.setGoUpLevel(1);
             }
             else
-                model.notify(gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
+                model.sendError(move.getColor().toString()+" "+gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
             return;
         }
 
         if(!model.isRightWorker(move, turn)){
-            model.sendError(move.getColor().toString()+" "+gameMessage.insertAgain);
+            model.sendError(move.getColor().toString()+" "+gameMessage.wrongWorker+"\n"+gameMessage.insertAgain);
             return;
         }
 
@@ -94,10 +94,11 @@ public class PrometheusRuleDecorator extends StandardRuleDecorator {
     public void build(PlayerMove move, Model model, Turn turn) {
         if(turn.getPlayerTurn(move.getPlayer()).getI()==1){
             //Can't go up for this turn
+            move.getPlayer().getMyCard().setUsingCard(true);
             model.setGoUpLevel(0);
         }
         if(turn.getPlayerTurn(move.getPlayer()).getI()==2){
-            move.getPlayer().getMyCard().addCustomStep(2,"END");;
+            move.getPlayer().getMyCard().setCustomSteps(2,"END");
         }
         model.getBoard().getCell(move.getRow(),move.getColumn()).buildInCell();
         model.setStep(move, turn, model);

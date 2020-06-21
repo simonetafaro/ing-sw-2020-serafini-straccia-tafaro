@@ -30,6 +30,9 @@ public class Card implements Serializable {
     public void addCustomStep(int i, String customStep){
         this.customSteps.add(i, customStep);
     }
+    public void setCustomSteps(int i, String customStep){
+        this.customSteps.set(i, customStep);
+    }
 
     public String getName() {
         return name;
