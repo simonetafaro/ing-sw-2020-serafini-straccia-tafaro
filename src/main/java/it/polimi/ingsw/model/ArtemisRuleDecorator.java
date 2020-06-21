@@ -104,7 +104,6 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
         (model.getBoard().getCell(move.getRow(),move.getColumn())).setFreeSpace(false);
         model.getBoard().getCell(move.getRow(),move.getColumn()).setCurrWorker(move.getWorker());
 
-
         model.notifyView(move,hasWon);
     }
 

@@ -13,32 +13,6 @@ import java.util.ArrayList;
 
 public class RemoteView extends View implements Serializable{
 
-
-    private class MessageReceiver implements Observer<String> {
-
-        @Override
-        public void update(String message) {
-            //System.out.println("Received from " +getPlayer().getNickname() +" "+ message);
-            try{
-                if(message.equals("END")){
-                    isEndNotify();
-                    return;
-                }
-                if(standardInput(message))
-                    handleMove(message.substring(0,1),
-                            Integer.parseInt(message.substring(2, 3)),
-                            Integer.parseInt(message.substring(4, 5)),
-                            Integer.parseInt(message.substring(6, 7)));
-                else
-                    clientConnection.send(gameMessage.wrongInputMessage+ gameMessage.insertAgain);
-            }catch(IllegalArgumentException e){
-                clientConnection.asyncSend("Error!");
-            }
-        }
-    }
-
-    private ClientConnection clientConnection;
-
     private transient ObjectInputStream input;
     private transient ObjectOutputStream output;
     private transient int id;
@@ -51,21 +25,6 @@ public class RemoteView extends View implements Serializable{
         this.output = player.getOutput();
         this.readThread = readFromClient();
         readThread.start();
-    }
-    public RemoteView(Player player, ClientConnection c) {
-        super(player);
-        this.clientConnection = c;
-        c.addObserver(new MessageReceiver());
-    }
-    public ClientConnection getClientConnection() {
-        return clientConnection;
-    }
-
-    private boolean standardInput(String message){
-        //M 1-1,2
-        return message.length()==7 && (message.charAt(0)=='M' || message.charAt(0)=='B') && (message.charAt(2)=='1' ||
-                    message.charAt(2)=='2') && Integer.parseInt(message.substring(4,5))>=0 && Integer.parseInt(message.substring(4,5))<=4 &&
-                        Integer.parseInt(message.substring(6,7))>=0 && Integer.parseInt(message.substring(6,7))<=4;
     }
 
     public Thread readFromClient(){
@@ -94,11 +53,6 @@ public class RemoteView extends View implements Serializable{
         } catch (IOException e){
             System.err.println(e.getMessage());
         }
-    }
-
-    @Override
-    protected void showMessage(Object message) {
-        clientConnection.send(message);
     }
 
     @Override

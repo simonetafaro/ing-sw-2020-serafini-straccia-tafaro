@@ -445,7 +445,7 @@ public class PickUpCards implements Runnable {
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();;
         JPanel eastPanel = new PickUpCards.EastJPanel();
         eastPanel.setPreferredSize(new Dimension(459, 720));
-        eastPanel.setOpaque(true);
+        eastPanel.setOpaque(false);
         eastPanel.setLayout(gblSxPanel);
         rootPanel.add(eastPanel, BorderLayout.EAST);
 
@@ -456,10 +456,17 @@ public class PickUpCards implements Runnable {
         gbcCardsLabel.gridx = 0;
         gbcCardsLabel.gridy = 0;
 
+
         JPanel card = new JPanel(new GridLayout(5,3,5,5));
         card.setBackground(new Color(0,0,0,0));
         card.setOpaque(false);
 
+        JScrollPane cardScroll = new ModernScrollPane(card,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        cardScroll.setMinimumSize(new Dimension(360,360));
+        cardScroll.setOpaque(false);
+        cardScroll.getViewport().setOpaque(false);
         Image PanCard = new ImageIcon(PATH + "CardPan.png").getImage();
         PanCard_Icon = new ImageIcon(PanCard);
         Image PanCard_pressed = new ImageIcon(PATH + "PanCardPressed.png").getImage();
@@ -633,13 +640,7 @@ public class PickUpCards implements Runnable {
             buttonList.forEach((GodButton) -> GodButton.setEnabled(false));
         }
 
-        JScrollPane cardScroll = new ModernScrollPane(card,
-                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        cardScroll.setMinimumSize(new Dimension(360,360));
-        cardScroll.getViewport().setBackground(new Color(0,0,0,0));
-        cardScroll.setBorder(BorderFactory.createEmptyBorder());
-        cardScroll.setOpaque(false);
+        //cardScroll.setBorder(BorderFactory.createEmptyBorder());
 
         eastPanel.add(cardScroll, gbcCardsLabel);
 
@@ -790,7 +791,6 @@ public class PickUpCards implements Runnable {
         public ModernScrollPane(Component view, int vsbPolicy, int hsbPolicy) {
 
             setBorder(null);
-
             // Set ScrollBar UI
             JScrollBar verticalScrollBar = getVerticalScrollBar();
             verticalScrollBar.setOpaque(false);

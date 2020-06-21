@@ -28,7 +28,7 @@ public class ChronusRuleDecorator extends StandardRuleDecorator {
         }
 
         if(!checkStepType(move,turn)){
-            move.getView().reportError(gameMessage.wrongStepMessage+"\n"+gameMessage.insertAgain);
+            model.sendError(move.getColor().toString()+" "+gameMessage.wrongStepMessage+"\n"+gameMessage.insertAgain);
             return;
         }
 

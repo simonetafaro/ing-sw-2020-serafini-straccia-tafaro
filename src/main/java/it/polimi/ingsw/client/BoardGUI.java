@@ -227,11 +227,6 @@ public class BoardGUI implements Runnable{
     private class ButtonMoveListeners implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-            //BoardGUI.this.popUpBox.infoBox("YOUR INFORMATION HERE", "TITLE BAR MESSAGE");
-            System.out.println("ButtonListeners");
-            //BoardGUI.this.worker1.addActionListener(new WorkerListeners());
-            //BoardGUI.this.worker2.addActionListener(new WorkerListeners());
-            //removeWorkerListeners();
             if(BoardGUI.this.move.getWorker() != null) {
                 System.out.println("set Move");
                 BoardGUI.this.move.setMoveOrBuild("M");
@@ -253,13 +248,14 @@ public class BoardGUI implements Runnable{
     private class ButtonDomeListeners implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(BoardGUI.this.connectionManagerSocket.getPlayer().getMyCard().getName().equals("Atlas")){
+            if(BoardGUI.this.connectionManagerSocket.getPlayer().getMyCard().getName().equals("Atlas")
+                || (BoardGUI.this.connectionManagerSocket.getPlayer().getMyCard().getName().equals("Selene"))){
                 if(BoardGUI.this.move.getWorker() != null) {
                     BoardGUI.this.move.setMoveOrBuild("D");
                     verifyPlayerMove();
                 }
             }else{
-                BoardGUI.this.popUpBox.infoBox("You can't use this button. Only with Atlas you can build Dome everywhere", "DomeButton");
+                BoardGUI.this.popUpBox.infoBox("You can't use this button. Only with Atlas or Selene you can build Dome everywhere", "DomeButton");
             }
 
         }
@@ -267,7 +263,6 @@ public class BoardGUI implements Runnable{
     private class ButtonDoneListeners implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("actionDonelisteners");
             BoardGUI.this.moveEnd = new PlayerMoveEnd(connectionManagerSocket.getPlayer(), true);
             verifyPlayerMove();
         }
@@ -284,11 +279,9 @@ public class BoardGUI implements Runnable{
 
             if (BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1().getWorkerPosition().getPosX() == workerPosition.getPosY() && BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1().getWorkerPosition().getPosY() == workerPosition.getPosX()) {
                 if (BoardGUI.this.move.getWorker() == null) {
-                    System.out.println("set Worker1");
                     BoardGUI.this.move.setWorker(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1());
                 }else {
                     if (!BoardGUI.this.move.getWorker().equals(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1())) {
-                        System.out.println("resetWorker");
                         BoardGUI.this.move = new PlayerMove(connectionManagerSocket.getPlayer());
                         BoardGUI.this.move.setWorker(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1());
                     }
@@ -297,11 +290,9 @@ public class BoardGUI implements Runnable{
             else {
                 if(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2().getWorkerPosition().getPosX() == workerPosition.getPosY() && BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2().getWorkerPosition().getPosY() == workerPosition.getPosX()) {
                     if(BoardGUI.this.move.getWorker() == null) {
-                        System.out.println("set Worker2");
                         BoardGUI.this.move.setWorker(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2());
                     }else {
                         if(!BoardGUI.this.move.getWorker().equals(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2())){
-                            System.out.println("resetWorker");
                             BoardGUI.this.move = new PlayerMove(connectionManagerSocket.getPlayer());
                             BoardGUI.this.move.setWorker(BoardGUI.this.connectionManagerSocket.getPlayer().getWorker2());
                         }
@@ -527,20 +518,6 @@ public class BoardGUI implements Runnable{
     @Override
     public void run() {
         this.connectionManagerSocket.initializeMessageSocket(this);
-        //System.out.println("gui"+connectionManagerSocket.getclientID());
-        //PlayerMove playermove =new PlayerMove("test"+connectionManagerSocket.getclientID());
-        //this.connectionManagerSocket.sendToServer(playermove);
-        //boardButton.forEach((currButton)-> currButton.);
-    }
-
-    public static void main(String[] args) {
-        JFrame mainFrame = new JFrame("prova");
-        try {
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-        }catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-        SwingUtilities.invokeLater(new BoardGUI(mainFrame,  null));
     }
 
     public void setWorkers(){
@@ -564,7 +541,6 @@ public class BoardGUI implements Runnable{
 
         }
     }
-
 
     public void validateFrame(){
         this.mainframe.validate();
@@ -820,7 +796,6 @@ public class BoardGUI implements Runnable{
     public JButton getWorker2(){
         return this.worker2;
     }
-
     public PopUpBox getPopUpBox() {
         return popUpBox;
     }
@@ -837,7 +812,3 @@ public class BoardGUI implements Runnable{
     }
 
 }
-
-
-
-

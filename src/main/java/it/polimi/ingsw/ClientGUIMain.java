@@ -1,12 +1,8 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.client.ConnectionManagerSocket;
-import it.polimi.ingsw.client.PopUpNumberPlayer;
-import it.polimi.ingsw.client.StartGame;
 import it.polimi.ingsw.client.showPopUpColor;
 import it.polimi.ingsw.utils.CustomDate;
-import it.polimi.ingsw.utils.PlayerColor;
-import it.polimi.ingsw.utils.setupMessage;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -14,7 +10,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.ObjectOutputStream;
 
 public class ClientGUIMain implements Runnable{
 
