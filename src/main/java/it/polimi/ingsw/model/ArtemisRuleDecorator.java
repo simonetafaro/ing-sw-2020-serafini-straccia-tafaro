@@ -13,7 +13,7 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
             if(isEndAllowed(move, turn)) {
                 model.endMessage(move,turn,model);
                 move.getPlayer().getMyCard().setUsingCard(false);
-                move.getPlayer().getMyCard().addCustomStep(2, "B");
+                move.getPlayer().getMyCard().setCustomSteps(2, "B");
             }
             else {
                 model.sendError(move.getColor().toString()+" "+gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
@@ -89,6 +89,7 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
 
         if(turn.getPlayerTurn(move.getPlayer()).getI()==2){
             //is the second move for this player, so he wants to use the card
+
             if(model.getBoard().getCell(move.getRow(),move.getColumn()).equals(turn.getPlayerTurn(move.getPlayer()).getStepI(1).getCellFrom())){
                 model.sendError(move.getColor().toString()+" "+gameMessage.invalidMoveArtemis+"\n"+gameMessage.insertAgain);
                 return;
@@ -110,7 +111,7 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
     @Override
     public void build(PlayerMove move, Model model, Turn turn) {
         if(turn.getPlayerTurn(move.getPlayer()).getI()==2){
-            move.getPlayer().getMyCard().addCustomStep(2,"END");
+            move.getPlayer().getMyCard().setCustomSteps(2,"END");
         }
         model.getBoard().getCell(move.getRow(),move.getColumn()).buildInCell();
         model.setStep(move, turn, model);

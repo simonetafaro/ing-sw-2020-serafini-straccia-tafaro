@@ -30,11 +30,6 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
         return readFromServerCLI();
     }
 
-    public void parseInput(Object o){
-        if(o instanceof ClientSocketMessageCLI){
-
-        }
-    }
     public void send (PlayerMove playerMove){
         try {
             outputStream.reset();
@@ -84,9 +79,6 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
                             }
                         }
                         if(o instanceof ArrayList){
-                            //problema, nella partita a 3 il primo giocatore entra qui e stampa una board perchè riceve una lista
-                            // che è la lista delle carte scelte
-                            //risolvere
                             if( ((ArrayList) o).get(0) instanceof Player){
                                 connectionManagerSocket.getBoardCLI().printBoard();
                                 connectionManagerSocket.printOpponentInformation((ArrayList) o);
@@ -106,7 +98,6 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
     }
 
     public void updateBoard(SetWorkerPosition o){
-        //connectionManagerSocket.getBoardCLI().addWorkerToBoard(o.getWorkerNum(), o.getColor(), o.getX(), o.getY());
         connectionManagerSocket.getBoardCLI().addWorkerToBoard((SetWorkerPosition) o);
         if(o.getID() == connectionManagerSocket.getclientID()){
             connectionManagerSocket.getBoardCLI().incrementWorkerNum();
@@ -120,9 +111,9 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
             @Override
             public void run() {
                 Scanner in = new Scanner(System.in);
-                try {
-                    while (isActive()) {
-                        String inputLine = in.nextLine().toUpperCase();
+                while (isActive()) {
+                    String inputLine = in.nextLine().toUpperCase();
+                    try {
                         if(checkInputStandard(inputLine)){
                             outputStream.writeObject(handleMove(inputLine.substring(0,1),
                                     Integer.parseInt(inputLine.substring(2, 3)),
@@ -130,9 +121,9 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
                                     Integer.parseInt(inputLine.substring(6, 7))));
                             outputStream.flush();
                         }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                }catch(Exception e){
-                    //System.out.println("fine della write");
                 }
             }
         });

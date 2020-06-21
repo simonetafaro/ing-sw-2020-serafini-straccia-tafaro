@@ -18,17 +18,6 @@ class PlayerTest {
     }
 
     @Test
-    void setBirthDate() {
-        CustomDate date = new CustomDate();
-        date.setDay(32);
-        date.setMonth(32);
-        date.setYear(32);
-
-        player.setBirthDate(date);
-        assertEquals(player.getBirthDate(),date);
-    }
-
-    @Test
     void setNickname() {
         player.setNickname("Pippo");
 
@@ -94,17 +83,6 @@ class PlayerTest {
     void getColor() {
         player.setColor(PlayerColor.GREY);
         assertEquals(player.getColor(),PlayerColor.GREY);
-    }
-
-    @Test
-    void getBirthDate() {
-        CustomDate date = new CustomDate();
-        date.setDay(32);
-        date.setMonth(32);
-        date.setYear(32);
-
-        player.setBirthDate(date);
-        assertEquals(player.getBirthDate(),date);
     }
 
     @Test
