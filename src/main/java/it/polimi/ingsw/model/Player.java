@@ -47,32 +47,12 @@ public class Player implements Serializable {
         this.cardManager= new CardManager();
     }
 
-    /*public Player(Player player) {
-        this.nickname = player.getNickname();
-        this.color = player.getColor();
-        this.birthDate = player.getBirthDate();
-        this.worker1=player.worker1;
-        this.worker2=player.worker2;
-        this.cardManager= new CardManager();
-    }*/
-
-    public Player(int ID, String nickname, CustomDate birthDate, Socket socket) {
-        this.birthDate = birthDate;
+    public Player(int ID, String nickname, Socket socket) {
         this.nickname = nickname;
         this.ID = ID;
         this.cardManager = new CardManager();
         this.socket = socket;
     }
-
-    public Player(String name, CustomDate birthDate, PlayerColor color){
-        this.nickname = name;
-        this.birthDate = birthDate;
-        this.color = color;
-        this.worker1 = null;
-        this.worker2 = null;
-        this.cardManager = new CardManager();
-    }
-
 
     public PlayerTurn setMyTurn() {
         this.myTurn = new PlayerTurn(this);
@@ -80,9 +60,6 @@ public class Player implements Serializable {
     }
     public void setColor(PlayerColor color) {
         this.color = color;
-    }
-    public void setBirthDate(CustomDate birthDate) {
-        this.birthDate = birthDate;
     }
     public void setNickname(String nickname) {
         this.nickname = nickname;
@@ -118,9 +95,6 @@ public class Player implements Serializable {
     }
     public PlayerColor getColor() {
         return color;
-    }
-    public CustomDate getBirthDate() {
-        return birthDate;
     }
     public Card getMyCard(){
         return this.myCard;

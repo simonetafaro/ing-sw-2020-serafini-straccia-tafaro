@@ -133,20 +133,10 @@ public class ClientGUIMain implements Runnable{
 
             ConnectionManagerSocket connectionManagerSocket;
             String playerName = playerTextField.getText();
-            String day = dayField.getText();
-            String month = monthField.getText();
-            String year = yearField.getText();
-            int day_value, month_value, year_value, playerNumber = 0;
-            CustomDate birthday;
+            int playerNumber = 0;
             if(playerName != null){
                 if(two_Players_button.isSelected() || three_Players_button.isSelected()){
-                    if(day!=null && month!=null && year!=null){
-                        //TODO check day,month and year value, must be an integer
-                        day_value = Integer.parseInt(day);
-                        month_value = Integer.parseInt(month);
-                        year_value = Integer.parseInt(year);
-                        birthday = new CustomDate(day_value, month_value, year_value);
-                        if(two_Players_button.isSelected()){
+                    if(two_Players_button.isSelected()){
                             playerNumber= 2;
                             ClientGUIMain.this.playerNumber = 2;
                         }
@@ -154,14 +144,12 @@ public class ClientGUIMain implements Runnable{
                             playerNumber= 3;
                             ClientGUIMain.this.playerNumber = 3;
                         }
-                        System.out.println("invio i dati");
-                        connectionManagerSocket = new ConnectionManagerSocket(playerName, birthday, playerNumber);
+                        connectionManagerSocket = new ConnectionManagerSocket(playerName, playerNumber);
                         connectionManagerSocket.setMainFrame(ClientGUIMain.this.mainFrame);
                         connectionManagerSocket.setup();
                         //mainFrame.dispose();
                         //connectionManagerSocket.setColor(mainFrame);
                         showPopUpPlayerColor(connectionManagerSocket);
-                    }
                 }
             }
 
@@ -266,48 +254,10 @@ public class ClientGUIMain implements Runnable{
         centralPanel.add(playerTextField, gbcTxtAsd);
         playerTextField.setColumns(10);
 
-        JLabel dateLabel = new JLabel("INSERT YOUR BIRTHDAY:");
-        dateLabel.setForeground(Color.darkGray);
         GridBagConstraints gbcLblDate = new GridBagConstraints();
         gbcLblDate.insets = new Insets(10, 200, 5, 200);
         gbcLblDate.gridx = 0;
         gbcLblDate.gridy = 11;
-        centralPanel.add(dateLabel, gbcLblDate);
-
-        JPanel datePickerPanel = new JPanel(new GridLayout(1,3,10,10));
-        datePickerPanel.setOpaque(false);
-
-        dayField = new JTextField();
-        dayField.setFont(new Font("Tahoma", Font.PLAIN, 15));
-        dayField.setHorizontalAlignment(SwingConstants.CENTER);
-        dayField.setBackground(new Color(214, 217, 223));
-        dayField.setBorder(BorderFactory.createCompoundBorder(
-                dayField.getBorder(),
-                BorderFactory.createEmptyBorder(0, 0, 0, 15)));
-        dayField.setText("Day");
-        datePickerPanel.add(dayField);
-        monthField = new JTextField();
-        monthField.setFont(new Font("Tahoma", Font.PLAIN, 15));
-        monthField.setHorizontalAlignment(SwingConstants.CENTER);
-        monthField.setBackground(new Color(214, 217, 223));
-        monthField.setBorder(BorderFactory.createCompoundBorder(
-                monthField.getBorder(),
-                BorderFactory.createEmptyBorder(0, 0, 0, 15)));
-        monthField.setText("Month");
-        datePickerPanel.add(monthField);
-        yearField = new JTextField();
-        yearField.setFont(new Font("Tahoma", Font.PLAIN, 15));
-        yearField.setHorizontalAlignment(SwingConstants.CENTER);
-        yearField.setBackground(new Color(214, 217, 223));
-        yearField.setText("Year");
-        datePickerPanel.add(yearField);
-
-        GridBagConstraints gbcTxtDate = new GridBagConstraints();
-        gbcTxtDate.insets = new Insets(0, 200, 5, 200);
-        gbcTxtDate.fill = GridBagConstraints.HORIZONTAL;
-        gbcTxtDate.gridx = 0;
-        gbcTxtDate.gridy = 15;
-        centralPanel.add(datePickerPanel, gbcTxtDate);
 
         JLabel colorLabel = new JLabel("CHOOSE PREFERRED PLAYER NUMBER:");
         colorLabel.setForeground(Color.darkGray);
@@ -411,8 +361,6 @@ public class ClientGUIMain implements Runnable{
     @Override
     public void run() {
         playButton.addActionListener(new PlayActionListener());
-        //two_Players_button.addActionListener(new PlayerNumberButtonActionListener());
-        //three_Players_button.addActionListener(new PlayerNumberButtonActionListener());
     }
 
     public static void main(String[] args) {

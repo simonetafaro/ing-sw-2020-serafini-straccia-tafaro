@@ -40,17 +40,10 @@ public class ClientCLIMain{
     public void setupPlayerData(Scanner in){
         System.out.print("Insert nickname: ");
         String nickname = in.nextLine();
-        System.out.print("Insert day (birthday): ");
-        int day = Integer.parseInt(in.nextLine());
-        System.out.print("Insert month (birthday): ");
-        int month = Integer.parseInt(in.nextLine());
-        System.out.print("Insert year (birthday): ");
-        int year = Integer.parseInt(in.nextLine());
-        CustomDate birthday = new CustomDate(day, month, year);
         System.out.print("Do you want to join 2 or 3 players match? ");
         this.playerNumber = Integer.parseInt(in.nextLine());
 
-        this.connectionManagerSocket = new ConnectionManagerSocket(nickname, birthday, playerNumber);
+        this.connectionManagerSocket = new ConnectionManagerSocket(nickname, playerNumber);
         connectionManagerSocket.setup();
     }
 

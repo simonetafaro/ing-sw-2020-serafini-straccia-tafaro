@@ -58,13 +58,7 @@ public class SocketClientConnection  extends Observable<String> implements Runna
                     output.writeObject("NAME ACCEPTED");
                     output.flush();
 
-                    // read player birthday and confirm
-                    CustomDate birthday = (CustomDate) input.readObject();
-                    System.out.println("date accepted!");
-                    output.writeObject("VALID DATE");
-                    output.flush();
-
-                    Player player = new Player(clientId, playerName, birthday, null);
+                    Player player = new Player(clientId, playerName, null);
                     int playerNumber = (int) input.readObject();
                     switch (playerNumber){
                         case 2: activeServer.getTwoPlayerMatch().add(player);
