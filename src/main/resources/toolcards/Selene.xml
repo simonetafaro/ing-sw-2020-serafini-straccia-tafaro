@@ -3,7 +3,9 @@
     <title>Selene</title>
     <ImageIconURL>CardSelene.png</ImageIconURL>
     <ImagePressedIconURL>SeleneCardPressed.png</ImagePressedIconURL>
-    <PowerDescription></PowerDescription>
+    <PowerDescription>Your Build: Instead of your normal build, your
+        female Worker may build a dome at any level
+        regardless of which Worker moved. </PowerDescription>
     <imageURL></imageURL>
     <description>Selene description</description>
     <customRule decoratorName="SeleneRuleDecorator" />

@@ -4,7 +4,10 @@
 
     <ImageIconURL>CardPoseidon.png</ImageIconURL>
     <ImagePressedIconURL>PoseidonCardPressed.png</ImagePressedIconURL>
-    <PowerDescription></PowerDescription>
+    <PowerDescription>End of Your Turn: If your
+        unmoved Worker is on the
+        ground level, it may build up to
+        three times.</PowerDescription>
     <imageURL></imageURL>
     <description>Poseidon description</description>
     <customRule decoratorName="PoseidonRuleDecorator" />

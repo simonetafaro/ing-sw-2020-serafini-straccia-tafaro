@@ -3,7 +3,9 @@
     <title>Chronus</title>
     <ImageIconURL>CardChronus.png</ImageIconURL>
     <ImagePressedIconURL>ChronusCardPressed.png</ImagePressedIconURL>
-    <PowerDescription></PowerDescription>
+    <PowerDescription>Win Condition: You also win
+        when there are at least five
+        Complete Towers on the board</PowerDescription>
 
     <imageURL></imageURL>
     <description>Chronus description</description>

@@ -18,6 +18,8 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -590,8 +592,9 @@ public class BoardGUI implements Runnable{
 
             NodeList powerDescription = document.getElementsByTagName("PowerDescription");
             String text = powerDescription.item(0).getTextContent();
-            StringBuilder sb = new StringBuilder(64);
-            sb.append("<html>"+ text +"</html>");
+            StringBuilder sb = new StringBuilder();
+            String color = player.getColor().toString();
+            sb.append("<html>"+"COLOR -> "+ color + "  " + System.lineSeparator()+text+"</html>");
             this.myPowerDescription.setText(sb.toString());
 
 
@@ -627,8 +630,9 @@ public class BoardGUI implements Runnable{
 
             NodeList powerDescription = document.getElementsByTagName("PowerDescription");
             String text = powerDescription.item(0).getTextContent();
-            StringBuilder sb = new StringBuilder(64);
-            sb.append("<html>"+ text +"</html>");
+            StringBuilder sb = new StringBuilder();
+            String color = player.getColor().toString();
+            sb.append("<html>"+"COLOR -> "+ color + "  "+ System.lineSeparator()+text+"</html>");
             this.powerTextContainer.setText(sb.toString());
 
             godImageButton.addActionListener(new ChangePowerDescription(godImageButton, player.getColor(), sb));
@@ -811,4 +815,13 @@ public class BoardGUI implements Runnable{
         }
     }
 
+    public static void main(String[] args) {
+        JFrame mainFrame = new JFrame("prova");
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+        }catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        SwingUtilities.invokeLater(new BoardGUI(mainFrame,null));
+    }
 }

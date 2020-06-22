@@ -3,7 +3,8 @@
     <title>Zeus</title>
     <ImageIconURL>CardZeus.png</ImageIconURL>
     <ImagePressedIconURL>ZeusCardPressed.png</ImagePressedIconURL>
-    <PowerDescription></PowerDescription>
+    <PowerDescription>Your Build: Your Worker may
+        build a block under itself.</PowerDescription>
     <imageURL></imageURL>
     <description>Zeus description</description>
     <customRule decoratorName="ZeusRuleDecorator" />
