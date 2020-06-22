@@ -13,8 +13,6 @@ public class ServerMain {
     public static void main( String[] args )
     {
         Server server;
-        FileSystem fileSystem = FileSystems.getDefault();
-        System.out.println(fileSystem.getSeparator());
 
         try {
             server = new Server();

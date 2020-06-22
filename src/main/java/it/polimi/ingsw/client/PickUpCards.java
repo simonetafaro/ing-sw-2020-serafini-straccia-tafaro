@@ -383,12 +383,11 @@ public class PickUpCards implements Runnable {
         AtlasText = new ImageIcon(PATH + "Atlas_Text.png");
         MinotaurText = new ImageIcon(PATH + "Minotaur_Text.png");
 
-        ZeusText = new ImageIcon(PATH + "Minotaur_Text.png");
-        HestiaText = new ImageIcon(PATH + "Minotaur_Text.png");
-        PoseidonText = new ImageIcon(PATH + "Minotaur_Text.png");
-        SeleneText = new ImageIcon(PATH + "Minotaur_Text.png");
-        ChronusText = new ImageIcon(PATH + "Minotaur_Text.png");
-
+        ZeusText = new ImageIcon(PATH + "Zeus_Text.png");
+        HestiaText = new ImageIcon(PATH + "Hestia_Text.png");
+        PoseidonText = new ImageIcon(PATH + "Poseidon_Text.png");
+        SeleneText = new ImageIcon(PATH + "Selene_Text.png");
+        ChronusText = new ImageIcon(PATH + "Chronus_Text.png");
 
         logoLabel = new JLabel();
         logoLabel.setBorder(new EmptyBorder(12, 0, 30, 0));
@@ -430,11 +429,11 @@ public class PickUpCards implements Runnable {
         PrometheusImage = new ImageIcon(PATH + "Prometheus_Image.png");
         ApolloImage = new ImageIcon(PATH + "Apollo_Image.png");
 
-        ZeusImage = new ImageIcon(PATH + "Apollo_Image.png");
-        ChronusImage = new ImageIcon(PATH + "Apollo_Image.png");
-        PoseidonImage = new ImageIcon(PATH + "Apollo_Image.png");
-        HestiaImage = new ImageIcon(PATH + "Apollo_Image.png");
-        SeleneImage = new ImageIcon(PATH + "Apollo_Image.png");
+        ZeusImage = new ImageIcon(PATH + "Zeus_Image.png");
+        ChronusImage = new ImageIcon(PATH + "Chronus_Image.png");
+        PoseidonImage = new ImageIcon(PATH + "Poseidon_Image.png");
+        HestiaImage = new ImageIcon(PATH + "Hestia_Image.png");
+        SeleneImage = new ImageIcon(PATH + "Selene_Image.png");
 
         ImageContainer = new JLabel();
         ImageContainer.setBackground(new Color(0,0,0,0));
@@ -566,9 +565,9 @@ public class PickUpCards implements Runnable {
         MinotaurButton.setIcon(MinotaurCard_Icon);
         card.add(MinotaurButton);
 
-        Image SeleneCard = new ImageIcon(PATH + "CardMinotaur.png").getImage();
+        Image SeleneCard = new ImageIcon(PATH + "CardSelene.png").getImage();
         SeleneCard_Icon = new ImageIcon(SeleneCard);
-        Image SeleneCard_pressed = new ImageIcon(PATH + "MinotaurCardPressed.png").getImage();
+        Image SeleneCard_pressed = new ImageIcon(PATH + "SeleneCardPressed.png").getImage();
         SeleneCard_Icon_Pressed = new ImageIcon(SeleneCard_pressed);
         SeleneButton = new JCheckBox();
         SeleneButton.setBackground(new Color(0,0,0,0));
@@ -577,9 +576,9 @@ public class PickUpCards implements Runnable {
         SeleneButton.setIcon(SeleneCard_Icon);
         card.add(SeleneButton);
 
-        Image PoseidonCard = new ImageIcon(PATH + "CardMinotaur.png").getImage();
+        Image PoseidonCard = new ImageIcon(PATH + "CardPoseidon.png").getImage();
         PoseidonCard_Icon = new ImageIcon(PoseidonCard);
-        Image PoseidonCard_pressed = new ImageIcon(PATH + "MinotaurCardPressed.png").getImage();
+        Image PoseidonCard_pressed = new ImageIcon(PATH + "PoseidonCardPressed.png").getImage();
         PoseidonCard_Icon_Pressed = new ImageIcon(PoseidonCard_pressed);
         PoseidonButton = new JCheckBox();
         PoseidonButton.setBackground(new Color(0,0,0,0));
@@ -588,9 +587,9 @@ public class PickUpCards implements Runnable {
         PoseidonButton.setIcon(PoseidonCard_Icon);
         card.add(PoseidonButton);
 
-        Image ZeusCard = new ImageIcon(PATH + "CardMinotaur.png").getImage();
+        Image ZeusCard = new ImageIcon(PATH + "CardZeus.png").getImage();
         ZeusCard_Icon = new ImageIcon(ZeusCard);
-        Image ZeusCard_pressed = new ImageIcon(PATH + "MinotaurCardPressed.png").getImage();
+        Image ZeusCard_pressed = new ImageIcon(PATH + "ZeusCardPressed.png").getImage();
         ZeusCard_Icon_Pressed = new ImageIcon(ZeusCard_pressed);
         ZeusButton = new JCheckBox();
         ZeusButton.setBackground(new Color(0,0,0,0));
@@ -599,9 +598,9 @@ public class PickUpCards implements Runnable {
         ZeusButton.setIcon(ZeusCard_Icon);
         card.add(ZeusButton);
 
-        Image ChronusCard = new ImageIcon(PATH + "CardMinotaur.png").getImage();
+        Image ChronusCard = new ImageIcon(PATH + "CardChronus.png").getImage();
         ChronusCard_Icon = new ImageIcon(ChronusCard);
-        Image ChronusCard_pressed = new ImageIcon(PATH + "MinotaurCardPressed.png").getImage();
+        Image ChronusCard_pressed = new ImageIcon(PATH + "ChronusCardPressed.png").getImage();
         ChronusCard_Icon_Pressed = new ImageIcon(ChronusCard_pressed);
         ChronusButton = new JCheckBox();
         ChronusButton.setBackground(new Color(0,0,0,0));
@@ -610,9 +609,9 @@ public class PickUpCards implements Runnable {
         ChronusButton.setIcon(ChronusCard_Icon);
         card.add(ChronusButton);
 
-        Image HestiaCard = new ImageIcon(PATH + "CardMinotaur.png").getImage();
+        Image HestiaCard = new ImageIcon(PATH + "CardHestia.png").getImage();
         HestiaCard_Icon = new ImageIcon(HestiaCard);
-        Image HestiaCard_pressed = new ImageIcon(PATH + "MinotaurCardPressed.png").getImage();
+        Image HestiaCard_pressed = new ImageIcon(PATH + "HestiaCardPressed.png").getImage();
         HestiaCard_Icon_Pressed = new ImageIcon(HestiaCard_pressed);
         HestiaButton = new JCheckBox();
         HestiaButton.setBackground(new Color(0,0,0,0));

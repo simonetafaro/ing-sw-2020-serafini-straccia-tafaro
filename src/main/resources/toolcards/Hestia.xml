@@ -4,7 +4,9 @@
 
     <ImageIconURL>CardHestia.png</ImageIconURL>
     <ImagePressedIconURL>HestiaCardPressed.png</ImagePressedIconURL>
-    <PowerDescription></PowerDescription>
+    <PowerDescription>Your Build: Your Worker may
+        build one additional time, but this
+        cannot be on a perimeter space.</PowerDescription>
 
     <imageURL></imageURL>
     <description>Hestia description</description>
