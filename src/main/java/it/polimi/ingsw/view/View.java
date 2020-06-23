@@ -1,10 +1,6 @@
 package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.MoveMessage;
-import it.polimi.ingsw.model.PlayerMove;
-import it.polimi.ingsw.model.PlayerMoveEnd;
 import it.polimi.ingsw.observ.*;
-import it.polimi.ingsw.server.ClientConnection;
 
 import java.io.Serializable;
 

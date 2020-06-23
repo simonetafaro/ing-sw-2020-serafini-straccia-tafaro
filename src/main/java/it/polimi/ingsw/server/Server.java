@@ -26,7 +26,7 @@ public class Server{
     private static final int PORT = 12345;
     private final int  portGame = 14456;
 
-    public Server() throws IOException {
+    public Server() throws IOException{
         this.activeClientConnection = new HashMap<>();
         this.playerData = new HashMap<>();
         this.twoPlayerMatch = new ArrayList<>();
@@ -67,7 +67,6 @@ public class Server{
 
     public void run(){
         ExecutorService executorSocket = Executors.newCachedThreadPool();
-        //thread always on
         executorSocket.submit(new SocketClientConnection(PORT, this, portGame));
 
     }
@@ -97,8 +96,6 @@ public class Server{
 
                         broadcastMessage(broadcast, "Match created");
 
-                        //broadcastMessage(broadcast, "Players in this match:"+player1.getNickname()+player2.getNickname());
-
                         Thread t1 = handleColorChoose(matchColor, input1, player1, broadcast);
                         Thread t2 = handleColorChoose(matchColor, input2, player2, broadcast);
                         t1.join();
@@ -111,7 +108,6 @@ public class Server{
                             Object obj = input1.readObject();
                             if(obj instanceof ArrayList){
                                 cards = (ArrayList) obj;
-                                cards.forEach((cardName)-> System.out.println(cardName));
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -129,7 +125,6 @@ public class Server{
                         player1.setOutput(output1);
                         player2.setInput(input2);
                         player2.setOutput(output2);
-                        //call lobby
 
                         Game game = new Game(player1, player2);
 
@@ -139,7 +134,6 @@ public class Server{
             }
         }).start();
     }
-
     public void createThreePlayersMatch(Player player1, Player player2, Player player3){
         new Thread(new Runnable() {
             @Override
@@ -170,8 +164,6 @@ public class Server{
 
                     broadcastMessage(broadcast, "Match created");
 
-                    //broadcastMessage(broadcast, "Players in this match:"+player1.getNickname()+player2.getNickname());
-
                     Thread t1 = handleColorChoose(matchColor, input1, player1, broadcast);
                     Thread t2 = handleColorChoose(matchColor, input2, player2, broadcast);
                     Thread t3 = handleColorChoose(matchColor, input3, player3, broadcast);
@@ -187,7 +179,6 @@ public class Server{
                     Object obj = input1.readObject();
                     if(obj instanceof ArrayList){
                         cards = (ArrayList) obj;
-                        //cards.forEach((cardName)-> System.out.println(cardName));
                     }
 
                     cards.forEach((cardName)-> { deck.setChosenCard(cardName); });
@@ -213,7 +204,7 @@ public class Server{
                     player3.setOutput(output3);
 
                     Game game = new Game(player1, player2, player3);
-                    //call lobby
+
                 }catch (Exception e){
                     System.err.println(e.getMessage());
                 }
@@ -265,7 +256,6 @@ public class Server{
         }
         return false;
     }
-
     private Thread handleColorChoose (ColorCheck matchColor, ObjectInputStream input, Player player, List broadcast){
         Thread t = new Thread(new Runnable() {
             @Override
@@ -283,7 +273,6 @@ public class Server{
                     System.out.println(color);
                     playerColor = parseColor(matchColor, color, player, broadcast);
                 }
-                System.out.println("thread colore server morto");
             }
         });
         t.start();

@@ -18,21 +18,14 @@ public class showPopUpColor implements Runnable{
 
     private ConnectionManagerSocket connectionManagerSocket;
 
-    private ImageIcon blueButton_Icon_No_Available;
-    private ImageIcon whiteButton_Icon_No_Available;
-    private ImageIcon greyButton_Icon_No_Available;
-
     private JRadioButton grey_button;
     private JRadioButton blue_button;
     private JRadioButton white_button;
-    private ButtonGroup color;
     private JFrame mainFrame;
-    private Thread t;
     private static final String SRC = "src";
     private static final String MAIN = "main";
     private static final String RESOURCES = "resources";
     private static final String IMAGE = "images";
-    private ObjectOutputStream socketOut;
     private static final String PATH = SRC + File.separatorChar + MAIN + File.separatorChar + RESOURCES + File.separatorChar + IMAGE + File.separatorChar;
 
     private class WhiteColor implements ActionListener {
@@ -40,18 +33,13 @@ public class showPopUpColor implements Runnable{
         public void actionPerformed(ActionEvent e) {
             connectionManagerSocket.setColor("WHITE", showPopUpColor.this);
         }
-
-
     }
-
     private class BlueColor implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             connectionManagerSocket.setColor("BLUE", showPopUpColor.this);
         }
-
     }
-
     private class GreyColor implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -66,8 +54,6 @@ public class showPopUpColor implements Runnable{
         JPanel popUpFrame = new JPanel();
         popUpFrame.setLayout(new GridLayout(2,1));
 
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-
         Image titleImage = new ImageIcon(PATH + "chooseYourColor.png").getImage();
         ImageIcon titleIMG = new ImageIcon(titleImage);
         JLabel title = new JLabel();
@@ -79,22 +65,21 @@ public class showPopUpColor implements Runnable{
         Image greyButton_image_pressed = new ImageIcon(PATH + "G_Workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon greyButton_Icon_Pressed = new ImageIcon(greyButton_image_pressed);
         Image greyButton_image_No_Available = new ImageIcon(PATH + "G_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
-        greyButton_Icon_No_Available = new ImageIcon(greyButton_image_No_Available);
-
+        ImageIcon greyButton_Icon_No_Available = new ImageIcon(greyButton_image_No_Available);
 
         Image blueButton_image = new ImageIcon(PATH + "B_Workers_No_Shadow.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon blueButton_Icon = new ImageIcon(blueButton_image);
         Image blueButton_image_pressed = new ImageIcon(PATH + "B_Workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon blueButton_Icon_Pressed = new ImageIcon(blueButton_image_pressed);
         Image blueButton_image_No_Available = new ImageIcon(PATH + "B_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
-        blueButton_Icon_No_Available = new ImageIcon(blueButton_image_No_Available);
+        ImageIcon blueButton_Icon_No_Available = new ImageIcon(blueButton_image_No_Available);
 
         Image whiteButton_image = new ImageIcon(PATH + "W_workers_No_Press.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon whiteButton_Icon = new ImageIcon(whiteButton_image);
         Image whiteButton_image_pressed = new ImageIcon(PATH + "W_Workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon whiteButton_Icon_Pressed = new ImageIcon(whiteButton_image_pressed);
         Image whiteButton_image_No_Available = new ImageIcon(PATH + "W_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
-        whiteButton_Icon_No_Available = new ImageIcon(whiteButton_image_No_Available);
+        ImageIcon whiteButton_Icon_No_Available = new ImageIcon(whiteButton_image_No_Available);
 
         GridBagConstraints gbcWorkerColor = new GridBagConstraints();
         gbcWorkerColor.insets = new Insets(0, 150, 0, 150);
@@ -112,6 +97,7 @@ public class showPopUpColor implements Runnable{
         grey_button.setOpaque(false);
         grey_button.setHorizontalAlignment(SwingConstants.CENTER);
         grey_button.setIcon(greyButton_Icon);
+        grey_button.setPressedIcon(greyButton_Icon_Pressed);
         grey_button.setDisabledIcon(greyButton_Icon_No_Available);
 
         blue_button = new JRadioButton();
@@ -119,6 +105,7 @@ public class showPopUpColor implements Runnable{
         blue_button.setOpaque(false);
         blue_button.setHorizontalAlignment(SwingConstants.CENTER);
         blue_button.setIcon(blueButton_Icon);
+        blue_button.setPressedIcon(blueButton_Icon_Pressed);
         blue_button.setDisabledIcon(blueButton_Icon_No_Available);
 
         white_button = new JRadioButton();
@@ -126,8 +113,8 @@ public class showPopUpColor implements Runnable{
         white_button.setOpaque(false);
         white_button.setHorizontalAlignment(SwingConstants.CENTER);
         white_button.setIcon(whiteButton_Icon);
+        white_button.setPressedIcon(whiteButton_Icon_Pressed);
         white_button.setDisabledIcon(whiteButton_Icon_No_Available);
-
 
         gbcWorkerColor.insets = new Insets(0, 150, 5, 150);
         workersColorButton.add(grey_button);
@@ -135,7 +122,7 @@ public class showPopUpColor implements Runnable{
         workersColorButton.add(white_button);
         popUpFrame.add(workersColorButton,gbcWorkerColor);
 
-        color = new ButtonGroup();
+        ButtonGroup color = new ButtonGroup();
         color.add(grey_button);
         color.add(white_button);
         color.add(blue_button);
@@ -148,9 +135,7 @@ public class showPopUpColor implements Runnable{
     }
 
     public void closeGUI() throws IOException {
-        //connectionManagerSocket.setColorSetted(true);
         mainFrame.getContentPane().removeAll();
-        //SwingUtilities.invokeLater(new PickUpCards(mainFrame, connectionManagerSocket.getPlayerNumber()));
         connectionManagerSocket.setMainFrame(mainFrame);
         connectionManagerSocket.waitForFirstPlayer();
         mainFrame.update(mainFrame.getGraphics());
@@ -172,6 +157,6 @@ public class showPopUpColor implements Runnable{
         blue_button.addActionListener(new BlueColor());
         white_button.addActionListener(new WhiteColor());
         grey_button.addActionListener(new GreyColor());
-        t = connectionManagerSocket.receiveColorResponse(this);
+        connectionManagerSocket.receiveColorResponse(this);
     }
 }

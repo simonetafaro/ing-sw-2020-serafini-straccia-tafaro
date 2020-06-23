@@ -230,7 +230,6 @@ public class BoardGUI implements Runnable{
         @Override
         public void actionPerformed(ActionEvent e) {
             if(BoardGUI.this.move.getWorker() != null) {
-                System.out.println("set Move");
                 BoardGUI.this.move.setMoveOrBuild("M");
                 verifyPlayerMove();
             }else
@@ -276,7 +275,6 @@ public class BoardGUI implements Runnable{
             int x = (int) getCellX(BoardPanel.getMousePosition().getX());
             int y = (int) getCellY(BoardPanel.getMousePosition().getY());
             Cell workerPosition = new Cell(x, y);
-            System.out.println(x + y);
             //reset PlayerMove when click on worker different from worker already selected
 
             if (BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1().getWorkerPosition().getPosX() == workerPosition.getPosY() && BoardGUI.this.connectionManagerSocket.getPlayer().getWorker1().getWorkerPosition().getPosY() == workerPosition.getPosX()) {
@@ -542,10 +540,6 @@ public class BoardGUI implements Runnable{
             }
 
         }
-    }
-
-    public void validateFrame(){
-        this.mainframe.validate();
     }
     public void incrementWorkerNum(){
         this.workersNum++;

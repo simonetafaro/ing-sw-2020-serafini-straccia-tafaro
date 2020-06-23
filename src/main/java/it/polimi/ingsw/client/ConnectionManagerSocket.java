@@ -2,11 +2,8 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.ClientCLIMain;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.PlayerMove;
-import it.polimi.ingsw.utils.CustomDate;
 import it.polimi.ingsw.utils.FileManager;
 import it.polimi.ingsw.utils.PlayerColor;
-import it.polimi.ingsw.view.RemoteView;
 import it.polimi.ingsw.view.View;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -14,7 +11,6 @@ import org.xml.sax.SAXException;
 
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
-import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -28,9 +24,7 @@ public class ConnectionManagerSocket {
 
     private String nickname ;
     private PlayerColor myColor;
-    private transient ExecutorService executor;
     protected boolean nameSet;
-    private CustomDate customDate;
     private int playerNumber;
     private Socket socket;
     private ObjectOutputStream output;
@@ -40,26 +34,21 @@ public class ConnectionManagerSocket {
     private Thread t, cardThread;
     private static final String SERVER_ADDRESS = "127.0.0.1";
     private static final int SOCKET_PORT = 12345;
-    private static final int SOCKET_MESSAGE_PORT = 14456;
     private int order;
     private ClientSocketMessage clientSocket;
     private BoardGUI boardGUI;
     private ClientCLIMain boardCLI;
-    private View view;
     private Player player;
-    //private ClientData clientData;
 
     protected int clientID;
 
     public ConnectionManagerSocket(String nickname, int playerNumber) {
         this.nickname = nickname;
         this.playerNumber = playerNumber;
-        this.executor = Executors.newCachedThreadPool();
         this.myColor = null;
         this.clientID = 0;
         this.playerColor = "null";
         this.boardGUI = null;
-        //this.clientData = new ClientData();
     }
 
     public void setMainFrame(JFrame mainFrame) {
@@ -107,31 +96,14 @@ public class ConnectionManagerSocket {
         return order;
     }
 
-    public void setup() {
-        try {
-            this.initializeSocket();
-            this.chooseColor();
-        } catch (IOException e) {
-            System.out.println("Cannot connect to socket server (" + SERVER_ADDRESS
-                    + ":" + SOCKET_PORT + ")");
-        }
-
-    }
-
-    public void initializeMessageSocket(BoardGUI boardGUI){
-        this.boardGUI = boardGUI;
-        this.clientSocket = new ClientSocketMessageGUI(this, input, output);
-        this.clientSocket.initialize();
-    }
-    public Thread initializeMessageSocketCLI(ClientCLIMain BoardCLI){
-        this.boardCLI = BoardCLI;
-        this.clientSocket = new ClientSocketMessageCLI(this, input, output);
-        return this.clientSocket.initializeCLI();
+    public void setup() throws IOException {
+        this.initializeSocket();
+        this.chooseColor();
     }
     public void initializeSocket() throws IOException {
 
-        System.out.println("Connected to server " + SERVER_ADDRESS + " on port " + SOCKET_PORT);
         socket = new Socket(SERVER_ADDRESS, SOCKET_PORT);
+        System.out.println("Connected to server " + SERVER_ADDRESS + " on port " + SOCKET_PORT);
         output = new ObjectOutputStream(socket.getOutputStream());
         input = new ObjectInputStream(socket.getInputStream());
 
@@ -173,12 +145,23 @@ public class ConnectionManagerSocket {
         String matchCreated =null;
         do{
             try{
-                 matchCreated = (String) input.readObject();
+                matchCreated = (String) input.readObject();
             }catch (ClassNotFoundException e){
                 System.err.println(e.getMessage());
             }
             System.out.println(matchCreated);
         }while (!matchCreated.equals("Match created"));
+    }
+
+    public void initializeMessageSocket(BoardGUI boardGUI){
+        this.boardGUI = boardGUI;
+        this.clientSocket = new ClientSocketMessageGUI(this, input, output);
+        this.clientSocket.initialize();
+    }
+    public Thread initializeMessageSocketCLI(ClientCLIMain BoardCLI){
+        this.boardCLI = BoardCLI;
+        this.clientSocket = new ClientSocketMessageCLI(this, input, output);
+        return this.clientSocket.initializeCLI();
     }
 
     public void resetPlayerColor(){
@@ -248,6 +231,7 @@ public class ConnectionManagerSocket {
         t.start();
         return t;
     }
+
     public Thread receiveCard(PickUpCards guiInstance, ClientCLIMain cliInstance){
         this.cardThread = new Thread(new Runnable() {
             @Override

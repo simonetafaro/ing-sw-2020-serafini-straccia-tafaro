@@ -3,8 +3,12 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.SetWorkerPosition;
+import it.polimi.ingsw.utils.gameMessage;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -30,32 +34,6 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
         readFromServer();
     }
 
-    public void parseInput(Object o){
-        if(o instanceof ClientSocketMessageGUI){
-
-        }
-    }
-    public void send (PlayerMove playerMove){
-        try {
-            outputStream.reset();
-            outputStream.writeObject(playerMove);
-            outputStream.flush();
-        }catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
-
-    }
-    public void sendString (String playerMove){
-        try {
-            outputStream.reset();
-            outputStream.writeObject(playerMove);
-            outputStream.flush();
-        }catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
-
-    }
-
     public void readFromServer(){
         Thread t=new Thread(new Runnable() {
             @Override
@@ -71,14 +49,19 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
                             if(((String) o).contains(connectionManagerSocket.getPlayerColorEnum().toString())){
                                 if(((String) o).contains("setWorkers"))
                                     connectionManagerSocket.getBoardGUI().setWorkers();
-
+                                if(((String) o).contains(gameMessage.loseMessage)){
+                                    gameOver(null);
+                                    break;
+                                }
                                 String message = ((String) o).replace(connectionManagerSocket.getPlayerColorEnum().toString(), "");
                                 connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox(message, "received from server");
                             }
                         }
                         if(o instanceof MoveMessage){
-                            if(((MoveMessage) o).isHasWon())
+                            if(((MoveMessage) o).isHasWon()){
                                 gameOver(((MoveMessage)o).getPlayer().getColor());
+                                break;
+                            }
                             scanBoard((MoveMessage) o);
 
                         }
@@ -143,14 +126,23 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
         }
     }
     public void gameOver (PlayerColor color){
-        if(color.equals(connectionManagerSocket.getPlayerColorEnum())){
-            connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox("YOU WIN!", "Message From Server - Game Over");
-        } else {
+        if(color == null){
             connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox("YOU LOSE!", "Message From Server - Game Over");
+        } else {
+            if(color.equals(connectionManagerSocket.getPlayerColorEnum())){
+                connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox("YOU WIN!", "Message From Server - Game Over");
+            } else {
+                connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox("YOU LOSE!", "Message From Server - Game Over");
+            }
         }
-        this.active = false;
-        connectionManagerSocket.close();
-        connectionManagerSocket.disposeAll();
+        new Timer(5000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ClientSocketMessageGUI.this.active = false;
+                connectionManagerSocket.close();
+                connectionManagerSocket.disposeAll();
+            }
+        }).start();
     }
     public boolean isActive(){
         return active;

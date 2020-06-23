@@ -35,7 +35,4 @@ public class ColorCheck {
         counter++;
     }
 
-    public int getCounter() {
-        return counter;
-    }
 }

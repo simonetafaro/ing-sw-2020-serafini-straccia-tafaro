@@ -28,7 +28,6 @@ public class Controller implements Observer<Object> {
                 move.setWorker(model.getPlayerFromColor(move.getColor()).getWorker2());
         }
         if(!isPlayerTurn(move.getPlayer())){
-            //move.getView().reportError(gameMessage.wrongTurnMessage+"\n"+gameMessage.waitMessage);
             this.model.notify(move.getColor()+" "+ gameMessage.wrongTurnMessage+"\n"+gameMessage.waitMessage);
             return;
         }
@@ -44,15 +43,7 @@ public class Controller implements Observer<Object> {
             setWorker((SetWorkerPosition) message);
         }
         if(message instanceof PlayerMove) {
-            //updateDataPlayerMove((PlayerMove) message);
             performMove((PlayerMove) message);
-        }
-    }
-
-    public void updateDataPlayerMove(PlayerMove move){
-        if(turn.getPlayerTurn(move.getPlayer()).isFirstStep()) {
-            System.out.println("sono nell'if");
-            turn.getPlayerTurn(move.getPlayer()).setTurnWorker(move.getWorker());
         }
     }
 
@@ -62,17 +53,8 @@ public class Controller implements Observer<Object> {
             return;
         }
         model.setWorkers(worker);
-        /*
-        Player currPlayer = model.getPlayer(worker.getID());
-        if(worker.getWorkerNum() == 1 )
-            currPlayer.setWorker1(new Worker(worker.getID(), model.getBoard().getCell(worker.getX(), worker.getY()), 1, worker.getColor()));
-        else
-            currPlayer.setWorker2(new Worker(worker.getID(), model.getBoard().getCell(worker.getX(), worker.getY()), 2, worker.getColor()));
-
-         */
         model.notifySetWorker(worker);
     }
-
     public void setWorkersMessage(){
         model.notifySetWorkers();
     }

@@ -65,16 +65,9 @@ public class Model extends Observable<Object> {
     }
 
     public void endNotifyView(PlayerMove move, boolean hasWon){
-        //try {
-            PlayerColor nextTurn = playOrder_List.get((playOrder_List.indexOf(turn)+1)%playOrder_List.size());
-            //notifyObserver(new MoveMessage((Board) board.clone(), move.getPlayer(), hasWon, nextTurn));
-            notify(move);
-            /*
-        }catch (CloneNotSupportedException e){
-            System.err.println(e.getMessage());
-        }
+        PlayerColor nextTurn = playOrder_List.get((playOrder_List.indexOf(turn)+1)%playOrder_List.size());
+        notify(move);
 
-             */
         updateTurn();
     }
     public void notifyView(PlayerMove move, boolean hasWon){
@@ -140,18 +133,13 @@ public class Model extends Observable<Object> {
             endGamePlayerStuck(move);
             return;
         }
-        //3 players and 1 is stuck
-        //delete workers of this player from board
         move.getPlayer().getWorker1().clear();
         move.getPlayer().getWorker2().clear();
-        //update this.players--
         updateTurn();
         deletePlayerFromGame(move.getPlayer().getColor());
-        //update turn
         notifyView(move,false);
-        notify(gameMessage.loseMessage);
-        //move.getView().reportError(gameMessage.loseMessage);
-        //kill thread of move.getPlayer() ?
+        notify(move.getColor()+" "+gameMessage.loseMessage);
+
     }
     public void deletePlayerFromGame(PlayerColor color){
         playOrder_List.remove(color);
