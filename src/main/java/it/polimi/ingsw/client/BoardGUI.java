@@ -811,17 +811,22 @@ public class BoardGUI implements Runnable{
 
         public void infoBox(String infoMessage, String titleBar)
         {
-            JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
+            //JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
+            int TIME_VISIBLE = 5000;
+            JOptionPane pane = new JOptionPane(infoMessage,
+                    JOptionPane.INFORMATION_MESSAGE);
+            JDialog dialog = pane.createDialog(mainframe, titleBar);
+            dialog.setModal(false);
+            dialog.setVisible(true);
+
+            new Timer(TIME_VISIBLE, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    dialog.setVisible(false);
+                }
+            }).start();
+
         }
     }
 
-    public static void main(String[] args) {
-        JFrame mainFrame = new JFrame("prova");
-        try {
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-        }catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-        SwingUtilities.invokeLater(new BoardGUI(mainFrame,null));
-    }
 }
