@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -22,7 +24,7 @@ public class ClientGUIMain implements Runnable{
     private ImageIcon eastPanelImage;
     private Image centralPanelImageScaled;
     private ImageIcon centralPanelImage;
-    private JTextField playerTextField;
+    private JTextField playerTextField, serverIpField;
     private  JRadioButton playButton;
     private JTextField dayField, monthField, yearField;
     private ImageIcon threeButton_Icon, threeButton_Icon_Pressed;
@@ -132,7 +134,10 @@ public class ClientGUIMain implements Runnable{
         public void actionPerformed(ActionEvent e) {
 
             ConnectionManagerSocket connectionManagerSocket;
+            String serverIP = serverIpField.getText();
             String playerName = playerTextField.getText();
+            if(serverIP.equals(""))
+                return;
             int playerNumber = 0;
             if(playerName != null){
                 if(two_Players_button.isSelected() || three_Players_button.isSelected()){
@@ -145,6 +150,7 @@ public class ClientGUIMain implements Runnable{
                             ClientGUIMain.this.playerNumber = 3;
                         }
                         connectionManagerSocket = new ConnectionManagerSocket(playerName, playerNumber);
+                        connectionManagerSocket.setServerData(serverIP);
                         connectionManagerSocket.setMainFrame(ClientGUIMain.this.mainFrame);
                         int MAX_TRIES = 5, counter = 0;
                         while(true){
@@ -245,27 +251,88 @@ public class ClientGUIMain implements Runnable{
         gbcLogoLabel.gridy = 0;
         centralPanel.add(logoLabel, gbcLogoLabel);
 
-        JLabel playerLabel = new JLabel("INSERT YOUR NICKNAME:");
-        //playerLabel.setFont(fontTitilliumBoldUpright);
-        playerLabel.setForeground(Color.DARK_GRAY);
+        JLabel serverData = new JLabel("INSERT SERVER IP:");
+        serverData.setForeground(Color.DARK_GRAY);
+
         GridBagConstraints gbcLblName = new GridBagConstraints();
         gbcLblName.insets = new Insets(0, 200, 5, 200);
         gbcLblName.gridx = 0;
         gbcLblName.gridy = 5;
+
+        centralPanel.add(serverData, gbcLblName);
+
+        serverIpField = new JTextField();
+        serverIpField.setFont(new Font("Tahoma", Font.PLAIN, 15));
+        serverIpField.setHorizontalAlignment(SwingConstants.CENTER);
+        serverIpField.setBackground(new Color(214, 217, 223));
+        serverIpField.setText("127.0.0.1");
+        gbcLblName.gridy = 8;
+        gbcLblName.fill = GridBagConstraints.HORIZONTAL;
+        centralPanel.add(serverIpField, gbcLblName);
+        serverIpField.setColumns(10);
+        serverIpField.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                serverIpField.setText("");
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if(serverIpField.getText().equals(""))
+                    serverIpField.setText("127.0.0.1");
+            }
+        });
+
+        JLabel playerLabel = new JLabel("INSERT YOUR NICKNAME:");
+        playerLabel.setForeground(Color.DARK_GRAY);
+        gbcLblName.fill = GridBagConstraints.CENTER;
+        gbcLblName.gridy = 10;
+
         centralPanel.add(playerLabel, gbcLblName);
 
         playerTextField = new JTextField();
         playerTextField.setFont(new Font("Tahoma", Font.PLAIN, 15));
         playerTextField.setHorizontalAlignment(SwingConstants.CENTER);
         playerTextField.setBackground(new Color(214, 217, 223));
-        playerTextField.setText("Player");
-        GridBagConstraints gbcTxtAsd = new GridBagConstraints();
-        gbcTxtAsd.insets = new Insets(0, 200, 5, 200);
-        gbcTxtAsd.fill = GridBagConstraints.HORIZONTAL;
-        gbcTxtAsd.gridx = 0;
-        gbcTxtAsd.gridy = 8;
-        centralPanel.add(playerTextField, gbcTxtAsd);
+        playerTextField.setText("Nickname");
+        gbcLblName.fill = GridBagConstraints.HORIZONTAL;
+        gbcLblName.gridy = 12;
+        centralPanel.add(playerTextField, gbcLblName);
         playerTextField.setColumns(10);
+        playerTextField.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                playerTextField.setText("");
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if(playerTextField.getText().equals(""))
+                    playerTextField.setText("Nickname");
+            }
+        });
 
         GridBagConstraints gbcLblDate = new GridBagConstraints();
         gbcLblDate.insets = new Insets(10, 200, 5, 200);

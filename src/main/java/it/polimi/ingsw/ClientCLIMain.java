@@ -22,8 +22,15 @@ public class ClientCLIMain{
     private Scanner in;
     private Board board;
     private ConnectionManagerSocket connectionManagerSocket;
+    private String IPServer;
 
     private static final String PATH = SRC + File.separatorChar + MAIN + File.separatorChar + RESOURCES + File.separatorChar + IMAGE + File.separatorChar;
+
+    public void chooseServerIP(Scanner in){
+        System.out.print("Insert IP of server (Es: 192.168.2.1): ");
+        String serverIP = in.nextLine();
+        this.IPServer = serverIP;
+    }
 
     public void setupPlayerData(Scanner in){
         System.out.print("Insert nickname: ");
@@ -32,6 +39,7 @@ public class ClientCLIMain{
         this.playerNumber = Integer.parseInt(in.nextLine());
 
         this.connectionManagerSocket = new ConnectionManagerSocket(nickname, playerNumber);
+        connectionManagerSocket.setServerData(IPServer);
     }
     public void connectToServer() throws IOException{
         connectionManagerSocket.setup();
@@ -163,6 +171,7 @@ public class ClientCLIMain{
     public ClientCLIMain() {
         int MAX_TRIES = 5, counter = 0;
         this.in = new Scanner(System.in);
+        chooseServerIP(in);
         setupPlayerData(in);
         while(true) {
             try {
