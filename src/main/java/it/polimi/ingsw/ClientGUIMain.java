@@ -335,7 +335,11 @@ public class ClientGUIMain implements Runnable{
 
         Image play = new ImageIcon(PATH + "button_play.png").getImage().getScaledInstance(126,141, Image.SCALE_SMOOTH);
         ImageIcon play_button = new ImageIcon(play);
+        Image play_pressed = new ImageIcon(PATH + "button_play_pressed.png").getImage().getScaledInstance(126,141, Image.SCALE_SMOOTH);
+        ImageIcon play_button_pressed = new ImageIcon(play_pressed);
+
         playButton.setIcon(play_button);
+        playButton.setPressedIcon(play_button_pressed);
         playButton.setHorizontalAlignment(SwingConstants.CENTER);
         //playButton.setBackground(new Color(0,0,0,0));
         playButton.setOpaque(false);
