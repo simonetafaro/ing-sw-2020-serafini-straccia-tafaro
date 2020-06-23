@@ -34,6 +34,7 @@ public class ConnectionManagerSocket {
     private Thread t, cardThread;
     private static final String SERVER_ADDRESS = "127.0.0.1";
     private static final int SOCKET_PORT = 12345;
+    private String Server_IP;
     private int order;
     private ClientSocketMessage clientSocket;
     private BoardGUI boardGUI;
@@ -49,6 +50,10 @@ public class ConnectionManagerSocket {
         this.clientID = 0;
         this.playerColor = "null";
         this.boardGUI = null;
+    }
+
+    public void setServerData(String IP){
+        this.Server_IP = IP;
     }
 
     public void setMainFrame(JFrame mainFrame) {
@@ -102,7 +107,7 @@ public class ConnectionManagerSocket {
     }
     public void initializeSocket() throws IOException {
 
-        socket = new Socket(SERVER_ADDRESS, SOCKET_PORT);
+        socket = new Socket(Server_IP, SOCKET_PORT);
         System.out.println("Connected to server " + SERVER_ADDRESS + " on port " + SOCKET_PORT);
         output = new ObjectOutputStream(socket.getOutputStream());
         input = new ObjectInputStream(socket.getInputStream());
@@ -149,7 +154,6 @@ public class ConnectionManagerSocket {
             }catch (ClassNotFoundException e){
                 System.err.println(e.getMessage());
             }
-            System.out.println(matchCreated);
         }while (!matchCreated.equals("Match created"));
     }
 
