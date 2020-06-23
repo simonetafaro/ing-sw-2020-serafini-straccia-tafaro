@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.utils.CustomDate;
 import it.polimi.ingsw.utils.PlayerColor;
 import org.junit.jupiter.api.Test;
 

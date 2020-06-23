@@ -14,13 +14,8 @@ import java.util.Map;
 public class PickUpCards implements Runnable {
 
     private Image eastPanelImageScaled;
-    private ImageIcon eastPanelImage;
-
     private Image westPanelImageScaled;
-    private ImageIcon westPanelImage;
-
     private Image centralPanelImageScaled;
-    private ImageIcon centralPanelImage;
 
     private ImageIcon PanText;
     private ImageIcon PanImage;
@@ -94,7 +89,6 @@ public class PickUpCards implements Runnable {
     private ImageIcon PoseidonCard_Icon_Pressed;
     private ImageIcon PoseidonCard_Icon;
 
-
     private JLabel ImageContainer;
     private JLabel logoLabel;
     private int cardCounter;
@@ -142,7 +136,6 @@ public class PickUpCards implements Runnable {
                     updatedHeight, null);
         }
     }
-
     private class WestJPanel extends JPanel {
 
         @Override
@@ -171,7 +164,6 @@ public class PickUpCards implements Runnable {
                     updatedHeight, null);
         }
     }
-
     private class CentralJPanel extends JPanel {
         @Override
         public void paintComponent(Graphics g) {
@@ -204,7 +196,6 @@ public class PickUpCards implements Runnable {
         ImageIcon pressedButtonImage, ButtonImage, Text, GodImage;
         JCheckBox button;
         String godName;
-        int x,y;
 
         public PickGodActionListener(JCheckBox button, ImageIcon pressedButtonImage, ImageIcon buttonImage, ImageIcon text, ImageIcon godImage, String godName) {
             this.pressedButtonImage = pressedButtonImage;
@@ -259,7 +250,6 @@ public class PickUpCards implements Runnable {
         }
     }
 
-
     private class ChooseYourCardListener implements ActionListener{
         String CardName;
         ImageIcon pressedButtonImage, Text, GodImage, ButtonImage;
@@ -297,7 +287,6 @@ public class PickUpCards implements Runnable {
             }
         }
     }
-
     private class ChooseCardActionListener implements ActionListener {
 
         @Override
@@ -354,7 +343,7 @@ public class PickUpCards implements Runnable {
         buttonList = new ArrayList<JCheckBox>();
         JPanel rootPanel = new JPanel(new BorderLayout());
 
-        westPanelImage = new ImageIcon(PATH + "Sx_Panel_Cards_new.png");
+        ImageIcon westPanelImage = new ImageIcon(PATH + "Sx_Panel_Cards_new.png");
         westPanelImageScaled = new ImageIcon(westPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
         JPanel westPanel = new PickUpCards.WestJPanel();
@@ -371,7 +360,6 @@ public class PickUpCards implements Runnable {
         westPanel.setPreferredSize(new Dimension(459, 720));
         westPanel.setOpaque(true);
         rootPanel.add(westPanel, BorderLayout.WEST);
-
 
         PanText = new ImageIcon(PATH + "Pan_Text.png");
         ApolloText = new ImageIcon(PATH + "Apollo_Text.png");
@@ -402,11 +390,10 @@ public class PickUpCards implements Runnable {
 
         westPanel.add(logoLabel, gbcDescriptionLabel);
 
-        centralPanelImage = new ImageIcon(PATH + "Central_Panel_Cards_Image.png");
+        ImageIcon centralPanelImage = new ImageIcon(PATH + "Central_Panel_Cards_Image.png");
         centralPanelImageScaled = new ImageIcon(centralPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
         JPanel centralPanel = new PickUpCards.CentralJPanel();
-        //centralPanel.setBackground(Color.BLACK);
         centralPanel.setPreferredSize(new Dimension(362, 720));
         centralPanel.setOpaque(true);
         centralPanel.setLayout(gblSxPanel);
@@ -428,7 +415,6 @@ public class PickUpCards implements Runnable {
         AthenaImage = new ImageIcon(PATH + "Athena_Image.png");
         PrometheusImage = new ImageIcon(PATH + "Prometheus_Image.png");
         ApolloImage = new ImageIcon(PATH + "Apollo_Image.png");
-
         ZeusImage = new ImageIcon(PATH + "Zeus_Image.png");
         ChronusImage = new ImageIcon(PATH + "Chronus_Image.png");
         PoseidonImage = new ImageIcon(PATH + "Poseidon_Image.png");
@@ -439,7 +425,7 @@ public class PickUpCards implements Runnable {
         ImageContainer.setBackground(new Color(0,0,0,0));
         centralPanel.add(ImageContainer, gbcCardsImageLabel);
 
-        eastPanelImage = new ImageIcon(PATH + "Dx_Panel_Cards_new.png");
+        ImageIcon eastPanelImage = new ImageIcon(PATH + "Dx_Panel_Cards_new.png");
         eastPanelImageScaled = new ImageIcon(eastPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();;
         JPanel eastPanel = new PickUpCards.EastJPanel();
@@ -454,7 +440,6 @@ public class PickUpCards implements Runnable {
         gbcCardsLabel.fill = GridBagConstraints.VERTICAL;
         gbcCardsLabel.gridx = 0;
         gbcCardsLabel.gridy = 0;
-
 
         JPanel card = new JPanel(new GridLayout(5,3,5,5));
         card.setBackground(new Color(0,0,0,0));
@@ -639,10 +624,7 @@ public class PickUpCards implements Runnable {
             buttonList.forEach((GodButton) -> GodButton.setEnabled(false));
         }
 
-        //cardScroll.setBorder(BorderFactory.createEmptyBorder());
-
         eastPanel.add(cardScroll, gbcCardsLabel);
-
 
         Image play = new ImageIcon(PATH + "start-game-button.png").getImage().getScaledInstance(169,91, Image.SCALE_SMOOTH);
         ImageIcon play_button = new ImageIcon(play);
@@ -727,10 +709,10 @@ public class PickUpCards implements Runnable {
                                     MinotaurButton.addActionListener(new ChooseYourCardListener(MinotaurButton, MinotaurCard_Icon_Pressed, MinotaurText, MinotaurImage, "Minotaur", MinotaurCard_Icon));
                                     ActiveCardList.put(MinotaurButton, MinotaurCard_Icon);
                                     break;
-                case "Pan": PanButton.setEnabled(true);
-                            PanButton.addActionListener(new ChooseYourCardListener(PanButton, PanCard_Icon_Pressed, PanText, PanImage, "Pan", PanCard_Icon));
-                            ActiveCardList.put(PanButton, PanCard_Icon);
-                            break;
+                case "Pan":     PanButton.setEnabled(true);
+                                PanButton.addActionListener(new ChooseYourCardListener(PanButton, PanCard_Icon_Pressed, PanText, PanImage, "Pan", PanCard_Icon));
+                                ActiveCardList.put(PanButton, PanCard_Icon);
+                                break;
                 case "Prometheus":  PrometheusButton.setEnabled(true);
                                     PrometheusButton.addActionListener(new ChooseYourCardListener(PrometheusButton, PrometheusCard_Icon_Pressed, PrometheusText, PrometheusImage, "Prometheus", PrometheusCard_Icon));
                                     ActiveCardList.put(PrometheusButton, PrometheusCard_Icon);
@@ -769,18 +751,9 @@ public class PickUpCards implements Runnable {
         private static final int SB_SIZE = 10;
         private final Color THUMB_COLOR = Color.BLACK;
 
-        public ModernScrollPane(Component view) {
-            this(view, VERTICAL_SCROLLBAR_AS_NEEDED, HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        }
-
-        public ModernScrollPane(int vsbPolicy, int hsbPolicy) {
-            this(null, vsbPolicy, hsbPolicy);
-        }
-
         public ModernScrollPane(Component view, int vsbPolicy, int hsbPolicy) {
 
             setBorder(null);
-            // Set ScrollBar UI
             JScrollBar verticalScrollBar = getVerticalScrollBar();
             verticalScrollBar.setOpaque(false);
             verticalScrollBar.setUI(new ModernScrollBarUI(this));

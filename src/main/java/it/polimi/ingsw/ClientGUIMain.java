@@ -2,7 +2,6 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.client.ConnectionManagerSocket;
 import it.polimi.ingsw.client.showPopUpColor;
-import it.polimi.ingsw.utils.CustomDate;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -10,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 public class ClientGUIMain implements Runnable{
 
@@ -146,10 +146,23 @@ public class ClientGUIMain implements Runnable{
                         }
                         connectionManagerSocket = new ConnectionManagerSocket(playerName, playerNumber);
                         connectionManagerSocket.setMainFrame(ClientGUIMain.this.mainFrame);
-                        connectionManagerSocket.setup();
-                        //mainFrame.dispose();
-                        //connectionManagerSocket.setColor(mainFrame);
-                        showPopUpPlayerColor(connectionManagerSocket);
+                        int MAX_TRIES = 5, counter = 0;
+                        while(true){
+                            try{
+                                connectionManagerSocket.setup();
+                                showPopUpPlayerColor(connectionManagerSocket);
+                                break;
+                            } catch (IOException socketNoAvailable) {
+                                if (counter < MAX_TRIES) {
+                                    System.out.println("Server seems to be offline, trying again to connect");
+                                    counter++;
+                                } else {
+                                    System.out.println("Cannot connect to socket server!");
+                                    mainFrame.dispose();
+                                    break;
+                                }
+                            }
+                        }
                 }
             }
 

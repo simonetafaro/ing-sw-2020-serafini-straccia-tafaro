@@ -1,24 +1,12 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.client.BoardGUI;
 import it.polimi.ingsw.client.ConnectionManagerSocket;
-import it.polimi.ingsw.client.showPopUpColor;
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.server.ClientConnection;
-import it.polimi.ingsw.utils.CustomDate;
-import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.SetWorkerPosition;
-import it.polimi.ingsw.view.View;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class ClientCLIMain{
@@ -44,6 +32,8 @@ public class ClientCLIMain{
         this.playerNumber = Integer.parseInt(in.nextLine());
 
         this.connectionManagerSocket = new ConnectionManagerSocket(nickname, playerNumber);
+    }
+    public void connectToServer() throws IOException{
         connectionManagerSocket.setup();
     }
 
@@ -171,25 +161,43 @@ public class ClientCLIMain{
         return this.workersNum;
     }
     public ClientCLIMain() {
+        int MAX_TRIES = 5, counter = 0;
         this.in = new Scanner(System.in);
         setupPlayerData(in);
-        showPopUpPlayerColor(in);
-        try{
-            this.colorThread.join();
-        }catch (InterruptedException e){
-            System.err.println(e.getMessage());
-        }
-        showPopUpPlayerCards(in);
-        try{
-            this.cardThread.join();
-        }catch (InterruptedException e){
-            System.err.println(e.getMessage());
-        }
-        showMainBoard();
-        try{
-            this.mainGame.join();
-        }catch (InterruptedException e){
-            System.err.println(e.getMessage());
+        while(true) {
+            try {
+                connectToServer();
+                showPopUpPlayerColor(in);
+                try {
+                    this.colorThread.join();
+                } catch (InterruptedException e) {
+                    System.err.println(e.getMessage());
+                    break;
+                }
+                showPopUpPlayerCards(in);
+                try {
+                    this.cardThread.join();
+                } catch (InterruptedException e) {
+                    System.err.println(e.getMessage());
+                    break;
+                }
+                showMainBoard();
+                try {
+                    this.mainGame.join();
+                } catch (InterruptedException e) {
+                    System.err.println(e.getMessage());
+                    break;
+                }
+            } catch (IOException serverNoAvailable) {
+                if (counter < MAX_TRIES) {
+                    System.out.println("Server seems to be offline, trying again to connect");
+                    counter++;
+                } else {
+                    System.out.println("Cannot connect to socket server!");
+                    break;
+                }
+            }
+            break;
         }
     }
 

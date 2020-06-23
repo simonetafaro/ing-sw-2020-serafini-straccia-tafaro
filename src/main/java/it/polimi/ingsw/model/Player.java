@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.controller.CardManager;
-import it.polimi.ingsw.utils.CustomDate;
 import it.polimi.ingsw.utils.PlayerColor;
 
 import java.io.ObjectInputStream;
@@ -13,7 +12,6 @@ public class Player implements Serializable {
 
     private transient CardManager cardManager;
     private PlayerColor color;
-    private transient CustomDate birthDate;
     private String nickname;
     private int ID;
     private Worker worker1;

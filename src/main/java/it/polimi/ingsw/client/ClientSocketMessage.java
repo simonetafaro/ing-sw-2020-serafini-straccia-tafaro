@@ -18,9 +18,6 @@ public abstract class ClientSocketMessage {
     public Thread initializeCLI(){
         return null;
     };
-    public void parseInput(Object o){}
-    public void send (PlayerMove playerMove){ }
-    public void sendString (String playerMove){}
     public void readFromServer(){};
     public Thread readFromServerCLI(){
         return null;

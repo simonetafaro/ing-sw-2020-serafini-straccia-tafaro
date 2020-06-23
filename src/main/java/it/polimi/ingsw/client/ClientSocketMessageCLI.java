@@ -5,6 +5,9 @@ import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.SetWorkerPosition;
 import it.polimi.ingsw.utils.gameMessage;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -30,27 +33,6 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
         return readFromServerCLI();
     }
 
-    public void send (PlayerMove playerMove){
-        try {
-            outputStream.reset();
-            outputStream.writeObject(playerMove);
-            outputStream.flush();
-        }catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
-
-    }
-    public void sendString (String playerMove){
-        try {
-            outputStream.reset();
-            outputStream.writeObject(playerMove);
-            outputStream.flush();
-        }catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
-
-    }
-
     public Thread readFromServerCLI(){
         Thread t=new Thread(new Runnable() {
             @Override
@@ -66,13 +48,19 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
                                 if(((String) o).contains(" workerOccupiedCell") || ((String) o).contains("setWorkers")){
                                     connectionManagerSocket.getBoardCLI().setWorkers();
                                 }
+                                if(((String) o).contains(gameMessage.loseMessage)){
+                                    gameOver(null);
+                                    break;
+                                }
                                 String message = ((String) o).replace(connectionManagerSocket.getPlayerColorEnum().toString(), "");
                                 System.out.println(message);
                             }
                         }
                         if(o instanceof MoveMessage){
-                            if(((MoveMessage) o).isHasWon())
+                            if(((MoveMessage) o).isHasWon()){
                                 gameOver(((MoveMessage)o).getPlayer().getColor());
+                                break;
+                            }
                             else{
                                 connectionManagerSocket.getBoardCLI().setBoard(((MoveMessage)o).getBoard());
                                 connectionManagerSocket.getBoardCLI().printBoard();
@@ -143,14 +131,12 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
 
         return false;
     }
-
     private boolean standardInput(String message){
         //M 1-1,2
         return message.length()==7 && (message.charAt(0)=='M' || message.charAt(0)=='B' || message.charAt(0)=='D') && (message.charAt(2)=='1' ||
                 message.charAt(2)=='2') && Integer.parseInt(message.substring(4,5))>=0 && Integer.parseInt(message.substring(4,5))<=4 &&
                 Integer.parseInt(message.substring(6,7))>=0 && Integer.parseInt(message.substring(6,7))<=4;
     }
-
     public PlayerMove handleMove(String MoveOrBuild, int worker, int row, int column) {
         if(worker == 1) {
             PlayerMove move = new PlayerMove(connectionManagerSocket.getPlayer(), connectionManagerSocket.getPlayer().getWorker1(), row, column);
@@ -165,13 +151,23 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
     }
 
     public void gameOver (PlayerColor color){
-        if(color.equals(connectionManagerSocket.getPlayerColorEnum())){
-            System.out.println("YOU WIN!");
-        } else {
+        if(color == null){
             System.out.println("YOU LOSE!");
+        } else {
+            if(color.equals(connectionManagerSocket.getPlayerColorEnum())){
+                System.out.println("YOU WIN!");
+            } else {
+                System.out.println("YOU LOSE!");
+            }
         }
-        this.active = false;
-        connectionManagerSocket.close();
+        new Timer(5000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ClientSocketMessageCLI.this.active = false;
+                connectionManagerSocket.close();
+
+            }
+        }).start();
     }
 
     public boolean isActive(){

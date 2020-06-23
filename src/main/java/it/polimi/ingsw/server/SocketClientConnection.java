@@ -95,5 +95,4 @@ public class SocketClientConnection  extends Observable<String> implements Runna
         }
     }
 
-
 }

@@ -1,15 +1,11 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.observ.Observer;
-import it.polimi.ingsw.server.ClientConnection;
-import it.polimi.ingsw.utils.gameMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class RemoteView extends View implements Serializable{
 
