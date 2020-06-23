@@ -695,16 +695,6 @@ public class PickUpCards implements Runnable {
         connectionManagerSocket.receiveCard(this,null);
     }
 
-    public static void main(String[] args) {
-        JFrame mainFrame = new JFrame("prova");
-        try {
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-        }catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-        SwingUtilities.invokeLater(new PickUpCards(mainFrame, 2, null, false));
-    }
-
     public void updateGodImage(ArrayList<String> cards){
 
         cards.forEach((CardName) -> {
