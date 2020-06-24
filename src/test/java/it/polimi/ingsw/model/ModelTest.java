@@ -246,6 +246,8 @@ class ModelTest {
         assertEquals(model.getPlayer(3), player3);
         assertNotEquals(model.getPlayer(1), player3);
         assertNotEquals(model.getPlayer(2), player1);
+
+        assertNull(model.getPlayer(4));
     }
 
     @Test
@@ -286,7 +288,7 @@ class ModelTest {
     }
 
     @Test
-    void deletePlayerFromGameTest() {
+    void deletePlayerFromGame() {
         Player player1 = new Player();
         player1.setColor(PlayerColor.BLUE);
         Player player2 = new Player();
@@ -355,7 +357,9 @@ class ModelTest {
         player2.setColor(PlayerColor.GREY);
 
         Worker worker1 = new Worker(model.getBoard().getCell(0,0),1,player1.getColor());
+        Worker worker2 = new Worker(model.getBoard().getCell(1,1),2,player1.getColor());
         player1.setWorker1(worker1);
+        player1.setWorker2(worker2);
         PlayerMove move = new PlayerMove(player1,player1.getWorker1(),1,1);
         Turn turn = new Turn(player1.setMyTurn(),player2.setMyTurn());
 
@@ -366,6 +370,9 @@ class ModelTest {
         model.setFirstStep(move,turn);
         assertTrue(model.isRightWorker(move,turn));
 
+        turn.getPlayerTurn(move.getPlayer()).updateStep();
+        turn.getPlayerTurn(move.getPlayer()).setTurnWorker(worker2);
+        assertFalse(model.isRightWorker(move,turn));
     }
 
     @Test
@@ -429,6 +436,10 @@ class ModelTest {
         SetWorkerPosition worker = new SetWorkerPosition(1,1,player1.getColor(),1,1);
         model.setWorkers(worker);
         assertEquals(player1.getWorker1().getPlayerColor(),player1.getColor());
+
+        worker = new SetWorkerPosition(1,1,player1.getColor(),1,2);
+        model.setWorkers(worker);
+        assertEquals(player1.getWorker2().getPlayerColor(),player1.getColor());
     }
 
     @Test
@@ -446,6 +457,10 @@ class ModelTest {
         assertEquals(model.getPlayerFromColor(PlayerColor.WHITE), player3);
         assertNotEquals(model.getPlayerFromColor(PlayerColor.BLUE), player3);
         assertNotEquals(model.getPlayerFromColor(PlayerColor.WHITE), player1);
+
+        Model model1 = new Model();
+        model1.setPlayers(player1,player2);
+        assertNull(model1.getPlayerFromColor(PlayerColor.WHITE));
     }
 
     @Test
@@ -462,37 +477,32 @@ class ModelTest {
     }
 
     @Test
-    void notifySetWorker() {
-        /*
-        Socket socket = new Socket();
-        Player player1 = new Player(1,"Apollo", socket);
-        player1.setColor(PlayerColor.BLUE);
-        player1.setColor(PlayerColor.GREY);
-        Player player2 = new Player(2,"Pan", socket);
-        Worker worker11 = new Worker(1,model.getBoard().getCell(1,1),1, player1.getColor());
-        Worker worker22 = new Worker(2,model.getBoard().getCell(1,2),2, player2.getColor());
-        Worker worker12 = new Worker(1,model.getBoard().getCell(1,4),2, player1.getColor());
-        Worker worker21 = new Worker(2,model.getBoard().getCell(1,3),1, player2.getColor());
-
-        player1.setWorker1(worker11);
-        player1.setWorker2(worker12);
-        player2.setWorker1(worker21);
-        player2.setWorker2(worker22);
-
-        model.setPlayers(player1, player2);
-
-        model.notifySetWorker(new SetWorkerPosition(1,1,player1.getColor(),1,1));
-        assertEquals(model.getTurn(),PlayerColor.BLUE);
-
-         */
-    }
-
-    @Test
     void deletePlayer() {
-    }
+        Player player1 = new Player();
+        Player player2 = new Player();
+        Player player3 = new Player();
+        player1.setColor(PlayerColor.BLUE);
+        player2.setColor(PlayerColor.GREY);
+        player3.setColor(PlayerColor.WHITE);
+        Worker worker = new Worker();
+        player1.setWorker1(worker);
+        Worker worker1 = new Worker();
+        player1.setWorker2(worker1);
+        worker1.setWorkerPosition(model.getBoard().getCell(2,2));
+        worker.setWorkerPosition(model.getBoard().getCell(2,1));
 
-    @Test
-    void endGamePlayerStuck() {
+        PlayerMove move = new PlayerMove(player1,worker ,1,1);
+        model.setPlayers(player1, player2, player3);
+        model.setPlayOrder(player1.getColor(),player2.getColor(),player3.getColor());
+
+        model.deletePlayer(move);
+        assertTrue(model.getBoard().getCell(worker.getWorkerPosition().getPosX(),worker.getWorkerPosition().getPosY()).isFree());
+        assertNull(model.getBoard().getCell(worker.getWorkerPosition().getPosX(),worker.getWorkerPosition().getPosY()).getCurrWorker());
+        assertEquals(model.getTurn(),player2.getColor());
+
+        Model model1 = new Model();
+        model1.setPlayOrder(player1.getColor(),player2.getColor());
+        model1.deletePlayer(move);
     }
 
     @Test
@@ -517,5 +527,40 @@ class ModelTest {
 
         model.endMessage(move,turn, model);
         assertEquals(model.getTurn(), PlayerColor.BLUE);
+    }
+
+    @Test
+    void notifySetWorker() {
+        Model model = new Model();
+        Socket socket = new Socket();
+
+        Player player1 = new Player(1,"Apollo",socket);
+        Player player2 = new Player(2,"Apollo",socket);
+        Player player3 = new Player(3,"Apollo",socket);
+        player1.setColor(PlayerColor.BLUE);
+        player2.setColor(PlayerColor.GREY);
+        player3.setColor(PlayerColor.WHITE);
+        Worker worker1 = new Worker();
+        Worker worker2 = new Worker();
+        player3.setWorker1(worker1);
+        player3.setWorker2(worker2);
+
+
+        model.setPlayOrder(player1.getColor(),player2.getColor(),player3.getColor());
+        model.setPlayers(player1,player2,player3);
+
+        SetWorkerPosition worker = new SetWorkerPosition(1,1,player3.getColor(),3,1);
+        model.notifySetWorker(worker);
+        assertEquals(model.getTurn(),player2.getColor());
+
+        worker1 = new Worker();
+        worker2 = new Worker();
+        player1.setWorker1(worker1);
+        player1.setWorker2(worker2);
+
+        worker = new SetWorkerPosition(1,1,player1.getColor(),1,1);
+        model.notifySetWorker(worker);
+        assertEquals(model.getTurn(),player3.getColor());
+
     }
 }

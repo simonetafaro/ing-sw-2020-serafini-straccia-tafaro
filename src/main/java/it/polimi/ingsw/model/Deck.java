@@ -33,7 +33,4 @@ public class Deck {
         return this.deck;
     }
 
-    public void clearDeck(){
-        deck.forEach((nome, bool_value) -> deck.replace(nome, bool_value, false));
-    }
 }

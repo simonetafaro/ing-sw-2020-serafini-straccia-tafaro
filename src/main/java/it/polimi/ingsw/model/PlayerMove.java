@@ -127,8 +127,4 @@ public class PlayerMove implements Serializable , Cloneable{
         return color;
     }
 
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
 }

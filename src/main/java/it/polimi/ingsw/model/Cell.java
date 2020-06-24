@@ -104,10 +104,4 @@ public class Cell implements Cloneable, Serializable {
         return bool;
     }
 
-    @Override
-    protected final Cell clone(){
-        return this.clone();
-    }
-
-
 }

@@ -2,10 +2,13 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.PlayerMove;
 import it.polimi.ingsw.utils.PlayerColor;
+import it.polimi.ingsw.utils.SetWorkerPosition;
 import org.junit.jupiter.api.Test;
 
+import java.net.Socket;
+
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ControllerTest {
@@ -21,5 +24,62 @@ class ControllerTest {
         model.setPlayOrder(player.getColor(),player1.getColor());
         assertTrue(controller.isPlayerTurn(player));
         assertFalse(controller.isPlayerTurn(player1));
+    }
+
+    @Test
+    void update() {
+        Model model = new Model();
+        Controller controller = new Controller(model);
+        Socket socket = new Socket();
+
+        Player player1 = new Player(1,"Apollo",socket);
+        Player player2 = new Player(2,"Apollo",socket);
+        Player player3 = new Player(3,"Apollo",socket);
+        player1.setColor(PlayerColor.BLUE);
+        player2.setColor(PlayerColor.GREY);
+        player3.setColor(PlayerColor.WHITE);
+
+        model.setPlayers(player1,player2,player3);
+        SetWorkerPosition worker = new SetWorkerPosition(1,1,player1.getColor(),1,1);
+        controller.update(worker);
+        assertNotNull(player1.getWorker1());
+
+        SetWorkerPosition worker1 = new SetWorkerPosition(1,2 ,player2.getColor(),2,1);
+        model.getBoard().getCell(1,2).setFreeSpace(false);
+        controller.update(worker1);
+        assertNull(player2.getWorker1());
+    }
+
+    @Test
+    void setWorker() {
+        Model model = new Model();
+        Controller controller = new Controller(model);
+        Socket socket = new Socket();
+
+        Player player1 = new Player(1,"Apollo",socket);
+        Player player2 = new Player(2,"Apollo",socket);
+        Player player3 = new Player(3,"Apollo",socket);
+        player1.setColor(PlayerColor.BLUE);
+        player2.setColor(PlayerColor.GREY);
+        player3.setColor(PlayerColor.WHITE);
+
+        model.setPlayers(player1,player2,player3);
+        SetWorkerPosition worker = new SetWorkerPosition(1,1,player1.getColor(),1,1);
+        controller.setWorker(worker);
+        assertNotNull(player1.getWorker1());
+
+        SetWorkerPosition worker1 = new SetWorkerPosition(1,2 ,player2.getColor(),2,1);
+        model.getBoard().getCell(1,2).setFreeSpace(false);
+        controller.setWorker(worker1);
+        assertNull(player2.getWorker1());
+    }
+
+    @Test
+    void setWorkersMessage() {
+        Model model = new Model();
+        Controller controller = new Controller(model);
+
+        controller.setWorkersMessage();
+
     }
 }

@@ -44,7 +44,6 @@ public class Player implements Serializable {
         this.worker2=null;
         this.cardManager= new CardManager();
     }
-
     public Player(int ID, String nickname, Socket socket) {
         this.nickname = nickname;
         this.ID = ID;
@@ -78,9 +77,6 @@ public class Player implements Serializable {
         this.myCardMethod=cardRuleDecorator;
     }
 
-    public Socket getSocket() {
-        return socket;
-    }
     public String getNickname() {
         return nickname;
     }

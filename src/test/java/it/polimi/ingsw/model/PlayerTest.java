@@ -4,6 +4,11 @@ import it.polimi.ingsw.utils.PlayerColor;
 import org.junit.jupiter.api.Test;
 
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
@@ -99,5 +104,70 @@ class PlayerTest {
         assertEquals(player.getMyCard(),card);
     }
 
+    @Test
+    void getInput() {
+        try {
+            Socket socket = new Socket();
+            Player player = new Player();
+            ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
+            player.setInput(inputStream);
 
+            assertEquals(inputStream,player.getInput());
+        }catch(IOException e){
+            System.err.println(e.getMessage());
+        }
+    }
+
+    @Test
+    void setInput() {
+        try {
+            Socket socket = new Socket();
+            Player player = new Player();
+            ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
+            player.setInput(inputStream);
+
+            assertEquals(inputStream,player.getInput());
+        }catch(IOException e){
+            System.err.println(e.getMessage());
+        }
+    }
+
+    @Test
+    void getOutput() {
+        try {
+            Socket socket = new Socket();
+            Player player = new Player();
+            ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
+            player.setOutput(outputStream);
+
+            assertEquals(outputStream,player.getOutput());
+        }catch(IOException e){
+            System.err.println(e.getMessage());
+        }
+    }
+
+    @Test
+    void setOutput() {
+        try {
+            Socket socket = new Socket();
+            Player player = new Player();
+            ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
+            player.setOutput(outputStream);
+
+            assertEquals(outputStream,player.getOutput());
+        }catch(IOException e){
+            System.err.println(e.getMessage());
+        }
+    }
+
+    @Test
+    void getID() {
+        Socket socket = new Socket();
+        Player player = new Player(1,"Apollo",socket);
+
+        assertEquals(player.getID(),1);
+        assertNotEquals(player.getID(),2);
+        assertNotEquals(player.getID(),3);
+
+    }
 }
