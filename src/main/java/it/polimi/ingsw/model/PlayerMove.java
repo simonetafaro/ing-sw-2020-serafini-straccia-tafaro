@@ -112,9 +112,6 @@ public class PlayerMove implements Serializable , Cloneable{
     public Player getPlayer() {
         return player;
     }
-    public View getView() {
-        return view;
-    }
     public Worker getWorker() {
         return worker;
     }
