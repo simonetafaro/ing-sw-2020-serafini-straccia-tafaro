@@ -141,4 +141,32 @@ class ApolloRuleDecoratorTest {
         assertTrue(apollo.isEmptyCell(move,model));
     }
 
+    @Test
+    void move() {
+        Model model = new Model();
+        Player player1 = new Player();
+        Player player2 = new Player();
+        player1.setColor(PlayerColor.BLUE);
+        player2.setColor(PlayerColor.GREY);
+
+        Worker worker1 = new Worker(model.getBoard().getCell(0,0),1,PlayerColor.BLUE);
+        Worker worker2 = new Worker(model.getBoard().getCell(1,1),1,PlayerColor.GREY);
+        player1.setWorker1(worker1);
+        player2.setWorker1(worker2);
+        PlayerMove move = new PlayerMove(player1,player1.getWorker1(),1,1);
+        Turn turn = new Turn(player1.setMyTurn(),player2.setMyTurn());
+
+        apollo.move(move, model, turn);
+
+        //switchWorkerPosition test
+        assertTrue(model.getBoard().getCell(1,1).equals(worker1.getWorkerPosition()));
+        assertTrue(model.getBoard().getCell(0,0).equals(worker2.getWorkerPosition()));
+
+        move = new PlayerMove(player1,player1.getWorker1(),1,0);
+        apollo.move(move, model, turn);
+
+        //standard move test
+        assertTrue(model.getBoard().getCell(1,0).equals(worker1.getWorkerPosition()));
+        assertTrue(model.getBoard().getCell(1,1).isFree());
+    }
 }

@@ -78,5 +78,21 @@ class WorkerTest {
         assertTrue(worker.isStuck());
     }
 
+    @Test
+    void getPlayerColor() {
+        worker.setColor(PlayerColor.GREY);
+        assertEquals(worker.getPlayerColor(),PlayerColor.GREY);
 
+        worker.setColor(PlayerColor.BLUE);
+        assertEquals(worker.getPlayerColor(),PlayerColor.BLUE);
+
+        worker.setColor(PlayerColor.WHITE);
+        assertEquals(worker.getPlayerColor(),PlayerColor.WHITE);
+    }
+
+    @Test
+    void getID() {
+        Worker worker = new Worker(1, new Cell(1,1), 1, PlayerColor.GREY);
+        assertEquals(worker.getID(),1);
+    }
 }

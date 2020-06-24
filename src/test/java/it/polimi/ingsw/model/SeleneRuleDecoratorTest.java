@@ -12,6 +12,7 @@ class SeleneRuleDecoratorTest {
     private PlayerMove playermove=new PlayerMove(player,worker,1,1);
     private PlayerTurn playerTurn= new PlayerTurn(player);
     private Turn turn = new Turn(playerTurn);
+
     @Test
     void play() {
     }
