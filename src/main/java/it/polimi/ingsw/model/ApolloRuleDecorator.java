@@ -4,6 +4,12 @@ import it.polimi.ingsw.utils.gameMessage;
 
 import java.io.Serializable;
 
+/**
+ *Your Move: Your Worker may
+ * move into an opponent Worker’s
+ * space by forcing their Worker to
+ * the space yours just vacated.
+ */
 public class ApolloRuleDecorator extends StandardRuleDecorator {
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {

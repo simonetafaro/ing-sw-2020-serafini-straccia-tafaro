@@ -1,5 +1,10 @@
 package it.polimi.ingsw.model;
 
+/**
+ * Win Condition: You also win if
+ * your Worker moves down two or
+ * more levels.
+ */
 public class PanRuleDecorator extends StandardRuleDecorator {
 
     @Override

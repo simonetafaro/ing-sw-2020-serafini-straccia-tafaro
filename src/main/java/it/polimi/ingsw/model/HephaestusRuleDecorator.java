@@ -1,7 +1,11 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
-
+/**
+ *Your Build: Your Worker may
+ * build one additional block (not
+ * dome) on top of your first block.
+ */
 public class HephaestusRuleDecorator extends StandardRuleDecorator {
 
     @Override

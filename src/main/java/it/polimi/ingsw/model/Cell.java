@@ -33,7 +33,6 @@ public class Cell implements Cloneable, Serializable {
     public void setLevel(int level){
         this.level=level;
         if(this.level==4){
-            this.cronusRule = true;
             this.setFreeSpace(false);
         }
     }
@@ -61,6 +60,7 @@ public class Cell implements Cloneable, Serializable {
     public void buildInCell(){
         this.level++;
         if(this.level==4){
+            this.cronusRule = true;
             this.setFreeSpace(false);
         }
     }

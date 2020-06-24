@@ -2,6 +2,11 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
+/**
+ * Your Turn: If your Worker does
+ * not move up, it may build both
+ * before and after moving.
+ */
 public class PrometheusRuleDecorator extends StandardRuleDecorator {
 
     @Override
