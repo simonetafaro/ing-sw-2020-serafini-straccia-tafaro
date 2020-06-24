@@ -9,12 +9,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Game class is used before that a game starts to
+ * initialize Model and Controller class
+ */
 public class Game {
 
+    /**
+     * list players in the game
+     */
     private Map<Player, View> players;
+
+    /**
+     * Controller of the game, one per each game
+     */
     private Controller controller;
+
+    /**
+     * Model of the game, one per each game
+     */
     private Model model;
 
+    /**
+     * Game constructor for 3 players game in which a match is created
+     * @param player1
+     * @param player2
+     * @param player3
+     */
     public Game(Player player1, Player player2, Player player3){
         View player1View = new RemoteView(player1);
         View player2View = new RemoteView(player2);
@@ -37,6 +58,11 @@ public class Game {
         controller.setWorkersMessage();
     }
 
+    /**
+     * Game constructor for 2 players game in which a match is created
+     * @param player1
+     * @param player2
+     */
     public Game(Player player1, Player player2){
         System.out.println(player1.getID()+" "+ player1.getNickname());
         View player1View = new RemoteView(player1);
