@@ -1,7 +1,11 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
-
+/**
+ *Your Build: Your Worker may
+ * build one additional time, but not
+ * on the same space.
+ */
 public class DemeterRuleDecorator extends StandardRuleDecorator {
 
     @Override

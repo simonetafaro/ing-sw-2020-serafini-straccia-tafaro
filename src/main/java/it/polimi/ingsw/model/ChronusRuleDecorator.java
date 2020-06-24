@@ -1,7 +1,11 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
-
+/**
+ *Win Condition: You also win
+ * when there are at least five
+ * Complete Towers on the board.
+ */
 public class ChronusRuleDecorator extends StandardRuleDecorator {
 
     @Override
@@ -11,6 +15,7 @@ public class ChronusRuleDecorator extends StandardRuleDecorator {
                 model.notifyView(move,true);
                 return;
             }
+
             if(isEndAllowed(move, turn)) {
                 model.endMessage(move,turn,model);
                 move.getPlayer().getMyCard().setUsingCard(false);
@@ -21,6 +26,7 @@ public class ChronusRuleDecorator extends StandardRuleDecorator {
         }
         if(cronusrule(model)){
             model.notifyView(move,true);
+            return;
         }
         if(!model.isRightWorker(move, turn)){
             model.sendError(move.getColor().toString()+" "+gameMessage.insertAgain);
@@ -85,7 +91,7 @@ public class ChronusRuleDecorator extends StandardRuleDecorator {
                 }
                 }
             }
-        return conter > 4;
+        return conter>4;
     }
 
 }

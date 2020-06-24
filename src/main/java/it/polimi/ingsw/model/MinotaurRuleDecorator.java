@@ -2,6 +2,13 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
+/**
+ * Your Move: Your Worker may
+ * move into an opponent Worker’s
+ * space, if their Worker can be
+ * forced one space straight backwards to an
+ * unoccupied space at any level.
+ */
 public class MinotaurRuleDecorator extends StandardRuleDecorator {
 
     @Override

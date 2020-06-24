@@ -1,7 +1,11 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
-/* in this class we decorate play*/
+
+/**
+ * Your Build: Your Worker may
+ * build a block under itself.
+ */
 public class ZeusRuleDecorator extends StandardRuleDecorator {
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
@@ -74,7 +78,10 @@ public class ZeusRuleDecorator extends StandardRuleDecorator {
                 model.sendError(move.getColor().toString()+" "+gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
                 return;
             }
-
+            if(ZeusTohight(move, model, turn)&&Zeusbuild(move, model, turn)){
+                model.sendError(move.getColor().toString()+" "+gameMessage.invalidBuildZeus+"\n"+gameMessage.insertAgain);
+                return;
+            }
             if(model.checkStep(move, turn, model))
                 //model.performBuild(move);
                 build(move, model, turn);
@@ -84,6 +91,8 @@ public class ZeusRuleDecorator extends StandardRuleDecorator {
  public boolean Zeusbuild(PlayerMove move, Model model,Turn turn){
      return model.getBoard().getCell(move.getRow(), move.getColumn()).equals(turn.getPlayerTurn(move.getPlayer()).getStepI(1).getCellTo());
  }
+ public boolean ZeusTohight(PlayerMove move, Model model,Turn turn){
+     return model.getBoard().getCell(move.getRow(), move.getColumn()).getLevel()==3;
+ }
 }
 //non fa altro che dire se la cella dove bilto è quella dove sono allora posso
-//probabilmente con la logica dei layer devo fare in modo che nel leyer invece di 0 venga messo -1 se so questo potere

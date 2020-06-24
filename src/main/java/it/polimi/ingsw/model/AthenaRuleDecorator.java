@@ -1,7 +1,12 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
-
+/**
+ *Opponent’s Turn: If one of your
+ * Workers moved up on your last
+ * turn, opponent Workers cannot
+ * move up this turn.
+ */
 public class AthenaRuleDecorator extends StandardRuleDecorator {
 
     @Override

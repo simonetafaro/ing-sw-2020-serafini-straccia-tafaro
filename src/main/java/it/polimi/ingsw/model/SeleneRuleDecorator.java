@@ -1,10 +1,15 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
-/*Selene effect:
-Instead of your normal build, your
-female Worker may build a dome at any level
-regardless of which Worker moved.*/
+
+/**
+ * Setup: Place a male and a female
+ * Worker of your color.
+ *
+ * Your Build: Instead of your normal build, your
+ * female Worker may build a dome at any level
+ * regardless of which Worker moved.
+ */
 public class SeleneRuleDecorator extends StandardRuleDecorator {
     private boolean IamWoman=false;
     @Override
@@ -20,7 +25,7 @@ public class SeleneRuleDecorator extends StandardRuleDecorator {
         }
 
         if(!isRightWorkerDecorator(move, turn)){
-            if(move.getWorker().getWorkerNum()==1)
+            if(move.getWorker().getWorkerNum()==2)
                 IamWoman=true;
             else{
                 model.sendError(move.getColor().toString()+" "+gameMessage.wrongWorker);
@@ -86,8 +91,7 @@ public class SeleneRuleDecorator extends StandardRuleDecorator {
             model.getBoard().getCell(move.getRow(), move.getColumn()).setLevel(4);
         }
         else {
-            if(move.getWorker().getWorkerNum()==1){
-                model.sendError(move.getColor().toString()+" "+gameMessage.atlasCard);
+            if(move.getWorker().getWorkerNum()==2){
                 if(move.getMoveOrBuild().equals("D")){
                     model.getBoard().getCell(move.getRow(),move.getColumn()).setLevel(4);
                 }else{

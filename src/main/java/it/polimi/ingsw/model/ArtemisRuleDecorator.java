@@ -4,6 +4,11 @@ import it.polimi.ingsw.utils.gameMessage;
 
 import java.io.Serializable;
 
+/**Your Move: Your Worker may
+ *move one additional time, but not
+ *back to its initial space.
+ */
+
 public class ArtemisRuleDecorator extends StandardRuleDecorator {
 
     @Override

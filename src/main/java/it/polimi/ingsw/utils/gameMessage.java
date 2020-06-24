@@ -24,4 +24,6 @@ public class gameMessage {
     public static String tooHighCellMessage = "The chosen cell is too high!";
     public static String invalidMoveHestia="You cannot build in perimetral space ";
     public static String invalidBuildPoseidon="You cannot build another time ,your worker is too high";
+    public static String invalidBuildPoseidon2="You cannot build another time ,there are no free spaces around you!";
+    public static String invalidBuildZeus = "you cannot build under yourself you would build a dome ";
 }

@@ -1,7 +1,10 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
-
+/**
+ *Your Build: Your Worker may
+ * build a dome at any level.
+ */
 public class AtlasRuleDecorator extends StandardRuleDecorator {
 
     @Override

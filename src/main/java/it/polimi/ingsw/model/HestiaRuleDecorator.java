@@ -1,11 +1,13 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
-/* in this class we decorate build*/
-   /*Hestia effect
-   Your Worker may
-build one additional time, but this
-cannot be on a perimeter space.*/
+
+/**
+ * Hestia effect
+ *    Your Worker may
+ * build one additional time, but this
+ * cannot be on a perimeter space.
+ */
 public class HestiaRuleDecorator extends StandardRuleDecorator{
     @Override
     public void build(PlayerMove move, Model model, Turn turn) {

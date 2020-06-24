@@ -157,6 +157,7 @@ public class ClientCLIMain{
         this.board.getCell(o.getX(), o.getY()).setCurrWorker(new Worker(o.getID(), this.board.getCell(o.getX(), o.getY()), o.getWorkerNum(), o.getColor()));
     }
     public void printBoard(){
+        System.out.println('\n');
         this.board.printBoard();
     }
     public void setBoard(Board board){

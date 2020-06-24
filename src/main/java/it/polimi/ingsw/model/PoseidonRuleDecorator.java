@@ -2,6 +2,12 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
+/**
+ * End of Your Turn: If your
+ * unmoved Worker is on the
+ * ground level, it may build up to
+ * three times.
+ */
 public class PoseidonRuleDecorator extends StandardRuleDecorator {
     private boolean ican;
     @Override
@@ -38,17 +44,23 @@ public class PoseidonRuleDecorator extends StandardRuleDecorator {
             model.sendError(move.getColor().toString()+" "+gameMessage.wrongInputMessage+"\n"+gameMessage.insertAgain);
             return;
         }
+        if(turn.getPlayerTurn(move.getPlayer()).getI()>2){
+            if(!move.getWorker().getWorkerPosition().canBuildInCells(model.getBoard().getPlayingBoard()))
+                model.sendError(move.getColor().toString()+" "+gameMessage.invalidBuildPoseidon2);
 
-        if(!move.getWorker().getWorkerPosition().hasFreeCellClosed(model.getBoard().getPlayingBoard())){
+        }
+        else {
+            if(!move.getWorker().getWorkerPosition().hasFreeCellClosed(model.getBoard().getPlayingBoard())){
             //this worker is stuck
-            move.getWorker().setStuck(true);
-            model.sendError(move.getColor().toString()+" "+gameMessage.workerStuck+"\n"+gameMessage.insertAgain);
+                 move.getWorker().setStuck(true);
+                 model.sendError(move.getColor().toString()+" "+gameMessage.workerStuck+"\n"+gameMessage.insertAgain);
             //check if both worker1 && worker2 are stuck player lose
-            if(model.isPlayerStuck(move)){
+                 if(model.isPlayerStuck(move)){
                 //this player lose, both workers are stuck
-                model.deletePlayer(move);
-            }
+                     model.deletePlayer(move);
+                }
             return;
+            }
         }
 
         if(!model.isReachableCell(move)){
