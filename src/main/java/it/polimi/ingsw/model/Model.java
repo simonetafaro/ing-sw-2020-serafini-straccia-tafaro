@@ -4,12 +4,9 @@ import it.polimi.ingsw.observ.Observable;
 import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.SetWorkerPosition;
 import it.polimi.ingsw.utils.gameMessage;
-import it.polimi.ingsw.view.View;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Model extends Observable<Object> {
 
