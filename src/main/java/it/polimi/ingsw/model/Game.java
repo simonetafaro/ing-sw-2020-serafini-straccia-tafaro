@@ -10,18 +10,20 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Game class is used before that a game starts to
- * initialize Model and Controller class
+ * Game class is used before that a game starts to initialize
+ * {@link Model}, {@link Controller} and {@link RemoteView} class.
+ * There is one Model and one Controller per Game, while
+ * there is one RemoteView per player.
  */
 public class Game {
 
     /**
-     * list players in the game
+     * players List in the game
      */
     private Map<Player, View> players;
 
     /**
-     * Controller of the game, one per each game
+     * Controller of the game
      */
     private Controller controller;
 

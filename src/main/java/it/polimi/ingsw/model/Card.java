@@ -3,7 +3,6 @@ package it.polimi.ingsw.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-
 /**
  * Card class used to store sequence of
  * both standard moves and custom move
@@ -29,6 +28,7 @@ public class Card implements Serializable {
 
     /**
      * Choice of player to use or not card
+     * It's true if player wants to use his card
      */
     private boolean usingCard;
 
@@ -69,7 +69,7 @@ public class Card implements Serializable {
     /**
      * @param i index of list
      * @param customStep move character
-     * It populate custom moves list
+     * It populates custom moves list
      */
     public void addCustomStep(int i, String customStep){
         this.customSteps.add(i, customStep);

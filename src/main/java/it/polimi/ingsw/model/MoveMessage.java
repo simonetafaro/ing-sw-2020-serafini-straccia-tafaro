@@ -6,27 +6,27 @@ import java.io.Serializable;
 /**
  * MoveMessage class is the server's response to the client
  * after it has sent it a {@link PlayerMove}. It contains the following information:
- * player who made the move, a board's copy, if the player has won and next turn color player
+ * player who made the move, board's copy, if the player has won and next turn color player
  */
 public class MoveMessage implements Serializable {
 
     /**
-     * player
+     * Player
      */
     private final Player player;
 
     /**
-     * update board
+     * Update board
      */
     private final Board board;
 
     /**
-     * true if the player has won making the move
+     * True if the player has just won
      */
     private final boolean  hasWon;
 
     /**
-     * next turn color player
+     * Next turn color player
      */
     private PlayerColor nextTurn;
 
@@ -56,7 +56,7 @@ public class MoveMessage implements Serializable {
     }
 
     /**
-     * @return player who make the move
+     * @return player who made the move
      */
     public Player getPlayer() {
         return player;

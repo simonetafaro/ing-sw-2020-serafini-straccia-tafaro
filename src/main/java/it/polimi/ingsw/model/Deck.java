@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Deck class used to memorize the two or
- * three cards chosen in a game
+ * Deck class manages card choice. Each {@link Player} can have
+ * only a card so that in a game can be chosen two or three cards
  */
 public class Deck {
 

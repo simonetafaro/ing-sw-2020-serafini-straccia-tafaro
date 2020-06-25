@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 /**
  * Cell class keeps track of levels and workers
- * in Board game
- * {@link it.polimi.ingsw.model.Board}
+ * in {@link Board} game. Each cell has two coordinate on the board,
+ * current level and pointer of worker
  */
 public class Cell implements Cloneable, Serializable {
 
@@ -36,7 +36,8 @@ public class Cell implements Cloneable, Serializable {
     private Worker currWorker;
 
     /**
-     * true when a dome is built
+     * Parameter used for chronus card.
+     * It is true when a dome is built
      */
     private boolean cronusRule;
 
@@ -122,7 +123,11 @@ public class Cell implements Cloneable, Serializable {
     }
 
     /**
-     * @return block level
+     * @return block level:
+     * 1 first block
+     * 2 second block
+     * 3 third block
+     * 4 dome
      */
     public int getLevel(){
         return this.level;
@@ -136,8 +141,8 @@ public class Cell implements Cloneable, Serializable {
     }
 
     /**
-     * @return true if
-     *          returns true if there is
+     * @return true if the cell is free.
+     *          A cell is free if there is
      *          neither a dome nor a worker
      */
     public boolean isFree(){
@@ -145,11 +150,8 @@ public class Cell implements Cloneable, Serializable {
     }
 
     /**
-     * add block level:
-     * 1 first block
-     * 2 second block
-     * 3 third block
-     * 4 dome
+     * add block level in a cell:
+     * it increments previous level existing in the cell
      */
     public void buildInCell(){
         this.level++;
@@ -167,7 +169,7 @@ public class Cell implements Cloneable, Serializable {
     }
 
     /**
-     * @return true if a cell is adjacent to
+     * @return true if a cell is adjacent to another
      * @param cell
      */
     public boolean isClosedTo(Cell cell){
@@ -178,7 +180,7 @@ public class Cell implements Cloneable, Serializable {
 
     /**
      * @param board
-     * @return true if it has al least one near free cell whose level
+     * @return true if a cell has at least one near free cell whose level
      *         is not more than 1 higher than the level of the cell on
      *         which the method is called
      */
@@ -199,7 +201,7 @@ public class Cell implements Cloneable, Serializable {
 
     /**
      * @param board
-     * @return true if worker has near free cell
+     * @return true if a cell has at least one near free cell
      */
     public boolean canBuildInCells(Cell[][] board){
         boolean bool=false;

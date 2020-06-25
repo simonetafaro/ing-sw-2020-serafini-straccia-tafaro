@@ -5,10 +5,9 @@ import java.io.Serializable;
 /**
  * Game board class that contains
  * cells of the board.
- * {@link it.polimi.ingsw.model.Cell}
+ * {@link Cell}
  */
 public class Board implements Cloneable, Serializable {
-
 
     /**
      * rows number
@@ -28,7 +27,7 @@ public class Board implements Cloneable, Serializable {
     /**
      *  Board class constructor.
      *  It initializes game board and initializes
-     *  all cells as empty
+     *  all cells to empty
      */
     public Board() {
         this.board = new Cell[N_COLS][N_COLS];
