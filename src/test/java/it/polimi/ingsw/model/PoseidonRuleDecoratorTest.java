@@ -18,7 +18,7 @@ class PoseidonRuleDecoratorTest {
     void playM_B_END() {
         model.setPlayOrder(PlayerColor.BLUE,PlayerColor.GREY,PlayerColor.WHITE);
         playermove.setMoveOrBuild("M");
-        player.setMyCard("Pan");
+        player.setMyCard("Poseidon");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         poseidonRuleDecorator .play(playermove,turn,model);
@@ -40,7 +40,7 @@ class PoseidonRuleDecoratorTest {
     void playWrongStepB() {
         playermove.setMoveOrBuild("B");
         playermove.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Poseidon");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         poseidonRuleDecorator .play(playermove,turn,model);
@@ -50,7 +50,7 @@ class PoseidonRuleDecoratorTest {
 
     @Test
     void playNotEndAllowed() {
-        player.setMyCard("Pan");
+        player.setMyCard("Poseidon");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         PlayerMoveEnd playerMoveEnd = new PlayerMoveEnd(player,true);
@@ -63,7 +63,7 @@ class PoseidonRuleDecoratorTest {
         PlayerMove move =new PlayerMove(player,worker,1,5);
         move.setMoveOrBuild("M");
         move.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Poseidon");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         poseidonRuleDecorator .play(move,turn,model);
@@ -73,7 +73,7 @@ class PoseidonRuleDecoratorTest {
     @Test
     void playWrongBuild() {
         playermove.setMoveOrBuild("M");
-        player.setMyCard("Pan");
+        player.setMyCard("Poseidon");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         poseidonRuleDecorator .play(playermove, turn, model);
@@ -92,7 +92,7 @@ class PoseidonRuleDecoratorTest {
         PlayerMove move =new PlayerMove(player,worker,0,1);
         move.setMoveOrBuild("M");
         move.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Poseidon");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         poseidonRuleDecorator .play(move, turn, model);
@@ -104,7 +104,7 @@ class PoseidonRuleDecoratorTest {
         PlayerMove move =new PlayerMove(player,worker,3,3);
         move.setMoveOrBuild("M");
         move.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Poseidon");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         poseidonRuleDecorator .play(move, turn, model);
@@ -117,7 +117,7 @@ class PoseidonRuleDecoratorTest {
         model.getBoard().getCell(1,1).setLevel(2);
         playermove.setMoveOrBuild("M");
         playermove.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Poseidon");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         poseidonRuleDecorator .play(playermove, turn, model);
@@ -136,7 +136,7 @@ class PoseidonRuleDecoratorTest {
         model.getBoard().getCell(0,3).setLevel(2);
         playermove.setMoveOrBuild("M");
         playermove.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Poseidon");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         poseidonRuleDecorator .play(playermove,turn,model);
@@ -149,7 +149,97 @@ class PoseidonRuleDecoratorTest {
         assertTrue(model.getBoard().getCell(0,2).isFree());
         assertTrue(model.getBoard().getCell(1,2).isFree());
     }
+    @Test
+    void playM_B_B() {
+        playermove.setMoveOrBuild("M");
+        player.setMyCard("Poseidon");
+        player.setWorker1(worker);
+        player.setWorker2(worker1);
+        poseidonRuleDecorator .play(playermove,turn,model);
+        assertTrue(model.getBoard().getCell(0,0).isFree());
+        assertFalse(model.getBoard().getCell(1,1).isFree());
+        PlayerMove move=new PlayerMove(player,worker,1,2);
+        move.setMoveOrBuild("B");
+        move.setColor(PlayerColor.BLUE);
+        poseidonRuleDecorator .play(move,turn,model);
+        assertEquals(0, model.getBoard().getCell(1, 1).getLevel());
+        assertEquals(1, model.getBoard().getCell(1, 2).getLevel());
+        PlayerMove move1=new PlayerMove(player,worker1,1,2);
+        move1.setMoveOrBuild("B");
+        move1.setColor(PlayerColor.BLUE);
+        poseidonRuleDecorator.play(move1,turn,model);
+        assertEquals(0, model.getBoard().getCell(1, 1).getLevel());
+        assertEquals(2, model.getBoard().getCell(1, 2).getLevel());
 
+    }
+    @Test
+    void playM_B_B_B_NotAllowedNotCellToBuild() {
+        PlayerMove playerMove=new PlayerMove(player,worker1,1,1);
+        model.getBoard().getCell(0,1).setLevel(4);
+        model.getBoard().getCell(1,0).setLevel(2);
+        assertEquals(2, model.getBoard().getCell(1, 0).getLevel());
+        playerMove.setMoveOrBuild("M");
+        player.setMyCard("Poseidon");
+        player.setWorker1(worker);
+        player.setWorker2(worker1);
+        poseidonRuleDecorator .play(playerMove,turn,model);//M
+        PlayerMove move=new PlayerMove(player,worker1,1,0);
+        move.setMoveOrBuild("B");
+        move.setColor(PlayerColor.BLUE);
+        poseidonRuleDecorator .play(move,turn,model);//B
+        assertEquals(3, model.getBoard().getCell(1, 0).getLevel());
+        PlayerMove move1=new PlayerMove(player,worker,1,0);
+        move1.setMoveOrBuild("B");
+        move1.setColor(PlayerColor.BLUE);
+        poseidonRuleDecorator.play(move1,turn,model);//B
+        assertEquals(4, model.getBoard().getCell(1, 0).getLevel());
+        PlayerMove move2=new PlayerMove(player,worker,1,0);
+        move2.setMoveOrBuild("B");
+        move2.setColor(PlayerColor.BLUE);
+        poseidonRuleDecorator.play(move1,turn,model);
+        assertEquals(4, model.getBoard().getCell(1, 0).getLevel());
+        assertFalse(move2.getWorker().getWorkerPosition().canBuildInCells(model.getBoard().getPlayingBoard()));
+    }
+
+    @Test
+    void playM_B_BNotAllowedWorkerHigh() {
+        PlayerMove playerMove=new PlayerMove(player,worker1,1,1);
+        model.getBoard().getCell(0,0).setLevel(1);
+        playerMove.setMoveOrBuild("M");
+        player.setMyCard("Poseidon");
+        player.setWorker1(worker);
+        player.setWorker2(worker1);
+        poseidonRuleDecorator .play(playerMove,turn,model);//M
+        PlayerMove move=new PlayerMove(player,worker1,1,0);
+        move.setMoveOrBuild("B");
+        move.setColor(PlayerColor.BLUE);
+        poseidonRuleDecorator .play(move,turn,model);//B
+        PlayerMove move1=new PlayerMove(player,worker,1,0);
+        move1.setMoveOrBuild("B");
+        move1.setColor(PlayerColor.BLUE);
+        poseidonRuleDecorator.play(move1,turn,model);//B
+        assertEquals(1, model.getBoard().getCell(1, 0).getLevel());
+        assertFalse(poseidonRuleDecorator.isIcan());
+       }
+    @Test
+    void playM_B_BW1() {
+        PlayerMove playerMove=new PlayerMove(player,worker1,1,1);
+        model.getBoard().getCell(0,0).setLevel(1);
+        playerMove.setMoveOrBuild("M");
+        player.setMyCard("Poseidon");
+        player.setWorker1(worker);
+        player.setWorker2(worker1);
+        poseidonRuleDecorator .play(playerMove,turn,model);//M
+        PlayerMove move=new PlayerMove(player,worker1,1,0);
+        move.setMoveOrBuild("B");
+        move.setColor(PlayerColor.BLUE);
+        poseidonRuleDecorator .play(move,turn,model);//B
+        PlayerMove move1=new PlayerMove(player,worker1,1,0);
+        move1.setMoveOrBuild("B");
+        move1.setColor(PlayerColor.BLUE);
+        poseidonRuleDecorator.play(move1,turn,model);//B
+        assertEquals(1, model.getBoard().getCell(1, 0).getLevel());
+    }
     @Test
     void build() {
         Worker worker= new Worker(model.getBoard().getCell(0,0),1, PlayerColor.BLUE);

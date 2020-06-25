@@ -21,4 +21,14 @@ class AtlasRuleDecoratorTest {
         assertEquals(1, model.getBoard().getCell(1, 1).getLevel());
 
     }
+    @Test
+    void buildADome() {
+        Worker worker= new Worker(model.getBoard().getCell(0,0),1, PlayerColor.BLUE);
+        PlayerMove playermove=new PlayerMove(player,worker,1,1);
+        playermove.setMoveOrBuild("D");
+        atlasRuleDecorator.build(playermove,model,turn);
+        assertEquals(0, model.getBoard().getCell(0, 0).getLevel());
+        assertEquals(4, model.getBoard().getCell(1, 1).getLevel());
+
+    }
 }

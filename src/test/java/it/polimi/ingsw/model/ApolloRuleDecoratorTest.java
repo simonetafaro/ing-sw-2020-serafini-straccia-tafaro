@@ -16,14 +16,14 @@ class ApolloRuleDecoratorTest {
     private Board board=model.getBoard();
     private PlayerTurn playerTurn= new PlayerTurn(player);
     private Turn turn = new Turn(playerTurn);
-    private  Worker worker= new Worker(model.getBoard().getCell(0,0),1, PlayerColor.BLUE);
+    private Worker worker= new Worker(model.getBoard().getCell(0,0),1, PlayerColor.BLUE);
     private Worker worker1= new Worker(model.getBoard().getCell(0,2),2, PlayerColor.BLUE);
     private PlayerMove playermove=new PlayerMove(player,worker,1,1);
     @Test
     void playM_B_END() {
         model.setPlayOrder(PlayerColor.BLUE,PlayerColor.GREY,PlayerColor.WHITE);
         playermove.setMoveOrBuild("M");
-        player.setMyCard("Pan");
+        player.setMyCard("Apollo");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         apollo.play(playermove,turn,model);
@@ -38,14 +38,14 @@ class ApolloRuleDecoratorTest {
         PlayerMoveEnd moveend=new PlayerMoveEnd(player,true);
         //move.setColor(PlayerColor.BLUE);
         apollo.play(moveend,turn,model);
-        Assertions.assertFalse(move.getPlayer().getMyCard().isUsingCard());
+        assertFalse(move.getPlayer().getMyCard().isUsingCard());
     }
 
     @Test
     void playWrongStepB() {
         playermove.setMoveOrBuild("B");
         playermove.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Apollo");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         apollo.play(playermove,turn,model);
@@ -55,7 +55,7 @@ class ApolloRuleDecoratorTest {
 
     @Test
     void playNotEndAllowed() {
-        player.setMyCard("Pan");
+        player.setMyCard("Apollo");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         PlayerMoveEnd playerMoveEnd = new PlayerMoveEnd(player,true);
@@ -68,22 +68,22 @@ class ApolloRuleDecoratorTest {
         PlayerMove move =new PlayerMove(player,worker,1,5);
         move.setMoveOrBuild("M");
         move.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Apollo");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         apollo.play(move,turn,model);
-        Assertions.assertFalse(model.getBoard().getCell(0,0).isFree());
+        assertFalse(model.getBoard().getCell(0,0).isFree());
 
     }
     @Test
     void playWrongBuild() {
         playermove.setMoveOrBuild("M");
-        player.setMyCard("Pan");
+        player.setMyCard("Apollo");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         apollo.play(playermove, turn, model);
-        Assertions.assertTrue(model.getBoard().getCell(0, 0).isFree());
-        Assertions.assertFalse(model.getBoard().getCell(1, 1).isFree());
+        assertTrue(model.getBoard().getCell(0, 0).isFree());
+        assertFalse(model.getBoard().getCell(1, 1).isFree());
         PlayerMove move = new PlayerMove(player, worker1, 1, 2);
         move.setMoveOrBuild("B");
         move.setColor(PlayerColor.BLUE);
@@ -97,11 +97,11 @@ class ApolloRuleDecoratorTest {
         PlayerMove move =new PlayerMove(player,worker,0,1);
         move.setMoveOrBuild("M");
         move.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Apollo");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         apollo.play(move, turn, model);
-        Assertions.assertFalse(model.getBoard().getCell(0,0).isFree());
+        assertFalse(model.getBoard().getCell(0,0).isFree());
     }
 
     @Test
@@ -109,12 +109,12 @@ class ApolloRuleDecoratorTest {
         PlayerMove move =new PlayerMove(player,worker,3,3);
         move.setMoveOrBuild("M");
         move.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Apollo");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         apollo.play(move, turn, model);
-        Assertions.assertFalse(model.getBoard().getCell(0,0).isFree());
-        Assertions.assertTrue(model.getBoard().getCell(3,3).isFree());
+        assertFalse(model.getBoard().getCell(0,0).isFree());
+        assertTrue(model.getBoard().getCell(3,3).isFree());
     }
 
     @Test
@@ -122,12 +122,12 @@ class ApolloRuleDecoratorTest {
         model.getBoard().getCell(1,1).setLevel(2);
         playermove.setMoveOrBuild("M");
         playermove.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Apollo");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         apollo.play(playermove, turn, model);
-        Assertions.assertFalse(model.getBoard().getCell(0,0).isFree());
-        Assertions.assertTrue(model.getBoard().getCell(1,1).isFree());
+        assertFalse(model.getBoard().getCell(0,0).isFree());
+        assertTrue(model.getBoard().getCell(1,1).isFree());
     }
 
     @Test
@@ -141,20 +141,59 @@ class ApolloRuleDecoratorTest {
         model.getBoard().getCell(0,3).setLevel(2);
         playermove.setMoveOrBuild("M");
         playermove.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Apollo");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         apollo.play(playermove,turn,model);
-        Assertions.assertFalse(model.getBoard().getCell(0,0).isFree());
-        Assertions.assertTrue(model.getBoard().getCell(1,1).isFree());
+        assertFalse(model.getBoard().getCell(0,0).isFree());
+        assertTrue(model.getBoard().getCell(1,1).isFree());
         PlayerMove move=new PlayerMove(player,worker1,1,2);
         move.setMoveOrBuild("M");
         move.setColor(PlayerColor.BLUE);
         apollo.play(move,turn,model);
-        Assertions.assertTrue(model.getBoard().getCell(0,2).isFree());
-        Assertions.assertTrue(model.getBoard().getCell(1,2).isFree());
+        assertTrue(model.getBoard().getCell(0,2).isFree());
+        assertTrue(model.getBoard().getCell(1,2).isFree());
     }
 
+    @Test
+    void playB_NotFreeCell() {
+        model.setPlayOrder(PlayerColor.BLUE,PlayerColor.GREY,PlayerColor.WHITE);
+        playermove.setMoveOrBuild("M");
+        player.setMyCard("Apollo");
+        player.setWorker1(worker);
+        player.setWorker2(worker1);
+        apollo.play(playermove,turn,model);
+        assertTrue(model.getBoard().getCell(0,0).isFree());
+        assertFalse(model.getBoard().getCell(1,1).isFree());
+        PlayerMove move=new PlayerMove(player,worker,0,2);
+        move.setMoveOrBuild("B");
+        move.setColor(PlayerColor.BLUE);
+        apollo.play(move,turn,model);
+        assertEquals(0, model.getBoard().getCell(0, 2).getLevel());
+    }
+    @Test
+    void playM_CannotBuild() {
+        Player player1=new Player();
+        Worker worker2= new Worker(model.getBoard().getCell(1,1),1, PlayerColor.BLUE);
+        Worker worker3= new Worker(model.getBoard().getCell(3,2),2, PlayerColor.BLUE);
+        PlayerTurn playerTurn1= new PlayerTurn(player1);
+        Turn turn = new Turn(playerTurn,playerTurn1);
+        PlayerMove move=new PlayerMove(player1,worker2,0,0);
+        model.setPlayOrder(PlayerColor.BLUE,PlayerColor.GREY,PlayerColor.WHITE);
+        model.getBoard().getCell(1,0).setLevel(4);
+        model.getBoard().getCell(0,1).setLevel(4);
+        player1.setMyCard("Apollo");
+        player1.setWorker1(worker2);
+        player1.setWorker2(worker3);
+        move.setMoveOrBuild("M");
+        move.setColor(PlayerColor.BLUE);
+        player.setMyCard("Apollo");
+        player.setWorker1(worker);
+        player.setWorker2(worker1);
+        apollo.play(move,turn,model);
+        assertEquals(player.getWorker1(), model.getBoard().getCell(0, 0).getCurrWorker());
+        assertEquals(player1.getWorker1(), model.getBoard().getCell(1, 1).getCurrWorker());
+    }
     @Test
     void switchWorkerPosition(){
         Worker worker1 = new Worker(board.getCell(0,0),1, PlayerColor.BLUE);

@@ -18,7 +18,7 @@ class ChronusRuleDecoratorTest {
     void playM_B_END() {
         model.setPlayOrder(PlayerColor.BLUE,PlayerColor.GREY,PlayerColor.WHITE);
         playermove.setMoveOrBuild("M");
-        player.setMyCard("Pan");
+        player.setMyCard("Chronus");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         chronusRuleDecorator.play(playermove,turn,model);
@@ -40,7 +40,7 @@ class ChronusRuleDecoratorTest {
     void playWrongStepB() {
         playermove.setMoveOrBuild("B");
         playermove.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Chronus");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         chronusRuleDecorator.play(playermove,turn,model);
@@ -50,7 +50,7 @@ class ChronusRuleDecoratorTest {
 
     @Test
     void playNotEndAllowed() {
-        player.setMyCard("Pan");
+        player.setMyCard("Chronus");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         PlayerMoveEnd playerMoveEnd = new PlayerMoveEnd(player,true);
@@ -63,7 +63,7 @@ class ChronusRuleDecoratorTest {
         PlayerMove move =new PlayerMove(player,worker,1,5);
         move.setMoveOrBuild("M");
         move.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Chronus");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         chronusRuleDecorator.play(move,turn,model);
@@ -73,7 +73,7 @@ class ChronusRuleDecoratorTest {
     @Test
     void playWrongBuild() {
         playermove.setMoveOrBuild("M");
-        player.setMyCard("Pan");
+        player.setMyCard("Chronus");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         chronusRuleDecorator.play(playermove, turn, model);
@@ -92,7 +92,7 @@ class ChronusRuleDecoratorTest {
         PlayerMove move =new PlayerMove(player,worker,0,1);
         move.setMoveOrBuild("M");
         move.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Chronus");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         chronusRuleDecorator.play(move, turn, model);
@@ -104,7 +104,7 @@ class ChronusRuleDecoratorTest {
         PlayerMove move =new PlayerMove(player,worker,3,3);
         move.setMoveOrBuild("M");
         move.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Chronus");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         chronusRuleDecorator.play(move, turn, model);
@@ -117,7 +117,7 @@ class ChronusRuleDecoratorTest {
         model.getBoard().getCell(1,1).setLevel(2);
         playermove.setMoveOrBuild("M");
         playermove.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Chronus");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         chronusRuleDecorator.play(playermove, turn, model);
@@ -136,7 +136,7 @@ class ChronusRuleDecoratorTest {
         model.getBoard().getCell(0,3).setLevel(2);
         playermove.setMoveOrBuild("M");
         playermove.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Chronus");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         chronusRuleDecorator.play(playermove,turn,model);
@@ -149,7 +149,47 @@ class ChronusRuleDecoratorTest {
         assertTrue(model.getBoard().getCell(0,2).isFree());
         assertTrue(model.getBoard().getCell(1,2).isFree());
     }
+    @Test
+    void playCronusRuleM() {
+        model.setPlayOrder(PlayerColor.BLUE,PlayerColor.GREY,PlayerColor.WHITE);
+        model.getBoard().getCell(1,0).setCronusRule(true);
+        model.getBoard().getCell(0,1).setCronusRule(true);
+        model.getBoard().getCell(1,1).setCronusRule(true);
+        model.getBoard().getCell(1,2).setCronusRule(true);
+        model.getBoard().getCell(1,3).setCronusRule(true);
+        playermove.setMoveOrBuild("M");
+        playermove.setColor(PlayerColor.BLUE);
+        player.setMyCard("Chronus");
+        player.setWorker1(worker);
+        player.setWorker2(worker1);
+        chronusRuleDecorator.play(playermove,turn,model);
+        assertTrue(chronusRuleDecorator.cronusrule(model));
+    }
 
+    @Test
+    void playCronusRuleB() {
+        model.setPlayOrder(PlayerColor.BLUE,PlayerColor.GREY,PlayerColor.WHITE);
+        model.getBoard().getCell(1,0).setCronusRule(true);
+        model.getBoard().getCell(0,1).setCronusRule(true);
+        model.getBoard().getCell(1,1).setCronusRule(true);
+        model.getBoard().getCell(1,3).setCronusRule(true);
+        model.getBoard().getCell(1,2).setLevel(3);
+        playermove.setMoveOrBuild("M");
+        playermove.setColor(PlayerColor.BLUE);
+        player.setMyCard("Chronus");
+        player.setWorker1(worker);
+        player.setWorker2(worker1);
+        chronusRuleDecorator.play(playermove,turn,model);
+        PlayerMove move=new PlayerMove(player,worker,1,2);
+        move.setMoveOrBuild("B");
+        move.setColor(PlayerColor.BLUE);
+        chronusRuleDecorator.play(move,turn,model);
+        PlayerMoveEnd moveend=new PlayerMoveEnd(player,true);
+        //move.setColor(PlayerColor.BLUE);
+        chronusRuleDecorator.play(moveend,turn,model);
+        assertTrue(chronusRuleDecorator.cronusrule(model));
+
+    }
     @Test
     void cronusrule() {
     }

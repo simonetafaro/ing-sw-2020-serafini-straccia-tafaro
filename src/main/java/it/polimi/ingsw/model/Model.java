@@ -64,6 +64,10 @@ public class Model extends Observable<Object> {
         return null;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
     public void endNotifyView(PlayerMove move, boolean hasWon){
         PlayerColor nextTurn = playOrder_List.get((playOrder_List.indexOf(turn)+1)%playOrder_List.size());
         notify(move);

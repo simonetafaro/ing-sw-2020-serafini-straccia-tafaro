@@ -19,7 +19,7 @@ class SeleneRuleDecoratorTest {
     void playM_B_END() {
         model.setPlayOrder(PlayerColor.BLUE,PlayerColor.GREY,PlayerColor.WHITE);
         playermove.setMoveOrBuild("M");
-        player.setMyCard("Pan");
+        player.setMyCard("Selene");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         selene.play(playermove,turn,model);
@@ -38,10 +38,52 @@ class SeleneRuleDecoratorTest {
     }
 
     @Test
+    void playM_DChangeWorker() {
+        playermove.setMoveOrBuild("M");
+        player.setMyCard("Selene");
+        player.setWorker1(worker);
+        player.setWorker2(worker1);
+        selene.play(playermove,turn,model);
+        PlayerMove move=new PlayerMove(player,worker1,1,2);
+        move.setMoveOrBuild("B");
+        selene.play(move,turn,model);
+        assertEquals(4, model.getBoard().getCell(1, 2).getLevel());
+
+    }
+    @Test
+    void playM_D() {
+        PlayerMove moveM=new PlayerMove(player,worker1,1,1);
+        moveM.setMoveOrBuild("M");
+        player.setMyCard("Selene");
+        player.setWorker1(worker);
+        player.setWorker2(worker1);
+        selene.play(moveM,turn,model);
+        PlayerMove move=new PlayerMove(player,worker1,1,2);
+        move.setMoveOrBuild("D");
+        selene.play(move,turn,model);
+        assertEquals(4, model.getBoard().getCell(1, 2).getLevel());
+
+    }
+    @Test
+    void playM_D_Wrong() {
+        PlayerMove moveM=new PlayerMove(player,worker1,1,1);
+        moveM.setMoveOrBuild("M");
+        player.setMyCard("Selene");
+        player.setWorker1(worker);
+        player.setWorker2(worker1);
+        selene.play(moveM,turn,model);
+        PlayerMove move=new PlayerMove(player,worker,1,2);
+        move.setMoveOrBuild("D");
+        move.setColor(PlayerColor.BLUE);
+        selene.play(move,turn,model);
+        assertEquals(0, model.getBoard().getCell(1, 2).getLevel());
+
+    }
+    @Test
     void playWrongStepB() {
         playermove.setMoveOrBuild("B");
         playermove.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Selene");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         selene.play(playermove,turn,model);
@@ -51,7 +93,7 @@ class SeleneRuleDecoratorTest {
 
     @Test
     void playNotEndAllowed() {
-        player.setMyCard("Pan");
+        player.setMyCard("Selene");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         PlayerMoveEnd playerMoveEnd = new PlayerMoveEnd(player,true);
@@ -64,7 +106,7 @@ class SeleneRuleDecoratorTest {
         PlayerMove move =new PlayerMove(player,worker,1,5);
         move.setMoveOrBuild("M");
         move.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Selene");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         selene.play(move,turn,model);
@@ -78,7 +120,7 @@ class SeleneRuleDecoratorTest {
         PlayerMove move =new PlayerMove(player,worker,0,1);
         move.setMoveOrBuild("M");
         move.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Selene");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         selene.play(move, turn, model);
@@ -90,7 +132,7 @@ class SeleneRuleDecoratorTest {
         PlayerMove move =new PlayerMove(player,worker,3,3);
         move.setMoveOrBuild("M");
         move.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Selene");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         selene.play(move, turn, model);
@@ -103,7 +145,7 @@ class SeleneRuleDecoratorTest {
         model.getBoard().getCell(1,1).setLevel(2);
         playermove.setMoveOrBuild("M");
         playermove.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Selene");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         selene.play(playermove, turn, model);
@@ -122,7 +164,7 @@ class SeleneRuleDecoratorTest {
         model.getBoard().getCell(0,3).setLevel(2);
         playermove.setMoveOrBuild("M");
         playermove.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Selene");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         selene.play(playermove,turn,model);
@@ -139,7 +181,7 @@ class SeleneRuleDecoratorTest {
     @Test
     void build() {
         Worker worker= new Worker(model.getBoard().getCell(0,0),1, PlayerColor.BLUE);
-        PlayerMove playermove=new PlayerMove(player,worker,1,1);
+        PlayerMove playermove=new PlayerMove(player,worker1,1,1);
         playermove.setMoveOrBuild("B");
         selene.build(playermove,model,turn);
         assertEquals(0, model.getBoard().getCell(0, 0).getLevel());

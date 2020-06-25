@@ -20,7 +20,7 @@ class PrometheusRuleDecoratorTest {
     void playM_B_END() {
         model.setPlayOrder(PlayerColor.BLUE,PlayerColor.GREY,PlayerColor.WHITE);
         playermove.setMoveOrBuild("M");
-        player.setMyCard("Pan");
+        player.setMyCard("Prometheus");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         prometheusRuleDecorator.play(playermove,turn,model);
@@ -37,22 +37,62 @@ class PrometheusRuleDecoratorTest {
         prometheusRuleDecorator.play(moveend,turn,model);
         assertFalse(move.getPlayer().getMyCard().isUsingCard());
     }
-
     @Test
-    void playWrongStepB() {
+    void playB_M_B() {
         playermove.setMoveOrBuild("B");
-        playermove.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Prometheus");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         prometheusRuleDecorator.play(playermove,turn,model);
-        assertEquals(0, model.getBoard().getCell(0, 0).getLevel());
-        assertEquals(0, model.getBoard().getCell(1, 1).getLevel());
+        PlayerMove move=new PlayerMove(player,worker,1,0);
+        move.setMoveOrBuild("M");
+        prometheusRuleDecorator.play(move,turn,model);
+        PlayerMove move1=new PlayerMove(player,worker,0,0);
+        move1.setMoveOrBuild("B");
+        prometheusRuleDecorator.play(move1,turn,model);
+        assertEquals(1, model.getBoard().getCell(1, 1).getLevel());
+        assertEquals(1, model.getBoard().getCell(0, 0).getLevel());
+        assertEquals(worker, model.getBoard().getCell(1,0 ).getCurrWorker());
     }
-
+    @Test
+    void playWrongStepB() {
+        playermove.setMoveOrBuild("B");
+        player.setMyCard("Prometheus");
+        player.setWorker1(worker);
+        player.setWorker2(worker1);
+        prometheusRuleDecorator.play(playermove,turn,model);
+        PlayerMove move=new PlayerMove(player,worker,1,0);
+        move.setMoveOrBuild("M");
+        prometheusRuleDecorator.play(move,turn,model);
+        PlayerMove move1=new PlayerMove(player,worker,0,0);
+        move1.setMoveOrBuild("B");
+        prometheusRuleDecorator.play(move1,turn,model);
+        PlayerMove move2=new PlayerMove(player,worker,0,0);
+        move2.setMoveOrBuild("B");
+        move2.setColor(PlayerColor.BLUE);
+        prometheusRuleDecorator.play(move2,turn,model);
+        assertEquals(1, model.getBoard().getCell(1, 1).getLevel());
+        assertEquals(1, model.getBoard().getCell(0, 0).getLevel());
+        assertEquals(worker, model.getBoard().getCell(1,0 ).getCurrWorker());
+    }
+    @Test
+    void playWrongStepSecondB() {
+        playermove.setMoveOrBuild("B");
+        player.setMyCard("Prometheus");
+        player.setWorker1(worker);
+        player.setWorker2(worker1);
+        prometheusRuleDecorator.play(playermove,turn,model);
+        PlayerMove move=new PlayerMove(player,worker,1,0);
+        move.setMoveOrBuild("B");
+        move.setColor(PlayerColor.BLUE);
+        prometheusRuleDecorator.play(move,turn,model);
+        assertEquals(1, model.getBoard().getCell(1, 1).getLevel());
+        assertEquals(0, model.getBoard().getCell(1, 0).getLevel());
+        assertEquals(worker, model.getBoard().getCell(0,0 ).getCurrWorker());
+    }
     @Test
     void playNotEndAllowed() {
-        player.setMyCard("Pan");
+        player.setMyCard("Prometheus");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         PlayerMoveEnd playerMoveEnd = new PlayerMoveEnd(player,true);
@@ -65,7 +105,7 @@ class PrometheusRuleDecoratorTest {
         PlayerMove move =new PlayerMove(player,worker,1,5);
         move.setMoveOrBuild("M");
         move.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Prometheus");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         prometheusRuleDecorator.play(move,turn,model);
@@ -75,7 +115,7 @@ class PrometheusRuleDecoratorTest {
     @Test
     void playWrongBuild() {
         playermove.setMoveOrBuild("M");
-        player.setMyCard("Pan");
+        player.setMyCard("Prometheus");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         prometheusRuleDecorator.play(playermove, turn, model);
@@ -94,7 +134,7 @@ class PrometheusRuleDecoratorTest {
         PlayerMove move =new PlayerMove(player,worker,0,1);
         move.setMoveOrBuild("M");
         move.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Prometheus");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         prometheusRuleDecorator.play(move, turn, model);
@@ -106,7 +146,7 @@ class PrometheusRuleDecoratorTest {
         PlayerMove move =new PlayerMove(player,worker,3,3);
         move.setMoveOrBuild("M");
         move.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Prometheus");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         prometheusRuleDecorator.play(move, turn, model);
@@ -119,7 +159,7 @@ class PrometheusRuleDecoratorTest {
         model.getBoard().getCell(1,1).setLevel(2);
         playermove.setMoveOrBuild("M");
         playermove.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Prometheus");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         prometheusRuleDecorator.play(playermove, turn, model);
@@ -138,7 +178,7 @@ class PrometheusRuleDecoratorTest {
         model.getBoard().getCell(0,3).setLevel(2);
         playermove.setMoveOrBuild("M");
         playermove.setColor(PlayerColor.BLUE);
-        player.setMyCard("Pan");
+        player.setMyCard("Prometheus");
         player.setWorker1(worker);
         player.setWorker2(worker1);
         prometheusRuleDecorator.play(playermove,turn,model);
@@ -151,7 +191,18 @@ class PrometheusRuleDecoratorTest {
         assertTrue(model.getBoard().getCell(0,2).isFree());
         assertTrue(model.getBoard().getCell(1,2).isFree());
     }
-
+    @Test
+    void playFirstBuildNotAllowed() {
+        model.getBoard().getCell(0,1).setLevel(1);
+        model.getBoard().getCell(1,0).setLevel(1);
+        playermove.setMoveOrBuild("B");
+        playermove.setColor(PlayerColor.BLUE);
+        player.setMyCard("Prometheus");
+        player.setWorker1(worker);
+        player.setWorker2(worker1);
+        prometheusRuleDecorator.play(playermove,turn,model);
+        assertEquals(0,model.getBoard().getCell(1,1).getLevel());
+    }
     @Test
     void move() {
         Worker worker= new Worker(model.getBoard().getCell(0,0),1, PlayerColor.BLUE);
