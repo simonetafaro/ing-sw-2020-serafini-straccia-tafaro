@@ -14,6 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ClientSocketMessageGUI extends ClientSocketMessage {
 
@@ -51,18 +52,20 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
                                     connectionManagerSocket.getBoardGUI().setWorkers();
                                 if(((String) o).contains(gameMessage.loseMessage)){
                                     gameOver(null);
-                                    break;
+                                    closeOrWatchGame();
                                 }
                                 String message = ((String) o).replace(connectionManagerSocket.getPlayerColorEnum().toString(), "");
                                 connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox(message, "received from server");
                             }
                         }
                         if(o instanceof MoveMessage){
+                            scanBoard((MoveMessage) o);
+
                             if(((MoveMessage) o).isHasWon()){
                                 gameOver(((MoveMessage)o).getPlayer().getColor());
                                 break;
                             }
-                            scanBoard((MoveMessage) o);
+
 
                         }
                         if(o instanceof ArrayList){
@@ -78,6 +81,7 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
             }
         });t.start();
     }
+
     public void scanBoard(MoveMessage message){
         Board board = message.getBoard();
         for(int x = 0; x<5; x++){
@@ -134,7 +138,12 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
             } else {
                 connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox("YOU LOSE!", "Message From Server - Game Over");
             }
+            quitGame();
         }
+
+    }
+
+    public void quitGame(){
         new Timer(5000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -146,5 +155,11 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
     }
     public boolean isActive(){
         return active;
+    }
+
+    public void closeOrWatchGame(){
+        if(connectionManagerSocket.getBoardGUI().CloseGuiOrNot() == JOptionPane.NO_OPTION){
+            quitGame();
+        }
     }
 }

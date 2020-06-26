@@ -19,7 +19,9 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
     private ConnectionManagerSocket connectionManagerSocket;
-    private boolean active;
+    private Thread writeToserver;
+    private Scanner in;
+    private boolean active,activeWrite;
 
     public ClientSocketMessageCLI(ConnectionManagerSocket connectionManagerSocket, ObjectInputStream input, ObjectOutputStream output) {
         super();
@@ -27,9 +29,11 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
         this.outputStream = output;
         this.connectionManagerSocket = connectionManagerSocket;
         this.active = true;
+        this.activeWrite = true;
     }
 
     public Thread initializeCLI(){
+        in = new Scanner(System.in);
         return readFromServerCLI();
     }
 
@@ -48,12 +52,14 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
                                 if(((String) o).contains(" workerOccupiedCell") || ((String) o).contains("setWorkers")){
                                     connectionManagerSocket.getBoardCLI().setWorkers();
                                 }
-                                if(((String) o).contains(gameMessage.loseMessage)){
-                                    gameOver(null);
-                                    break;
-                                }
+
                                 String message = ((String) o).replace(connectionManagerSocket.getPlayerColorEnum().toString(), "");
                                 System.out.println(message);
+
+                                if(((String) o).contains(gameMessage.loseMessage)){
+                                    activeWrite = false;
+                                    closeOrWatchGame();
+                                }
                             }
                         }
                         if(o instanceof MoveMessage){
@@ -95,11 +101,11 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
     }
 
     public void writeToServer(){
-        Thread t = new Thread(new Runnable() {
+        writeToserver = new Thread(new Runnable() {
             @Override
             public void run() {
-                Scanner in = new Scanner(System.in);
-                while (isActive()) {
+                //Scanner in = new Scanner(System.in);
+                while (isActiveWrite()) {
                     String inputLine = in.nextLine().toUpperCase();
                     try {
                         if(checkInputStandard(inputLine)){
@@ -115,7 +121,7 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
                 }
             }
         });
-        t.start();
+        writeToserver.start();
     }
 
     public boolean checkInputStandard(String message) throws IOException{
@@ -151,15 +157,14 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
     }
 
     public void gameOver (PlayerColor color){
-        if(color == null){
-            System.out.println("YOU LOSE!");
+        if(color.equals(connectionManagerSocket.getPlayerColorEnum())){
+            System.out.println("YOU WIN!");
         } else {
-            if(color.equals(connectionManagerSocket.getPlayerColorEnum())){
-                System.out.println("YOU WIN!");
-            } else {
-                System.out.println("YOU LOSE!");
-            }
+            System.out.println("YOU LOSE!");
         }
+        quitGame();
+    }
+    public void quitGame(){
         new Timer(5000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -172,5 +177,20 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
 
     public boolean isActive(){
         return active;
+    }
+    public boolean isActiveWrite() {
+        return activeWrite;
+    }
+    public void closeOrWatchGame(){
+        try {
+            writeToserver.join();
+        } catch (InterruptedException e ){
+            System.err.println(e.getMessage());
+        }
+        System.out.println("Press any button to continue to watch the game or write NO if you want to close.");
+        String closeOrNot = in.nextLine();
+        if(closeOrNot.toUpperCase().equals("NO")){
+            quitGame();
+        }
     }
 }

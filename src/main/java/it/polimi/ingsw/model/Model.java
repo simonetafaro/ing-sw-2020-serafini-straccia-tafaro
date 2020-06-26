@@ -59,9 +59,24 @@ public class Model extends Observable<Object> {
 
     public void endNotifyView(PlayerMove move, boolean hasWon){
         PlayerColor nextTurn = playOrder_List.get((playOrder_List.indexOf(turn)+1)%playOrder_List.size());
-        notify(move);
-
+        notifyObserver(move);
         updateTurn();
+    }
+    public void notifySetWorker(SetWorkerPosition worker){
+        notifyObserver(worker);
+        players.forEach((player)-> {
+            if(player.getID() == worker.getID()){
+                if(player.getWorker1() != null && player.getWorker2() != null){
+                    if(player.getColor().equals(playOrder_List.get(playOrder_List.size()-1))){
+                        notifyObserver(this.players);
+                        updateTurn();
+                    }else{
+                        updateTurnSetupPhase();
+                        notifyObserver(getTurn() + "setWorkers");
+                    }
+                }
+            }
+        });
     }
     public void notifyView(PlayerMove move, boolean hasWon){
         try {
@@ -70,39 +85,15 @@ public class Model extends Observable<Object> {
             System.err.println(e.getMessage());
         }
     }
+    public void notify(Object message){
+        notifyObserver(message);
+    }
+
 
     public void sendError(String s){
         notifyObserver(s);
     }
 
-    public void notifySetWorker(SetWorkerPosition worker){
-        notifyObserver(worker);
-        players.forEach((player)-> {
-            if(player.getID() == worker.getID()){
-                if(player.getWorker1() != null && player.getWorker2() != null){
-                    if(player.getColor().equals(playOrder_List.get(playOrder_List.size()-1))){
-                        notifyStartGame();
-                        updateTurn();
-                    }else{
-                        updateTurnSetupPhase();
-                        notifySetWorkers();
-                    }
-                }
-            }
-        });
-    }
-    public void notifySetWorkers(){
-        notifyObserver(getTurn() + "setWorkers");
-    }
-    public void notifyStartGame(){
-        notifyObserver(this.players);
-    }
-    public void notify(Object message){
-        notifyObserver(message);
-    }
-    public void notifyOccupiedCell(){
-        notifyObserver(getTurn() + " workerOccupiedCell");
-    }
     public boolean isReachableCell(PlayerMove move){
         return move.getWorker().getWorkerPosition().isClosedTo(board.getCell(move.getRow(),move.getColumn()));
     }

@@ -49,14 +49,14 @@ public class Controller implements Observer<Object> {
 
     public void setWorker(SetWorkerPosition worker){
         if(!model.getBoard().getCell(worker.getX(), worker.getY()).isFree()){
-            model.notifyOccupiedCell();
+            model.notify(model.getTurn() + " workerOccupiedCell");
             return;
         }
         model.setWorkers(worker);
         model.notifySetWorker(worker);
     }
     public void setWorkersMessage(){
-        model.notifySetWorkers();
+        model.notify(model.getTurn() + "setWorkers");
     }
 
 }
