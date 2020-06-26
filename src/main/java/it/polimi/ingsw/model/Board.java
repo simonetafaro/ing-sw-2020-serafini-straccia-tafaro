@@ -2,12 +2,33 @@ package it.polimi.ingsw.model;
 
 import java.io.Serializable;
 
+/**
+ * Game board class that contains
+ * cells of the board.
+ * {@link Cell}
+ */
 public class Board implements Cloneable, Serializable {
 
+    /**
+     * rows number
+     */
     private static final int N_ROWS = 5;
+
+    /**
+     * column number
+     */
     private static final int N_COLS = 5;
+
+    /**
+     * 5 x 5 board array of Cells
+     */
     private Cell[][] board;
 
+    /**
+     *  Board class constructor.
+     *  It initializes game board and initializes
+     *  all cells to empty
+     */
     public Board() {
         this.board = new Cell[N_COLS][N_COLS];
         for (int i = 0; i < N_ROWS; i++) {
@@ -18,14 +39,26 @@ public class Board implements Cloneable, Serializable {
         }
     }
 
+    /**
+     * @return game board
+     */
     public Cell[][] getPlayingBoard() {
         return board;
     }
 
+    /**
+     * @param x: row of game board
+     * @param y: column of game board
+     * @return cell (x,y) of game board
+     */
     public Cell getCell(int x, int y){
         return board[x][y];
     }
 
+    /**
+     * Game board is reinitialized:
+     * each level is set to 0 and all cells are empty
+     */
     public void clearAll(){
         for (int i = 0; i < N_ROWS; i++) {
             for (int j = 0; j < N_COLS; j++) {
@@ -35,6 +68,9 @@ public class Board implements Cloneable, Serializable {
         }
     }
 
+    /**
+     * game board printing
+     */
     public void printBoard(){
         int a,i,j,k=0;
         //TODO code optimization and row and column number

@@ -4,12 +4,9 @@ import it.polimi.ingsw.observ.Observable;
 import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.SetWorkerPosition;
 import it.polimi.ingsw.utils.gameMessage;
-import it.polimi.ingsw.view.View;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Model extends Observable<Object> {
 
@@ -44,14 +41,6 @@ public class Model extends Observable<Object> {
 
     public PlayerColor getTurn() {
         return turn;
-    }
-    public Board getBoardCopy(){
-        try{
-            return (Board) board.clone();
-        }catch (CloneNotSupportedException e){
-            System.err.println(e.getMessage());
-        }
-        return null;
     }
     public Board getBoard() {
         return board;
@@ -163,7 +152,6 @@ public class Model extends Observable<Object> {
 
     public void endMessage(PlayerMove message, Turn turn, Model model){
         turn.getPlayerTurn(message.getPlayer()).resetStep();
-        //model.notify(message);
         model.endNotifyView(message,false);
     }
     public void setStep(PlayerMove move, Turn turn, Model model){
@@ -177,7 +165,6 @@ public class Model extends Observable<Object> {
         //set both worker of this player !stuck
         move.getPlayer().getWorker1().setStuck(false);
         move.getPlayer().getWorker2().setStuck(false);
-        //turn.getPlayerTurn(move.getPlayer()).getCurrStep().setCellFrom(move.getWorker().getWorkerPosition());
         return true;
     }
     public boolean isPlayerStuck(PlayerMove move){
@@ -186,11 +173,10 @@ public class Model extends Observable<Object> {
 
     public boolean isRightWorker(PlayerMove move, Turn turn){
         if((!turn.getPlayerTurn(move.getPlayer()).isFirstStep())){
-                if(turn.getPlayerTurn(move.getPlayer()).getTurnWorker().getWorkerNum() != move.getWorker().getWorkerNum()) {
-                    //move.getView().reportError(gameMessage.wrongWorker);
-                    notify(gameMessage.wrongWorker);
-                    return false;
-                }
+            if(turn.getPlayerTurn(move.getPlayer()).getTurnWorker().getWorkerNum() != move.getWorker().getWorkerNum()) {
+                notify(gameMessage.wrongWorker);
+                return false;
+            }
         }
         return true;
     }
