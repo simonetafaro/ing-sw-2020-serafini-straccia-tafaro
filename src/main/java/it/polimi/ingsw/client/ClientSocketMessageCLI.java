@@ -62,6 +62,10 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
                                 }
                             }
                         }
+                        if (o instanceof GameOverMessage){
+                            gameOverStuck(((MoveMessage)o).getPlayer().getColor());
+                            break;
+                        }
                         if(o instanceof MoveMessage){
                             if(((MoveMessage) o).isHasWon()){
                                 gameOver(((MoveMessage)o).getPlayer().getColor());
@@ -72,6 +76,7 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
                                 connectionManagerSocket.getBoardCLI().printBoard();
                             }
                         }
+
                         if(o instanceof ArrayList){
                             if( ((ArrayList) o).get(0) instanceof Player){
                                 connectionManagerSocket.getBoardCLI().printBoard();
@@ -161,6 +166,14 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
             System.out.println("YOU WIN!");
         } else {
             System.out.println("YOU LOSE!");
+        }
+        quitGame();
+    }
+    public void gameOverStuck (PlayerColor color){
+        if(color.equals(connectionManagerSocket.getPlayerColorEnum())){
+            System.out.println("YOU LOSE!");
+        } else {
+            System.out.println("YOU WIN!");
         }
         quitGame();
     }
