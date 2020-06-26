@@ -1,17 +1,11 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.utils.PlayerColor;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-
-
 
 public class showPopUpColor implements Runnable{
 
