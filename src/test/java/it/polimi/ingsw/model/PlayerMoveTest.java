@@ -10,21 +10,6 @@ class PlayerMoveTest {
     private Player player = new Player();
     private PlayerMove move = new PlayerMove(player);
 
-    @Test
-    void isUseDome() {
-        move.setUseDome(false);
-        assertFalse(move.isUseDome());
-        move.setUseDome(true);
-        assertTrue(move.isUseDome());
-    }
-
-    @Test
-    void setUseDome() {
-        move.setUseDome(false);
-        assertFalse(move.isUseDome());
-        move.setUseDome(true);
-        assertTrue(move.isUseDome());
-    }
 
     @Test
     void setMoveOrBuild() {

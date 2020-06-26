@@ -50,36 +50,6 @@ public class PlayerMove implements Serializable , Cloneable{
     private PlayerColor color;
 
     /**
-     * It is true if a player with Atlas Card wants to build a dome
-     */
-    private boolean useDome;
-
-    /**
-     * @param pippo
-     */
-    public PlayerMove(String pippo){
-        this.MoveOrBuild=pippo;
-        this.row=0;
-        this.column=0;
-        this.player=null;
-        this.view=null;
-    }
-
-    /**
-     * PlayerMove constructor with 2 parameters
-     * @param player
-     * @param view
-     */
-    public PlayerMove(Player player, View view){
-        this.row=-1;
-        this.column=-1;
-        this.player=player;
-        this.worker=null;
-        this.view=view;
-        this.MoveOrBuild=null;
-    }
-
-    /**
      * PlayerMove constructor with 3 parameters
      * @param worker
      * @param row
@@ -110,27 +80,6 @@ public class PlayerMove implements Serializable , Cloneable{
     }
 
     /**
-     * PlayerMove constructor with 5 parameters
-     * @param player
-     * @param worker
-     * @param row
-     * @param column
-     * @param moveOrBuild
-     */
-    public PlayerMove(Player player, int worker, int row, int column, String moveOrBuild) {
-        this.player = null;
-        this.color = player.getColor();
-        if(worker==1)
-            this.worker=player.getWorker1();
-        else
-            this.worker=player.getWorker2();
-        this.row = row;
-        this.column = column;
-        this.view = null;
-        this.MoveOrBuild=moveOrBuild;
-    }
-
-    /**
      * PlayerMove constructor with 1 parameter
      * @param player
      */
@@ -141,44 +90,6 @@ public class PlayerMove implements Serializable , Cloneable{
         this.row = -1;
         this.column = -1;
         this.view = null;
-        this.useDome = false;
-    }
-
-
-    /**
-     * PlayerMove constructor with 6 parameters
-     * @param player
-     * @param worker
-     * @param row
-     * @param column
-     * @param view
-     * @param moveOrBuild
-     */
-    public PlayerMove(Player player, int worker, int row, int column, View view, String moveOrBuild) {
-        this.player = player;
-        if(worker==1)
-            this.worker=player.getWorker1();
-        else
-            this.worker=player.getWorker2();
-        this.row = row;
-        this.column = column;
-        this.view = view;
-        this.MoveOrBuild=moveOrBuild;
-    }
-
-    /**
-     * @return true if player wants to build a dome
-     */
-    public boolean isUseDome() {
-        return useDome;
-    }
-
-    /**
-     * @param useDome
-     * It changes useDome
-     */
-    public void setUseDome(boolean useDome) {
-        this.useDome = useDome;
     }
 
     /**

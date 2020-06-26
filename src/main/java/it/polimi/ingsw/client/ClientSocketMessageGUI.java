@@ -48,16 +48,22 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
                         if(o instanceof String){
                             System.out.println((String) o);
                             if(((String) o).contains(connectionManagerSocket.getPlayerColorEnum().toString())){
+
+                                String message = ((String) o).replace(connectionManagerSocket.getPlayerColorEnum().toString(), "");
+                                connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox(message, "received from server");
+
                                 if(((String) o).contains("setWorkers"))
                                     connectionManagerSocket.getBoardGUI().setWorkers();
                                 if(((String) o).contains(gameMessage.loseMessage)){
-                                    gameOver(null);
                                     closeOrWatchGame();
                                 }
-                                String message = ((String) o).replace(connectionManagerSocket.getPlayerColorEnum().toString(), "");
-                                connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox(message, "received from server");
                             }
                         }
+                        if (o instanceof GameOverMessage){
+                            gameOverStuck(((MoveMessage)o).getPlayer().getColor());
+                            break;
+                        }
+
                         if(o instanceof MoveMessage){
                             scanBoard((MoveMessage) o);
 
@@ -130,17 +136,21 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
         }
     }
     public void gameOver (PlayerColor color){
-        if(color == null){
-            connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox("YOU LOSE!", "Message From Server - Game Over");
+        if(color.equals(connectionManagerSocket.getPlayerColorEnum())){
+            connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox("YOU WIN!", "Message From Server - Game Over");
         } else {
-            if(color.equals(connectionManagerSocket.getPlayerColorEnum())){
-                connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox("YOU WIN!", "Message From Server - Game Over");
-            } else {
-                connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox("YOU LOSE!", "Message From Server - Game Over");
-            }
-            quitGame();
+            connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox("YOU LOSE!", "Message From Server - Game Over");
         }
+        quitGame();
 
+    }
+    public void gameOverStuck (PlayerColor color){
+       if(color.equals(connectionManagerSocket.getPlayerColorEnum())){
+           connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox("YOU LOSE!", "Message From Server - Game Over");
+        } else {
+            connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox("YOU WIN!", "Message From Server - Game Over");
+        }
+        quitGame();
     }
 
     public void quitGame(){

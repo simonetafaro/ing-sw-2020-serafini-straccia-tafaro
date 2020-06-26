@@ -14,17 +14,6 @@ public class PlayerMoveEnd extends PlayerMove {
     private boolean isEndMessage;
 
     /**
-     * PlayerMoveEnd constructor with 3 parameters
-     * @param player
-     * @param view
-     * @param isEndMessage
-     */
-    public PlayerMoveEnd(Player player, View view, boolean isEndMessage){
-        super(player, view);
-        this.isEndMessage= isEndMessage;
-    }
-
-    /**
      * PlayerMoveEnd constructor with 2 parameters,
      * it inherits the constructor from PlayerMove
      * @param player
