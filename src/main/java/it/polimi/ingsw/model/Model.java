@@ -89,7 +89,6 @@ public class Model extends Observable<Object> {
         notifyObserver(message);
     }
 
-
     public void sendError(String s){
         notifyObserver(s);
     }
