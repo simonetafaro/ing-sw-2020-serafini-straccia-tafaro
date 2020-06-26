@@ -82,6 +82,7 @@ public class SeleneRuleDecorator extends StandardRuleDecorator {
                 build(move, model, turn);
         }
     }
+
     /*
     this method allows you to build a
     copula for women instead of any build*/
