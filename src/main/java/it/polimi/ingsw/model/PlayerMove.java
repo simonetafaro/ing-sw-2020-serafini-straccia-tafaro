@@ -213,6 +213,10 @@ public class PlayerMove implements Serializable , Cloneable{
         this.column = column;
     }
 
+    public void setColor(PlayerColor color) {
+        this.color = color;
+    }
+
     /**
      * @return row cell
      */

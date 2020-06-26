@@ -112,7 +112,6 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
 
         model.notifyView(move,hasWon);
     }
-
     @Override
     public void build(PlayerMove move, Model model, Turn turn) {
         if(turn.getPlayerTurn(move.getPlayer()).getI()==2){
