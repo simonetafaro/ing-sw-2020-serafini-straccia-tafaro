@@ -99,6 +99,9 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
                 for(int j=0; j<level; j++){
                     connectionManagerSocket.getBoardGUI().addLevelToBoard(j+1,connectionManagerSocket.getBoardGUI().getBoardButton(x,y));
                 }
+                if (board.getCell(x,y).isDome())
+                    connectionManagerSocket.getBoardGUI().addLevelToBoard(4,connectionManagerSocket.getBoardGUI().getBoardButton(x,y));
+
                 if(board.getCell(x,y).getCurrWorker()!=null) {
                     if (board.getCell(x, y).getCurrWorker().getPlayerColor().equals(connectionManagerSocket.getPlayerColorEnum())) {
                         //updateDataPlayer(message, x, y);

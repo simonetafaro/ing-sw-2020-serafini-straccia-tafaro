@@ -36,7 +36,7 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
             return;
         }
 
-        if(!hasFreeCellClosed(move.getWorker().getWorkerPosition(), model.getBoard().getPlayingBoard())){
+        if(move.getMoveOrBuild().equals("M") && !hasFreeCellClosed(move.getWorker().getWorkerPosition(), model.getBoard().getPlayingBoard())){
             //this worker is stuck
             move.getWorker().setStuck(true);
             model.sendError(move.getColor().toString()+" "+gameMessage.workerStuck+"\n"+gameMessage.insertAgain);
