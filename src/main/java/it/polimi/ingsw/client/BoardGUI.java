@@ -823,4 +823,11 @@ public class BoardGUI implements Runnable{
         }
     }
 
+    public int CloseGuiOrNot(){
+        return JOptionPane.showConfirmDialog(mainframe,
+                "Press YES to continue to watch the game or NO if you want to close.",
+                "Workers stuck, you lose!",
+                JOptionPane.YES_NO_CANCEL_OPTION);
+    }
+
 }
