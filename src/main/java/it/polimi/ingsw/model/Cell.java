@@ -58,6 +58,11 @@ public class Cell implements Cloneable, Serializable {
         this.currWorker = null;
     }
 
+
+    public void setCronusRule(boolean cronusRule) {
+        this.cronusRule = cronusRule;
+    }
+
     /**
      * @param currWorker
      * Setter of currWorker
