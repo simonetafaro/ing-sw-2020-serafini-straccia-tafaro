@@ -19,7 +19,7 @@ public class StandardRuleDecorator implements CardRuleDecorator {
         }
 
         if(!model.isRightWorker(move, turn)){
-            model.sendError(move.getColor().toString()+" "+gameMessage.insertAgain);
+            model.sendError(move.getColor().toString()+" "+gameMessage.wrongWorker+" "+gameMessage.insertAgain);
             //move.getView().reportError(gameMessage.insertAgain);
             return;
         }

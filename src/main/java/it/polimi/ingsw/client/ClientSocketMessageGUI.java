@@ -46,7 +46,6 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
                             updateBoard((SetWorkerPosition) o);
                         }
                         if(o instanceof String){
-                            System.out.println((String) o);
                             if(((String) o).contains(connectionManagerSocket.getPlayerColorEnum().toString())){
 
                                 String message = ((String) o).replace(connectionManagerSocket.getPlayerColorEnum().toString(), "");
