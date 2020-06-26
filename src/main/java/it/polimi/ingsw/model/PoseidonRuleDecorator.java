@@ -45,9 +45,10 @@ public class PoseidonRuleDecorator extends StandardRuleDecorator {
             return;
         }
         if(turn.getPlayerTurn(move.getPlayer()).getI()>2){
-            if(!move.getWorker().getWorkerPosition().canBuildInCells(model.getBoard().getPlayingBoard()))
+            if(!move.getWorker().getWorkerPosition().canBuildInCells(model.getBoard().getPlayingBoard())){
                 model.sendError(move.getColor().toString()+" "+gameMessage.invalidBuildPoseidon2);
-
+                return;
+            }
         }
         else {
             if(!move.getWorker().getWorkerPosition().hasFreeCellClosed(model.getBoard().getPlayingBoard())){
@@ -111,6 +112,10 @@ public class PoseidonRuleDecorator extends StandardRuleDecorator {
 
         model.setStep(move, turn, model);
         model.notifyView(move,false);
+    }
+
+    public boolean isIcan() {
+        return ican;
     }
 
     public boolean isRightWorkerDecorator(PlayerMove move, Turn turn){

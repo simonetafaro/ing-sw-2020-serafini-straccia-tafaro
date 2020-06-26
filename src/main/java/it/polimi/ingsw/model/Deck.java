@@ -3,9 +3,21 @@ package it.polimi.ingsw.model;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Deck class manages card choice. Each {@link Player} can have
+ * only a card so that in a game can be chosen two or three cards
+ */
 public class Deck {
+
+    /**
+     * hash map that relates each card name with a boolean
+     * that indicates if the card has been chosen or not
+     */
     private Map<String, Boolean> deck = new HashMap<>();
 
+    /**
+     * Deck constructor: it initializes deck hash map
+     */
     public Deck(){
         this.deck.put("Apollo", false);
         this.deck.put("Artemis", false);
@@ -23,17 +35,27 @@ public class Deck {
         this.deck.put("Zeus", false);
     }
 
+    /**
+     * @param cardName
+     * @return true if deck contains the card
+     */
     public boolean validCard(String cardName){
         return deck.containsKey(cardName);
     }
+
+    /**
+     * @param cardName
+     * @return true if a card has already been chosen
+     */
     public boolean setChosenCard(String cardName){
         return deck.replace(cardName, false, true);
     }
+
+    /**
+     * @return deck
+     */
     public Map getDeck(){
         return this.deck;
     }
 
-    public void clearDeck(){
-        deck.forEach((nome, bool_value) -> deck.replace(nome, bool_value, false));
-    }
 }

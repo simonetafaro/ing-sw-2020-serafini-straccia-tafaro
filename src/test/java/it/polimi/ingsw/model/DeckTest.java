@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class DeckTest {
     private Deck deck = new Deck();
 
-    //TODO: Handle uppercase letter
     @Test
     void validCard() {
         assertFalse(deck.validCard("Hermes"));
@@ -36,4 +35,8 @@ class DeckTest {
         assertFalse(deck.setChosenCard("Atlas"));
     }
 
+    @Test
+    void getDeck() {
+        assertEquals(14, deck.getDeck().size());
+    }
 }

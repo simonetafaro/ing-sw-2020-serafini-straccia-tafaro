@@ -413,4 +413,20 @@ class BoardTest {
         board.clearAll();
 
     }
+
+    @Test
+    void getPlayingBoard() {
+        Model model = new Model();
+        Board board = model.getBoard();
+
+        assertTrue(model.getBoard().equals(board));
+
+    }
+
+    @Test
+    void getCell() {
+        Model model = new Model();
+        Board board = model.getBoard();
+        assertTrue(board.getCell(1,1).equals(model.getBoard().getCell(1,1)));
+    }
 }
