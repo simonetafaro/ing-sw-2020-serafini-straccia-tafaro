@@ -277,20 +277,6 @@ class CellTest {
         assertTrue(cell.canBuildInCells(board.getPlayingBoard()));
     }
 
-    @Test
-    void isCronusRule() {
-        Cell cell = new Cell(1,1);
 
-        cell.setLevel(0);
-        assertFalse(cell.isCronusRule());
-        cell.buildInCell();
-        assertFalse(cell.isCronusRule());
-        cell.buildInCell();
-        assertFalse(cell.isCronusRule());
-        cell.buildInCell();
-        assertFalse(cell.isCronusRule());
-        cell.buildInCell();
-        assertTrue(cell.isCronusRule());
-    }
 }
 

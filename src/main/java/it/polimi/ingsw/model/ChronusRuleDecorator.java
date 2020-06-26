@@ -43,7 +43,7 @@ public class ChronusRuleDecorator extends StandardRuleDecorator {
             return;
         }
 
-        if(!move.getWorker().getWorkerPosition().hasFreeCellClosed(model.getBoard().getPlayingBoard())){
+        if(move.getMoveOrBuild().equals("M") && !move.getWorker().getWorkerPosition().hasFreeCellClosed(model.getBoard().getPlayingBoard())){
             //this worker is stuck
             move.getWorker().setStuck(true);
             model.sendError(move.getColor().toString()+" "+gameMessage.workerStuck+"\n"+gameMessage.insertAgain);
@@ -83,15 +83,15 @@ public class ChronusRuleDecorator extends StandardRuleDecorator {
     }
 
     public boolean cronusrule(Model model){
-        int conter=0;
+        int counter=0;
         for(int i=0; i<5; i++){
             for(int j=0; j<5; j++){
-                if(model.getBoard().getCell(i, j).isCronusRule()){
-                    conter++;
+                if(model.getBoard().getCell(i, j).getLevel() == 4 ){
+                    counter++;
                 }
                 }
             }
-        return conter>4;
+        return counter>4;
     }
 
 }

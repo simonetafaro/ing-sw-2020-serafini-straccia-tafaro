@@ -92,9 +92,12 @@ public class Board implements Cloneable, Serializable {
                                 if(i==3 && j==4+8*k)
                                     System.out.print("L");
                                 else{
-                                    if(i==3 && j==5+8*k)
-                                        System.out.print((this.board[a][j/8]).getLevel());
-                                    else
+                                    if(i==3 && j==5+8*k) {
+                                        if ((this.board[a][j / 8]).isDome())
+                                            System.out.print("4");
+                                        else
+                                            System.out.print((this.board[a][j / 8]).getLevel());
+                                    }else
                                         System.out.print(" ");
                                 }
                             }

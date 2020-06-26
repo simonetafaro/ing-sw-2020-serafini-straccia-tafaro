@@ -29,8 +29,7 @@ public class PoseidonRuleDecorator extends StandardRuleDecorator {
                 ican=true;
             }
             else{
-                model.sendError(move.getColor().toString()+" "+gameMessage.wrongWorker);
-                model.sendError(move.getColor().toString()+" "+gameMessage.insertAgain);
+                model.sendError(move.getColor().toString()+" "+gameMessage.wrongWorker+" "+gameMessage.insertAgain);
                 return;
             }
         }
@@ -51,7 +50,7 @@ public class PoseidonRuleDecorator extends StandardRuleDecorator {
             }
         }
         else {
-            if(!move.getWorker().getWorkerPosition().hasFreeCellClosed(model.getBoard().getPlayingBoard())){
+            if(move.getMoveOrBuild().equals("M") && !move.getWorker().getWorkerPosition().hasFreeCellClosed(model.getBoard().getPlayingBoard())){
             //this worker is stuck
                  move.getWorker().setStuck(true);
                  model.sendError(move.getColor().toString()+" "+gameMessage.workerStuck+"\n"+gameMessage.insertAgain);

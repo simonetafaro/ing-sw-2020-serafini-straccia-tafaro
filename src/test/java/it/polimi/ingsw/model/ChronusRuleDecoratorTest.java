@@ -152,11 +152,11 @@ class ChronusRuleDecoratorTest {
     @Test
     void playCronusRuleM() {
         model.setPlayOrder(PlayerColor.BLUE,PlayerColor.GREY,PlayerColor.WHITE);
-        model.getBoard().getCell(1,0).setCronusRule(true);
-        model.getBoard().getCell(0,1).setCronusRule(true);
-        model.getBoard().getCell(1,1).setCronusRule(true);
-        model.getBoard().getCell(1,2).setCronusRule(true);
-        model.getBoard().getCell(1,3).setCronusRule(true);
+        model.getBoard().getCell(1,0).setLevel(4);
+        model.getBoard().getCell(0,1).setLevel(4);
+        model.getBoard().getCell(1,1).setLevel(4);
+        model.getBoard().getCell(1,2).setLevel(4);
+        model.getBoard().getCell(1,3).setLevel(4);
         playermove.setMoveOrBuild("M");
         playermove.setColor(PlayerColor.BLUE);
         player.setMyCard("Chronus");
@@ -169,10 +169,10 @@ class ChronusRuleDecoratorTest {
     @Test
     void playCronusRuleB() {
         model.setPlayOrder(PlayerColor.BLUE,PlayerColor.GREY,PlayerColor.WHITE);
-        model.getBoard().getCell(1,0).setCronusRule(true);
-        model.getBoard().getCell(0,1).setCronusRule(true);
-        model.getBoard().getCell(1,1).setCronusRule(true);
-        model.getBoard().getCell(1,3).setCronusRule(true);
+        model.getBoard().getCell(1,0).setLevel(4);
+        model.getBoard().getCell(0,1).setLevel(4);
+        model.getBoard().getCell(1,1).setLevel(4);
+        model.getBoard().getCell(1,3).setLevel(4);
         model.getBoard().getCell(1,2).setLevel(3);
         playermove.setMoveOrBuild("M");
         playermove.setColor(PlayerColor.BLUE);

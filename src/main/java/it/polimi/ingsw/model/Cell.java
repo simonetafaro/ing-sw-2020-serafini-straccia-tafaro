@@ -25,6 +25,11 @@ public class Cell implements Cloneable, Serializable {
     private int level;
 
     /**
+     * block dome
+     */
+    private boolean dome;
+
+    /**
      * true if the cell is empty
      * false if the cell is not empty
      */
@@ -34,12 +39,6 @@ public class Cell implements Cloneable, Serializable {
      * pointer to worker in a cell
      */
     private Worker currWorker;
-
-    /**
-     * Parameter used for chronus card.
-     * It is true when a dome is built
-     */
-    private boolean cronusRule;
 
     /**
      * empty Cell constructor
@@ -56,12 +55,9 @@ public class Cell implements Cloneable, Serializable {
         this.posY = posY;
         this.level=0;
         this.currWorker = null;
+        this.dome = false;
     }
 
-
-    public void setCronusRule(boolean cronusRule) {
-        this.cronusRule = cronusRule;
-    }
 
     /**
      * @param currWorker
@@ -104,13 +100,6 @@ public class Cell implements Cloneable, Serializable {
         if(this.level==4){
             this.setFreeSpace(false);
         }
-    }
-
-    /**
-     * @return true if a dome has been built
-     */
-    public boolean isCronusRule() {
-        return cronusRule;
     }
 
     /**
@@ -161,11 +150,28 @@ public class Cell implements Cloneable, Serializable {
     public void buildInCell(){
         this.level++;
         if(this.level==4){
-            this.cronusRule = true;
             this.setFreeSpace(false);
         }
     }
 
+    /**add dome in this cell
+     * */
+    public void buildDome(){
+        if(this.getLevel() == 3){
+            buildInCell();
+        } else {
+            this.dome = true;
+            this.setFreeSpace(false);
+        }
+    }
+
+
+    /**
+     * @return true if dome is present in this cell
+     */
+    public boolean isDome(){
+        return dome;
+    }
     /**
      * It deletes worker pointer from a cell
      */

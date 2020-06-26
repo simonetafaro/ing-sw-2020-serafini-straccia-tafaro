@@ -44,7 +44,7 @@ public class SeleneRuleDecorator extends StandardRuleDecorator {
             return;
         }
 
-        if(!move.getWorker().getWorkerPosition().hasFreeCellClosed(model.getBoard().getPlayingBoard())){
+        if(move.getMoveOrBuild().equals("M") && !move.getWorker().getWorkerPosition().hasFreeCellClosed(model.getBoard().getPlayingBoard())){
             //this worker is stuck
             move.getWorker().setStuck(true);
             model.sendError(move.getColor().toString()+" "+gameMessage.workerStuck+"\n"+gameMessage.insertAgain);
@@ -89,15 +89,11 @@ public class SeleneRuleDecorator extends StandardRuleDecorator {
     @Override
     public void build(PlayerMove move, Model model, Turn turn) {
         if(IamWoman){
-            model.getBoard().getCell(move.getRow(), move.getColumn()).setLevel(4);
+            model.getBoard().getCell(move.getRow(), move.getColumn()).buildDome();
         }
         else {
-            if(move.getWorker().getWorkerNum()==2){
-                if(move.getMoveOrBuild().equals("D")){
-                    model.getBoard().getCell(move.getRow(),move.getColumn()).setLevel(4);
-                }else{
-                    model.getBoard().getCell(move.getRow(),move.getColumn()).buildInCell();
-                }
+            if((move.getWorker().getWorkerNum()==2) && (move.getMoveOrBuild().equals("D"))){
+                model.getBoard().getCell(move.getRow(),move.getColumn()).buildDome();
             }
             else{
                 model.getBoard().getCell(move.getRow(),move.getColumn()).buildInCell();
