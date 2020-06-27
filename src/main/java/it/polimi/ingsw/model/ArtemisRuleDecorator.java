@@ -2,8 +2,6 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
-import java.io.Serializable;
-
 /**Your Move: Your Worker may
  *move one additional time, but not
  *back to its initial space.
@@ -76,12 +74,12 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
                 //move.getView().reportError(gameMessage.tooHighCellMessage+"\n"+gameMessage.insertAgain);
                 return;
             }
-            if(model.checkStep(move, turn, model))
+            if(model.fillStepInfo(move, turn, model))
                 //model.performMove(move);
                 move(move, model, turn);
         }
         else{
-            if(model.checkStep(move, turn, model))
+            if(model.fillStepInfo(move, turn, model))
                 //model.performBuild(move);
                 build(move, model, turn);
         }
