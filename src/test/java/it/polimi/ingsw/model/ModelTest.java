@@ -343,7 +343,7 @@ class ModelTest {
         PlayerMove move = new PlayerMove(player1,player1.getWorker1(),1,1);
         Turn turn = new Turn(player1.setMyTurn(),player2.setMyTurn());
 
-        model.checkStep(move,turn,model);
+        model.fillStepInfo(move,turn,model);
         assertFalse(move.getPlayer().getWorker2().isStuck());
         assertFalse(move.getPlayer().getWorker1().isStuck());
     }

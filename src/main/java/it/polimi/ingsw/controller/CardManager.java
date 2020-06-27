@@ -18,6 +18,11 @@ public class CardManager {
         this.fileFinder = new FileManager();
     }
 
+    /**
+     * @param player
+     * @param cardName
+     * Assign card information to player from cardName.xml file
+     */
     public void setCardFromFile(Player player, String cardName){
         try {
             Document document = fileFinder.getFileDocument(PATH.concat(cardName).concat(".xml"));
