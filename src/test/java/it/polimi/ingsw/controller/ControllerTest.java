@@ -29,11 +29,10 @@ class ControllerTest {
     void update() {
         Model model = new Model();
         Controller controller = new Controller(model);
-        Socket socket = new Socket();
 
-        Player player1 = new Player(1,"Apollo",socket);
-        Player player2 = new Player(2,"Apollo",socket);
-        Player player3 = new Player(3,"Apollo",socket);
+        Player player1 = new Player(1,"Apollo");
+        Player player2 = new Player(2,"Apollo");
+        Player player3 = new Player(3,"Apollo");
         player1.setColor(PlayerColor.BLUE);
         player2.setColor(PlayerColor.GREY);
         player3.setColor(PlayerColor.WHITE);
@@ -53,11 +52,10 @@ class ControllerTest {
     void updatePlayerMove() {
         Model model = new Model();
         Controller controller = new Controller(model);
-        Socket socket = new Socket();
 
-        Player player1 = new Player(1,"Apollo",socket);
-        Player player2 = new Player(2,"Apollo",socket);
-        Player player3 = new Player(3,"Apollo",socket);
+        Player player1 = new Player(1,"Apollo");
+        Player player2 = new Player(2,"Apollo");
+        Player player3 = new Player(3,"Apollo");
         player1.setColor(PlayerColor.BLUE);
         player2.setColor(PlayerColor.GREY);
         player3.setColor(PlayerColor.WHITE);
@@ -76,11 +74,10 @@ class ControllerTest {
     void setWorker() {
         Model model = new Model();
         Controller controller = new Controller(model);
-        Socket socket = new Socket();
 
-        Player player1 = new Player(1,"Apollo",socket);
-        Player player2 = new Player(2,"Apollo",socket);
-        Player player3 = new Player(3,"Apollo",socket);
+        Player player1 = new Player(1,"Apollo");
+        Player player2 = new Player(2,"Apollo");
+        Player player3 = new Player(3,"Apollo");
         player1.setColor(PlayerColor.BLUE);
         player2.setColor(PlayerColor.GREY);
         player3.setColor(PlayerColor.WHITE);

@@ -78,6 +78,11 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
                             updateBoard((SetWorkerPosition) o);
                         }
                         if(o instanceof String){
+                            if(((String) o).contains("quitClient")){
+                                connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox("One of your opponents disconnected, closing game...", "CloseConnection");
+                                quitGame();
+                                break;
+                            }
                             if(((String) o).contains(connectionManagerSocket.getPlayerColorEnum().toString())){
 
                                 String message = ((String) o).replace(connectionManagerSocket.getPlayerColorEnum().toString(), "");
@@ -109,8 +114,10 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
                             if (((ArrayList) o).get(0) instanceof Player)
                                 connectionManagerSocket.getBoardGUI().populatePlayersInfo((ArrayList) o);
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (IOException e ){
+                        connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox("Server connection is not available, closing game...", "CloseConnection");
+                        quitGame();
+                        break;
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -223,6 +230,7 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
                 ClientSocketMessageGUI.this.active = false;
                 connectionManagerSocket.close();
                 connectionManagerSocket.disposeAll();
+                System.exit(0);
             }
         }).start();
     }

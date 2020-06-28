@@ -10,6 +10,8 @@ import org.xml.sax.SAXException;
 
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -211,6 +213,8 @@ public class ConnectionManagerSocket {
 
             } catch (IOException e) {
                 System.err.println(e.getMessage());
+                ServerCloseConnection("Server connection is not available, closing game...");
+                break;
             } catch (ClassNotFoundException e) {
                 System.err.println(e.getMessage());
             }
@@ -334,9 +338,16 @@ public class ConnectionManagerSocket {
                 while(!colorCheck){
                     try {
                         String colorResult = (String) input.readObject();
+                        if(colorResult.equals("quitClient")){
+                            ServerCloseConnection("One of your opponents disconnected, closing game...");
+                            break;
+                        }
                         colorCheck = handleColorResponse(colorResult, guiInstance);
-                    }catch (ClassNotFoundException | IOException e){
+                    }catch (ClassNotFoundException e){
                         System.err.println(e.getMessage());
+                    }  catch (IOException e){
+                        ServerCloseConnection("Server connection is not available, closing game...");
+                        break;
                     }
                 }
             }
@@ -391,9 +402,15 @@ public class ConnectionManagerSocket {
                                 break;
                             i++;
                         }
-
-                    }catch (ClassNotFoundException | IOException e){
+                        if(((String) obj).contains("quitClient")){
+                            ServerCloseConnection("One of your opponents disconnected, closing game...");
+                            break;
+                        }
+                    } catch (ClassNotFoundException e){
                         System.err.println(e.getMessage());
+                    } catch (IOException e){
+                        ServerCloseConnection("Server connection is not available, closing game...");
+                        break;
                     }
                 }
             }
@@ -414,8 +431,11 @@ public class ConnectionManagerSocket {
         do{
             try{
                 orderPlayer = (String) input.readObject();
-            }catch (ClassNotFoundException e){
+            } catch (ClassNotFoundException e){
                 System.err.println(e.getMessage());
+            } catch (IOException e){
+                ServerCloseConnection("Server connection is not available, closing game...");
+                break;
             }
         }while (!orderPlayer.contains(" "+clientID));
         if(orderPlayer.equals("firstPlayer: "+ this.clientID))
@@ -438,9 +458,11 @@ public class ConnectionManagerSocket {
      */
     public void close() {
         try {
-            this.socket.close();
-            this.input.close();
-            this.output.close();
+            if(socket != null) {
+                this.socket.close();
+                this.input.close();
+                this.output.close();
+            }
             this.socket = null;
             this.output = null;
             this.input = null;
@@ -509,5 +531,32 @@ public class ConnectionManagerSocket {
      */
     public void disposeAll(){
         this.mainFrame.dispose();
+    }
+
+    public void ServerCloseConnection(String message){
+        int TIME_VISIBLE = 5000;
+        if(mainFrame!= null) {
+            JOptionPane pane = new JOptionPane(message,
+                    JOptionPane.INFORMATION_MESSAGE);
+            JDialog dialog = pane.createDialog(mainFrame, "CloseConnection");
+            dialog.setModal(false);
+            dialog.setVisible(true);
+            new Timer(TIME_VISIBLE, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    dialog.setVisible(false);
+                    mainFrame.dispose();
+                    System.exit(0);
+                }
+            }).start();
+        } else {
+            System.out.println(message);
+            new Timer(TIME_VISIBLE, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.exit(0);
+                }
+            }).start();
+        }
     }
 }

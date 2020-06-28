@@ -64,7 +64,6 @@ public class Server{
         return ClientConnectionInput;
     }
 
-
     public void run(){
         ExecutorService executorSocket = Executors.newCachedThreadPool();
         executorSocket.submit(new SocketClientConnection(PORT, this, portGame));
@@ -80,6 +79,7 @@ public class Server{
                 List<ObjectOutputStream> broadcast = new ArrayList<>();
                 List<String> playerName = new ArrayList<>();
                 ObjectInputStream input1, input2;
+
                 ArrayList<String> cards = new ArrayList<>();
                 Deck deck = new Deck();
                 try {
@@ -104,14 +104,12 @@ public class Server{
                         broadcastMessage(broadcast, "firstPlayer: "+player1.getID());
                         broadcastMessage(broadcast, "secondPlayer: "+player2.getID());
 
-                        try {
-                            Object obj = input1.readObject();
-                            if(obj instanceof ArrayList){
-                                cards = (ArrayList) obj;
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
+
+                        Object obj = input1.readObject();
+                        if(obj instanceof ArrayList){
+                            cards = (ArrayList) obj;
                         }
+
                         cards.forEach((cardName)-> { deck.setChosenCard(cardName); });
 
                         broadcastMessage(broadcast, cards);
@@ -128,8 +126,8 @@ public class Server{
 
                         Game game = new Game(player1, player2);
 
-                }catch (Exception e){
-                        System.err.println(e.getMessage());
+                }catch (IOException | ClassNotFoundException | InterruptedException e){
+                    broadcastMessage(broadcast, "quitClient");
                 }
             }
         }).start();
@@ -266,7 +264,8 @@ public class Server{
                     try {
                         color = (String) input.readObject();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
+                        broadcastMessage(broadcast, "quitClient");
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }

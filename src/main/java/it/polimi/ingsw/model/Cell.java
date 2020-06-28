@@ -9,6 +9,9 @@ import java.io.Serializable;
  */
 public class Cell implements Cloneable, Serializable {
 
+
+    private static final long serialVersionUID = -6339404514199154797L;
+
     /**
      * coordinate x of the board
      */
