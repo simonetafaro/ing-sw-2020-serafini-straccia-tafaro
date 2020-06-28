@@ -166,6 +166,7 @@ class ChronusRuleDecoratorTest {
         assertTrue(chronusRuleDecorator.cronusrule(model));
     }
 
+    /*
     @Test
     void playCronusRuleB() {
         model.setPlayOrder(PlayerColor.BLUE,PlayerColor.GREY,PlayerColor.WHITE);
@@ -190,5 +191,5 @@ class ChronusRuleDecoratorTest {
         assertTrue(chronusRuleDecorator.cronusrule(model));
 
     }
-
+    */
 }
