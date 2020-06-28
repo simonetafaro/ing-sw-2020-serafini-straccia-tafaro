@@ -159,15 +159,18 @@ public class BoardGUI implements Runnable{
             Image workers;
             ImageIcon workers_scaled;
             switch (color){
-                case WHITE: workers = new ImageIcon(PATH + "W_Workers.png").getImage();
+                case WHITE: //workers = new ImageIcon(PATH + "W_Workers.png").getImage();
+                            workers = new ImageIcon(this.getClass().getResource("/images/W_Workers.png")).getImage();
                             workers_scaled = new ImageIcon(workers.getScaledInstance(72,62, Image.SCALE_SMOOTH));
                             this.workerImage = workers_scaled;
                             break;
-                case BLUE:  workers = new ImageIcon(PATH + "B_Workers.png").getImage();
+                case BLUE:  //workers = new ImageIcon(PATH + "B_Workers.png").getImage();
+                            workers = new ImageIcon(this.getClass().getResource("/images/B_Workers.png")).getImage();
                             workers_scaled = new ImageIcon(workers.getScaledInstance(72,62, Image.SCALE_SMOOTH));
                             this.workerImage = workers_scaled;
                             break;
-                case GREY:  workers = new ImageIcon(PATH + "G_Workers.png").getImage();
+                case GREY:  //workers = new ImageIcon(PATH + "G_Workers.png").getImage();
+                            workers = new ImageIcon(this.getClass().getResource("/images/G_Workers.png")).getImage();
                             workers_scaled = new ImageIcon(workers.getScaledInstance(72,62, Image.SCALE_SMOOTH));
                             this.workerImage = workers_scaled;
                             break;
@@ -316,7 +319,9 @@ public class BoardGUI implements Runnable{
         this.boardButton = new JLayeredPane[5][5];
         this.popUpBox = new PopUpBox();
 
-        mainPanelImage = new ImageIcon(PATH + "BoardBackground.png");
+        //mainPanelImage = new ImageIcon(PATH + "BoardBackground.png");
+        mainPanelImage = new ImageIcon(this.getClass().getResource("/images/BoardBackground.png"));
+
         mainPanelImageScaled = mainPanelImage.getImage();
         JPanel mainPanel = new MainJPanel();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -345,28 +350,38 @@ public class BoardGUI implements Runnable{
         BoardPanel.setOpaque(false);
         BoardPanel.setVisible(true);
 
-        Image level1 = new ImageIcon(PATH + "level1.png").getImage();
+        //Image level1 = new ImageIcon(PATH + "level1.png").getImage();
+        Image level1 =  new ImageIcon(this.getClass().getResource("/images/level1.png")).getImage();
         level1_Icon = new ImageIcon(level1.getScaledInstance(90,90,Image.SCALE_SMOOTH));
-        Image level2 = new ImageIcon(PATH + "level2.png").getImage();
+        //Image level2 = new ImageIcon(PATH + "level2.png").getImage();
+        Image level2 =  new ImageIcon(this.getClass().getResource("/images/level2.png")).getImage();
         level2_Icon = new ImageIcon(level2.getScaledInstance(75,75,Image.SCALE_SMOOTH));
-        Image level3 = new ImageIcon(PATH + "level3.png").getImage();
+        //Image level3 = new ImageIcon(PATH + "level3.png").getImage();
+        Image level3 =  new ImageIcon(this.getClass().getResource("/images/level3.png")).getImage();
         level3_Icon = new ImageIcon(level3.getScaledInstance(60,60,Image.SCALE_SMOOTH));
-        Image dome = new ImageIcon(PATH + "dome.png").getImage();
+        //Image dome = new ImageIcon(PATH + "dome.png").getImage();
+        Image dome =  new ImageIcon(this.getClass().getResource("/images/dome.png")).getImage();
         dome_Icon = new ImageIcon(dome.getScaledInstance(45,45,Image.SCALE_SMOOTH));
 
-        Image worker_Man_Blue = new ImageIcon(PATH + "Blue_Worker_Man.png").getImage();
+        //Image worker_Man_Blue = new ImageIcon(PATH + "Blue_Worker_Man.png").getImage();
+        Image worker_Man_Blue =  new ImageIcon(this.getClass().getResource("/images/Blue_Worker_Man.png")).getImage();
         worker_Man_Blue_Icon = new ImageIcon(worker_Man_Blue.getScaledInstance(29,50,Image.SCALE_SMOOTH));
-        Image worker_Woman_Blue = new ImageIcon(PATH + "Blue_Worker_Woman.png").getImage();
+        //Image worker_Woman_Blue = new ImageIcon(PATH + "Blue_Worker_Woman.png").getImage();
+        Image worker_Woman_Blue =  new ImageIcon(this.getClass().getResource("/images/Blue_Worker_Woman.png")).getImage();
         worker_Woman_Blue_Icon = new ImageIcon(worker_Woman_Blue.getScaledInstance(29,50,Image.SCALE_SMOOTH));
 
-        Image worker_Man_White = new ImageIcon(PATH + "White_Worker_Man.png").getImage();
+        //Image worker_Man_White = new ImageIcon(PATH + "White_Worker_Man.png").getImage();
+        Image worker_Man_White =  new ImageIcon(this.getClass().getResource("/images/White_Worker_Man.png")).getImage();
         worker_Man_White_Icon = new ImageIcon(worker_Man_White.getScaledInstance(29,50,Image.SCALE_SMOOTH));
-        Image worker_Woman_White = new ImageIcon(PATH + "White_Worker_Woman.png").getImage();
+        //Image worker_Woman_White = new ImageIcon(PATH + "White_Worker_Woman.png").getImage();
+        Image worker_Woman_White =  new ImageIcon(this.getClass().getResource("/images/White_Worker_Woman.png")).getImage();
         worker_Woman_White_Icon = new ImageIcon(worker_Woman_White.getScaledInstance(29,50,Image.SCALE_SMOOTH));
 
-        Image worker_Man_Grey = new ImageIcon(PATH + "Grey_Worker_Man.png").getImage();
+        //Image worker_Man_Grey = new ImageIcon(PATH + "Grey_Worker_Man.png").getImage();
+        Image worker_Man_Grey =  new ImageIcon(this.getClass().getResource("/images/Grey_Worker_Man.png")).getImage();
         worker_Man_Grey_Icon = new ImageIcon(worker_Man_Grey.getScaledInstance(29,50,Image.SCALE_SMOOTH));
-        Image worker_Woman_Grey = new ImageIcon(PATH + "Grey_Worker_Woman.png").getImage();
+        //Image worker_Woman_Grey = new ImageIcon(PATH + "Grey_Worker_Woman.png").getImage();
+        Image worker_Woman_Grey =  new ImageIcon(this.getClass().getResource("/images/Grey_Worker_Woman.png")).getImage();
         worker_Woman_Grey_Icon = new ImageIcon(worker_Woman_Grey.getScaledInstance(29,50,Image.SCALE_SMOOTH));
 
         for(int x=0; x<5; x++){
@@ -394,13 +409,17 @@ public class BoardGUI implements Runnable{
 
         dxPanel.setBackground(new Color(0,0,0,0));
 
-        Image moveImage = new ImageIcon(PATH + "MoveButton.png").getImage();
+        //Image moveImage = new ImageIcon(PATH + "MoveButton.png").getImage();
+        Image moveImage =  new ImageIcon(this.getClass().getResource("/images/MoveButton.png")).getImage();
         ImageIcon moveButton_Icon = new ImageIcon(moveImage.getScaledInstance(120,120,Image.SCALE_SMOOTH));
-        Image buildImage = new ImageIcon(PATH + "BuildButton.png").getImage();
+        //Image buildImage = new ImageIcon(PATH + "BuildButton.png").getImage();
+        Image buildImage =  new ImageIcon(this.getClass().getResource("/images/BuildButton.png")).getImage();
         ImageIcon buildButton_Icon = new ImageIcon(buildImage.getScaledInstance(120,120,Image.SCALE_SMOOTH));
-        Image domeImage = new ImageIcon(PATH + "DomeButton.png").getImage();
+        //Image domeImage = new ImageIcon(PATH + "DomeButton.png").getImage();
+        Image domeImage =  new ImageIcon(this.getClass().getResource("/images/DomeButton.png")).getImage();
         ImageIcon domeButton_Icon = new ImageIcon(domeImage.getScaledInstance(120,87,Image.SCALE_SMOOTH));
-        Image doneImage = new ImageIcon(PATH + "DoneButton.png").getImage();
+        //Image doneImage = new ImageIcon(PATH + "DoneButton.png").getImage();
+        Image doneImage =  new ImageIcon(this.getClass().getResource("/images/DoneButton.png")).getImage();
         ImageIcon doneButton_Icon = new ImageIcon(doneImage.getScaledInstance(120,118,Image.SCALE_SMOOTH));
 
         this.moveButton = new JButton(moveButton_Icon);
@@ -457,10 +476,12 @@ public class BoardGUI implements Runnable{
         topPowerColumn.setVisible(true);
         topPowerColumn.setOpaque(false);
 
-        ImageIcon powerColumnImage = new ImageIcon(PATH + "powerColumn.png");
+        //ImageIcon powerColumnImage = new ImageIcon(PATH + "powerColumn.png");
+        ImageIcon powerColumnImage =  new ImageIcon(this.getClass().getResource("/images/powerColumn.png"));
         powerColumnImageScaled = powerColumnImage.getImage();
 
-        ImageIcon additionalIslandImage = new ImageIcon(PATH + "island_image.png");
+        //ImageIcon additionalIslandImage = new ImageIcon(PATH + "island_image.png");
+        ImageIcon additionalIslandImage =  new ImageIcon(this.getClass().getResource("/images/island_image.png"));
 
         powerColumn = new PowerColumn();
         powerColumn.setPreferredSize(new Dimension(322,600));
@@ -581,7 +602,9 @@ public class BoardGUI implements Runnable{
             Document document = fileFinder.getFileDocument(PATHFILE.concat(player.getMyCard().getName()).concat(".xml"));
 
             NodeList GodImage = document.getElementsByTagName("ImageIconURL");
-            Image god_Image = new ImageIcon(PATH + GodImage.item(0).getTextContent()).getImage();
+            //Image god_Image = new ImageIcon(PATH + GodImage.item(0).getTextContent()).getImage();
+            Image god_Image = new ImageIcon(this.getClass().getResource("/images/"+GodImage.item(0).getTextContent())).getImage();
+
             ImageIcon god_Image_Icon = new ImageIcon(god_Image);
 
             NodeList powerDescription = document.getElementsByTagName("PowerDescription");
@@ -601,11 +624,15 @@ public class BoardGUI implements Runnable{
             Document document = fileFinder.getFileDocument(PATHFILE.concat(player.getMyCard().getName()).concat(".xml"));
 
             NodeList GodImage = document.getElementsByTagName("ImageIconURL");
-            Image god_Image = new ImageIcon(PATH + GodImage.item(0).getTextContent()).getImage();
+            //Image god_Image = new ImageIcon(PATH + GodImage.item(0).getTextContent()).getImage();
+            Image god_Image = new ImageIcon(this.getClass().getResource("/images/"+GodImage.item(0).getTextContent())).getImage();
+
             ImageIcon god_Image_Icon = new ImageIcon(god_Image);
 
             NodeList GodImagePressed = document.getElementsByTagName("ImagePressedIconURL");
-            Image GodImagePressed_Image = new ImageIcon(PATH + GodImagePressed.item(0).getTextContent()).getImage();
+            //Image GodImagePressed_Image = new ImageIcon(PATH + GodImagePressed.item(0).getTextContent()).getImage();
+            Image GodImagePressed_Image = new ImageIcon(this.getClass().getResource("/images/"+GodImagePressed.item(0).getTextContent())).getImage();
+
             ImageIcon GodImagePressed_Icon = new ImageIcon(GodImagePressed_Image);
 
             JRadioButton godImageButton = new JRadioButton();

@@ -203,7 +203,8 @@ public class ClientGUIMain implements Runnable{
         mainFrame.getContentPane().add(rootPanel, gbcPanel);
         rootPanel.setLayout(new BorderLayout(0, 0));
 
-        westPanelImage = new ImageIcon(PATH + "SX_Panel.png");
+        //westPanelImage = new ImageIcon(PATH + "SX_Panel.png");
+        westPanelImage = new ImageIcon(this.getClass().getResource("/images/SX_Panel.png"));
         westPanelImageScaled = new ImageIcon(westPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
 
@@ -212,7 +213,8 @@ public class ClientGUIMain implements Runnable{
         westPanel.setOpaque(false);
         rootPanel.add(westPanel, BorderLayout.WEST);
 
-        eastPanelImage = new ImageIcon(PATH + "DX_Panel.png");
+        //eastPanelImage = new ImageIcon(PATH + "DX_Panel.png");
+        eastPanelImage = new ImageIcon(this.getClass().getResource("/images/DX_Panel.png"));
         eastPanelImageScaled = new ImageIcon(eastPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
         JPanel eastPanel = new ClientGUIMain.EastJPanel();
@@ -220,7 +222,8 @@ public class ClientGUIMain implements Runnable{
         eastPanel.setOpaque(false);
         rootPanel.add(eastPanel, BorderLayout.EAST);
 
-        centralPanelImage = new ImageIcon(PATH + "Central_Panel_Crop.png");
+        //centralPanelImage = new ImageIcon(PATH + "Central_Panel_Crop.png");
+        centralPanelImage = new ImageIcon(this.getClass().getResource("/images/Central_Panel_Crop.png"));
         centralPanelImageScaled = new ImageIcon(centralPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
         JPanel centralPanel = new ClientGUIMain.CentralJPanel();
@@ -241,7 +244,8 @@ public class ClientGUIMain implements Runnable{
         JLabel logoLabel = new JLabel();
         logoLabel.setBorder(new EmptyBorder(0, 0, 30, 0));
         logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        logoLabel.setIcon(new ImageIcon(PATH + "empty_title.png"));
+        //logoLabel.setIcon(new ImageIcon(PATH + "empty_title.png"));
+        logoLabel.setIcon(new ImageIcon(this.getClass().getResource("/images/empty_title.png")));
         logoLabel.setOpaque(false);
         GridBagConstraints gbcLogoLabel = new GridBagConstraints();
         gbcLogoLabel.insets = new Insets(0, 0, 5, 0);
@@ -344,14 +348,18 @@ public class ClientGUIMain implements Runnable{
         gbcLblDate.gridy = 17;
         centralPanel.add(colorLabel, gbcLblDate);
 
-        Image twoButton_image = new ImageIcon(PATH + "2Players.png").getImage();
+        //Image twoButton_image = new ImageIcon(PATH + "2Players.png").getImage();
+        Image twoButton_image = new ImageIcon(this.getClass().getResource("/images/2Players.png")).getImage();
         twoButton_Icon = new ImageIcon(twoButton_image);
-        Image twoButton_image_Pressed = new ImageIcon(PATH + "2Players_pressed.png").getImage();
+        //Image twoButton_image_Pressed = new ImageIcon(PATH + "2Players_pressed.png").getImage();
+        Image twoButton_image_Pressed = new ImageIcon(this.getClass().getResource("/images/2Players_pressed.png")).getImage();
         twoButton_Icon_Pressed = new ImageIcon(twoButton_image_Pressed);
 
-        Image threeButton_image = new ImageIcon(PATH + "3Players.png").getImage();
+        //Image threeButton_image = new ImageIcon(PATH + "3Players.png").getImage();
+        Image threeButton_image = new ImageIcon(this.getClass().getResource("/images/3Players.png")).getImage();
         threeButton_Icon = new ImageIcon(threeButton_image);
-        Image threeButton_image_pressed = new ImageIcon(PATH + "3Players_pressed.png").getImage();
+        //Image threeButton_image_pressed = new ImageIcon(PATH + "3Players_pressed.png").getImage();
+        Image threeButton_image_pressed = new ImageIcon(this.getClass().getResource("/images/3Players_pressed.png")).getImage();
         threeButton_Icon_Pressed = new ImageIcon(threeButton_image_pressed);
 
         JPanel playerNumberButtons = new JPanel(new GridLayout(1,2, 15,0));
@@ -413,9 +421,12 @@ public class ClientGUIMain implements Runnable{
 
         playButton = new JRadioButton();
 
-        Image play = new ImageIcon(PATH + "button_play.png").getImage().getScaledInstance(126,141, Image.SCALE_SMOOTH);
+        //Image play = new ImageIcon(PATH + "button_play.png").getImage().getScaledInstance(126,141, Image.SCALE_SMOOTH);
+        Image play = new ImageIcon(this.getClass().getResource("/images/button_play.png")).getImage().getScaledInstance(126,141, Image.SCALE_SMOOTH);
+
         ImageIcon play_button = new ImageIcon(play);
-        Image play_pressed = new ImageIcon(PATH + "button_play_pressed.png").getImage().getScaledInstance(126,141, Image.SCALE_SMOOTH);
+        //Image play_pressed = new ImageIcon(PATH + "button_play_pressed.png").getImage().getScaledInstance(126,141, Image.SCALE_SMOOTH);
+        Image play_pressed = new ImageIcon(this.getClass().getResource("/images/button_play_pressed.png")).getImage().getScaledInstance(126,141, Image.SCALE_SMOOTH);
         ImageIcon play_button_pressed = new ImageIcon(play_pressed);
 
         playButton.setIcon(play_button);

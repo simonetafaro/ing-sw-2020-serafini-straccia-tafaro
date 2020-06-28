@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.ClientGUIMain;
 import it.polimi.ingsw.utils.PlayerColor;
 
 import javax.swing.*;
@@ -54,31 +55,42 @@ public class showPopUpColor implements Runnable{
         JPanel popUpFrame = new JPanel();
         popUpFrame.setLayout(new GridLayout(2,1));
 
-        Image titleImage = new ImageIcon(PATH + "chooseYourColor.png").getImage();
+        //Image titleImage = new ImageIcon(PATH + "chooseYourColor.png").getImage();
+        Image titleImage = new ImageIcon(this.getClass().getResource("/images/chooseYourColor.png")).getImage();
+
         ImageIcon titleIMG = new ImageIcon(titleImage);
         JLabel title = new JLabel();
         title.setIcon(titleIMG);
         popUpFrame.add(title);
 
-        Image greyButton_image = new ImageIcon(PATH + "G_Workers_No_Shadow.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        //Image greyButton_image = new ImageIcon(PATH + "G_Workers_No_Shadow.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image greyButton_image = new ImageIcon(this.getClass().getResource("/images/G_Workers_No_Shadow.png")).getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon greyButton_Icon = new ImageIcon(greyButton_image);
-        Image greyButton_image_pressed = new ImageIcon(PATH + "G_Workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        //Image greyButton_image_pressed = new ImageIcon(PATH + "G_Workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image greyButton_image_pressed = new ImageIcon(this.getClass().getResource("/images/G_Workers.png")).getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon greyButton_Icon_Pressed = new ImageIcon(greyButton_image_pressed);
-        Image greyButton_image_No_Available = new ImageIcon(PATH + "G_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        //Image greyButton_image_No_Available = new ImageIcon(PATH + "G_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image greyButton_image_No_Available = new ImageIcon(this.getClass().getResource("/images/G_Workers_No_Available.png")).getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon greyButton_Icon_No_Available = new ImageIcon(greyButton_image_No_Available);
 
-        Image blueButton_image = new ImageIcon(PATH + "B_Workers_No_Shadow.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        //Image blueButton_image = new ImageIcon(PATH + "B_Workers_No_Shadow.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image blueButton_image = new ImageIcon(this.getClass().getResource("/images/B_Workers_No_Shadow.png")).getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon blueButton_Icon = new ImageIcon(blueButton_image);
-        Image blueButton_image_pressed = new ImageIcon(PATH + "B_Workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        //Image blueButton_image_pressed = new ImageIcon(PATH + "B_Workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image blueButton_image_pressed = new ImageIcon(this.getClass().getResource("/images/B_Workers.png")).getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon blueButton_Icon_Pressed = new ImageIcon(blueButton_image_pressed);
-        Image blueButton_image_No_Available = new ImageIcon(PATH + "B_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        //Image blueButton_image_No_Available = new ImageIcon(PATH + "B_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image blueButton_image_No_Available = new ImageIcon(this.getClass().getResource("/images/B_Workers_No_Available.png")).getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon blueButton_Icon_No_Available = new ImageIcon(blueButton_image_No_Available);
 
-        Image whiteButton_image = new ImageIcon(PATH + "W_workers_No_Press.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        //Image whiteButton_image = new ImageIcon(PATH + "W_Workers_No_Press.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image whiteButton_image = new ImageIcon(this.getClass().getResource("/images/W_Workers_No_Press.png")).getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon whiteButton_Icon = new ImageIcon(whiteButton_image);
-        Image whiteButton_image_pressed = new ImageIcon(PATH + "W_Workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        //Image whiteButton_image_pressed = new ImageIcon(PATH + "W_Workers.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image whiteButton_image_pressed = new ImageIcon(this.getClass().getResource("/images/W_Workers.png")).getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon whiteButton_Icon_Pressed = new ImageIcon(whiteButton_image_pressed);
-        Image whiteButton_image_No_Available = new ImageIcon(PATH + "W_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        //Image whiteButton_image_No_Available = new ImageIcon(PATH + "W_Workers_No_Available.png").getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
+        Image whiteButton_image_No_Available = new ImageIcon(this.getClass().getResource("/images/W_Workers_No_Available.png")).getImage().getScaledInstance(144,124, Image.SCALE_SMOOTH);
         ImageIcon whiteButton_Icon_No_Available = new ImageIcon(whiteButton_image_No_Available);
 
         GridBagConstraints gbcWorkerColor = new GridBagConstraints();

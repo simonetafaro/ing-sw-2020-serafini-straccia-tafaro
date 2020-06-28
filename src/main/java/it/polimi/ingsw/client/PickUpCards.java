@@ -343,7 +343,8 @@ public class PickUpCards implements Runnable {
         buttonList = new ArrayList<JCheckBox>();
         JPanel rootPanel = new JPanel(new BorderLayout());
 
-        ImageIcon westPanelImage = new ImageIcon(PATH + "Sx_Panel_Cards_new.png");
+        //ImageIcon westPanelImage = new ImageIcon(PATH + "Sx_Panel_Cards_new.png");
+        ImageIcon westPanelImage = new ImageIcon(this.getClass().getResource("/images/Sx_Panel_Cards_new.png"));
         westPanelImageScaled = new ImageIcon(westPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
         JPanel westPanel = new PickUpCards.WestJPanel();
@@ -361,21 +362,35 @@ public class PickUpCards implements Runnable {
         westPanel.setOpaque(true);
         rootPanel.add(westPanel, BorderLayout.WEST);
 
-        PanText = new ImageIcon(PATH + "Pan_Text.png");
-        ApolloText = new ImageIcon(PATH + "Apollo_Text.png");
-        DemeterText = new ImageIcon(PATH + "Demeter_Text.png");
-        HephaestusText = new ImageIcon(PATH + "Hephaestus_Text.png");
-        PrometheusText = new ImageIcon(PATH + "Prometheus_Text.png");
-        ArtemisText = new ImageIcon(PATH + "Artemis_Text.png");
-        AthenaText = new ImageIcon(PATH + "Athena_Text.png");
-        AtlasText = new ImageIcon(PATH + "Atlas_Text.png");
-        MinotaurText = new ImageIcon(PATH + "Minotaur_Text.png");
+        //PanText = new ImageIcon(PATH + "Pan_text.png");
+        PanText = new ImageIcon(this.getClass().getResource("/images/Pan_text.png"));
+        //ApolloText = new ImageIcon(PATH + "Apollo_Text.png");
+        ApolloText = new ImageIcon(this.getClass().getResource("/images/Apollo_text.png"));
+        //DemeterText = new ImageIcon(PATH + "Demeter_Text.png");
+        DemeterText = new ImageIcon(this.getClass().getResource("/images/Demeter_text.png"));
+        //HephaestusText = new ImageIcon(PATH + "Hephaestus_Text.png");
+        HephaestusText = new ImageIcon(this.getClass().getResource("/images/Hephaestus_text.png"));
+        //PrometheusText = new ImageIcon(PATH + "Prometheus_Text.png");
+        PrometheusText = new ImageIcon(this.getClass().getResource("/images/Prometheus_text.png"));
+        //ArtemisText = new ImageIcon(PATH + "Artemis_Text.png");
+        ArtemisText = new ImageIcon(this.getClass().getResource("/images/Artemis_text.png"));
+        //AthenaText = new ImageIcon(PATH + "Athena_Text.png");
+        AthenaText = new ImageIcon(this.getClass().getResource("/images/Athena_text.png"));
+        //AtlasText = new ImageIcon(PATH + "Atlas_Text.png");
+        AtlasText = new ImageIcon(this.getClass().getResource("/images/Atlas_text.png"));
+        //MinotaurText = new ImageIcon(PATH + "Minotaur_Text.png");
+        MinotaurText = new ImageIcon(this.getClass().getResource("/images/Minotaur_text.png"));
 
-        ZeusText = new ImageIcon(PATH + "Zeus_Text.png");
-        HestiaText = new ImageIcon(PATH + "Hestia_Text.png");
-        PoseidonText = new ImageIcon(PATH + "Poseidon_Text.png");
-        SeleneText = new ImageIcon(PATH + "Selene_Text.png");
-        ChronusText = new ImageIcon(PATH + "Chronus_Text.png");
+        //ZeusText = new ImageIcon(PATH + "Zeus_Text.png");
+        ZeusText = new ImageIcon(this.getClass().getResource("/images/Zeus_text.png"));
+        //HestiaText = new ImageIcon(PATH + "Hestia_Text.png");
+        HestiaText = new ImageIcon(this.getClass().getResource("/images/Hestia_text.png"));
+        //PoseidonText = new ImageIcon(PATH + "Poseidon_Text.png");
+        PoseidonText = new ImageIcon(this.getClass().getResource("/images/Poseidon_text.png"));
+        //SeleneText = new ImageIcon(PATH + "Selene_Text.png");
+        SeleneText = new ImageIcon(this.getClass().getResource("/images/Selene_text.png"));
+        //ChronusText = new ImageIcon(PATH + "Chronus_Text.png");
+        ChronusText = new ImageIcon(this.getClass().getResource("/images/Chronus_text.png"));
 
         logoLabel = new JLabel();
         logoLabel.setBorder(new EmptyBorder(12, 0, 30, 0));
@@ -390,7 +405,9 @@ public class PickUpCards implements Runnable {
 
         westPanel.add(logoLabel, gbcDescriptionLabel);
 
-        ImageIcon centralPanelImage = new ImageIcon(PATH + "Central_Panel_Cards_Image.png");
+        //ImageIcon centralPanelImage = new ImageIcon(PATH + "Central_Panel_Cards_Image.png");
+        ImageIcon centralPanelImage  = new ImageIcon(this.getClass().getResource("/images/Central_Panel_Cards_Image.png"));
+
         centralPanelImageScaled = new ImageIcon(centralPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
         JPanel centralPanel = new PickUpCards.CentralJPanel();
@@ -406,26 +423,41 @@ public class PickUpCards implements Runnable {
         gbcCardsImageLabel.gridx = 0;
         gbcCardsImageLabel.gridy = 0;
 
-        ArtemisImage = new ImageIcon(PATH + "Artemis_Image.png");
-        PanImage = new ImageIcon(PATH + "Pan_Image.png");
-        AtlasImage = new ImageIcon(PATH + "Atlas_Image.png");
-        DemeterImage = new ImageIcon(PATH + "Demeter_Image.png");
-        HephaestusImage = new ImageIcon(PATH + "Hephaestus_Image.png");
-        MinotaurImage = new ImageIcon(PATH + "Minotaur_Image.png");
-        AthenaImage = new ImageIcon(PATH + "Athena_Image.png");
-        PrometheusImage = new ImageIcon(PATH + "Prometheus_Image.png");
-        ApolloImage = new ImageIcon(PATH + "Apollo_Image.png");
-        ZeusImage = new ImageIcon(PATH + "Zeus_Image.png");
-        ChronusImage = new ImageIcon(PATH + "Chronus_Image.png");
-        PoseidonImage = new ImageIcon(PATH + "Poseidon_Image.png");
-        HestiaImage = new ImageIcon(PATH + "Hestia_Image.png");
-        SeleneImage = new ImageIcon(PATH + "Selene_Image.png");
+        //ArtemisImage = new ImageIcon(PATH + "Artemis_Image.png");
+        ArtemisImage  = new ImageIcon(this.getClass().getResource("/images/Artemis_Image.png"));
+        //PanImage = new ImageIcon(PATH + "Pan_Image.png");
+        PanImage  = new ImageIcon(this.getClass().getResource("/images/Pan_Image.png"));
+        //AtlasImage = new ImageIcon(PATH + "Atlas_Image.png");
+        AtlasImage  = new ImageIcon(this.getClass().getResource("/images/Atlas_Image.png"));
+        //DemeterImage = new ImageIcon(PATH + "Demeter_Image.png");
+        DemeterImage  = new ImageIcon(this.getClass().getResource("/images/Demeter_Image.png"));
+        //HephaestusImage = new ImageIcon(PATH + "Hephaestus_Image.png");
+        HephaestusImage  = new ImageIcon(this.getClass().getResource("/images/Hephaestus_Image.png"));
+        //MinotaurImage = new ImageIcon(PATH + "Minotaur_Image.png");
+        MinotaurImage  = new ImageIcon(this.getClass().getResource("/images/Minotaur_Image.png"));
+        //AthenaImage = new ImageIcon(PATH + "Athena_Image.png");
+        AthenaImage  = new ImageIcon(this.getClass().getResource("/images/Athena_Image.png"));
+        //PrometheusImage = new ImageIcon(PATH + "Prometheus_Image.png");
+        PrometheusImage  = new ImageIcon(this.getClass().getResource("/images/Prometheus_Image.png"));
+        //ApolloImage = new ImageIcon(PATH + "Apollo_Image.png");
+        ApolloImage  = new ImageIcon(this.getClass().getResource("/images/Apollo_Image.png"));
+        //ZeusImage = new ImageIcon(PATH + "Zeus_Image.png");
+        ZeusImage  = new ImageIcon(this.getClass().getResource("/images/Zeus_Image.png"));
+        //ChronusImage = new ImageIcon(PATH + "Chronus_Image.png");
+        ChronusImage  = new ImageIcon(this.getClass().getResource("/images/Chronus_Image.png"));
+        //PoseidonImage = new ImageIcon(PATH + "Poseidon_Image.png");
+        PoseidonImage  = new ImageIcon(this.getClass().getResource("/images/Poseidon_Image.png"));
+        //HestiaImage = new ImageIcon(PATH + "Hestia_Image.png");
+        HestiaImage  = new ImageIcon(this.getClass().getResource("/images/Hestia_Image.png"));
+        //SeleneImage = new ImageIcon(PATH + "Selene_Image.png");
+        SeleneImage  = new ImageIcon(this.getClass().getResource("/images/Selene_Image.png"));
 
         ImageContainer = new JLabel();
         ImageContainer.setBackground(new Color(0,0,0,0));
         centralPanel.add(ImageContainer, gbcCardsImageLabel);
 
-        ImageIcon eastPanelImage = new ImageIcon(PATH + "Dx_Panel_Cards_new.png");
+        //ImageIcon eastPanelImage = new ImageIcon(PATH + "Dx_Panel_Cards_new.png");
+        ImageIcon eastPanelImage  = new ImageIcon(this.getClass().getResource("/images/Dx_Panel_Cards_new.png"));
         eastPanelImageScaled = new ImageIcon(eastPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();;
         JPanel eastPanel = new PickUpCards.EastJPanel();
@@ -451,9 +483,11 @@ public class PickUpCards implements Runnable {
         cardScroll.setMinimumSize(new Dimension(360,360));
         cardScroll.setOpaque(false);
         cardScroll.getViewport().setOpaque(false);
-        Image PanCard = new ImageIcon(PATH + "CardPan.png").getImage();
+        //Image PanCard = new ImageIcon(PATH + "CardPan.png").getImage();
+        Image PanCard  = new ImageIcon(this.getClass().getResource("/images/CardPan.png")).getImage();
         PanCard_Icon = new ImageIcon(PanCard);
-        Image PanCard_pressed = new ImageIcon(PATH + "PanCardPressed.png").getImage();
+        //Image PanCard_pressed = new ImageIcon(PATH + "PanCardPressed.png").getImage();
+        Image PanCard_pressed = new ImageIcon(this.getClass().getResource("/images/PanCardPressed.png")).getImage();
         PanCard_Icon_Pressed = new ImageIcon(PanCard_pressed);
         PanButton = new JCheckBox();
         PanButton.setBackground(new Color(0,0,0,0));
@@ -462,9 +496,11 @@ public class PickUpCards implements Runnable {
         PanButton.setIcon(PanCard_Icon);
         card.add(PanButton);
 
-        Image ApolloCard = new ImageIcon(PATH + "CardApollo.png").getImage();
+        //Image ApolloCard = new ImageIcon(PATH + "CardApollo.png").getImage();
+        Image ApolloCard = new ImageIcon(this.getClass().getResource("/images/CardApollo.png")).getImage();
         ApolloCard_Icon = new ImageIcon(ApolloCard);
-        Image ApolloCard_pressed = new ImageIcon(PATH + "ApolloCardPressed.png").getImage();
+        //Image ApolloCard_pressed = new ImageIcon(PATH + "ApolloCardPressed.png").getImage();
+        Image ApolloCard_pressed = new ImageIcon(this.getClass().getResource("/images/ApolloCardPressed.png")).getImage();
         ApolloCard_Icon_Pressed = new ImageIcon(ApolloCard_pressed);
         ApolloButton = new JCheckBox();
         ApolloButton.setBackground(new Color(0,0,0,0));
@@ -473,9 +509,11 @@ public class PickUpCards implements Runnable {
         ApolloButton.setIcon(ApolloCard_Icon);
         card.add(ApolloButton);
 
-        Image AtlasCard = new ImageIcon(PATH + "CardAtlas.png").getImage();
+        //Image AtlasCard = new ImageIcon(PATH + "CardAtlas.png").getImage();
+        Image AtlasCard = new ImageIcon(this.getClass().getResource("/images/CardAtlas.png")).getImage();
         AtlasCard_Icon = new ImageIcon(AtlasCard);
-        Image AtlasCard_pressed = new ImageIcon(PATH + "AtlasCardPressed.png").getImage();
+        //Image AtlasCard_pressed = new ImageIcon(PATH + "AtlasCardPressed.png").getImage();
+        Image AtlasCard_pressed = new ImageIcon(this.getClass().getResource("/images/AtlasCardPressed.png")).getImage();
         AtlasCard_Icon_Pressed = new ImageIcon(AtlasCard_pressed);
         AtlasButton = new JCheckBox();
         AtlasButton.setBackground(new Color(0,0,0,0));
@@ -484,9 +522,11 @@ public class PickUpCards implements Runnable {
         AtlasButton.setIcon(AtlasCard_Icon);
         card.add(AtlasButton);
 
-        Image ArtemisCard = new ImageIcon(PATH + "CardArtemis.png").getImage();
+        //Image ArtemisCard = new ImageIcon(PATH + "CardArtemis.png").getImage();
+        Image ArtemisCard = new ImageIcon(this.getClass().getResource("/images/CardArtemis.png")).getImage();
         ArtemisCard_Icon = new ImageIcon(ArtemisCard);
-        Image ArtemisCard_pressed = new ImageIcon(PATH + "ArtemisCardPressed.png").getImage();
+        //Image ArtemisCard_pressed = new ImageIcon(PATH + "ArtemisCardPressed.png").getImage();
+        Image ArtemisCard_pressed = new ImageIcon(this.getClass().getResource("/images/ArtemisCardPressed.png")).getImage();
         ArtemisCard_Icon_Pressed = new ImageIcon(ArtemisCard_pressed);
         ArtemisButton = new JCheckBox();
         ArtemisButton.setBackground(new Color(0,0,0,0));
@@ -495,9 +535,11 @@ public class PickUpCards implements Runnable {
         ArtemisButton.setIcon(ArtemisCard_Icon);
         card.add(ArtemisButton);
 
-        Image AthenaCard = new ImageIcon(PATH + "CardAthena.png").getImage();
+        //Image AthenaCard = new ImageIcon(PATH + "CardAthena.png").getImage();
+        Image AthenaCard = new ImageIcon(this.getClass().getResource("/images/CardAthena.png")).getImage();
         AthenaCard_Icon = new ImageIcon(AthenaCard);
-        Image AthenaCard_pressed = new ImageIcon(PATH + "AthenaCardPressed.png").getImage();
+        //Image AthenaCard_pressed = new ImageIcon(PATH + "AthenaCardPressed.png").getImage();
+        Image AthenaCard_pressed = new ImageIcon(this.getClass().getResource("/images/AthenaCardPressed.png")).getImage();
         AthenaCard_Icon_Pressed = new ImageIcon(AthenaCard_pressed);
         AthenaButton = new JCheckBox();
         AthenaButton.setBackground(new Color(0,0,0,0));
@@ -506,9 +548,11 @@ public class PickUpCards implements Runnable {
         AthenaButton.setIcon(AthenaCard_Icon);
         card.add(AthenaButton);
 
-        Image DemeterCard = new ImageIcon(PATH + "CardDemeter.png").getImage();
+        //Image DemeterCard = new ImageIcon(PATH + "CardDemeter.png").getImage();
+        Image DemeterCard = new ImageIcon(this.getClass().getResource("/images/CardDemeter.png")).getImage();
         DemeterCard_Icon = new ImageIcon(DemeterCard);
-        Image DemeterCard_pressed = new ImageIcon(PATH + "DemeterCardPressed.png").getImage();
+        //Image DemeterCard_pressed = new ImageIcon(PATH + "DemeterCardPressed.png").getImage();
+        Image DemeterCard_pressed = new ImageIcon(this.getClass().getResource("/images/DemeterCardPressed.png")).getImage();
         DemeterCard_Icon_Pressed = new ImageIcon(DemeterCard_pressed);
         DemeterButton = new JCheckBox();
         DemeterButton.setBackground(new Color(0,0,0,0));
@@ -517,9 +561,11 @@ public class PickUpCards implements Runnable {
         DemeterButton.setIcon(DemeterCard_Icon);
         card.add(DemeterButton);
 
-        Image HephaestusCard = new ImageIcon(PATH + "CardHephaestus.png").getImage();
+        //Image HephaestusCard = new ImageIcon(PATH + "CardHephaestus.png").getImage();
+        Image HephaestusCard = new ImageIcon(this.getClass().getResource("/images/CardHephaestus.png")).getImage();
         HephaestusCard_Icon = new ImageIcon(HephaestusCard);
-        Image HephaestusCard_pressed = new ImageIcon(PATH + "HephaestusCardPressed.png").getImage();
+        //Image HephaestusCard_pressed = new ImageIcon(PATH + "HephaestusCardPressed.png").getImage();
+        Image HephaestusCard_pressed = new ImageIcon(this.getClass().getResource("/images/HephaestusCardPressed.png")).getImage();
         HephaestusCard_Icon_Pressed = new ImageIcon(HephaestusCard_pressed);
         HephaestusButton = new JCheckBox();
         HephaestusButton.setBackground(new Color(0,0,0,0));
@@ -528,9 +574,11 @@ public class PickUpCards implements Runnable {
         HephaestusButton.setIcon(HephaestusCard_Icon);
         card.add(HephaestusButton);
 
-        Image PrometheusCard = new ImageIcon(PATH + "CardPrometheus.png").getImage();
+        //Image PrometheusCard = new ImageIcon(PATH + "CardPrometheus.png").getImage();
+        Image PrometheusCard = new ImageIcon(this.getClass().getResource("/images/CardPrometheus.png")).getImage();
         PrometheusCard_Icon = new ImageIcon(PrometheusCard);
-        Image PrometheusCard_pressed = new ImageIcon(PATH + "PrometheusCardPressed.png").getImage();
+        //Image PrometheusCard_pressed = new ImageIcon(PATH + "PrometheusCardPressed.png").getImage();
+        Image PrometheusCard_pressed = new ImageIcon(this.getClass().getResource("/images/PrometheusCardPressed.png")).getImage();
         PrometheusCard_Icon_Pressed = new ImageIcon(PrometheusCard_pressed);
         PrometheusButton = new JCheckBox();
         PrometheusButton.setBackground(new Color(0,0,0,0));
@@ -539,9 +587,11 @@ public class PickUpCards implements Runnable {
         PrometheusButton.setIcon(PrometheusCard_Icon);
         card.add(PrometheusButton);
 
-        Image MinotaurCard = new ImageIcon(PATH + "CardMinotaur.png").getImage();
+        //Image MinotaurCard = new ImageIcon(PATH + "CardMinotaur.png").getImage();
+        Image MinotaurCard = new ImageIcon(this.getClass().getResource("/images/CardMinotaur.png")).getImage();
         MinotaurCard_Icon = new ImageIcon(MinotaurCard);
-        Image MinotaurCard_pressed = new ImageIcon(PATH + "MinotaurCardPressed.png").getImage();
+        //Image MinotaurCard_pressed = new ImageIcon(PATH + "MinotaurCardPressed.png").getImage();
+        Image MinotaurCard_pressed = new ImageIcon(this.getClass().getResource("/images/MinotaurCardPressed.png")).getImage();
         MinotaurCard_Icon_Pressed = new ImageIcon(MinotaurCard_pressed);
         MinotaurButton = new JCheckBox();
         MinotaurButton.setBackground(new Color(0,0,0,0));
@@ -550,9 +600,11 @@ public class PickUpCards implements Runnable {
         MinotaurButton.setIcon(MinotaurCard_Icon);
         card.add(MinotaurButton);
 
-        Image SeleneCard = new ImageIcon(PATH + "CardSelene.png").getImage();
+        //Image SeleneCard = new ImageIcon(PATH + "CardSelene.png").getImage();
+        Image SeleneCard = new ImageIcon(this.getClass().getResource("/images/CardSelene.png")).getImage();
         SeleneCard_Icon = new ImageIcon(SeleneCard);
-        Image SeleneCard_pressed = new ImageIcon(PATH + "SeleneCardPressed.png").getImage();
+        //Image SeleneCard_pressed = new ImageIcon(PATH + "SeleneCardPressed.png").getImage();
+        Image SeleneCard_pressed = new ImageIcon(this.getClass().getResource("/images/SeleneCardPressed.png")).getImage();
         SeleneCard_Icon_Pressed = new ImageIcon(SeleneCard_pressed);
         SeleneButton = new JCheckBox();
         SeleneButton.setBackground(new Color(0,0,0,0));
@@ -561,9 +613,11 @@ public class PickUpCards implements Runnable {
         SeleneButton.setIcon(SeleneCard_Icon);
         card.add(SeleneButton);
 
-        Image PoseidonCard = new ImageIcon(PATH + "CardPoseidon.png").getImage();
+        //Image PoseidonCard = new ImageIcon(PATH + "CardPoseidon.png").getImage();
+        Image PoseidonCard = new ImageIcon(this.getClass().getResource("/images/CardPoseidon.png")).getImage();
         PoseidonCard_Icon = new ImageIcon(PoseidonCard);
-        Image PoseidonCard_pressed = new ImageIcon(PATH + "PoseidonCardPressed.png").getImage();
+        //Image PoseidonCard_pressed = new ImageIcon(PATH + "PoseidonCardPressed.png").getImage();
+        Image PoseidonCard_pressed = new ImageIcon(this.getClass().getResource("/images/PoseidonCardPressed.png")).getImage();
         PoseidonCard_Icon_Pressed = new ImageIcon(PoseidonCard_pressed);
         PoseidonButton = new JCheckBox();
         PoseidonButton.setBackground(new Color(0,0,0,0));
@@ -572,9 +626,11 @@ public class PickUpCards implements Runnable {
         PoseidonButton.setIcon(PoseidonCard_Icon);
         card.add(PoseidonButton);
 
-        Image ZeusCard = new ImageIcon(PATH + "CardZeus.png").getImage();
+        //Image ZeusCard = new ImageIcon(PATH + "CardZeus.png").getImage();
+        Image ZeusCard = new ImageIcon(this.getClass().getResource("/images/CardZeus.png")).getImage();
         ZeusCard_Icon = new ImageIcon(ZeusCard);
-        Image ZeusCard_pressed = new ImageIcon(PATH + "ZeusCardPressed.png").getImage();
+        //Image ZeusCard_pressed = new ImageIcon(PATH + "ZeusCardPressed.png").getImage();
+        Image ZeusCard_pressed = new ImageIcon(this.getClass().getResource("/images/ZeusCardPressed.png")).getImage();
         ZeusCard_Icon_Pressed = new ImageIcon(ZeusCard_pressed);
         ZeusButton = new JCheckBox();
         ZeusButton.setBackground(new Color(0,0,0,0));
@@ -583,9 +639,11 @@ public class PickUpCards implements Runnable {
         ZeusButton.setIcon(ZeusCard_Icon);
         card.add(ZeusButton);
 
-        Image ChronusCard = new ImageIcon(PATH + "CardChronus.png").getImage();
+        //Image ChronusCard = new ImageIcon(PATH + "CardChronus.png").getImage();
+        Image ChronusCard = new ImageIcon(this.getClass().getResource("/images/CardChronus.png")).getImage();
         ChronusCard_Icon = new ImageIcon(ChronusCard);
-        Image ChronusCard_pressed = new ImageIcon(PATH + "ChronusCardPressed.png").getImage();
+        //Image ChronusCard_pressed = new ImageIcon(PATH + "ChronusCardPressed.png").getImage();
+        Image ChronusCard_pressed = new ImageIcon(this.getClass().getResource("/images/ChronusCardPressed.png")).getImage();
         ChronusCard_Icon_Pressed = new ImageIcon(ChronusCard_pressed);
         ChronusButton = new JCheckBox();
         ChronusButton.setBackground(new Color(0,0,0,0));
@@ -594,9 +652,11 @@ public class PickUpCards implements Runnable {
         ChronusButton.setIcon(ChronusCard_Icon);
         card.add(ChronusButton);
 
-        Image HestiaCard = new ImageIcon(PATH + "CardHestia.png").getImage();
+        //Image HestiaCard = new ImageIcon(PATH + "CardHestia.png").getImage();
+        Image HestiaCard = new ImageIcon(this.getClass().getResource("/images/CardHestia.png")).getImage();
         HestiaCard_Icon = new ImageIcon(HestiaCard);
-        Image HestiaCard_pressed = new ImageIcon(PATH + "HestiaCardPressed.png").getImage();
+        //Image HestiaCard_pressed = new ImageIcon(PATH + "HestiaCardPressed.png").getImage();
+        Image HestiaCard_pressed = new ImageIcon(this.getClass().getResource("/images/HestiaCardPressed.png")).getImage();
         HestiaCard_Icon_Pressed = new ImageIcon(HestiaCard_pressed);
         HestiaButton = new JCheckBox();
         HestiaButton.setBackground(new Color(0,0,0,0));
@@ -626,7 +686,9 @@ public class PickUpCards implements Runnable {
 
         eastPanel.add(cardScroll, gbcCardsLabel);
 
-        Image play = new ImageIcon(PATH + "start-game-button.png").getImage().getScaledInstance(169,91, Image.SCALE_SMOOTH);
+        //Image play = new ImageIcon(PATH + "start-game-button.png").getImage().getScaledInstance(169,91, Image.SCALE_SMOOTH);
+        Image play = new ImageIcon(this.getClass().getResource("/images/start-game-button.png")).getImage().getScaledInstance(169,91, Image.SCALE_SMOOTH);
+
         ImageIcon play_button = new ImageIcon(play);
         playButton = new JRadioButton();
         playButton.setIcon(play_button);
