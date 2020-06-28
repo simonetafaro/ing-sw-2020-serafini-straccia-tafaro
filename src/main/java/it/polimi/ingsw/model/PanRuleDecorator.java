@@ -1,12 +1,13 @@
 package it.polimi.ingsw.model;
 
-/**
- * Win Condition: You also win if
- * your Worker moves down two or
- * more levels.
- */
 public class PanRuleDecorator extends StandardRuleDecorator {
 
+    /**
+     * in this move the condition to win is also to move down two or more level
+     * @param move
+     * @param model
+     * @param turn
+     */
     @Override
     public void move(PlayerMove move, Model model, Turn turn) {
         boolean hasWon = model.hasWon(move) || panWinCondition(move, model);
@@ -22,6 +23,11 @@ public class PanRuleDecorator extends StandardRuleDecorator {
         model.notifyView(move,hasWon);
     }
 
+    /**
+     * @param move
+     * @param model
+     * @return true if the worker has gone down by at least two levels
+     */
     public boolean panWinCondition(PlayerMove move, Model model){
         return ( move.getWorker().getWorkerPosition().getLevel() - model.getBoard().getCell(move.getRow(),move.getColumn()).getLevel() )>=2;
 
