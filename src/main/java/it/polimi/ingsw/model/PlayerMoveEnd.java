@@ -8,6 +8,8 @@ import it.polimi.ingsw.view.View;
  */
 public class PlayerMoveEnd extends PlayerMove {
 
+    private static final long serialVersionUID = -6339404514199154791L;
+
     /**
      * It is true if it's an end turn message
      */

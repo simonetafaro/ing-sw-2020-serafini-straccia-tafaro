@@ -16,6 +16,8 @@ import java.net.Socket;
  */
 public class Player implements Serializable {
 
+    private static final long serialVersionUID = -6339404514199154792L;
+
     /**
      * Controller that manages to get the sequence of custom
      * moves from the xml file based on the player's card
@@ -63,12 +65,6 @@ public class Player implements Serializable {
      * player's card
      */
     private Card myCard;
-
-    /**
-     * Socket of player's client used to RemoteView
-     * to send messages to client
-     */
-    private transient Socket socket;
 
     /**
      * ObjectInputStream of player's client
@@ -123,13 +119,11 @@ public class Player implements Serializable {
      * Player constructor to initialize CardManager()
      * @param ID
      * @param nickname
-     * @param socket
      */
-    public Player(int ID, String nickname, Socket socket) {
+    public Player(int ID, String nickname) {
         this.nickname = nickname;
         this.ID = ID;
         this.cardManager = new CardManager();
-        this.socket = socket;
     }
 
     /**

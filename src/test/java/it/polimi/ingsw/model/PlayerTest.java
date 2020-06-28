@@ -136,8 +136,7 @@ class PlayerTest {
 
     @Test
     void getID() {
-        Socket socket = new Socket();
-        Player player = new Player(1,"Apollo",socket);
+        Player player = new Player(1,"Apollo");
 
         assertEquals(player.getID(),1);
         assertNotEquals(player.getID(),2);

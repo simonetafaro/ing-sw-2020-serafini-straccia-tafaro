@@ -5,4 +5,5 @@ import java.io.Serializable;
 public enum PlayerColor implements Serializable {
     GREY, WHITE, BLUE;
 
+    private static final long serialVersionUID = -6339404514199154795L;
 }

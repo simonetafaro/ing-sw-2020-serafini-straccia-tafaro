@@ -8,6 +8,7 @@ import it.polimi.ingsw.utils.gameMessage;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -93,6 +94,11 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
                             updateBoard((SetWorkerPosition) o);
                         }
                         if(o instanceof String){
+                            if(((String) o).contains("quitClient")){
+                                System.out.println("One of your opponents disconnected, closing game...");
+                                quitGame();
+                                break;
+                            }
                             if(((String) o).contains(connectionManagerSocket.getPlayerColor().toUpperCase())){
                                 if(((String) o).contains(" workerOccupiedCell") || ((String) o).contains("setWorkers")){
                                     connectionManagerSocket.getBoardCLI().setWorkers();
@@ -129,10 +135,12 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
                                 ClientSocketMessageCLI.this.writeToServer();
                             }
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
+                    } catch (IOException e ){
+                        System.out.println("Server connection is not available, closing game...");
+                        quitGame();
+                        break;
                     }
                 }
             }
@@ -276,7 +284,7 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
             public void actionPerformed(ActionEvent e) {
                 ClientSocketMessageCLI.this.active = false;
                 connectionManagerSocket.close();
-
+                System.exit(0);
             }
         }).start();
     }

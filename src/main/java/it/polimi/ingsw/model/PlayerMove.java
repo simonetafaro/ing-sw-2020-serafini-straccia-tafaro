@@ -12,6 +12,8 @@ import java.io.Serializable;
  */
 public class PlayerMove implements Serializable , Cloneable{
 
+    private static final long serialVersionUID = -6339404514199154790L;
+
     /**
      * Cell row in which player wants to build or move
      */

@@ -37,12 +37,6 @@ public class SocketClientConnection  extends Observable<String> implements Runna
                         client.getInputStream());
                 ObjectOutputStream output = new ObjectOutputStream(
                         client.getOutputStream());
-                /* Inizializzazione del client
-                 * -ID
-                 * -Nome
-                 * -Data
-                 * -Colore
-                 * */
                 Integer clientId = (Integer) input.readObject();
                 if(clientId == 0){
                     clientId = Server.getClientId();
@@ -58,7 +52,7 @@ public class SocketClientConnection  extends Observable<String> implements Runna
                     output.writeObject("NAME ACCEPTED");
                     output.flush();
 
-                    Player player = new Player(clientId, playerName, null);
+                    Player player = new Player(clientId, playerName);
                     int playerNumber = (int) input.readObject();
                     switch (playerNumber){
                         case 2: activeServer.getTwoPlayerMatch().add(player);

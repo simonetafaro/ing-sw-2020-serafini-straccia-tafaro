@@ -9,6 +9,8 @@ import java.io.Serializable;
  */
 public class Board implements Cloneable, Serializable {
 
+    private static final long serialVersionUID = -6339404514199154798L;
+
     /**
      * rows number
      */

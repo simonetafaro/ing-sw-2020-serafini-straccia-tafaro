@@ -11,6 +11,8 @@ import java.io.Serializable;
  */
 public class Worker implements Serializable {
 
+    private static final long serialVersionUID = -6339404514199154794L;
+
     /**
      * An integer depending on if it's
      * worker1 or worker2 of a player

@@ -235,10 +235,9 @@ class ModelTest {
 
     @Test
     void getPlayer() {
-        Socket socket = new Socket();
-        Player player1 = new Player(1,"Apollo", socket);
-        Player player2 = new Player(2,"Pan", socket);
-        Player player3 = new Player(3,"Hephaestus", socket);
+        Player player1 = new Player(1,"Apollo");
+        Player player2 = new Player(2,"Pan");
+        Player player3 = new Player(3,"Hephaestus");
 
         model.setPlayers(player1, player2, player3);
         assertEquals(model.getPlayer(1), player1);
@@ -398,10 +397,9 @@ class ModelTest {
 
     @Test
     void setPlayers() {
-        Socket socket = new Socket();
-        Player player1 = new Player(1,"Apollo", socket);
-        Player player2 = new Player(2,"Pan", socket);
-        Player player3 = new Player(3,"Hephaestus", socket);
+        Player player1 = new Player(1,"Apollo");
+        Player player2 = new Player(2,"Pan");
+        Player player3 = new Player(3,"Hephaestus");
 
         model.setPlayers(player1, player2, player3);
         assertEquals(model.getPlayer(1), player1);
@@ -413,9 +411,8 @@ class ModelTest {
 
     @Test
     void testSetPlayers() {
-        Socket socket = new Socket();
-        Player player1 = new Player(1,"Apollo", socket);
-        Player player2 = new Player(2,"Pan", socket);
+        Player player1 = new Player(1,"Apollo");
+        Player player2 = new Player(2,"Pan");
 
         model.setPlayers(player1, player2);
         assertEquals(model.getPlayer(1), player1);
@@ -426,9 +423,8 @@ class ModelTest {
 
     @Test
     void setWorkers() {
-        Socket socket = new Socket();
-        Player player1 = new Player(1,"Apollo",socket);
-        Player player2 = new Player(2,"Pan",socket);
+        Player player1 = new Player(1,"Apollo");
+        Player player2 = new Player(2,"Pan");
         player1.setColor(PlayerColor.GREY);
         player2.setColor(PlayerColor.BLUE);
 
@@ -532,11 +528,10 @@ class ModelTest {
     @Test
     void notifySetWorker() {
         Model model = new Model();
-        Socket socket = new Socket();
 
-        Player player1 = new Player(1,"Apollo",socket);
-        Player player2 = new Player(2,"Apollo",socket);
-        Player player3 = new Player(3,"Apollo",socket);
+        Player player1 = new Player(1,"Apollo");
+        Player player2 = new Player(2,"Apollo");
+        Player player3 = new Player(3,"Apollo");
         player1.setColor(PlayerColor.BLUE);
         player2.setColor(PlayerColor.GREY);
         player3.setColor(PlayerColor.WHITE);

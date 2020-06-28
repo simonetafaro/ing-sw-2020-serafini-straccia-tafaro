@@ -6,6 +6,9 @@ import java.io.Serializable;
  */
 public class SetWorkerPosition implements Serializable {
 
+
+    private static final long serialVersionUID = -6339404514199154796L;
+
     /**
      * Coordinate of the cell
      */
