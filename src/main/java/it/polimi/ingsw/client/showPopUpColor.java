@@ -7,33 +7,64 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Class used to manages GUI color choice implementation.
+ * When a player chooses a color, this color is locked on the other GUI.
+ */
 public class showPopUpColor implements Runnable{
 
-
+    /**
+     * Pointer of ConnectionManagerSocket of this player
+     */
     private ConnectionManagerSocket connectionManagerSocket;
 
+    /**
+     * JButton colors
+     */
     private JRadioButton grey_button;
     private JRadioButton blue_button;
     private JRadioButton white_button;
+
+    /**
+     * Frame of the window
+     */
     private JFrame mainFrame;
+
+    /**
+     * Parameters used to take all components images
+     */
     private static final String SRC = "src";
     private static final String MAIN = "main";
     private static final String RESOURCES = "resources";
     private static final String IMAGE = "images";
     private static final String PATH = SRC + File.separatorChar + MAIN + File.separatorChar + RESOURCES + File.separatorChar + IMAGE + File.separatorChar;
 
+    /**
+     * Listeners to the white color.
+     * It sets white color in the connectionManagerSocket
+     */
     private class WhiteColor implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             connectionManagerSocket.setColor("WHITE", showPopUpColor.this);
         }
     }
+
+    /**
+     * Listeners to the blue color.
+     * It sets blue color in the connectionManagerSocket
+     */
     private class BlueColor implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             connectionManagerSocket.setColor("BLUE", showPopUpColor.this);
         }
     }
+
+    /**
+     * Listeners to the grey color.
+     * It sets grey color in the connectionManagerSocket
+     */
     private class GreyColor implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -42,6 +73,13 @@ public class showPopUpColor implements Runnable{
 
     }
 
+
+    /**
+     * @param mainFrame
+     * @param connectionManagerSocket
+     * BoardGUI constructor initializes all the components in
+     * the GUI and it takes all the components images
+     */
     public showPopUpColor(JFrame mainFrame, ConnectionManagerSocket connectionManagerSocket){
         this.connectionManagerSocket = connectionManagerSocket;
         this.mainFrame = mainFrame;
@@ -128,6 +166,11 @@ public class showPopUpColor implements Runnable{
         this.mainFrame.setSize(1280, 720);
     }
 
+    /**
+     * @throws IOException
+     * It removes all components from color choice GUI
+     * and it initializes card choice GUI
+     */
     public void closeGUI() throws IOException {
         mainFrame.getContentPane().removeAll();
         connectionManagerSocket.setMainFrame(mainFrame);
@@ -135,6 +178,11 @@ public class showPopUpColor implements Runnable{
         mainFrame.update(mainFrame.getGraphics());
     }
 
+    /**
+     * @param color
+     * It is called when a player chose a color
+     * and this color is locked with a lock image
+     */
     public void lock(String color){
         switch (color){
             case "blue": blue_button.setEnabled(false);
@@ -146,6 +194,10 @@ public class showPopUpColor implements Runnable{
         }
     }
 
+    /**
+     * It adds Listeners to JButton color and it initializes
+     * color Thread in connectionManagerSocket
+     */
     @Override
     public void run() {
         blue_button.addActionListener(new BlueColor());

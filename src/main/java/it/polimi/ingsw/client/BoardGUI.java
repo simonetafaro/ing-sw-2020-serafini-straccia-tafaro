@@ -36,7 +36,7 @@ public class BoardGUI implements Runnable{
     private JFrame mainframe;
 
     /**
-     * pointer of ConnectionManagerSocket of this player
+     * Pointer of ConnectionManagerSocket of this player
      */
     private ConnectionManagerSocket connectionManagerSocket;
 
