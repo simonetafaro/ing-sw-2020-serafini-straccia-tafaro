@@ -4,15 +4,18 @@ import it.polimi.ingsw.utils.gameMessage;
 
 import java.io.Serializable;
 
-/**Your Move: Your Worker may
- *move one additional time, but not
- *back to its initial space.
- */
+
 
 public class ArtemisRuleDecorator extends StandardRuleDecorator {
+    /**
+     * this method allowed to a player ho have artemis to move a second time
+     * @param move
+     * @param model
+     * @param turn
+     */
 
     @Override
-    public void play(PlayerMove move, Turn turn, Model model) {
+   public void play(PlayerMove move, Turn turn, Model model) {
 
         if(move instanceof PlayerMoveEnd){
             if(isEndAllowed(move, turn)) {
@@ -22,25 +25,21 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
             }
             else {
                 model.sendError(move.getColor().toString()+" "+gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
-                //move.getView().reportError(gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
             }return;
         }
 
         if(!model.isRightWorker(move, turn)){
             model.sendError(move.getColor().toString()+" "+gameMessage.insertAgain);
-            //move.getView().reportError(gameMessage.insertAgain);
             return;
         }
 
         if(!checkStepType(move,turn)){
             model.sendError(move.getColor().toString()+" "+gameMessage.wrongStepMessage+"\n"+gameMessage.insertAgain);
-            //move.getView().reportError(gameMessage.wrongStepMessage+"\n"+gameMessage.insertAgain);
             return;
         }
 
         if(move.getRow()<0 || move.getRow()>=5 || move.getColumn()<0 || move.getColumn()>=5){
             model.sendError(move.getColor().toString()+" "+gameMessage.wrongInputMessage+"\n"+gameMessage.insertAgain);
-            //move.getView().reportError(gameMessage.wrongInputMessage+"\n"+gameMessage.insertAgain);
             return;
         }
 
@@ -48,7 +47,6 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
             //this worker is stuck
             move.getWorker().setStuck(true);
             model.sendError(move.getColor().toString()+" "+gameMessage.workerStuck+"\n"+gameMessage.insertAgain);
-            //move.getView().reportError(gameMessage.workerStuck+"\n"+gameMessage.insertAgain);
             //check if both worker1 && worker2 are stuck player lose
             if(model.isPlayerStuck(move)){
                 //this player lose, both workers are stuck
@@ -59,34 +57,34 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
 
         if(!model.isReachableCell(move)){
             model.sendError(move.getColor().toString()+" "+gameMessage.notReachableCellMessage+"\n"+gameMessage.insertAgain);
-            //move.getView().reportError(gameMessage.notReachableCellMessage+"\n"+gameMessage.insertAgain);
             return;
         }
 
         if(!model.isEmptyCell(move)){
             //read worker position and check if there are some empty cell where he can move in.
             model.sendError(move.getColor().toString()+" "+gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
-            //move.getView().reportError(gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
             return;
         }
 
         if(move.getMoveOrBuild().equals("M") ){
             if(!model.isLevelDifferenceAllowed(move)){
                 model.sendError(move.getColor().toString()+" "+gameMessage.tooHighCellMessage+"\n"+gameMessage.insertAgain);
-                //move.getView().reportError(gameMessage.tooHighCellMessage+"\n"+gameMessage.insertAgain);
                 return;
             }
             if(model.checkStep(move, turn, model))
-                //model.performMove(move);
                 move(move, model, turn);
         }
         else{
             if(model.checkStep(move, turn, model))
-                //model.performBuild(move);
                 build(move, model, turn);
         }
     }
 
+    /**
+     * @param move
+     * @param model
+     * @param turn
+     */
     @Override
     public void move(PlayerMove move, Model model, Turn turn) {
         //check if is second step, in this case check is the cell where i want to move in is different from the cell of first step
@@ -112,6 +110,13 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
 
         model.notifyView(move,hasWon);
     }
+
+    /**
+     * in this method the third step is set 'END'
+     * @param move
+     * @param model
+     * @param turn
+     */
     @Override
     public void build(PlayerMove move, Model model, Turn turn) {
         if(turn.getPlayerTurn(move.getPlayer()).getI()==2){
@@ -121,17 +126,6 @@ public class ArtemisRuleDecorator extends StandardRuleDecorator {
         model.setStep(move, turn, model);
 
         model.notifyView(move,false);
-    }
-    public boolean checkStepType(PlayerMove message, Turn turn){
-        if(message.getPlayer().getMyCard().isUsingCard())
-            return message.getMoveOrBuild().equals(message.getPlayer().getMyCard().getStepLetter(turn.getPlayerTurn(message.getPlayer()).getI()));
-        else
-            return  message.getMoveOrBuild().equals(message.getPlayer().getMyCard().getStandardStepLetter(turn.getPlayerTurn(message.getPlayer()).getI()))
-                    || message.getMoveOrBuild().equals(message.getPlayer().getMyCard().getStepLetter(turn.getPlayerTurn(message.getPlayer()).getI()));
-    }
-    public boolean isEndAllowed(PlayerMove move, Turn turn){
-        return move.getPlayer().getMyCard().isUsingCard() ? (move.getPlayer().getMyCard().getStepLetter(turn.getPlayerTurn(move.getPlayer()).getI())).equals("END") :
-                (move.getPlayer().getMyCard().getStandardStepLetter(turn.getPlayerTurn(move.getPlayer()).getI())).equals("END");
     }
 
 }

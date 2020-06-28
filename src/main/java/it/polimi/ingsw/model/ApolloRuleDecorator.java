@@ -4,13 +4,17 @@ import it.polimi.ingsw.utils.gameMessage;
 
 import java.io.Serializable;
 
-/**
- *Your Move: Your Worker may
- * move into an opponent Worker’s
- * space by forcing their Worker to
- * the space yours just vacated.
- */
+
 public class ApolloRuleDecorator extends StandardRuleDecorator {
+    /**
+     * in this method there is
+     * an extra check for the stuck worker ,
+     * because if he can switch  position with an opponent worker
+     * he is not really stack
+     * @param move  cell, worker and type of move
+     * @param turn
+     * @param model
+     */
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
 
@@ -40,7 +44,8 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
                 return;
             }
 
-            //se apollo ha worker vicino ed è stack non è really stack
+            //if the player who has apollo has a worker1 close to
+            // an opponent  one then that worker is not really stuck
             if(move.getMoveOrBuild().equals("M") && !hasFreeCellClosed(move.getWorker().getWorkerPosition(), model.getBoard().getPlayingBoard())){
                 //this worker is stuck
                 move.getWorker().setStuck(true);
@@ -65,7 +70,6 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
             }
 
             if(move.getMoveOrBuild().equals("M") ){
-                //per apollo anche le celle con un worker sono empty
                 if(!isEmptyCell(move, model)){
                     //read worker position and check if there are some empty cell where he can move in.
                     model.sendError(move.getColor().toString()+" "+gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
@@ -88,7 +92,6 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
                     return;
                 }
                 if(model.checkStep(move, turn, model))
-                    //model.performBuild(move);
                     build(move, model, turn);
             }
         }
@@ -98,7 +101,7 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
         boolean hasWon = model.hasWon(move);
 
         model.setStep(move,turn, model);
-
+        //allows you to swipe your worker position with an adjacent opponent
         if(model.getBoard().getCell(move.getRow(),move.getColumn()).getCurrWorker()!=null){
             switchWorkerPosition(move, model);
         }else{
@@ -112,6 +115,12 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
 
         model.notifyView(move,hasWon);
     }
+
+    /**
+     *allows you to swipe your worker position with an adjacent opponent
+     * @param move
+     * @param model
+     */
     public void switchWorkerPosition(PlayerMove move, Model model){
         Worker tempWorker;
         Cell from = model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(), move.getWorker().getWorkerPosition().getPosY());
@@ -124,6 +133,12 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
 
         tempWorker.setWorkerPosition(from);
     }
+
+    /**
+     * @param from cell where the worker is
+     * @param board game board
+     * @return true if the worker has at least one cell to move to or an opposing worker
+     */
     public boolean hasFreeCellClosed(Cell from, Cell[][] board){
         boolean bool=false;
         for(int i=-1; i<2; i++){
@@ -140,6 +155,12 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
         }
         return bool;
     }
+
+    /**
+     * @param move
+     * @param model
+     * @return true if the cell where I want to move the worker is free or there is an opposing worker
+     */
     public boolean isEmptyCell(PlayerMove move, Model model){
         Cell to = model.getBoard().getCell(move.getRow(),move.getColumn());
 
@@ -148,9 +169,21 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
                     to.getCurrWorker()!= move.getPlayer().getWorker2() &&
                         model.getBoard().getCell(move.getRow(), move.getColumn()).getCurrWorker()!=null);
     }
+
+    /**
+     * @param move
+     * @param model
+     * @return true if the worker can build after moving
+     */
     public boolean canBuildFromCellTo(PlayerMove move, Model model){
         return model.getBoard().getCell(move.getRow(),move.getColumn()).canBuildInCells(model.getBoard().getPlayingBoard());
     }
+
+    /**
+     * @param from cell where the worker is
+     * @param to worker
+     * @return true if the worker in the cell is from the same player as the worker To
+     */
     public boolean isApolloWorker(Cell from, Worker to){
         return from.getCurrWorker().getColor()==to.getColor();
     }

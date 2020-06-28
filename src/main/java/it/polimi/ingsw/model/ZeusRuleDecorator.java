@@ -2,11 +2,13 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
-/**
- * Your Build: Your Worker may
- * build a block under itself.
- */
+
 public class ZeusRuleDecorator extends StandardRuleDecorator {
+    /** this method allows Zeus to build under yourself
+     * @param move  cell, worker and type of move
+     * @param turn
+     * @param model
+     */
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
         if(move instanceof PlayerMoveEnd){
@@ -64,9 +66,9 @@ public class ZeusRuleDecorator extends StandardRuleDecorator {
                 return;
             }
             if(model.checkStep(move, turn, model))
-                //model.performMove(move);
                 move(move, model, turn);
         }
+        //if the worker have the Zeus power can build under your self
         else{
             if(!model.isReachableCell(move)&&!Zeusbuild(move,model,turn)){
                 model.sendError(move.getColor().toString()+" "+gameMessage.notReachableCellMessage+"\n"+gameMessage.insertAgain);
@@ -78,7 +80,7 @@ public class ZeusRuleDecorator extends StandardRuleDecorator {
                 model.sendError(move.getColor().toString()+" "+gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
                 return;
             }
-            if(ZeusTohight(move, model, turn)&&Zeusbuild(move, model, turn)){
+            if(ZeusTohight(move, model)&&Zeusbuild(move, model, turn)){
                 model.sendError(move.getColor().toString()+" "+gameMessage.invalidBuildZeus+"\n"+gameMessage.insertAgain);
                 return;
             }
@@ -87,12 +89,24 @@ public class ZeusRuleDecorator extends StandardRuleDecorator {
                 build(move, model, turn);
         }
     }
-    /*this method allow to the worker to build a block under itself */
+
+    /**
+     * @param move
+     * @param model
+     * @param turn
+     * @return true if the cell where the worker wants to build is the one where he is
+     */
  public boolean Zeusbuild(PlayerMove move, Model model,Turn turn){
      return model.getBoard().getCell(move.getRow(), move.getColumn()).equals(turn.getPlayerTurn(move.getPlayer()).getStepI(1).getCellTo());
  }
- public boolean ZeusTohight(PlayerMove move, Model model,Turn turn){
+
+
+    /**
+     * @param move
+     * @param model
+     * @return true if the cell where the worker wants to build is at level three
+     */
+ public boolean ZeusTohight(PlayerMove move, Model model){
      return model.getBoard().getCell(move.getRow(), move.getColumn()).getLevel()==3;
  }
 }
-//non fa altro che dire se la cella dove bilto è quella dove sono allora posso

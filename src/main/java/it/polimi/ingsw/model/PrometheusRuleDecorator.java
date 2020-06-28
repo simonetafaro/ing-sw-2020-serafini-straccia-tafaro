@@ -2,13 +2,16 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
-/**
- * Your Turn: If your Worker does
- * not move up, it may build both
- * before and after moving.
- */
 public class PrometheusRuleDecorator extends StandardRuleDecorator {
 
+    /**
+     *  in this method there is
+     *  an extra check if the worker
+     * can build and then move without leveling up
+     * @param move  cell, worker and type of move
+     * @param turn
+     * @param model
+     */
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
 
@@ -71,12 +74,12 @@ public class PrometheusRuleDecorator extends StandardRuleDecorator {
                 move(move, model, turn);
         }
         else{ //"B"
+            //This worker cannot build if then he cannot move
             if((turn.getPlayerTurn(move.getPlayer()).getI()==1) && !canBuildInAndThenMove(move, model)){
                 model.sendError(move.getColor().toString()+" "+gameMessage.invalidMovePrometheus+"\n"+gameMessage.insertAgain);
                 return;
             }
             if(model.checkStep(move, turn, model))
-                //model.performBuild(move);
                 build(move, model, turn);
         }
     }
@@ -95,6 +98,12 @@ public class PrometheusRuleDecorator extends StandardRuleDecorator {
         model.notifyView(move,hasWon);
     }
 
+    /**
+     * this method allowed to build at the first step
+     * @param move
+     * @param model
+     * @param turn
+     */
     @Override
     public void build(PlayerMove move, Model model, Turn turn) {
         if(turn.getPlayerTurn(move.getPlayer()).getI()==1){
@@ -111,6 +120,13 @@ public class PrometheusRuleDecorator extends StandardRuleDecorator {
         model.notifyView(move,false);
     }
 
+    /**
+     * @param move
+     * @param model
+     * @return true
+     * if after the build I want to do there is at least one cell left
+     * where I can go which is on the same level as where I am
+     */
     public boolean canBuildInAndThenMove(PlayerMove move, Model model){
         boolean bool=false;
         Cell[][] board= model.getBoard().getPlayingBoard();

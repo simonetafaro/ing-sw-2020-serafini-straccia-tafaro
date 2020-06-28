@@ -2,14 +2,16 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
-/**
- * End of Your Turn: If your
- * unmoved Worker is on the
- * ground level, it may build up to
- * three times.
- */
 public class PoseidonRuleDecorator extends StandardRuleDecorator {
     private boolean ican;
+
+    /**
+     * in this method there is
+     * an extra check to allow to allow the unmoved worker to build
+     * @param move  cell, worker and type of move
+     * @param turn
+     * @param model
+     */
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
         if(move instanceof PlayerMoveEnd){
@@ -22,7 +24,7 @@ public class PoseidonRuleDecorator extends StandardRuleDecorator {
                 model.sendError(move.getColor().toString()+" "+gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
             return;
         }
-
+            //the other worker could build at the end of the turn
         if(!isRightWorkerDecorator(move, turn)){
             if(turn.getPlayerTurn(move.getPlayer()).getI()==3){
                 turn.getPlayerTurn(move.getPlayer()).setTurnWorker(move.getWorker());
@@ -90,9 +92,16 @@ public class PoseidonRuleDecorator extends StandardRuleDecorator {
         }
     }
 
-
+    /**
+     * at the end of the turn this method allowed the unmoved worker
+     * to build at most three time if he is on the ground level
+     * @param move
+     * @param model
+     * @param turn
+     */
     @Override
     public void build(PlayerMove move, Model model, Turn turn) {
+        //check if the unmoved worker is on the ground
         if(ican){
             if(!(move.getWorker().getWorkerPosition().getLevel()==0)){
                 model.sendError(move.getColor().toString()+" "+gameMessage.invalidBuildPoseidon);
@@ -117,9 +126,22 @@ public class PoseidonRuleDecorator extends StandardRuleDecorator {
         return ican;
     }
 
+    /**
+     * @param move
+     * @param turn
+     * @return true if it is the first step (M) or if the first step's worker
+     * is the same of the move's worker
+     */
     public boolean isRightWorkerDecorator(PlayerMove move, Turn turn){
         return (turn.getPlayerTurn(move.getPlayer()).isFirstStep()) || turn.getPlayerTurn(move.getPlayer()).getTurnWorker().equals(move.getWorker());
     }
+
+    /**
+     * @param move
+     * @param turn
+     * @return true if the end is allowed by step or
+     * if I'm playing with the player not moved
+     */
     public boolean isEndAllowedDecorator(PlayerMove move, Turn turn){
         return move.getPlayer().getMyCard().isUsingCard() ? (move.getPlayer().getMyCard().getStepLetter(turn.getPlayerTurn(move.getPlayer()).getI())).equals("END")||turn.getPlayerTurn(move.getPlayer()).getI()>3 :
                 (move.getPlayer().getMyCard().getStandardStepLetter(turn.getPlayerTurn(move.getPlayer()).getI())).equals("END");
