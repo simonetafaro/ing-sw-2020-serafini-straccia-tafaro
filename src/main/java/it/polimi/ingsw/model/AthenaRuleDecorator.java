@@ -1,14 +1,17 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
-/**
- *Opponent’s Turn: If one of your
- * Workers moved up on your last
- * turn, opponent Workers cannot
- * move up this turn.
- */
+
 public class AthenaRuleDecorator extends StandardRuleDecorator {
 
+    /**
+     * in this method
+     *there is a changed condition for goes up
+     * the worker with the power of Athena
+     * @param move  cell, worker and type of move
+     * @param turn
+     * @param model
+     */
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
 
@@ -76,6 +79,12 @@ public class AthenaRuleDecorator extends StandardRuleDecorator {
         }
     }
 
+    /**
+     * this method is a normal move with a check if the worker how have Athena power goes up
+     * @param move
+     * @param model
+     * @param turn
+     */
     @Override
     public void move(PlayerMove move, Model model, Turn turn) {
         boolean hasWon = model.hasWon(move);
@@ -83,8 +92,8 @@ public class AthenaRuleDecorator extends StandardRuleDecorator {
         //reset normal goUpCondition (max one level up)
         model.setGoUpLevel(1);
 
-        /**If Athena goes up change GoUpCondition (can't go up)
-         * */
+        //If the worker how have  Athena  power goes up change GoUpCondition and nobody can go up
+
         if(model.getBoard().getCell(move.getRow(),move.getColumn()).getLevel() - move.getWorker().getWorkerPosition().getLevel() > 0)
             model.setGoUpLevel(0);
         model.setStep(move, turn, model);
@@ -98,6 +107,12 @@ public class AthenaRuleDecorator extends StandardRuleDecorator {
         model.notifyView(move,hasWon);
     }
 
+    /**
+     * @param move
+     * @param model
+     * @return true if the difference of the cell in which I am ,
+     * compared to the one where I want to move is at most 1
+     */
     public boolean isLevelDifferenceAllowedAthena(PlayerMove move, Model model){
         return ((model.getBoard().getCell(move.getRow(), move.getColumn())).getLevel() - ((move.getWorker().getWorkerPosition()).getLevel())) <= 1;
     }

@@ -1,15 +1,20 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
-/**
- *Win Condition: You also win
- * when there are at least five
- * Complete Towers on the board.
- */
+
 public class ChronusRuleDecorator extends StandardRuleDecorator {
 
+    /**
+     * in this method there is
+     * an extra check if there are
+     * five complete tower on the board
+     * @param move  cell, worker and type of move
+     * @param turn
+     * @param model
+     */
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
+        //if the player how have chronus builds the fifth dome then he wins
         if(move instanceof PlayerMoveEnd){
             if(cronusrule(model)){
                 model.notifyView(move,true);
@@ -24,6 +29,7 @@ public class ChronusRuleDecorator extends StandardRuleDecorator {
                 model.sendError(move.getColor().toString()+" "+gameMessage.endYourTurn+"\n"+gameMessage.insertAgain);
             return;
         }
+        //if there are 5 complete tower the player how have Cronus win
         if(cronusrule(model)){
             model.notifyView(move,true);
             return;
@@ -61,7 +67,6 @@ public class ChronusRuleDecorator extends StandardRuleDecorator {
         }
 
         if(!model.isEmptyCell(move)){
-            //read worker position and check if there are some empty cell where he can move in.
             model.sendError(move.getColor().toString()+" "+gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
             return;
         }
@@ -82,6 +87,10 @@ public class ChronusRuleDecorator extends StandardRuleDecorator {
         }
     }
 
+    /**
+     * @param model
+     * @return true if there are five complete towers
+     */
     public boolean cronusrule(Model model){
         int counter=0;
         for(int i=0; i<5; i++){

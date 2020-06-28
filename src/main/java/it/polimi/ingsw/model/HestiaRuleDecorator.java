@@ -2,17 +2,18 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
-/**
- * Hestia effect
- *    Your Worker may
- * build one additional time, but this
- * cannot be on a perimeter space.
- */
+
 public class HestiaRuleDecorator extends StandardRuleDecorator{
+    /**
+     * This method allowed a worker to build an additional time
+     * @param move
+     * @param model
+     * @param turn
+     */
     @Override
     public void build(PlayerMove move, Model model, Turn turn) {
         if(turn.getPlayerTurn(move.getPlayer()).getI()==3){
-            //is the second move for this player, so he wants to use the card
+            //the worker cannon builds the second time in the perimeter space
             if(checkPerimeterSpace(move,model)){
                 model.sendError(move.getColor().toString()+" "+gameMessage.invalidMoveHestia+"\n"+gameMessage.insertAgain);
                 return;
@@ -24,7 +25,11 @@ public class HestiaRuleDecorator extends StandardRuleDecorator{
         model.notifyView(move,false);
     }
 
-    /*This method check if a player want do an action in a perimeter space.*/
+    /**
+     * @param move
+     * @param model
+     * @return  true if a player want do an action in a perimeter space.
+     */
     public boolean checkPerimeterSpace(PlayerMove move,Model model){
         for(int i=0;i<5;i++)
             if(model.getBoard().getCell(move.getRow(), move.getColumn()).equals(model.getBoard().getCell(i,0))||
