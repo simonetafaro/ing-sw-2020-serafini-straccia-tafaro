@@ -2,15 +2,17 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
-/**
- * Your Move: Your Worker may
- * move into an opponent Worker’s
- * space, if their Worker can be
- * forced one space straight backwards to an
- * unoccupied space at any level.
- */
 public class MinotaurRuleDecorator extends StandardRuleDecorator {
 
+    /**
+     * in this method there is
+     * an extra check for the stuck worker ,
+     * because if he can push an opponent worker
+     * he is not really stack
+     * @param move  cell, worker and type of move
+     * @param turn
+     * @param model
+     */
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
         if(move instanceof PlayerMoveEnd){
@@ -35,7 +37,7 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
             model.sendError(move.getColor().toString()+" "+gameMessage.wrongStepMessage+"\n"+gameMessage.insertAgain);
             return;
         }
-
+            //if Minotaur can push a player is not stuck
         if(move.getMoveOrBuild().equals("M") && !hasFreeCellClosed(move.getWorker().getWorkerPosition(), model.getBoard().getPlayingBoard())){
             //this worker is stuck
             move.getWorker().setStuck(true);
@@ -76,10 +78,17 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
         }
     }
 
+    /**
+     * This metod allowed to push an opponent worker
+     * @param move
+     * @param model
+     * @param turn
+     */
     @Override
     public void move(PlayerMove move, Model model, Turn turn) {
         boolean hasWon = model.hasWon(move);
         model.setStep(move, turn, model);
+        //if in the cell where I want go there is an opponent worker , push it
         if(model.getBoard().getCell(move.getRow(),move.getColumn()).getCurrWorker()!=null){
             pushWorkerPosition(move, model);
         }else{
@@ -92,6 +101,12 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
         }
         model.notifyView(move,hasWon);
     }
+
+    /**
+     *  push the opponent worker
+     * @param move
+     * @param model
+     */
     public void pushWorkerPosition(PlayerMove move, Model model){
         Cell from = model.getBoard().getCell(move.getWorker().getWorkerPosition().getPosX(), move.getWorker().getWorkerPosition().getPosY());
         Cell to = model.getBoard().getCell(move.getRow(), move.getColumn());
@@ -108,6 +123,12 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
         move.getWorker().setWorkerPosition(model.getBoard().getCell(move.getRow(),move.getColumn()));
 
     }
+
+    /**
+     * @param from cell where the worker is
+     * @param board game board
+     * @return  true if the worker has at least one cell to move to or an opposing worker to push
+     */
     public boolean hasFreeCellClosed(Cell from, Cell[][] board){
         boolean bool=false;
         for(int i=-1; i<2; i++){
@@ -125,6 +146,12 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
         }
         return bool;
     }
+
+    /**
+     * @param move
+     * @param model
+     * @return true if the cell where I want to move the worker is free or there is an opposing worker to push
+     */
     public boolean isEmptyCell(PlayerMove move, Model model){
         Cell to = model.getBoard().getCell(move.getRow(),move.getColumn());
         return to.isFree() ||
@@ -133,8 +160,12 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
                         (minotaurMoveAllowed(move.getWorker().getWorkerPosition(), to, model.getBoard().getPlayingBoard()))));
     }
 
-    /**Return true if minotaur in cell from can push the worker in the cell after cell to
-     * */
+    /**
+     * @param from cell where the worker is
+     * @param to cell where the  opposing worker is
+     * @param board game board
+     * @return  true if minotaur in cell from can push the worker in the cell after cell to
+     */
     public boolean minotaurMoveAllowed(Cell from, Cell to, Cell[][] board){
 
         if(from.getPosY()==to.getPosY()){
@@ -172,6 +203,13 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
                 return board[to.getPosX()+1][to.getPosY()-1].isFree();
         }
     }
+
+    /**
+     * @param from cell where the worker is
+     * @param to cell where the  opposing worker is
+     * @param board game board
+     * @return the cell where the opposing worker must move
+     */
     public Cell pushingInCell(Cell from, Cell to, Cell[][] board){
 
         if(from.getPosY()==to.getPosY()){
@@ -202,6 +240,12 @@ public class MinotaurRuleDecorator extends StandardRuleDecorator {
         }
 
     }
+
+    /**
+     * @param from  cell where the worker is
+     * @param to worker
+     * @return true if the worker in the cell is from the same player as the worker To
+     */
     public boolean isMinotaurWorker(Cell from, Worker to){
         return from.getCurrWorker().getColor()==to.getColor();
     }

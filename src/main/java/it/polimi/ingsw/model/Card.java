@@ -9,6 +9,8 @@ import java.util.ArrayList;
  */
 public class Card implements Serializable {
 
+    private static final long serialVersionUID = -6339404514199154799L;
+
     /**
      * card name
      */

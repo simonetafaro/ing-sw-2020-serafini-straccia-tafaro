@@ -166,13 +166,13 @@ class ChronusRuleDecoratorTest {
         assertTrue(chronusRuleDecorator.cronusrule(model));
     }
 
-    /*
+
     @Test
     void playCronusRuleB() {
         model.setPlayOrder(PlayerColor.BLUE,PlayerColor.GREY,PlayerColor.WHITE);
         model.getBoard().getCell(1,0).setLevel(4);
         model.getBoard().getCell(0,1).setLevel(4);
-        model.getBoard().getCell(1,1).setLevel(4);
+        model.getBoard().getCell(3,3).setLevel(4);
         model.getBoard().getCell(1,3).setLevel(4);
         model.getBoard().getCell(1,2).setLevel(3);
         playermove.setMoveOrBuild("M");
@@ -191,5 +191,5 @@ class ChronusRuleDecoratorTest {
         assertTrue(chronusRuleDecorator.cronusrule(model));
 
     }
-    */
+
 }

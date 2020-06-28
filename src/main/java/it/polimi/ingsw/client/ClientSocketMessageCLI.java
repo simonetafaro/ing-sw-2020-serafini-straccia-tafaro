@@ -8,21 +8,56 @@ import it.polimi.ingsw.utils.gameMessage;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Cass created to manage ClI Game: interacts with {@link it.polimi.ingsw.ClientCLIMain}
+ * It inherits from abstract {@link ClientSocketMessage} class
+ */
 public class ClientSocketMessageCLI extends ClientSocketMessage {
+
+    /**
+     * inputStream to read from Server
+     */
     private ObjectInputStream inputStream;
+
+    /**
+     * outputStream to write to Server
+     */
     private ObjectOutputStream outputStream;
+
+    /**
+     * class that manages initial connection and parameters
+     */
     private ConnectionManagerSocket connectionManagerSocket;
+
+    /**
+     * Thread used to write to Server
+     */
     private Thread writeToserver;
+
+    /**
+     * Scanner used to manages string in input and output
+     */
     private Scanner in;
+
+    /**
+     * active is true if client is active in reading,
+     * activeWrite is true if client is active in writing
+     */
     private boolean active,activeWrite;
 
+    /**
+     * Constructor that inherits from super class
+     * @param connectionManagerSocket
+     * @param input
+     * @param output
+     */
     public ClientSocketMessageCLI(ConnectionManagerSocket connectionManagerSocket, ObjectInputStream input, ObjectOutputStream output) {
         super();
         this.inputStream = input;
@@ -32,11 +67,22 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
         this.activeWrite = true;
     }
 
+    /**
+     * @return reading Thread
+     * It initializes scanner in
+     */
     public Thread initializeCLI(){
         in = new Scanner(System.in);
         return readFromServerCLI();
     }
 
+    /**
+     * @return Thread in reading
+     * Thread that parses input from Server.
+     * Server sends a MoveMessage in response of a PlayerMove during game,
+     * MoveMessage contains board that is printed and if a player wins or loses
+     * quitGame method is called and this Thread ends.
+     */
     public Thread readFromServerCLI(){
         Thread t=new Thread(new Runnable() {
             @Override
@@ -48,6 +94,11 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
                             updateBoard((SetWorkerPosition) o);
                         }
                         if(o instanceof String){
+                            if(((String) o).contains("quitClient")){
+                                System.out.println("One of your opponents disconnected, closing game...");
+                                quitGame();
+                                break;
+                            }
                             if(((String) o).contains(connectionManagerSocket.getPlayerColor().toUpperCase())){
                                 if(((String) o).contains(" workerOccupiedCell") || ((String) o).contains("setWorkers")){
                                     connectionManagerSocket.getBoardCLI().setWorkers();
@@ -84,10 +135,12 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
                                 ClientSocketMessageCLI.this.writeToServer();
                             }
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
+                    } catch (IOException e ){
+                        System.out.println("Server connection is not available, closing game...");
+                        quitGame();
+                        break;
                     }
                 }
             }
@@ -96,6 +149,10 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
         return t;
     }
 
+    /**
+     * @param o
+     * Method used to setting initial worker positions
+     */
     public void updateBoard(SetWorkerPosition o){
         connectionManagerSocket.getBoardCLI().addWorkerToBoard((SetWorkerPosition) o);
         if(o.getID() == connectionManagerSocket.getclientID()){
@@ -105,6 +162,12 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
         }
     }
 
+    /**
+     * Thread used in writing. It is always listening on this client
+     * and, after checking that the client
+     * has entered the right input, sends a PlayerMove or
+     * a PlayerMoveEnd to Server.
+     */
     public void writeToServer(){
         writeToserver = new Thread(new Runnable() {
             @Override
@@ -129,6 +192,14 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
         writeToserver.start();
     }
 
+    /**
+     * Input check
+     * @param message input move string
+     * @return true if client has entered a standard input
+     * @throws IOException
+     *
+     * If client ended his turn a PlayerMoveEnd is sent to Server
+     */
     public boolean checkInputStandard(String message) throws IOException{
         if(message.equals("END")){
             outputStream.writeObject(new PlayerMoveEnd(connectionManagerSocket.getPlayer(), true));
@@ -142,12 +213,26 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
 
         return false;
     }
+
+    /**
+     * @param message input move string
+     * @return if client has entered a standard input
+     */
     private boolean standardInput(String message){
         //M 1-1,2
         return message.length()==7 && (message.charAt(0)=='M' || message.charAt(0)=='B' || message.charAt(0)=='D') && (message.charAt(2)=='1' ||
                 message.charAt(2)=='2') && Integer.parseInt(message.substring(4,5))>=0 && Integer.parseInt(message.substring(4,5))<=4 &&
                 Integer.parseInt(message.substring(6,7))>=0 && Integer.parseInt(message.substring(6,7))<=4;
     }
+
+    /**
+     * @param MoveOrBuild
+     * @param worker
+     * @param row
+     * @param column
+     * @return a PlayerMove
+     * it creates a PlayerMove from string move in input
+     */
     public PlayerMove handleMove(String MoveOrBuild, int worker, int row, int column) {
         if(worker == 1) {
             PlayerMove move = new PlayerMove(connectionManagerSocket.getPlayer(), connectionManagerSocket.getPlayer().getWorker1(), row, column);
@@ -161,6 +246,11 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
 
     }
 
+    /**
+     * @param color
+     * Method called when game is over, It checks
+     *      * if this client player has won or lost
+     */
     public void gameOver (PlayerColor color){
         if(color.equals(connectionManagerSocket.getPlayerColorEnum())){
             System.out.println("YOU WIN!");
@@ -169,6 +259,12 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
         }
         quitGame();
     }
+
+    /**
+     * @param color
+     * Method called when game is over for player stuck, It checks
+     * if player stuck is this client player or not
+     */
     public void gameOverStuck (PlayerColor color){
         if(color.equals(connectionManagerSocket.getPlayerColorEnum())){
             System.out.println("YOU LOSE!");
@@ -177,23 +273,40 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
         }
         quitGame();
     }
+
+    /**
+     * Method called at the end of a game to close connection
+     * and to close Threads
+     */
     public void quitGame(){
         new Timer(5000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ClientSocketMessageCLI.this.active = false;
                 connectionManagerSocket.close();
-
+                System.exit(0);
             }
         }).start();
     }
 
+    /**
+     * @return true if reading Thread is still active
+     */
     public boolean isActive(){
         return active;
     }
+
+    /**
+     * @return true if writing Thread is still active
+     */
     public boolean isActiveWrite() {
         return activeWrite;
     }
+
+    /**
+     * It is called when this player has lost and it
+     * gives the option to stay to watch the game or close the connection
+     */
     public void closeOrWatchGame(){
         try {
             writeToserver.join();

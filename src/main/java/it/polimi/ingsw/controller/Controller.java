@@ -80,6 +80,10 @@ public class Controller implements Observer<Object> {
         if(message instanceof PlayerMove) {
             performMove((PlayerMove) message);
         }
+        if(message instanceof String){
+            if(message.equals("quitGameClientCloseConnection"))
+                model.notify("quitClient");
+        }
     }
 
     /**

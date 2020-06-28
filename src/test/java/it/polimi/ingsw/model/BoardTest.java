@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
+import it.polimi.ingsw.utils.PlayerColor;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -428,5 +429,15 @@ class BoardTest {
         Model model = new Model();
         Board board = model.getBoard();
         assertTrue(board.getCell(1,1).equals(model.getBoard().getCell(1,1)));
+    }
+
+    @Test
+    void printBoard(){
+        Board board = new Board();
+        board.getCell(1,1).setLevel(4);
+        board.getCell(2,2).setCurrWorker(new Worker(01, board.getCell(2,2), 1, PlayerColor.BLUE));
+        board.getCell(3,1).setLevel(1);
+        board.getCell(3,1).buildDome();
+        board.printBoard();
     }
 }

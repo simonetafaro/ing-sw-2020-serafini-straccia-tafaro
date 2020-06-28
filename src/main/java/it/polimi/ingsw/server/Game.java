@@ -1,6 +1,9 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.model.Model;
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.view.RemoteView;
 import it.polimi.ingsw.view.View;
 

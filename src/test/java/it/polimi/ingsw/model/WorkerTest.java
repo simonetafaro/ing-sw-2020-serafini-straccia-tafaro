@@ -64,18 +64,17 @@ class WorkerTest {
 
     @Test
     void getColor() {
-        Cell cell = new Cell(0,0);
-        Cell cell1 = new Cell(1,1);
-        Cell cell2 = new Cell(1,0);
-        Worker worker1 = new Worker(cell,1,PlayerColor.GREY);
-        Worker worker2 = new Worker(cell1,1,PlayerColor.BLUE);
-        Worker worker3 = new Worker(cell2,1,PlayerColor.WHITE);
-        Worker worker4 = new Worker(cell2,1,null);
+        Cell cell = new Cell(0, 0);
+        Cell cell1 = new Cell(1, 1);
+        Cell cell2 = new Cell(1, 0);
+        Worker worker1 = new Worker(cell, 1, PlayerColor.GREY);
+        Worker worker2 = new Worker(cell1, 1, PlayerColor.BLUE);
+        Worker worker3 = new Worker(cell2, 1, PlayerColor.WHITE);
 
-        assertEquals(worker1.getColor(),'G');
-        assertNotEquals(worker1.getColor(),'W');
-        assertEquals(worker2.getColor(),'B');
-        assertEquals(worker3.getColor(),'W');
+        assertEquals(worker1.getColor(), 'G');
+        assertNotEquals(worker1.getColor(), 'W');
+        assertEquals(worker2.getColor(), 'B');
+        assertEquals(worker3.getColor(), 'W');
     }
 
     @Test

@@ -29,11 +29,10 @@ class ControllerTest {
     void update() {
         Model model = new Model();
         Controller controller = new Controller(model);
-        Socket socket = new Socket();
 
-        Player player1 = new Player(1,"Apollo",socket);
-        Player player2 = new Player(2,"Apollo",socket);
-        Player player3 = new Player(3,"Apollo",socket);
+        Player player1 = new Player(1,"Apollo");
+        Player player2 = new Player(2,"Apollo");
+        Player player3 = new Player(3,"Apollo");
         player1.setColor(PlayerColor.BLUE);
         player2.setColor(PlayerColor.GREY);
         player3.setColor(PlayerColor.WHITE);
@@ -50,14 +49,35 @@ class ControllerTest {
     }
 
     @Test
+    void updatePlayerMove() {
+        Model model = new Model();
+        Controller controller = new Controller(model);
+
+        Player player1 = new Player(1,"Apollo");
+        Player player2 = new Player(2,"Apollo");
+        Player player3 = new Player(3,"Apollo");
+        player1.setColor(PlayerColor.BLUE);
+        player2.setColor(PlayerColor.GREY);
+        player3.setColor(PlayerColor.WHITE);
+
+        model.setPlayers(player1,player2,player3);
+        Worker worker = new Worker(01, new Cell(1,1), 1, PlayerColor.BLUE);
+        Worker worker2 = new Worker(01, new Cell(1,4), 2, PlayerColor.BLUE);
+        player1.setWorker2(worker2);
+        player1.setWorker1(worker);
+        PlayerMove playerMove = new PlayerMove(player1, worker, 1,1);
+
+        controller.update(playerMove);
+    }
+
+    @Test
     void setWorker() {
         Model model = new Model();
         Controller controller = new Controller(model);
-        Socket socket = new Socket();
 
-        Player player1 = new Player(1,"Apollo",socket);
-        Player player2 = new Player(2,"Apollo",socket);
-        Player player3 = new Player(3,"Apollo",socket);
+        Player player1 = new Player(1,"Apollo");
+        Player player2 = new Player(2,"Apollo");
+        Player player3 = new Player(3,"Apollo");
         player1.setColor(PlayerColor.BLUE);
         player2.setColor(PlayerColor.GREY);
         player3.setColor(PlayerColor.WHITE);
@@ -100,17 +120,29 @@ class ControllerTest {
 
         Player player1 = new Player();
         player1.setColor(PlayerColor.BLUE);
+        player1.setMyCardMethod(new ApolloRuleDecorator());
         Player player2 = new Player();
         player2.setColor(PlayerColor.GREY);
         model.setPlayers(player1, player2);
+        model.setPlayOrder(player1.getColor(), player2.getColor());
+        PlayerTurn playerTurn= new PlayerTurn(player1);
+        Turn turn = new Turn(playerTurn);
+        CardManager cardManager = new CardManager();
+        cardManager.setCardFromFile(player1, "Apollo");
 
         Controller controller = new Controller(model);
+        controller.setTurn(turn);
         Worker worker = new Worker(01, new Cell(1,1), 1, PlayerColor.BLUE);
+        Worker worker2 = new Worker(01, new Cell(1,4), 2, PlayerColor.BLUE);
+        player1.setWorker2(worker2);
         player1.setWorker1(worker);
         PlayerMove playerMove = new PlayerMove(player1, worker, 1,1);
+        playerMove.setMoveOrBuild("M");
+        playerMove.setColor(player1.getColor());
         controller.performMove(playerMove);
         assertTrue(playerMove.getPlayer().equals(model.getPlayerFromColor(PlayerColor.BLUE)));
         assertEquals(playerMove.getPlayer().getWorker1(), model.getPlayerFromColor(PlayerColor.BLUE).getWorker1());
+
     }
 
     @Test

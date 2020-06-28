@@ -11,12 +11,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class used to manages GUI card choice implementation.
+ * It divided into three parts: east JPanel, central JPanel and west JPanel.
+ * In the east panel there are all JCheckBox gods implemented through a JScrollPane.
+ * When a player clicks on a god in the central panel its image appears while in the
+ * west panel its power text description appears.
+ */
 public class PickUpCards implements Runnable {
 
+    /**
+     * JPanel images and JLabel
+     */
     private Image eastPanelImageScaled;
     private Image westPanelImageScaled;
     private Image centralPanelImageScaled;
+    private JLabel ImageContainer;
+    private JLabel logoLabel;
 
+    /**
+     * List of power god descriptions, images and JCheckBox
+     */
     private ImageIcon PanText;
     private ImageIcon PanImage;
     private JCheckBox PanButton;
@@ -60,6 +75,9 @@ public class PickUpCards implements Runnable {
     private ImageIcon ChronusImage;
     private JCheckBox ChronusButton;
 
+    /**
+     * List of god icons and pressed images
+     */
     private ImageIcon MinotaurCard_Icon_Pressed;
     private ImageIcon MinotaurCard_Icon;
     private ImageIcon ApolloCard_Icon_Pressed;
@@ -89,25 +107,44 @@ public class PickUpCards implements Runnable {
     private ImageIcon PoseidonCard_Icon_Pressed;
     private ImageIcon PoseidonCard_Icon;
 
-    private JLabel ImageContainer;
-    private JLabel logoLabel;
-    private int cardCounter;
-    private ArrayList<JCheckBox> buttonList;
+    /**
+     * Play button is clicked at the end of choice
+     */
     private JRadioButton playButton;
 
+    /**
+     * Lists and parameters to store card chosen
+     */
     private ArrayList<String> deck;
     private Map<JCheckBox, ImageIcon> ActiveCardList;
+    private int cardCounter;
+    private ArrayList<JCheckBox> buttonList;
+    private int playerNumber;
+
+    /**
+     * If a player is first player it must choice three or two
+     * cards in game and he is the last to choice one these
+     */
+    private boolean firstPlayer;
+
+    /**
+     * Pointer of ConnectionManagerSocket of this player
+     */
     private ConnectionManagerSocket connectionManagerSocket;
 
-    private int playerNumber;
-    private boolean firstPlayer;
+    /**
+     * Parameters to take images from folder
+     */
     private static final String SRC = "src";
     private static final String MAIN = "main";
     private static final String RESOURCES = "resources";
     private static final String IMAGE = "images";
-
     private static final String PATH = SRC + File.separatorChar + MAIN + File.separatorChar + RESOURCES + File.separatorChar + IMAGE + File.separatorChar;
 
+    /**
+     * Internal class created for the background east JPanel,
+     * It modifies height and width JPanel image
+     */
     private class EastJPanel extends JPanel {
 
         @Override
@@ -136,6 +173,11 @@ public class PickUpCards implements Runnable {
                     updatedHeight, null);
         }
     }
+
+    /**
+     * Internal class created for the background west JPanel,
+     * It modifies height and width JPanel image
+     */
     private class WestJPanel extends JPanel {
 
         @Override
@@ -164,6 +206,11 @@ public class PickUpCards implements Runnable {
                     updatedHeight, null);
         }
     }
+
+    /**
+     * Internal class created for the background central JPanel,
+     * It modifies height and width JPanel image
+     */
     private class CentralJPanel extends JPanel {
         @Override
         public void paintComponent(Graphics g) {
@@ -192,11 +239,178 @@ public class PickUpCards implements Runnable {
         }
     }
 
+    /**
+     * Class to manage JScrollPane in the east panel.
+     * It sets scrollBar design
+     */
+    public class ModernScrollPane extends JScrollPane {
+
+        private static final long serialVersionUID = 8607734981506765935L;
+
+        private static final int SCROLL_BAR_ALPHA_ROLLOVER = 100;
+        private static final int SCROLL_BAR_ALPHA = 50;
+        private static final int THUMB_SIZE = 8;
+        private static final int SB_SIZE = 10;
+        private final Color THUMB_COLOR = Color.BLACK;
+
+        public ModernScrollPane(Component view, int vsbPolicy, int hsbPolicy) {
+
+            setBorder(null);
+            JScrollBar verticalScrollBar = getVerticalScrollBar();
+            verticalScrollBar.setOpaque(false);
+            verticalScrollBar.setUI(new ModernScrollBarUI(this));
+
+            JScrollBar horizontalScrollBar = getHorizontalScrollBar();
+            horizontalScrollBar.setOpaque(false);
+            horizontalScrollBar.setUI(new ModernScrollBarUI(this));
+
+            setLayout(new ScrollPaneLayout() {
+                private static final long serialVersionUID = 5740408979909014146L;
+
+                @Override
+                public void layoutContainer(Container parent) {
+                    Rectangle availR = ((JScrollPane) parent).getBounds();
+                    availR.x = availR.y = 0;
+
+                    // viewport
+                    Insets insets = parent.getInsets();
+                    availR.x = insets.left;
+                    availR.y = insets.top;
+                    availR.width -= insets.left + insets.right;
+                    availR.height -= insets.top + insets.bottom;
+                    if (viewport != null) {
+                        viewport.setBounds(availR);
+                    }
+
+                    boolean vsbNeeded = isVerticalScrollBarfNecessary();
+                    boolean hsbNeeded = isHorizontalScrollBarNecessary();
+
+                    // vertical scroll bar
+                    Rectangle vsbR = new Rectangle();
+                    vsbR.width = SB_SIZE;
+                    vsbR.height = availR.height - (hsbNeeded ? vsbR.width : 0);
+                    vsbR.x = availR.x + availR.width - vsbR.width;
+                    vsbR.y = availR.y;
+                    if (vsb != null) {
+                        vsb.setBounds(vsbR);
+                    }
+
+                    // horizontal scroll bar
+                    Rectangle hsbR = new Rectangle();
+                    hsbR.height = SB_SIZE;
+                    hsbR.width = availR.width - (vsbNeeded ? hsbR.height : 0);
+                    hsbR.x = availR.x;
+                    hsbR.y = availR.y + availR.height - hsbR.height;
+                    if (hsb != null) {
+                        hsb.setBounds(hsbR);
+                    }
+                }
+            });
+
+            // Layering
+            setComponentZOrder(getVerticalScrollBar(), 0);
+            setComponentZOrder(getHorizontalScrollBar(), 1);
+            setComponentZOrder(getViewport(), 2);
+
+            viewport.setView(view);
+        }
+        private boolean isVerticalScrollBarfNecessary() {
+            Rectangle viewRect = viewport.getViewRect();
+            Dimension viewSize = viewport.getViewSize();
+            return viewSize.getHeight() > viewRect.getHeight();
+        }
+
+        private boolean isHorizontalScrollBarNecessary() {
+            Rectangle viewRect = viewport.getViewRect();
+            Dimension viewSize = viewport.getViewSize();
+            return viewSize.getWidth() > viewRect.getWidth();
+        }
+
+        /**
+         * Class extending the BasicScrollBarUI and overrides all necessary methods
+         */
+        private class ModernScrollBarUI extends BasicScrollBarUI {
+
+            private JScrollPane sp;
+
+            public ModernScrollBarUI(ModernScrollPane sp) {
+                this.sp = sp;
+            }
+
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+                return new InvisibleScrollBarButton();
+            }
+
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+                return new InvisibleScrollBarButton();
+            }
+
+            @Override
+            protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
+            }
+
+            @Override
+            protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
+                int alpha = isThumbRollover() ? SCROLL_BAR_ALPHA_ROLLOVER : SCROLL_BAR_ALPHA;
+                int orientation = scrollbar.getOrientation();
+                int x = thumbBounds.x;
+                int y = thumbBounds.y;
+
+                int width = orientation == JScrollBar.VERTICAL ? THUMB_SIZE : thumbBounds.width;
+                width = Math.max(width, THUMB_SIZE);
+
+                int height = orientation == JScrollBar.VERTICAL ? thumbBounds.height : THUMB_SIZE;
+                height = Math.max(height, THUMB_SIZE);
+
+                Graphics2D graphics2D = (Graphics2D) g.create();
+                graphics2D.setColor(new Color(THUMB_COLOR.getRed(), THUMB_COLOR.getGreen(), THUMB_COLOR.getBlue(), alpha));
+                graphics2D.fillRect(x, y, width, height);
+                graphics2D.dispose();
+            }
+
+            @Override
+            protected void setThumbBounds(int x, int y, int width, int height) {
+                super.setThumbBounds(x, y, width, height);
+                sp.repaint();
+            }
+
+            /**
+             * Invisible Buttons, to hide scroll bar buttons
+             */
+            private class InvisibleScrollBarButton extends JButton {
+
+                private static final long serialVersionUID = 1552427919226628689L;
+
+                private InvisibleScrollBarButton() {
+                    setOpaque(false);
+                    setFocusable(false);
+                    setFocusPainted(false);
+                    setBorderPainted(false);
+                    setBorder(BorderFactory.createEmptyBorder());
+                }
+            }
+        }
+    }
+
+    /**
+     * Listeners to god cards only for first player
+     */
     private class PickGodActionListener implements ActionListener {
         ImageIcon pressedButtonImage, ButtonImage, Text, GodImage;
         JCheckBox button;
         String godName;
 
+        /**
+         * @param button
+         * @param pressedButtonImage
+         * @param buttonImage
+         * @param text
+         * @param godImage
+         * @param godName
+         * PickGodActionListener constructor
+         */
         public PickGodActionListener(JCheckBox button, ImageIcon pressedButtonImage, ImageIcon buttonImage, ImageIcon text, ImageIcon godImage, String godName) {
             this.pressedButtonImage = pressedButtonImage;
             this.ButtonImage = buttonImage;
@@ -206,6 +420,11 @@ public class PickUpCards implements Runnable {
             this.godName = godName;
         }
 
+
+        /**
+         * @param e
+         * When first player select a card, this is added to deck
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             if(PickGodActionListener.this.button.isSelected()){
@@ -236,6 +455,12 @@ public class PickUpCards implements Runnable {
             }
         }
     }
+
+    /**
+     * Listeners to play button, in first player GUI it will
+     * appears only when he has selected three or two cards.
+     * Cards chosen are sent to server
+     */
     private class PlayActionListener implements ActionListener {
 
         @Override
@@ -250,6 +475,9 @@ public class PickUpCards implements Runnable {
         }
     }
 
+    /**
+     * Listeners to gods card for all players except for first player
+     */
     private class ChooseYourCardListener implements ActionListener{
         String CardName;
         ImageIcon pressedButtonImage, Text, GodImage, ButtonImage;
@@ -287,6 +515,11 @@ public class PickUpCards implements Runnable {
             }
         }
     }
+
+    /**
+     * Listener to play button of all players except for first player
+     * It sends to server card choice
+     */
     private class ChooseCardActionListener implements ActionListener {
 
         @Override
@@ -324,7 +557,6 @@ public class PickUpCards implements Runnable {
 
                 }
             });
-            //connectionManagerSocket.close();
             try{
                 connectionManagerSocket.getCardThread().join();
             }catch (InterruptedException thread){
@@ -334,6 +566,14 @@ public class PickUpCards implements Runnable {
         }
     }
 
+    /**
+     * @param mainFrame
+     * @param playerNumber
+     * @param connectionManagerSocket
+     * @param firstPlayer
+     * PickUpCards constructor initializes all the components in
+     * the GUI and it takes all the components images
+     */
     public PickUpCards(JFrame mainFrame, int playerNumber, ConnectionManagerSocket connectionManagerSocket, boolean firstPlayer) {
         this.deck = new ArrayList<>();
         this.connectionManagerSocket = connectionManagerSocket;
@@ -713,6 +953,12 @@ public class PickUpCards implements Runnable {
         mainFrame.pack();
     }
 
+    /**
+     * It attaches PickGodActionListeners only to GUI of
+     * first player that must choice three or two cards, each other player will see
+     * obscured god images and only cards chosen by first player will appears
+     * It initializes card choice Thread in connectionMangerSocket
+     */
     @Override
     public void run() {
         if(this.firstPlayer){
@@ -739,6 +985,12 @@ public class PickUpCards implements Runnable {
         connectionManagerSocket.receiveCard(this,null);
     }
 
+    /**
+     * @param cards
+     *  Method called in connectionManagerSocket after that first player has chosen cards
+     *  and it's turn of this player GUI. It sets as visible only cards chosen by first player
+     *  and this player can make his choice.
+     */
     public void updateGodImage(ArrayList<String> cards){
 
         cards.forEach((CardName) -> {
@@ -803,154 +1055,4 @@ public class PickUpCards implements Runnable {
         });
     }
 
-    public class ModernScrollPane extends JScrollPane {
-
-        private static final long serialVersionUID = 8607734981506765935L;
-
-        private static final int SCROLL_BAR_ALPHA_ROLLOVER = 100;
-        private static final int SCROLL_BAR_ALPHA = 50;
-        private static final int THUMB_SIZE = 8;
-        private static final int SB_SIZE = 10;
-        private final Color THUMB_COLOR = Color.BLACK;
-
-        public ModernScrollPane(Component view, int vsbPolicy, int hsbPolicy) {
-
-            setBorder(null);
-            JScrollBar verticalScrollBar = getVerticalScrollBar();
-            verticalScrollBar.setOpaque(false);
-            verticalScrollBar.setUI(new ModernScrollBarUI(this));
-
-            JScrollBar horizontalScrollBar = getHorizontalScrollBar();
-            horizontalScrollBar.setOpaque(false);
-            horizontalScrollBar.setUI(new ModernScrollBarUI(this));
-
-            setLayout(new ScrollPaneLayout() {
-                private static final long serialVersionUID = 5740408979909014146L;
-
-                @Override
-                public void layoutContainer(Container parent) {
-                    Rectangle availR = ((JScrollPane) parent).getBounds();
-                    availR.x = availR.y = 0;
-
-                    // viewport
-                    Insets insets = parent.getInsets();
-                    availR.x = insets.left;
-                    availR.y = insets.top;
-                    availR.width -= insets.left + insets.right;
-                    availR.height -= insets.top + insets.bottom;
-                    if (viewport != null) {
-                        viewport.setBounds(availR);
-                    }
-
-                    boolean vsbNeeded = isVerticalScrollBarfNecessary();
-                    boolean hsbNeeded = isHorizontalScrollBarNecessary();
-
-                    // vertical scroll bar
-                    Rectangle vsbR = new Rectangle();
-                    vsbR.width = SB_SIZE;
-                    vsbR.height = availR.height - (hsbNeeded ? vsbR.width : 0);
-                    vsbR.x = availR.x + availR.width - vsbR.width;
-                    vsbR.y = availR.y;
-                    if (vsb != null) {
-                        vsb.setBounds(vsbR);
-                    }
-
-                    // horizontal scroll bar
-                    Rectangle hsbR = new Rectangle();
-                    hsbR.height = SB_SIZE;
-                    hsbR.width = availR.width - (vsbNeeded ? hsbR.height : 0);
-                    hsbR.x = availR.x;
-                    hsbR.y = availR.y + availR.height - hsbR.height;
-                    if (hsb != null) {
-                        hsb.setBounds(hsbR);
-                    }
-                }
-            });
-
-            // Layering
-            setComponentZOrder(getVerticalScrollBar(), 0);
-            setComponentZOrder(getHorizontalScrollBar(), 1);
-            setComponentZOrder(getViewport(), 2);
-
-            viewport.setView(view);
-        }
-        private boolean isVerticalScrollBarfNecessary() {
-            Rectangle viewRect = viewport.getViewRect();
-            Dimension viewSize = viewport.getViewSize();
-            return viewSize.getHeight() > viewRect.getHeight();
-        }
-
-        private boolean isHorizontalScrollBarNecessary() {
-            Rectangle viewRect = viewport.getViewRect();
-            Dimension viewSize = viewport.getViewSize();
-            return viewSize.getWidth() > viewRect.getWidth();
-        }
-
-        /**
-         * Class extending the BasicScrollBarUI and overrides all necessary methods
-         */
-        private class ModernScrollBarUI extends BasicScrollBarUI {
-
-            private JScrollPane sp;
-
-            public ModernScrollBarUI(ModernScrollPane sp) {
-                this.sp = sp;
-            }
-
-            @Override
-            protected JButton createDecreaseButton(int orientation) {
-                return new InvisibleScrollBarButton();
-            }
-
-            @Override
-            protected JButton createIncreaseButton(int orientation) {
-                return new InvisibleScrollBarButton();
-            }
-
-            @Override
-            protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
-            }
-
-            @Override
-            protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
-                int alpha = isThumbRollover() ? SCROLL_BAR_ALPHA_ROLLOVER : SCROLL_BAR_ALPHA;
-                int orientation = scrollbar.getOrientation();
-                int x = thumbBounds.x;
-                int y = thumbBounds.y;
-
-                int width = orientation == JScrollBar.VERTICAL ? THUMB_SIZE : thumbBounds.width;
-                width = Math.max(width, THUMB_SIZE);
-
-                int height = orientation == JScrollBar.VERTICAL ? thumbBounds.height : THUMB_SIZE;
-                height = Math.max(height, THUMB_SIZE);
-
-                Graphics2D graphics2D = (Graphics2D) g.create();
-                graphics2D.setColor(new Color(THUMB_COLOR.getRed(), THUMB_COLOR.getGreen(), THUMB_COLOR.getBlue(), alpha));
-                graphics2D.fillRect(x, y, width, height);
-                graphics2D.dispose();
-            }
-
-            @Override
-            protected void setThumbBounds(int x, int y, int width, int height) {
-                super.setThumbBounds(x, y, width, height);
-                sp.repaint();
-            }
-
-            /**
-             * Invisible Buttons, to hide scroll bar buttons
-             */
-            private class InvisibleScrollBarButton extends JButton {
-
-                private static final long serialVersionUID = 1552427919226628689L;
-
-                private InvisibleScrollBarButton() {
-                    setOpaque(false);
-                    setFocusable(false);
-                    setFocusPainted(false);
-                    setBorderPainted(false);
-                    setBorder(BorderFactory.createEmptyBorder());
-                }
-            }
-        }
-    }
 }

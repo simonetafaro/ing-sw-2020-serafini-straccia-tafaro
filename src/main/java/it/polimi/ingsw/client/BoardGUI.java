@@ -18,32 +18,63 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Class used to manages GUI board game implementation.
+ * It is divided into two parts, at the left side there is board
+ * created with a JPanel and a JLayeredPane 5 x 5 array, at the right
+ * side there is move buttons and all information about players card in game.
+ * Levels and workers are JLabel layer on the board array while workers of this player are JButton
+ */
 public class BoardGUI implements Runnable{
 
+    /**
+     * Frame of the window
+     */
     private JFrame mainframe;
+
+    /**
+     * Pointer of ConnectionManagerSocket of this player
+     */
     private ConnectionManagerSocket connectionManagerSocket;
 
-    private ImageIcon mainPanelImage;
-    private Image mainPanelImageScaled, powerColumnImageScaled;
-
+    /**
+     * levels ImageIcon
+     */
     private ImageIcon level1_Icon, level2_Icon, level3_Icon, dome_Icon;
+
+    /**
+     * ImageIcon of workers man of all colors and woman of all colors
+     */
     private ImageIcon   worker_Man_White_Icon, worker_Woman_White_Icon,
                         worker_Man_Blue_Icon, worker_Woman_Blue_Icon,
                         worker_Man_Grey_Icon, worker_Woman_Grey_Icon;
-    private JLabel additionalIsland;
+
+    /**
+     * Parameters for the left side of board
+     */
     private JLayeredPane[][] boardButton;
     private JPanel BoardPanel;
+    private ImageIcon mainPanelImage;
+    private Image mainPanelImageScaled;
+
+    /**
+     * Parameters for the right side of board
+     */
+    private Image powerColumnImageScaled;
+    private JLabel additionalIsland;
     private JPanel powerColumn;
     private JPanel topPowerColumn;
     private List<JRadioButton> opponentPowers;
-    private int workersNum;
     private JLabel powerTextContainer;
     private JLabel myPowerDescription;
+
+    /**
+     * Parameters used to take cards information on the XML file
+     * and all components images
+     */
     private static final String SRC = "src";
     private static final String MAIN = "main";
     private static final String RESOURCES = "resources";
@@ -51,26 +82,47 @@ public class BoardGUI implements Runnable{
     private static final String PATH = SRC + File.separatorChar + MAIN + File.separatorChar + RESOURCES + File.separatorChar + IMAGE + File.separatorChar;
     private static final String PATHFILE = "toolcards/";
 
+    /**
+     * worker number, used in setting
+     * initial worker position
+     */
+    private int workersNum;
+
+    /**
+     * PlayerMove sent to server
+     */
     private PlayerMove move;
     private PlayerMove moveEnd;
 
+    /**
+     * Pointer to both JButton workers of this player
+     */
     public JButton worker1;
     public JButton worker2;
 
+    /**
+     * JButtons for the PlayerMove in the right side of board
+     */
     private JButton moveButton;
     private JButton buildButton;
     private JButton domeButton;
     private JButton doneButton;
+
+    /**
+     * PopUp used to show if player make an invalid move
+     * or to show if player has won or lost
+     */
     private PopUpBox popUpBox;
 
+    /**
+     * Internal class created for the background JPanel,
+     * It modifies height and width JPanel image
+     */
     private class MainJPanel extends JPanel {
 
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
-
-            //int updatedWidth = this.getWidth();
-            //int updatedHeight = this.getHeight();
 
             int updatedWidth = 1280;
             int updatedHeight = 720;
@@ -92,14 +144,16 @@ public class BoardGUI implements Runnable{
                     updatedHeight, null);
         }
     }
+
+    /**
+     * Internal class created for the right JPanel,
+     * It modifies height and width JPanel image
+     */
     private class PowerColumn extends JPanel {
 
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
-
-            //int updatedWidth = this.getWidth();
-            //int updatedHeight = this.getHeight();
 
             int updatedWidth = 322;
             int updatedHeight = 600;
@@ -122,6 +176,11 @@ public class BoardGUI implements Runnable{
         }
     }
 
+    /**
+     * MouseListener used in setting initial worker position,
+     * It calculates x and y coordinates of worker in the board and sends a SetWorkerPosition
+     * to Server
+     */
     private class SetWorker implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -151,10 +210,16 @@ public class BoardGUI implements Runnable{
             return (x/100);
         }
     }
+
+    /**
+     * Class that manages card power at the right side of board,
+     * This player can see other cards power clicking on the card button
+     */
     private class ChangePowerDescription implements ActionListener{
         ImageIcon workerImage;
         StringBuilder textDescription;
         JRadioButton button;
+
         public ChangePowerDescription(JRadioButton button, PlayerColor color, StringBuilder textDescription) {
             Image workers;
             ImageIcon workers_scaled;
@@ -190,12 +255,24 @@ public class BoardGUI implements Runnable{
 
         }
     }
+
+    /**
+     * MoveListeners are active when player clicks a board cell
+     * where he wants his worker to move or build
+     */
     private class MoveListeners implements MouseListener {
 
+
+        /**
+         * @param e
+         * It takes x and y coordinates of cell and then it sets parameter in the PlayerMove
+         * If the player has not yet clicked the worker and the move or build
+         * button a popUp of incorrect sequence of button clicked appears
+         */
         @Override
         public void mouseClicked(MouseEvent e) {
-            int column = (int) getCellX(BoardPanel.getMousePosition().getX());
-            int row = (int) getCellY(BoardPanel.getMousePosition().getY());
+            int column = (int) getCell(BoardPanel.getMousePosition().getX());
+            int row = (int) getCell(BoardPanel.getMousePosition().getY());
 
             if((BoardGUI.this.move.getWorker() != null) && (BoardGUI.this.move.getMoveOrBuild() != null)) {
                 BoardGUI.this.move.setRow(row);
@@ -221,15 +298,27 @@ public class BoardGUI implements Runnable{
 
         }
 
-        public double getCellX(double x){
+        /**
+         * @param x
+         * @return coordinate of cell clicked
+         */
+        public double getCell(double x){
             return (x/100);
         }
-        public double getCellY(double y){
-            return (y/100);
-        }
-
     }
+
+    /**
+     * Button Move Listeners
+     */
     private class ButtonMoveListeners implements ActionListener{
+
+
+        /**
+         * @param e
+         * It sets "M" in the PlayerMove
+         * If the player has not yet clicked the worker a popUp of
+         * incorrect sequence of button clicked appears
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             if(BoardGUI.this.move.getWorker() != null) {
@@ -239,7 +328,18 @@ public class BoardGUI implements Runnable{
                 BoardGUI.this.wrongStepSequence();
         }
     }
+
+    /**
+     * Button build Listeners
+     */
     private class ButtonBuildListeners implements ActionListener{
+
+        /**
+         * @param e
+         * It sets "B" in the PlayerMove
+         * If the player has not yet clicked the worker a popUp of
+         * incorrect sequence of button clicked appears
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             if(BoardGUI.this.move.getWorker() != null) {
@@ -249,7 +349,19 @@ public class BoardGUI implements Runnable{
                 BoardGUI.this.wrongStepSequence();
         }
     }
+
+    /**
+     * Button Dome Listeners only for player with
+     * Selene or Atlas card that allows to build dome at any level
+     */
     private class ButtonDomeListeners implements ActionListener{
+
+        /**
+         * @param e
+         * It sets "D" in the PlayerMove
+         * If the player has not yet clicked the worker a popUp of
+         * incorrect sequence of button clicked appears
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             if(BoardGUI.this.connectionManagerSocket.getPlayer().getMyCard().getName().equals("Atlas")
@@ -264,19 +376,37 @@ public class BoardGUI implements Runnable{
 
         }
     }
+
+    /**
+     * Done Button clicked at the end of a player turn
+     */
     private class ButtonDoneListeners implements ActionListener{
+
+        /**
+         * @param e
+         * When clicked it creates a PlayerMoveEnd
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             BoardGUI.this.moveEnd = new PlayerMoveEnd(connectionManagerSocket.getPlayer(), true);
             verifyPlayerMove();
         }
     }
+
+    /**
+     * Worker Listeners used to choice worker1 or worker2 in the move
+     */
     private class WorkerListeners implements ActionListener {
 
+        /**
+         * @param e
+         * It takes x and y coordinates of worker position
+         * and then it sets worker in the PlayerMove
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
-            int x = (int) getCellX(BoardPanel.getMousePosition().getX());
-            int y = (int) getCellY(BoardPanel.getMousePosition().getY());
+            int x = (int) getCell(BoardPanel.getMousePosition().getX());
+            int y = (int) getCell(BoardPanel.getMousePosition().getY());
             Cell workerPosition = new Cell(x, y);
             //reset PlayerMove when click on worker different from worker already selected
 
@@ -304,14 +434,22 @@ public class BoardGUI implements Runnable{
             }
             verifyPlayerMove();
         }
-        public double getCellX(double x){
+
+        /**
+         * @param x
+         * @return coordinate of cell clicked
+         */
+        public double getCell(double x){
             return (x/100);
-        }
-        public double getCellY(double y){
-            return (y/100);
         }
     }
 
+    /**
+     * @param mainframe
+     * @param connectionManagerSocket
+     * BoardGUI constructor initializes all the components in
+     * the GUI and it takes all the components images
+     */
     public BoardGUI(JFrame mainframe, ConnectionManagerSocket connectionManagerSocket){
         this.mainframe = mainframe;
         this.workersNum = 0;
@@ -496,7 +634,6 @@ public class BoardGUI implements Runnable{
 
         gbcButtonColumnConstraint.anchor = GridBagConstraints.SOUTH;
 
-        //topPowerColumn.add(godImage, BorderLayout.WEST);
         gbcButtonColumnConstraint.insets = new Insets(0,0,0,5);
         dxPanel.add(powerColumn, gbcButtonColumnConstraint);
 
@@ -528,19 +665,23 @@ public class BoardGUI implements Runnable{
         mainPanel.add(dxPanel, gbcDxPanelConstraint);
         mainPanel.add(BoardPanel, gbcBoardConstraint);
 
-        //this.move = new PlayerMove(connectionManagerSocket.getPlayer());
-
         mainPanel.setVisible(true);
         mainframe.setVisible(true);
         mainframe.setResizable(false);
         mainframe.pack();
     }
 
+    /**
+     * It creates ClientSocketMessage CLI and GUI
+     */
     @Override
     public void run() {
         this.connectionManagerSocket.initializeMessageSocket(this);
     }
 
+    /**
+     * add SetWorker Listeners in the board
+     */
     public void setWorkers(){
         this.workersNum = 0;
         for(int x=0; x<5; x++){
@@ -550,9 +691,19 @@ public class BoardGUI implements Runnable{
         }
     }
 
+    /**
+     * @param x
+     * @param y
+     * @return JLayeredPane game board
+     */
     public JLayeredPane getBoardButton(int x, int y){
         return this.boardButton[x][y];
     }
+
+    /**
+     * remove SetWorker Listeners when all the
+     * initial position workers in the board are chosen
+     */
     public void removeSetWorkersListener(){
         //this.workersNum = 0;
         for(int x=0; x<5; x++){
@@ -562,19 +713,35 @@ public class BoardGUI implements Runnable{
 
         }
     }
+
+    /**
+     * Worker number Incrementation
+     */
     public void incrementWorkerNum(){
         this.workersNum++;
     }
 
+    /**
+     * Method that adds a second Island to add a second card power
+     * in the right side of the board when it is a three players game
+     */
     public void addAdditionalIsland(){
         this.additionalIsland.setVisible(true);
         this.mainframe.validate();
     }
 
+    /**
+     * @return actual worker number
+     */
     public int getWorkersNum() {
         return workersNum;
     }
 
+    /**
+     * @param players
+     * It adds information about cards power and
+     * colors of this player and other players in game
+     */
     public void populatePlayersInfo(ArrayList players){
         FileManager f = new FileManager();
         this.opponentPowers = new ArrayList<JRadioButton>();
@@ -597,6 +764,12 @@ public class BoardGUI implements Runnable{
         addButtonListeners();
         addWorkerListeners();
     }
+
+    /**
+     * @param player
+     * @param fileFinder
+     * It takes card information of this players from the XML file
+     */
     public void addMyPowerInfo (Player player, FileManager fileFinder){
         try {
             Document document = fileFinder.getFileDocument(PATHFILE.concat(player.getMyCard().getName()).concat(".xml"));
@@ -619,6 +792,13 @@ public class BoardGUI implements Runnable{
             System.err.println(e.getMessage());
         }
     }
+
+    /**
+     * @param player
+     * @param fileFinder
+     * @param index
+     * It takes cards information of other players
+     */
     public void createPlayerInfo(Player player, FileManager fileFinder, int index){
         try{
             Document document = fileFinder.getFileDocument(PATHFILE.concat(player.getMyCard().getName()).concat(".xml"));
@@ -663,6 +843,11 @@ public class BoardGUI implements Runnable{
         }
     }
 
+    /**
+     * @param j
+     * @param cell
+     * Given an integer it adds JLabel level corresponding
+     */
     public void addLevelToBoard(int j, JLayeredPane cell){
         switch (j){
             case 1: addLevel1(cell);
@@ -675,6 +860,11 @@ public class BoardGUI implements Runnable{
                 break;
         }
     }
+
+    /**
+     * @param currCell
+     * It creates level1 and it adds to board cell
+     */
     public void addLevel1(JLayeredPane currCell){
         JLabel lv1 = new JLabel(level1_Icon);
         lv1.setVisible(true);
@@ -684,6 +874,11 @@ public class BoardGUI implements Runnable{
         lv1.setBounds(0, 0, 90, 90);
         currCell.add(lv1, 1,-1);
     }
+
+    /**
+     * @param currCell
+     *  It creates level2 and it adds to board cell
+     */
     public void addLevel2(JLayeredPane currCell){
         JLabel lv2 = new JLabel(level2_Icon);
         lv2.setVisible(true);
@@ -693,6 +888,11 @@ public class BoardGUI implements Runnable{
         lv2.setBounds(7, 7, 75, 75);
         currCell.add(lv2,2,0);
     }
+
+    /**
+     * @param currCell
+     *  It creates level3 and it adds to board cell
+     */
     public void addLevel3(JLayeredPane currCell){
         JLabel lv3 = new JLabel(level3_Icon);
         lv3.setVisible(true);
@@ -702,6 +902,11 @@ public class BoardGUI implements Runnable{
         lv3.setBounds(15, 15, 60, 60);
         currCell.add(lv3,3,0);
     }
+
+    /**
+     * @param currCell
+     *  It creates dome and it adds to board cell
+     */
     public void addDome(JLayeredPane currCell){
         JLabel dome = new JLabel(dome_Icon);
         dome.setVisible(true);
@@ -712,6 +917,13 @@ public class BoardGUI implements Runnable{
         currCell.add(dome,4,0);
     }
 
+    /**
+     * @param workerNum
+     * @param color
+     * @param x
+     * @param y
+     * It creates JButton pointer to worker of this player and it adds to board
+     */
     public void addMyWorkerToBoard(int workerNum, PlayerColor color, int x, int y){
         switch (color){
             case WHITE: if(workerNum == 1) {
@@ -740,6 +952,14 @@ public class BoardGUI implements Runnable{
                         break;
         }
     }
+
+    /**
+     * @param color
+     * @param workerNum
+     * @param x
+     * @param y
+     * It adds other players workers to board
+     */
     public void addWorker(PlayerColor color, int workerNum, int x, int y){
         switch (color){
             case WHITE: if(workerNum == 1) {
@@ -762,6 +982,13 @@ public class BoardGUI implements Runnable{
                 break;
         }
     }
+
+    /**
+     * @param worker
+     * @param x
+     * @param y
+     * It adds JButton worker to board
+     */
     public void addReadyWorker(JButton worker, int x , int y){
         worker.setVisible(true);
         worker.setOpaque(false);
@@ -772,6 +999,13 @@ public class BoardGUI implements Runnable{
         boardButton[x][y].add(worker,5,0);
         boardButton[x][y].setLayer(worker,5);
     }
+
+    /**
+     * @param icon
+     * @param x
+     * @param y
+     *  It adds JLabel worker to board
+     */
     public void addWorkerToBoard(ImageIcon icon, int x, int y){
         JLabel worker = new JLabel(icon);
         worker.setVisible(true);
@@ -782,6 +1016,9 @@ public class BoardGUI implements Runnable{
         this.boardButton[x][y].setLayer(worker,5);
     }
 
+    /**
+     * It adds MoveListeners to board cells
+     */
     public void addMoveListeners(){
         for(int x=0; x<5; x++){
             for(int y=0; y<5; y++){
@@ -789,18 +1026,31 @@ public class BoardGUI implements Runnable{
             }
         }
     }
+
+    /**
+     * It adds ButtonListeners to Button move
+     */
     public void addButtonListeners(){
         this.moveButton.addActionListener(new ButtonMoveListeners());
         this.buildButton.addActionListener(new ButtonBuildListeners());
         this.doneButton.addActionListener(new ButtonDoneListeners());
-        if(connectionManagerSocket.getPlayer().getMyCard().getName().equals("Atlas") || connectionManagerSocket.getPlayer().getMyCard().getName().equals("Selene"))
-            this.domeButton.addActionListener(new ButtonDomeListeners());
+        this.domeButton.addActionListener(new ButtonDomeListeners());
     }
+
+    /**
+     * It adds worker Listeners to both two JButton pointer
+     */
     public void addWorkerListeners(){
         this.worker1.addActionListener(new WorkerListeners());
         this.worker2.addActionListener(new WorkerListeners());
     }
 
+    /**
+     * Method that checks that all the PlayerMove parameters are set.
+     * It sends a PlayerMove or PlayerMoveEnd to Server only if player
+     * has clicked worker, move or build button and cell
+     * It is called any time player click one of the move Listeners
+     */
     public void verifyPlayerMove() {
         if(this.moveEnd != null){
             connectionManagerSocket.sendObjectToServer(moveEnd);
@@ -815,24 +1065,42 @@ public class BoardGUI implements Runnable{
         }
     }
 
+    /**
+     * @return JButton pointer to worker1
+     */
     public JButton getWorker1(){
         return this.worker1;
     }
+
+    /**
+     * @return JButton pointer to worker2
+     */
     public JButton getWorker2(){
         return this.worker2;
     }
+
+    /**
+     * @return PopUpBox
+     */
     public PopUpBox getPopUpBox() {
         return popUpBox;
     }
 
+    /**
+     * It shows wrong step sequence PopUp
+     */
     public void wrongStepSequence(){
         this.popUpBox.infoBox("Wrong sequence! \n You should select your worker first, than select the action you would like to perform and last you click the cell!", "WrongStepMethod");
     }
+
+    /**
+     * PopUpBox class to show all the messages to the client,
+     * popUp has also a timer
+     */
     public class PopUpBox {
 
         public void infoBox(String infoMessage, String titleBar)
         {
-            //JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
             int TIME_VISIBLE = 5000;
             JOptionPane pane = new JOptionPane(infoMessage,
                     JOptionPane.INFORMATION_MESSAGE);
@@ -850,6 +1118,11 @@ public class BoardGUI implements Runnable{
         }
     }
 
+    /**
+     * @return integer
+     * It gives the option to stay to watch game
+     * or to close game to a players stuck
+     */
     public int CloseGuiOrNot(){
         return JOptionPane.showConfirmDialog(mainframe,
                 "Press YES to continue to watch the game or NO if you want to close.",
