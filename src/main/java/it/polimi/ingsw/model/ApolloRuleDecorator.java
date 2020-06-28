@@ -64,11 +64,6 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
                 return;
             }
 
-            if(move.getMoveOrBuild().equals("D")){
-                model.sendError(move.getColor().toString()+" "+gameMessage.notReachableCellMessage+"\n"+gameMessage.insertAgain);
-                return;
-            }
-
             if(move.getMoveOrBuild().equals("M") ){
                 if(!isEmptyCell(move, model)){
                     //read worker position and check if there are some empty cell where he can move in.
