@@ -4,7 +4,6 @@ import it.polimi.ingsw.ClientCLIMain;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.utils.FileManager;
 import it.polimi.ingsw.utils.PlayerColor;
-import it.polimi.ingsw.view.View;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -17,9 +16,13 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
+/**
+ * ConnectionManagerSocket manages client connection to Server.
+ * It initializes client with starting parameter: nickname, color and card.
+ * It knows {@link BoardGUI}, if player is using GUI, or {@link ClientCLIMain}
+ * if player is using CLI. It is one per each connection client.
+ */
 public class ConnectionManagerSocket {
 
     private String nickname ;
@@ -43,6 +46,11 @@ public class ConnectionManagerSocket {
 
     protected int clientID;
 
+    /**
+     * Class constructor
+     * @param nickname
+     * @param playerNumber
+     */
     public ConnectionManagerSocket(String nickname, int playerNumber) {
         this.nickname = nickname;
         this.playerNumber = playerNumber;
@@ -52,35 +60,76 @@ public class ConnectionManagerSocket {
         this.boardGUI = null;
     }
 
+    /**
+     * @param IP server IP
+     * It sets server IP
+     */
     public void setServerData(String IP){
         this.Server_IP = IP;
     }
 
+    /**
+     * @param mainFrame
+     * It sets board GUI JFrame of a player that is using GUI
+     */
     public void setMainFrame(JFrame mainFrame) {
         this.mainFrame = mainFrame;
     }
+
+    /**
+     * @param clientID
+     * It sets client ID
+     */
     public void setclientID(int clientID) {
         this.clientID = clientID;
     }
+
+    /**
+     * @param player
+     * It sets Player
+     */
     public void setPlayer(Player player){
         this.player = player;
     }
 
+    /**
+     * @return client ID
+     */
     public int getclientID() {
         return this.clientID;
     }
+
+    /**
+     * @return Player
+     */
     public Player getPlayer() {
         return player;
     }
+
+    /**
+     * @return Board CLI if player is playing with CLI
+     */
     public ClientCLIMain getBoardCLI() {
         return boardCLI;
     }
+
+    /**
+     * @return Board GUI if player is playing with GUI
+     */
     public BoardGUI getBoardGUI() {
         return boardGUI;
     }
+
+    /**
+     * @return temporary color used in color choice
+     */
     public String getTemporaryColor() {
         return this.temporaryColor;
     }
+
+    /**
+     * @return Player color
+     */
     public PlayerColor getPlayerColorEnum(){
         switch (playerColor.toUpperCase()){
             case "WHITE": return PlayerColor.WHITE;
@@ -89,22 +138,43 @@ public class ConnectionManagerSocket {
         }
         return null;
     }
+
+    /**
+     * @return Player string color
+     */
     public String getPlayerColor() {
         synchronized (playerColor){
             return this.playerColor;
         }
     }
+
+    /**
+     * @return card Thread
+     */
     public Thread getCardThread() {
         return cardThread;
     }
+
+    /**
+     * @return order of the player in the game
+     */
     public int getOrder() {
         return order;
     }
 
+    /**
+     * @throws IOException
+     * It calls starting methods
+     */
     public void setup() throws IOException {
         this.initializeSocket();
         this.chooseColor();
     }
+
+    /**
+     * @throws IOException
+     * Starting method to choose nickname and player number
+     */
     public void initializeSocket() throws IOException {
 
         socket = new Socket(Server_IP, SOCKET_PORT);
@@ -146,6 +216,11 @@ public class ConnectionManagerSocket {
             }
         } while (!nameSet);
     }
+
+    /**
+     * @throws IOException
+     * Starting method to choose color
+     */
     public void chooseColor() throws IOException {
         String matchCreated =null;
         do{
@@ -157,22 +232,43 @@ public class ConnectionManagerSocket {
         }while (!matchCreated.equals("Match created"));
     }
 
+    /**
+     * @param boardGUI
+     * It initializes ClientSocketMessageGUI before game starts
+     */
     public void initializeMessageSocket(BoardGUI boardGUI){
         this.boardGUI = boardGUI;
         this.clientSocket = new ClientSocketMessageGUI(this, input, output);
         this.clientSocket.initialize();
     }
+
+    /**
+     * @param BoardCLI
+     * @return reading Thread in CLI
+     * It initializes ClientSocketMessageCLI before game starts
+     */
     public Thread initializeMessageSocketCLI(ClientCLIMain BoardCLI){
         this.boardCLI = BoardCLI;
         this.clientSocket = new ClientSocketMessageCLI(this, input, output);
         return this.clientSocket.initializeCLI();
     }
 
+    /**
+     * It resets player color
+     */
     public void resetPlayerColor(){
         synchronized (playerColor){
             this.playerColor = "null";
         }
     }
+
+    /**
+     * @param colorResult
+     * @param guiInstance
+     * @return true if color
+     * @throws IOException
+     * Method that manages color choices through players
+     */
     private boolean handleColorResponse(String colorResult, showPopUpColor guiInstance) throws IOException {
         if(colorResult.toUpperCase().equals(Integer.toString(getclientID())+" "+getTemporaryColor())){
             System.out.println("color ok");
@@ -202,6 +298,12 @@ public class ConnectionManagerSocket {
         this.playerColor = "reset";
         return false;
     }
+
+    /**
+     * @param color
+     * @param guiInstance
+     * It sets player color and sends it to server
+     */
     public void setColor(String color, showPopUpColor guiInstance){
         try{
             this.temporaryColor = color;
@@ -217,6 +319,13 @@ public class ConnectionManagerSocket {
         }
 
     }
+
+    /**
+     * @param guiInstance
+     * @return Thread color
+     * thread used to choice color, it is active unless
+     * player choose a color not already chosen
+     */
     public Thread receiveColorResponse(showPopUpColor guiInstance){
         t = new Thread(new Runnable() {
             @Override
@@ -236,6 +345,12 @@ public class ConnectionManagerSocket {
         return t;
     }
 
+    /**
+     * @param guiInstance
+     * @param cliInstance
+     * @return Thread card
+     * Thread that manages card choice, it is used both for CLI and GUI
+     */
     public Thread receiveCard(PickUpCards guiInstance, ClientCLIMain cliInstance){
         this.cardThread = new Thread(new Runnable() {
             @Override
@@ -288,6 +403,12 @@ public class ConnectionManagerSocket {
         return this.cardThread;
     }
 
+    /**
+     * @throws IOException
+     * Method to differentiate between players for the choice of cards:
+     * first player must choose three or two cards to use in game and
+     * then he is the last one to make his personal choice
+     */
     public void waitForFirstPlayer() throws IOException{
         String orderPlayer = null;
         do{
@@ -311,6 +432,10 @@ public class ConnectionManagerSocket {
         }
     }
 
+    /**
+     * Method called at the end of the game
+     * to close all the links with Server
+     */
     public void close() {
         try {
             this.socket.close();
@@ -324,6 +449,10 @@ public class ConnectionManagerSocket {
         }
     }
 
+    /**
+     * @param o
+     * Method to send Object to Server
+     */
     public void sendObjectToServer(Object o){
         try{
             output.reset();
@@ -333,12 +462,20 @@ public class ConnectionManagerSocket {
             System.err.println(e.getMessage());
         }
     }
+
+    /**
+     * It show Board GUI when game starts
+     */
     public void openBoardGui(){
         mainFrame.getContentPane().removeAll();
         SwingUtilities.invokeLater(new BoardGUI(mainFrame,ConnectionManagerSocket.this));
         mainFrame.update(mainFrame.getGraphics());
     }
 
+    /**
+     * @param players
+     * It shows in CLI each player with his card
+     */
     public void printOpponentInformation(ArrayList players){
         FileManager f = new FileManager();
         String PATHFILE = "toolcards/";
@@ -366,6 +503,10 @@ public class ConnectionManagerSocket {
             }
         });
     }
+
+    /**
+     * Method called to close GUI when game ends
+     */
     public void disposeAll(){
         this.mainFrame.dispose();
     }

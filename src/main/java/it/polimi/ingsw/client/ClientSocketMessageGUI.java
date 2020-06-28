@@ -12,18 +12,40 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Scanner;
 
+/**
+ * Cass created to manage GUI Game: interacts with {@link BoardGUI}
+ * It inherits from abstract ClientSocketMessage class
+ */
 public class ClientSocketMessageGUI extends ClientSocketMessage {
 
-    private Socket socket;
+    /**
+     * inputStream to read from Server
+     */
     private ObjectInputStream inputStream;
+
+    /**
+     * outputStream to write to Server
+     */
     private ObjectOutputStream outputStream;
+
+    /**
+     * class that manages initial connection and parameters
+     */
     private ConnectionManagerSocket connectionManagerSocket;
+
+    /**
+     * active is true if client is active
+     */
     private boolean active;
 
+    /**
+     * Constructor
+     * @param connectionManagerSocket
+     * @param input
+     * @param output
+     */
     public ClientSocketMessageGUI(ConnectionManagerSocket connectionManagerSocket, ObjectInputStream input, ObjectOutputStream output) {
         super();
         this.inputStream = input;
@@ -31,10 +53,20 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
         this.connectionManagerSocket = connectionManagerSocket;
         this.active = true;
     }
+
+    /**
+     * It initializes reading Thread from Server
+     */
     public void initialize(){
         readFromServer();
     }
 
+    /**
+     * Thread that parses input from Server.
+     * Server sends a MoveMessage in response of a PlayerMove during game,
+     * MoveMessage contains board that is scanned and if a player wins or loses
+     * quitGame method is called and this Thread ends.
+     */
     public void readFromServer(){
         Thread t=new Thread(new Runnable() {
             @Override
@@ -87,6 +119,12 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
         });t.start();
     }
 
+    /**
+     * @param message MoveMessage from Server
+     * it scans Board received fromServer in
+     * order to show updated board on GUI each time
+     * a player makes a move
+     */
     public void scanBoard(MoveMessage message){
         Board board = message.getBoard();
         for(int x = 0; x<5; x++){
@@ -126,6 +164,11 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
             }
         }
     }
+
+    /**
+     * @param o
+     * Method used to setting initial worker positions
+     */
     public void updateBoard(SetWorkerPosition o){
         if(o.getID() == connectionManagerSocket.getclientID()){
             connectionManagerSocket.getBoardGUI().incrementWorkerNum();
@@ -137,6 +180,13 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
             connectionManagerSocket.getBoardGUI().addWorker(o.getColor(), o.getWorkerNum(), o.getX(), o.getY());
         }
     }
+
+    /**
+     * @param color
+     * Method called when game is over, It checks
+     * if this client player has won or lost and show popUp
+     * corresponding
+     */
     public void gameOver (PlayerColor color){
         if(color.equals(connectionManagerSocket.getPlayerColorEnum())){
             connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox("YOU WIN!", "Message From Server - Game Over");
@@ -146,6 +196,13 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
         quitGame();
 
     }
+
+    /**
+     * @param color
+     * Method called when game is over for player stuck, It checks
+     * if player stuck is this client player or not and show popUp
+     * corresponding
+     */
     public void gameOverStuck (PlayerColor color){
        if(color.equals(connectionManagerSocket.getPlayerColorEnum())){
            connectionManagerSocket.getBoardGUI().getPopUpBox().infoBox("YOU LOSE!", "Message From Server - Game Over");
@@ -155,6 +212,10 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
         quitGame();
     }
 
+    /**
+     * Method called at the end of a game to close connection,
+     * Thread and to close board GUI
+     */
     public void quitGame(){
         new Timer(5000, new ActionListener() {
             @Override
@@ -165,10 +226,18 @@ public class ClientSocketMessageGUI extends ClientSocketMessage {
             }
         }).start();
     }
+
+    /**
+     * @return true if client is still active
+     */
     public boolean isActive(){
         return active;
     }
 
+    /**
+     *  It is called when this player has lost and it
+     *  gives the option to stay to watch the game or close the connection
+     */
     public void closeOrWatchGame(){
         if(connectionManagerSocket.getBoardGUI().CloseGuiOrNot() == JOptionPane.NO_OPTION){
             quitGame();
