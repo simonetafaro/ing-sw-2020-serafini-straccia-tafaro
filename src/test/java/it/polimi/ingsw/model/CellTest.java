@@ -277,6 +277,15 @@ class CellTest {
         assertTrue(cell.canBuildInCells(board.getPlayingBoard()));
     }
 
+    @Test
+    void buildDome() {
+        Cell cell = new Cell();
+
+        cell.setLevel(3);
+        cell.buildDome();
+        assertEquals(cell.getLevel(),4);
+
+    }
 
 }
 

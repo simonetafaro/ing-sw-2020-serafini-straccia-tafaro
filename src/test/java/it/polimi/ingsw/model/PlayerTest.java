@@ -106,58 +106,32 @@ class PlayerTest {
 
     @Test
     void getInput() {
-        try {
-            Socket socket = new Socket();
-            Player player = new Player();
-            ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
-            player.setInput(inputStream);
-
-            assertEquals(inputStream,player.getInput());
-        }catch(IOException e){
-            System.err.println(e.getMessage());
-        }
+        Player player = new Player();
+        player.setInput(null);
+        assertNull(player.getInput());
     }
 
     @Test
     void setInput() {
-        try {
-            Socket socket = new Socket();
-            Player player = new Player();
-            ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
-            player.setInput(inputStream);
+        Player player = new Player();
+        player.setInput(null);
 
-            assertEquals(inputStream,player.getInput());
-        }catch(IOException e){
-            System.err.println(e.getMessage());
-        }
+        assertNull(player.getInput());
     }
 
     @Test
     void getOutput() {
-        try {
-            Socket socket = new Socket();
-            Player player = new Player();
-            ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
-            player.setOutput(outputStream);
+        Player player = new Player();
+        player.setOutput(null);
+        assertNull(player.getOutput());
 
-            assertEquals(outputStream,player.getOutput());
-        }catch(IOException e){
-            System.err.println(e.getMessage());
-        }
     }
 
     @Test
     void setOutput() {
-        try {
-            Socket socket = new Socket();
-            Player player = new Player();
-            ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
-            player.setOutput(outputStream);
-
-            assertEquals(outputStream,player.getOutput());
-        }catch(IOException e){
-            System.err.println(e.getMessage());
-        }
+        Player player = new Player();
+        player.setOutput(null);
+        assertNull(player.getOutput());
     }
 
     @Test

@@ -240,7 +240,6 @@ class ApolloRuleDecoratorTest {
         Board board=model.getBoard();
         Cell cell =board.getCell(0,0);
         Worker worker =new Worker(board.getCell(0,0),1, PlayerColor.BLUE);
-        Worker worker1 =new Worker(board.getCell(0,1),1, PlayerColor.GREY);
         player.setWorker1(worker);
         board.getPlayingBoard()[1][1].setFreeSpace(false);
         board.getPlayingBoard()[1][0].setFreeSpace(false);
@@ -254,7 +253,6 @@ class ApolloRuleDecoratorTest {
         Cell cell = board.getCell(0,0);
         Cell cell1 = board.getCell(0,1);
         Worker worker = new Worker(board.getCell(0,0),1, PlayerColor.BLUE);
-        Worker worker1 = new Worker(cell1,1, PlayerColor.GREY);
         cell1.setLevel(2);
         cell.setLevel(0);
         player.setWorker1(worker);
