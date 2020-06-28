@@ -47,7 +47,7 @@ class SeleneRuleDecoratorTest {
         PlayerMove move=new PlayerMove(player,worker1,1,2);
         move.setMoveOrBuild("B");
         selene.play(move,turn,model);
-        assertEquals(4, model.getBoard().getCell(1, 2).getLevel());
+        assertEquals(true, model.getBoard().getCell(1, 2).isDome());
 
     }
     @Test
@@ -61,7 +61,7 @@ class SeleneRuleDecoratorTest {
         PlayerMove move=new PlayerMove(player,worker1,1,2);
         move.setMoveOrBuild("D");
         selene.play(move,turn,model);
-        assertEquals(4, model.getBoard().getCell(1, 2).getLevel());
+        assertEquals(true, model.getBoard().getCell(1, 2).isDome());
 
     }
     @Test

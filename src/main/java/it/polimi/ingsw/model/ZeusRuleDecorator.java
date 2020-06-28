@@ -63,7 +63,7 @@ public class ZeusRuleDecorator extends StandardRuleDecorator {
                 model.sendError(move.getColor().toString()+" "+gameMessage.tooHighCellMessage+"\n"+gameMessage.insertAgain);
                 return;
             }
-            if(model.checkStep(move, turn, model))
+            if(model.fillStepInfo(move, turn, model))
                 //model.performMove(move);
                 move(move, model, turn);
         }
@@ -82,7 +82,7 @@ public class ZeusRuleDecorator extends StandardRuleDecorator {
                 model.sendError(move.getColor().toString()+" "+gameMessage.invalidBuildZeus+"\n"+gameMessage.insertAgain);
                 return;
             }
-            if(model.checkStep(move, turn, model))
+            if(model.fillStepInfo(move, turn, model))
                 //model.performBuild(move);
                 build(move, model, turn);
         }

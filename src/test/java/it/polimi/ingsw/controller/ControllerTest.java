@@ -1,7 +1,6 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.Model;
-import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.SetWorkerPosition;
 import org.junit.jupiter.api.Test;
@@ -81,5 +80,55 @@ class ControllerTest {
 
         controller.setWorkersMessage();
 
+    }
+
+    @Test
+    void setTurn() {
+        Model model = new Model();
+        Controller controller = new Controller(model);
+
+        Player player = new Player();
+        PlayerTurn playerTurn = new PlayerTurn(player);
+        Turn turn  = new Turn(playerTurn);
+        controller.setTurn(turn);
+        assertEquals(turn, controller.getTurn());
+    }
+
+    @Test
+    void performMoveWorker1(){
+        Model model = new Model();
+
+        Player player1 = new Player();
+        player1.setColor(PlayerColor.BLUE);
+        Player player2 = new Player();
+        player2.setColor(PlayerColor.GREY);
+        model.setPlayers(player1, player2);
+
+        Controller controller = new Controller(model);
+        Worker worker = new Worker(01, new Cell(1,1), 1, PlayerColor.BLUE);
+        player1.setWorker1(worker);
+        PlayerMove playerMove = new PlayerMove(player1, worker, 1,1);
+        controller.performMove(playerMove);
+        assertTrue(playerMove.getPlayer().equals(model.getPlayerFromColor(PlayerColor.BLUE)));
+        assertEquals(playerMove.getPlayer().getWorker1(), model.getPlayerFromColor(PlayerColor.BLUE).getWorker1());
+    }
+
+    @Test
+    void performMoveWorker2(){
+        Model model = new Model();
+
+        Player player1 = new Player();
+        player1.setColor(PlayerColor.BLUE);
+        Player player2 = new Player();
+        player2.setColor(PlayerColor.GREY);
+        model.setPlayers(player1, player2);
+
+        Controller controller = new Controller(model);
+        Worker worker = new Worker(01, new Cell(1,1), 2, PlayerColor.BLUE);
+        player1.setWorker2(worker);
+        PlayerMove playerMove = new PlayerMove(player1, worker, 1,1);
+        controller.performMove(playerMove);
+        assertTrue(playerMove.getPlayer().equals(model.getPlayerFromColor(PlayerColor.BLUE)));
+        assertEquals(playerMove.getPlayer().getWorker2(), model.getPlayerFromColor(PlayerColor.BLUE).getWorker2());
     }
 }

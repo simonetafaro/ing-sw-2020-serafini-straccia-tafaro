@@ -28,7 +28,7 @@ class AtlasRuleDecoratorTest {
         playermove.setMoveOrBuild("D");
         atlasRuleDecorator.build(playermove,model,turn);
         assertEquals(0, model.getBoard().getCell(0, 0).getLevel());
-        assertEquals(4, model.getBoard().getCell(1, 1).getLevel());
+        assertEquals(true, model.getBoard().getCell(1, 1).isDome());
 
     }
 }

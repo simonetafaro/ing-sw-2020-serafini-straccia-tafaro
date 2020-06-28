@@ -2,8 +2,6 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
-import java.io.Serializable;
-
 /**
  *Your Move: Your Worker may
  * move into an opponent Worker’s
@@ -79,7 +77,7 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
                     model.sendError(move.getColor().toString()+" "+gameMessage.tooHighCellMessage+"\n"+gameMessage.insertAgain);
                     return;
                 }
-                if(model.checkStep(move, turn, model))
+                if(model.fillStepInfo(move, turn, model))
                     move(move, model, turn);
             }
             else{ //"B"
@@ -87,7 +85,7 @@ public class ApolloRuleDecorator extends StandardRuleDecorator {
                     model.sendError(move.getColor().toString()+" "+gameMessage.occupiedCellMessage+"\n"+gameMessage.insertAgain);
                     return;
                 }
-                if(model.checkStep(move, turn, model))
+                if(model.fillStepInfo(move, turn, model))
                     //model.performBuild(move);
                     build(move, model, turn);
             }
