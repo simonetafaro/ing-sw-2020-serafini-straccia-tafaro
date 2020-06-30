@@ -10,7 +10,7 @@ public class PlayerTurn {
     /**
      * Array to keep trace each Step of a turn's player
      */
-    private Step[] steps= new Step[6];
+    private Step[] steps = new Step[6];
 
     /**
      * Player
@@ -36,18 +36,19 @@ public class PlayerTurn {
     /**
      * Constructor that initializes array
      * and sets currentStep to 0
+     *
      * @param player
      */
-    public PlayerTurn(Player player){
-        this.turnPlayer=player;
-        steps[0]=new Step();
-        steps[1]=new Step();
-        steps[2]=new Step();
-        steps[3]=new Step();
-        steps[4]=new Step();
-        this.i=0;
+    public PlayerTurn(Player player) {
+        this.turnPlayer = player;
+        steps[0] = new Step();
+        steps[1] = new Step();
+        steps[2] = new Step();
+        steps[3] = new Step();
+        steps[4] = new Step();
+        this.i = 0;
         currStep = steps[i];
-        this.worker= null;
+        this.worker = null;
     }
 
     /**
@@ -67,38 +68,37 @@ public class PlayerTurn {
     /**
      * @return array's index
      */
-    public int getI(){
-        return i+1;
+    public int getI() {
+        return i + 1;
     }
 
     /**
      * It updates current step and index. It's called each time
      * player has finished a single step of his PlayerTurn
      */
-    public void updateStep(){
+    public void updateStep() {
         i++;
-        currStep=steps[i];
+        currStep = steps[i];
     }
 
     /**
      * It resets current step at the end of a PlayerTurn,
      * so that it's ready for the next round
      */
-    public void resetStep(){
-        this.i=0;
-        currStep=steps[i];
+    public void resetStep() {
+        this.i = 0;
+        currStep = steps[i];
     }
 
     /**
      * @return true if player is in first step of his playerTurn
      */
-    public boolean isFirstStep(){
-        return currStep==steps[0];
+    public boolean isFirstStep() {
+        return currStep == steps[0];
     }
 
     /**
-     * @param worker
-     * It sets turn worker used by player in this turn
+     * @param worker It sets turn worker used by player in this turn
      */
     public void setTurnWorker(Worker worker) {
         this.worker = worker;
@@ -113,12 +113,13 @@ public class PlayerTurn {
 
     /**
      * Given an index, it returns the corresponding Step
+     *
      * @param i index
      * @return Step
      */
-    public Step getStepI(int i){
+    public Step getStepI(int i) {
         //TODO manage array out of bound exception
-        return steps[i-1];
+        return steps[i - 1];
     }
 
 }

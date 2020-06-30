@@ -18,20 +18,20 @@ public class Deck {
     /**
      * Deck constructor: it initializes deck hash map
      */
-    public Deck(){
+    public Deck() {
         this.deck.put("Apollo", false);
         this.deck.put("Artemis", false);
         this.deck.put("Athena", false);
         this.deck.put("Atlas", false);
-        this.deck.put("Chronus",false);
+        this.deck.put("Chronus", false);
         this.deck.put("Demeter", false);
         this.deck.put("Hephaestus", false);
-        this.deck.put("Hestia",false);
+        this.deck.put("Hestia", false);
         this.deck.put("Minotaur", false);
         this.deck.put("Pan", false);
         this.deck.put("Poseidon", false);
         this.deck.put("Prometheus", false);
-        this.deck.put("Selene",false);
+        this.deck.put("Selene", false);
         this.deck.put("Zeus", false);
     }
 
@@ -39,7 +39,7 @@ public class Deck {
      * @param cardName
      * @return true if deck contains the card
      */
-    public boolean validCard(String cardName){
+    public boolean validCard(String cardName) {
         return deck.containsKey(cardName);
     }
 
@@ -47,14 +47,14 @@ public class Deck {
      * @param cardName
      * @return true if a card has already been chosen
      */
-    public boolean setChosenCard(String cardName){
+    public boolean setChosenCard(String cardName) {
         return deck.replace(cardName, false, true);
     }
 
     /**
      * @return deck
      */
-    public Map getDeck(){
+    public Map getDeck() {
         return this.deck;
     }
 

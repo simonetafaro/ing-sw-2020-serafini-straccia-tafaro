@@ -27,24 +27,21 @@ public class Step {
     private Cell CellTo;
 
     /**
-     * @param type
-     * It sets type move
+     * @param type It sets type move
      */
     public void setType(String type) {
         this.type = type;
     }
 
     /**
-     * @param cellFrom
-     * It sets cellFrom
+     * @param cellFrom It sets cellFrom
      */
     public void setCellFrom(Cell cellFrom) {
         CellFrom = cellFrom;
     }
 
     /**
-     * @param cellTo
-     * It sets cellTo
+     * @param cellTo It sets cellTo
      */
     public void setCellTo(Cell cellTo) {
         CellTo = cellTo;

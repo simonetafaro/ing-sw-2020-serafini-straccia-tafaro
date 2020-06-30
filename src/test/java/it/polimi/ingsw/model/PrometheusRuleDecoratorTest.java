@@ -207,6 +207,7 @@ class PrometheusRuleDecoratorTest {
     void move() {
         Worker worker= new Worker(model.getBoard().getCell(0,0),1, PlayerColor.BLUE);
         PlayerMove playermove=new PlayerMove(player,worker,1,1);
+        player.setMyCard("Prometheus");
         playermove.setMoveOrBuild("M");
         prometheusRuleDecorator.move(playermove,model,turn);
         assertTrue(model.getBoard().getCell(0,0).isFree());

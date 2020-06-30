@@ -6,7 +6,6 @@ import it.polimi.ingsw.utils.PlayerColor;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.net.Socket;
 
 
 /**
@@ -84,8 +83,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * @param input
-     * It sets ObjectInputStream of player's client
+     * @param input It sets ObjectInputStream of player's client
      */
     public void setInput(ObjectInputStream input) {
         this.input = input;
@@ -99,8 +97,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * @param output
-     * It sets ObjectOutputStream of player's client
+     * @param output It sets ObjectOutputStream of player's client
      */
     public void setOutput(ObjectOutputStream output) {
         this.output = output;
@@ -109,14 +106,15 @@ public class Player implements Serializable {
     /**
      * Player empty constructor to initialize CardManager()
      */
-    public Player(){
-        this.worker1=null;
-        this.worker2=null;
-        this.cardManager= new CardManager();
+    public Player() {
+        this.worker1 = null;
+        this.worker2 = null;
+        this.cardManager = new CardManager();
     }
 
     /**
      * Player constructor to initialize CardManager()
+     *
      * @param ID
      * @param nickname
      */
@@ -128,6 +126,7 @@ public class Player implements Serializable {
 
     /**
      * It initialize PlayerTurn and returns it
+     *
      * @return PlayerTurn
      */
     public PlayerTurn setMyTurn() {
@@ -136,24 +135,21 @@ public class Player implements Serializable {
     }
 
     /**
-     * @param color
-     * It changes player color
+     * @param color It changes player color
      */
     public void setColor(PlayerColor color) {
         this.color = color;
     }
 
     /**
-     * @param nickname
-     * It sets nickname
+     * @param nickname It sets nickname
      */
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
     /**
-     * @param worker1
-     * It sets worker 1
+     * @param worker1 It sets worker 1
      */
     public void setWorker1(Worker worker1) {
         this.worker1 = worker1;
@@ -161,8 +157,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * @param worker2
-     * It sets worker 2
+     * @param worker2 It sets worker 2
      */
     public void setWorker2(Worker worker2) {
         this.worker2 = worker2;
@@ -170,25 +165,24 @@ public class Player implements Serializable {
     }
 
     /**
-     * @param cardName
-     * It initializes Card with the sequence of custom moves from xml file
+     * @param cardName It initializes Card with the sequence of custom moves from xml file
      */
-    public void setMyCard(String cardName){
-        cardManager.setCardFromFile(this,cardName);
+    public void setMyCard(String cardName) {
+        cardManager.setCardFromFile(this, cardName);
     }
 
     /**
-     * @param card
-     * It sets card
+     * @param card It sets card
      */
-    public void setCard (Card card){ this.myCard=card; }
+    public void setCard(Card card) {
+        this.myCard = card;
+    }
 
     /**
-     * @param cardRuleDecorator
-     * It sets cardRuleDecorator
+     * @param cardRuleDecorator It sets cardRuleDecorator
      */
-    public void setMyCardMethod(CardRuleDecorator cardRuleDecorator){
-        this.myCardMethod=cardRuleDecorator;
+    public void setMyCardMethod(CardRuleDecorator cardRuleDecorator) {
+        this.myCardMethod = cardRuleDecorator;
     }
 
     /**
@@ -223,7 +217,7 @@ public class Player implements Serializable {
     /**
      * @return card
      */
-    public Card getMyCard(){
+    public Card getMyCard() {
         return this.myCard;
     }
 

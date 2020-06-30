@@ -14,37 +14,42 @@ public abstract class ClientSocketMessage {
     /**
      * Empty constructor
      */
-    public ClientSocketMessage() {}
+    public ClientSocketMessage() {
+    }
 
     /**
      * Initializes reading Thread in GUI
      */
-    public void initialize(){};
+    public void initialize() {
+    }
 
     /**
      * @return Thread
      * It initializes reading Thread in CLI
      */
-    public Thread initializeCLI(){
+    public Thread initializeCLI() {
         return null;
-    };
+    }
 
     /**
      * Reading Thread in GUI
      */
-    public void readFromServer(){};
+    public void readFromServer() {
+    }
 
     /**
      * @return Thread
      * reading Thread in CLI
      */
-    public Thread readFromServerCLI(){
+    public Thread readFromServerCLI() {
         return null;
-    };
+    }
 
     /**
-     * @param o
-     * Used in setting initial worker position
+     * @param o Used in setting initial worker position
      */
-    public void updateBoard(SetWorkerPosition o){};
+    public void updateBoard(SetWorkerPosition o) {
+    }
+
+
 }

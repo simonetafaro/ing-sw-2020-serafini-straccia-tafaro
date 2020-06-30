@@ -17,29 +17,32 @@ public class Turn {
 
     /**
      * Constructor with one parameter
+     *
      * @param playerTurn
      */
-    public Turn (PlayerTurn playerTurn){
-        turns.put(playerTurn.getTurnPlayer(),playerTurn);
+    public Turn(PlayerTurn playerTurn) {
+        turns.put(playerTurn.getTurnPlayer(), playerTurn);
     }
 
     /**
      * Constructor with two parameters for two players game
+     *
      * @param playerTurn1
      * @param playerTurn2
      */
-    public Turn(PlayerTurn playerTurn1, PlayerTurn playerTurn2){
+    public Turn(PlayerTurn playerTurn1, PlayerTurn playerTurn2) {
         turns.put(playerTurn1.getTurnPlayer(), playerTurn1);
         turns.put(playerTurn2.getTurnPlayer(), playerTurn2);
     }
 
     /**
      * Constructor with three parameters for three players game
+     *
      * @param playerTurn1
      * @param playerTurn2
      * @param playerTurn3
      */
-    public Turn(PlayerTurn playerTurn1, PlayerTurn playerTurn2, PlayerTurn playerTurn3){
+    public Turn(PlayerTurn playerTurn1, PlayerTurn playerTurn2, PlayerTurn playerTurn3) {
         turns.put(playerTurn1.getTurnPlayer(), playerTurn1);
         turns.put(playerTurn2.getTurnPlayer(), playerTurn2);
         turns.put(playerTurn3.getTurnPlayer(), playerTurn3);
@@ -49,7 +52,7 @@ public class Turn {
      * @param player
      * @return PlayerTurn of the corresponding Player
      */
-    public PlayerTurn getPlayerTurn(Player player){
+    public PlayerTurn getPlayerTurn(Player player) {
         return turns.get(player);
     }
 

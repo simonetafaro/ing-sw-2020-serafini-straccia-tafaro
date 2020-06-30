@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.view.View;
-
 /**
  * PlayerMoveEnd is a {@link PlayerMove} sent to server
  * by client when he wants to end his turn
@@ -18,14 +16,14 @@ public class PlayerMoveEnd extends PlayerMove {
     /**
      * PlayerMoveEnd constructor with 2 parameters,
      * it inherits the constructor from PlayerMove
+     *
      * @param player
      * @param isEndMessage
      */
-    public PlayerMoveEnd(Player player, boolean isEndMessage){
+    public PlayerMoveEnd(Player player, boolean isEndMessage) {
         super(player);
-        this.isEndMessage= isEndMessage;
+        this.isEndMessage = isEndMessage;
     }
-
 
 
 }

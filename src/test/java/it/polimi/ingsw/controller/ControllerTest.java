@@ -71,6 +71,27 @@ class ControllerTest {
     }
 
     @Test
+    void updateStringQuitGame() {
+        Model model = new Model();
+        Controller controller = new Controller(model);
+
+        Player player1 = new Player(1,"Apollo");
+        Player player2 = new Player(2,"Apollo");
+        Player player3 = new Player(3,"Apollo");
+        player1.setColor(PlayerColor.BLUE);
+        player2.setColor(PlayerColor.GREY);
+        player3.setColor(PlayerColor.WHITE);
+
+        model.setPlayers(player1,player2,player3);
+        Worker worker = new Worker(01, new Cell(1,1), 1, PlayerColor.BLUE);
+        Worker worker2 = new Worker(01, new Cell(1,4), 2, PlayerColor.BLUE);
+        player1.setWorker2(worker2);
+        player1.setWorker1(worker);
+
+        controller.update("quitGameClientCloseConnection");
+    }
+
+    @Test
     void setWorker() {
         Model model = new Model();
         Controller controller = new Controller(model);

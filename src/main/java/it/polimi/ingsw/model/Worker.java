@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.PlayerColor;
+
 import java.io.Serializable;
 
 /**
@@ -17,7 +18,7 @@ public class Worker implements Serializable {
      * An integer depending on if it's
      * worker1 or worker2 of a player
      */
-    private int  workerNum;
+    private int workerNum;
 
     /**
      * Pointer of worker position on the board
@@ -42,16 +43,18 @@ public class Worker implements Serializable {
     /**
      * Empty constructor
      */
-    public Worker(){}
+    public Worker() {
+    }
 
     /**
      * Constructor with ID client
+     *
      * @param ID
      * @param position
      * @param number
      * @param color
      */
-    public Worker(int ID, Cell position, int number, PlayerColor color){
+    public Worker(int ID, Cell position, int number, PlayerColor color) {
         this.ID = ID;
         this.currentPosition = position;
         this.workerNum = number;
@@ -62,11 +65,12 @@ public class Worker implements Serializable {
 
     /**
      * Constructor without ID
+     *
      * @param position
      * @param number
      * @param color
      */
-    public Worker(Cell position, int number, PlayerColor color){
+    public Worker(Cell position, int number, PlayerColor color) {
         this.ID = 0;
         this.currentPosition = position;
         this.workerNum = number;
@@ -77,11 +81,11 @@ public class Worker implements Serializable {
 
     /**
      * @param cell is changed
-     *      It changes the new worker position
-     *      by freeing the previous cell and moving
-     *      pointer to worker in the new cell
+     *             It changes the new worker position
+     *             by freeing the previous cell and moving
+     *             pointer to worker in the new cell
      */
-    public void setWorkerPosition(Cell cell){
+    public void setWorkerPosition(Cell cell) {
         this.currentPosition = cell;
         cell.setFreeSpace(false);
         cell.setCurrWorker(this);
@@ -89,24 +93,23 @@ public class Worker implements Serializable {
 
     /**
      * @param stuck is set true when a worker can't
-     *      move because it has no adjacent free cells
+     *              move because it has no adjacent free cells
      */
     public void setStuck(boolean stuck) {
         this.stuck = stuck;
     }
 
     /**
-     * @param color
-     * It sets color
+     * @param color It sets color
      */
-    public void setColor(PlayerColor color){
-        this.color=color;
+    public void setColor(PlayerColor color) {
+        this.color = color;
     }
 
     /**
      * @return Worker position
      */
-    public Cell getWorkerPosition(){
+    public Cell getWorkerPosition() {
         return this.currentPosition;
     }
 
@@ -124,11 +127,15 @@ public class Worker implements Serializable {
      * 'B' BLUE
      */
     public char getColor() {
-        switch (this.color){
-            case WHITE: return 'W';
-            case GREY:  return 'G';
-            case BLUE:  return 'B';
-            default: return ' ';
+        switch (this.color) {
+            case WHITE:
+                return 'W';
+            case GREY:
+                return 'G';
+            case BLUE:
+                return 'B';
+            default:
+                return ' ';
         }
 
     }
@@ -136,7 +143,7 @@ public class Worker implements Serializable {
     /**
      * @return a PlayerColor
      */
-    public PlayerColor getPlayerColor(){
+    public PlayerColor getPlayerColor() {
         return this.color;
     }
 
@@ -150,7 +157,7 @@ public class Worker implements Serializable {
     /**
      * @return ID
      */
-    public int getID(){
+    public int getID() {
         return this.ID;
     }
 
@@ -159,7 +166,7 @@ public class Worker implements Serializable {
      * It deletes worker by freeing cell position and
      * setting worker pointer in that cell to null
      */
-    public void clear(){
+    public void clear() {
         this.currentPosition.setFreeSpace(true);
         this.currentPosition.setCurrWorker(null);
     }

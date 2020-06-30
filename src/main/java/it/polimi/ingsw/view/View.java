@@ -1,6 +1,8 @@
 package it.polimi.ingsw.view;
+
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.observ.*;
+import it.polimi.ingsw.observ.Observable;
+import it.polimi.ingsw.observ.Observer;
 
 import java.io.Serializable;
 
@@ -8,13 +10,14 @@ public abstract class View extends Observable<Object> implements Observer<Object
 
     private Player player;
 
-    protected View(Player player){
+    protected View(Player player) {
         this.player = player;
     }
 
-    public Player getPlayer(){
+    public Player getPlayer() {
         return player;
     }
 
-    public void writeToClient(Object o){}
+    public void writeToClient(Object o) {
+    }
 }
