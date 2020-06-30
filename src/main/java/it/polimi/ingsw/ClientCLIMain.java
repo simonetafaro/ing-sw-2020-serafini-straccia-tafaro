@@ -5,35 +5,68 @@ import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Deck;
 import it.polimi.ingsw.model.Worker;
 import it.polimi.ingsw.utils.SetWorkerPosition;
-
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Class used to initialize CLI Game. Main for players who want to play with CLI.
+ * It interacts with ConnectionMangerSocket to save starting parameters game
+ * and it is active until Game ends.
+ */
 public class ClientCLIMain {
 
-    private static final String SRC = "src";
-    private static final String MAIN = "main";
-    private static final String RESOURCES = "resources";
-    private static final String IMAGE = "images";
-    private int clientID = 0;
+    /**
+     * Three Thread to manage color and card choice.
+     * mainGame is game thread that ends at the end of the match
+     */
     private Thread colorThread, cardThread, mainGame;
+
+    /**
+     * worker number
+     */
     private int workersNum;
+
+    /**
+     * player number in the game
+     */
     private int playerNumber;
+
+    /**
+     * Scanner used to manages string in input and output
+     */
     private Scanner in;
+
+    /**
+     * Board game
+     */
     private Board board;
+
+    /**
+     * class that manages initial connection and parameters
+     */
     private ConnectionManagerSocket connectionManagerSocket;
+
+    /**
+     * Server IP
+     */
     private String IPServer;
 
-    private static final String PATH = SRC + File.separatorChar + MAIN + File.separatorChar + RESOURCES + File.separatorChar + IMAGE + File.separatorChar;
-
+    /**
+     * @param in Scanner
+     * It waits for the IP server choice
+     */
     public void chooseServerIP(Scanner in) {
         System.out.print("Insert IP of server (Es: 192.168.2.1): ");
         String serverIP = in.nextLine();
         this.IPServer = serverIP;
     }
 
+    /**
+     * @param in Scanner
+     * It waits for the nickname and three
+     * or two players match choice
+     */
     public void setupPlayerData(Scanner in) {
         System.out.print("Insert nickname: ");
         String nickname = in.nextLine();
@@ -44,10 +77,19 @@ public class ClientCLIMain {
         connectionManagerSocket.setServerData(IPServer);
     }
 
+    /**
+     * @throws IOException
+     * It calls setup of ConnectionManagerSocket
+     */
     public void connectToServer() throws IOException {
         connectionManagerSocket.setup();
     }
 
+    /**
+     * @param in Scanner
+     * It manages color choice with CLI through ConnectionManagerSocket
+     * that sends color to Server and it waits for the Server response.
+     */
     public void showPopUpPlayerColor(Scanner in) {
         this.colorThread = connectionManagerSocket.receiveColorResponse(null);
         while (true) {
@@ -67,6 +109,10 @@ public class ClientCLIMain {
         }
     }
 
+    /**
+     * @param in Scanner
+     * @return color chosen by player
+     */
     public String setPlayerColor(Scanner in) {
         String color = null;
         do {
@@ -76,6 +122,10 @@ public class ClientCLIMain {
         return color;
     }
 
+    /**
+     * @param color player color
+     * @return true if color is BLUE, GREY or WHITE
+     */
     public boolean parseInputColor(String color) {
         switch (color) {
             case "BLUE":
@@ -88,6 +138,13 @@ public class ClientCLIMain {
 
     }
 
+    /**
+     * @param in Scanner
+     * It manages cards choice with CLI through ConnectionManagerSocket.
+     * It saves cardThread from connectionManagerSocket that receive chosen
+     * cards from Server. If this is the first player, he must choice three
+     * or two cards.
+     */
     public void showPopUpPlayerCards(Scanner in) {
         try {
             connectionManagerSocket.waitForFirstPlayer();
@@ -105,6 +162,10 @@ public class ClientCLIMain {
         }
     }
 
+    /**
+     * @param cards list of cards
+     * It waits for the chosen card from player
+     */
     public void chooseCard(ArrayList cards) {
         do {
             String cardName = this.in.nextLine();
@@ -117,6 +178,11 @@ public class ClientCLIMain {
         } while (true);
     }
 
+    /**
+     * @param in Scanner
+     * @return cards chosen from the first player
+     * It manages first cards choice in game from the first player
+     */
     public ArrayList chooseCardsFromDeck(Scanner in) {
         ArrayList<String> ChosenCards = new ArrayList<>();
         Deck deck = new Deck();
@@ -138,6 +204,10 @@ public class ClientCLIMain {
         return ChosenCards;
     }
 
+    /**
+     * Method called at the end of starting
+     * parameters choice to start game
+     */
     public void showMainBoard() {
         this.workersNum = 0;
         this.board = new Board();
@@ -145,10 +215,17 @@ public class ClientCLIMain {
         this.mainGame = connectionManagerSocket.initializeMessageSocketCLI(this);
     }
 
+    /**
+     * It calles
+     */
     public void setWorkers() {
         setWorkerPosition();
     }
 
+    /**
+     * It manages initial worker position
+     * from CLI of this player
+     */
     public void setWorkerPosition() {
         int x, y;
         String[] cellCoord;
@@ -161,27 +238,51 @@ public class ClientCLIMain {
         connectionManagerSocket.sendObjectToServer(new SetWorkerPosition(x, y, connectionManagerSocket.getPlayerColorEnum(), connectionManagerSocket.getclientID(), this.workersNum + 1));
     }
 
+    /**
+     * @param o
+     * It sets initial worker positions
+     * of other players in board game
+     */
     public void addWorkerToBoard(SetWorkerPosition o) {
         this.board.getCell(o.getX(), o.getY()).setCurrWorker(new Worker(o.getID(), this.board.getCell(o.getX(), o.getY()), o.getWorkerNum(), o.getColor()));
     }
 
+    /**
+     * It prints board game sent by Server
+     */
     public void printBoard() {
         System.out.println('\n');
         this.board.printBoard();
     }
 
+    /**
+     * @param board board game
+     * It sets board game
+     */
     public void setBoard(Board board) {
         this.board = board;
     }
 
+    /**
+     * It increments worker number
+     */
     public void incrementWorkerNum() {
         this.workersNum++;
     }
 
+    /**
+     * @return worker number
+     */
     public int getWorkersNum() {
         return this.workersNum;
     }
 
+    /**
+     * ClientCLIMain constructor, it calls all methods
+     * to manages starting parameters choice: IP server,
+     * Player nickname, three or two players match, player color
+     * and cards choice. At the end it waits for the game end.
+     */
     public ClientCLIMain() {
         int MAX_TRIES = 5, counter = 0;
         this.in = new Scanner(System.in);
@@ -224,6 +325,10 @@ public class ClientCLIMain {
         }
     }
 
+    /**
+     * @param args
+     * Main that launches ClientGUIMain
+     */
     public static void main(String[] args) {
         new ClientCLIMain();
     }

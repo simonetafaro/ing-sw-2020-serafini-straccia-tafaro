@@ -460,7 +460,6 @@ public class BoardGUI implements Runnable {
         this.boardButton = new JLayeredPane[5][5];
         this.popUpBox = new PopUpBox();
 
-        //mainPanelImage = new ImageIcon(PATH + "BoardBackground.png");
         mainPanelImage = new ImageIcon(this.getClass().getResource("/images/BoardBackground.png"));
 
         mainPanelImageScaled = mainPanelImage.getImage();
