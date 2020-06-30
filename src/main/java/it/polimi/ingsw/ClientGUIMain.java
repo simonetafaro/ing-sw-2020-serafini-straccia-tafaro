@@ -10,10 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.io.IOException;
 
-public class ClientGUIMain implements Runnable{
+public class ClientGUIMain implements Runnable {
 
     private JFrame mainFrame;
 
@@ -25,7 +24,7 @@ public class ClientGUIMain implements Runnable{
     private Image centralPanelImageScaled;
     private ImageIcon centralPanelImage;
     private JTextField playerTextField, serverIpField;
-    private  JRadioButton playButton;
+    private JRadioButton playButton;
     private JTextField dayField, monthField, yearField;
     private ImageIcon threeButton_Icon, threeButton_Icon_Pressed;
     private ImageIcon twoButton_Icon, twoButton_Icon_Pressed;
@@ -33,14 +32,9 @@ public class ClientGUIMain implements Runnable{
     private JCheckBox two_Players_button;
     private JCheckBox three_Players_button;
 
-    private static final String SRC = "src";
-    private static final String MAIN = "main";
-    private static final String RESOURCES = "resources";
-    private static final String IMAGE = "images";
     private int clientID = 0;
     private int playerNumber;
 
-    private static final String PATH = SRC + File.separatorChar + MAIN + File.separatorChar + RESOURCES + File.separatorChar + IMAGE + File.separatorChar;
 
     private class EastJPanel extends JPanel {
 
@@ -136,66 +130,66 @@ public class ClientGUIMain implements Runnable{
             ConnectionManagerSocket connectionManagerSocket;
             String serverIP = serverIpField.getText();
             String playerName = playerTextField.getText();
-            if(serverIP.equals(""))
+            if (serverIP.equals(""))
                 return;
             int playerNumber = 0;
-            if(playerName != null){
-                if(two_Players_button.isSelected() || three_Players_button.isSelected()){
-                    if(two_Players_button.isSelected()){
-                            playerNumber= 2;
-                            ClientGUIMain.this.playerNumber = 2;
-                        }
-                        if(three_Players_button.isSelected()){
-                            playerNumber= 3;
-                            ClientGUIMain.this.playerNumber = 3;
-                        }
-                        connectionManagerSocket = new ConnectionManagerSocket(playerName, playerNumber);
-                        connectionManagerSocket.setServerData(serverIP);
-                        connectionManagerSocket.setMainFrame(ClientGUIMain.this.mainFrame);
-                        int MAX_TRIES = 5, counter = 0;
-                        while(true){
-                            try{
-                                connectionManagerSocket.setup();
-                                showPopUpPlayerColor(connectionManagerSocket);
+            if (playerName != null) {
+                if (two_Players_button.isSelected() || three_Players_button.isSelected()) {
+                    if (two_Players_button.isSelected()) {
+                        playerNumber = 2;
+                        ClientGUIMain.this.playerNumber = 2;
+                    }
+                    if (three_Players_button.isSelected()) {
+                        playerNumber = 3;
+                        ClientGUIMain.this.playerNumber = 3;
+                    }
+                    connectionManagerSocket = new ConnectionManagerSocket(playerName, playerNumber);
+                    connectionManagerSocket.setServerData(serverIP);
+                    connectionManagerSocket.setMainFrame(ClientGUIMain.this.mainFrame);
+                    int MAX_TRIES = 5, counter = 0;
+                    while (true) {
+                        try {
+                            connectionManagerSocket.setup();
+                            showPopUpPlayerColor(connectionManagerSocket);
+                            break;
+                        } catch (IOException socketNoAvailable) {
+                            if (counter < MAX_TRIES) {
+                                System.out.println("Server seems to be offline, trying again to connect");
+                                counter++;
+                            } else {
+                                System.out.println("Cannot connect to socket server!");
+                                mainFrame.dispose();
                                 break;
-                            } catch (IOException socketNoAvailable) {
-                                if (counter < MAX_TRIES) {
-                                    System.out.println("Server seems to be offline, trying again to connect");
-                                    counter++;
-                                } else {
-                                    System.out.println("Cannot connect to socket server!");
-                                    mainFrame.dispose();
-                                    break;
-                                }
                             }
                         }
+                    }
                 }
             }
 
         }
     }
 
-    public void showPopUpPlayerColor(ConnectionManagerSocket connectionManagerSocket){
+    public void showPopUpPlayerColor(ConnectionManagerSocket connectionManagerSocket) {
         mainFrame.getContentPane().removeAll();
         mainFrame.update(mainFrame.getGraphics());
         SwingUtilities.invokeLater(new showPopUpColor(mainFrame, connectionManagerSocket));
     }
 
-    public ClientGUIMain(){
+    public ClientGUIMain() {
         mainFrame = new JFrame("Santorini Game");
         mainFrame.setBackground(Color.lightGray);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setResizable(false);
 
         GridBagLayout gridBagLayout = new GridBagLayout();
-        gridBagLayout.columnWidths = new int[] { 0, 0 };
-        gridBagLayout.rowHeights = new int[] { 0, 0 };
-        gridBagLayout.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-        gridBagLayout.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
+        gridBagLayout.columnWidths = new int[]{0, 0};
+        gridBagLayout.rowHeights = new int[]{0, 0};
+        gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+        gridBagLayout.rowWeights = new double[]{1.0, Double.MIN_VALUE};
         mainFrame.getContentPane().setLayout(gridBagLayout);
 
         rootPanel = new JPanel();
-        rootPanel.setBackground(new Color(0,0,0,60));
+        rootPanel.setBackground(new Color(0, 0, 0, 60));
         GridBagConstraints gbcPanel = new GridBagConstraints();
         gbcPanel.fill = GridBagConstraints.BOTH;
         gbcPanel.gridx = 0;
@@ -203,7 +197,6 @@ public class ClientGUIMain implements Runnable{
         mainFrame.getContentPane().add(rootPanel, gbcPanel);
         rootPanel.setLayout(new BorderLayout(0, 0));
 
-        //westPanelImage = new ImageIcon(PATH + "SX_Panel.png");
         westPanelImage = new ImageIcon(this.getClass().getResource("/images/SX_Panel.png"));
         westPanelImageScaled = new ImageIcon(westPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
@@ -213,7 +206,6 @@ public class ClientGUIMain implements Runnable{
         westPanel.setOpaque(false);
         rootPanel.add(westPanel, BorderLayout.WEST);
 
-        //eastPanelImage = new ImageIcon(PATH + "DX_Panel.png");
         eastPanelImage = new ImageIcon(this.getClass().getResource("/images/DX_Panel.png"));
         eastPanelImageScaled = new ImageIcon(eastPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
@@ -222,7 +214,6 @@ public class ClientGUIMain implements Runnable{
         eastPanel.setOpaque(false);
         rootPanel.add(eastPanel, BorderLayout.EAST);
 
-        //centralPanelImage = new ImageIcon(PATH + "Central_Panel_Crop.png");
         centralPanelImage = new ImageIcon(this.getClass().getResource("/images/Central_Panel_Crop.png"));
         centralPanelImageScaled = new ImageIcon(centralPanelImage.getImage()
                 .getScaledInstance(5000, -1, Image.SCALE_SMOOTH)).getImage();
@@ -232,19 +223,18 @@ public class ClientGUIMain implements Runnable{
         centralPanel.setOpaque(true);
 
         GridBagLayout gblCenterPanel = new GridBagLayout();
-        gblCenterPanel.columnWidths = new int[] { 474, 0 };
-        gblCenterPanel.rowHeights = new int[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-        gblCenterPanel.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-        gblCenterPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,
+        gblCenterPanel.columnWidths = new int[]{474, 0};
+        gblCenterPanel.rowHeights = new int[]{1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        gblCenterPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+        gblCenterPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+                0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
         centralPanel.setLayout(gblCenterPanel);
 
         JLabel logoLabel = new JLabel();
         logoLabel.setBorder(new EmptyBorder(0, 0, 30, 0));
         logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        //logoLabel.setIcon(new ImageIcon(PATH + "empty_title.png"));
         logoLabel.setIcon(new ImageIcon(this.getClass().getResource("/images/empty_title.png")));
         logoLabel.setOpaque(false);
         GridBagConstraints gbcLogoLabel = new GridBagConstraints();
@@ -279,21 +269,25 @@ public class ClientGUIMain implements Runnable{
             public void mouseClicked(MouseEvent e) {
                 serverIpField.setText("");
             }
+
             @Override
             public void mousePressed(MouseEvent e) {
 
             }
+
             @Override
             public void mouseReleased(MouseEvent e) {
 
             }
+
             @Override
             public void mouseEntered(MouseEvent e) {
 
             }
+
             @Override
             public void mouseExited(MouseEvent e) {
-                if(serverIpField.getText().equals(""))
+                if (serverIpField.getText().equals(""))
                     serverIpField.setText("127.0.0.1");
             }
         });
@@ -319,21 +313,25 @@ public class ClientGUIMain implements Runnable{
             public void mouseClicked(MouseEvent e) {
                 playerTextField.setText("");
             }
+
             @Override
             public void mousePressed(MouseEvent e) {
 
             }
+
             @Override
             public void mouseReleased(MouseEvent e) {
 
             }
+
             @Override
             public void mouseEntered(MouseEvent e) {
 
             }
+
             @Override
             public void mouseExited(MouseEvent e) {
-                if(playerTextField.getText().equals(""))
+                if (playerTextField.getText().equals(""))
                     playerTextField.setText("Nickname");
             }
         });
@@ -348,26 +346,22 @@ public class ClientGUIMain implements Runnable{
         gbcLblDate.gridy = 17;
         centralPanel.add(colorLabel, gbcLblDate);
 
-        //Image twoButton_image = new ImageIcon(PATH + "2Players.png").getImage();
         Image twoButton_image = new ImageIcon(this.getClass().getResource("/images/2Players.png")).getImage();
         twoButton_Icon = new ImageIcon(twoButton_image);
-        //Image twoButton_image_Pressed = new ImageIcon(PATH + "2Players_pressed.png").getImage();
         Image twoButton_image_Pressed = new ImageIcon(this.getClass().getResource("/images/2Players_pressed.png")).getImage();
         twoButton_Icon_Pressed = new ImageIcon(twoButton_image_Pressed);
 
-        //Image threeButton_image = new ImageIcon(PATH + "3Players.png").getImage();
         Image threeButton_image = new ImageIcon(this.getClass().getResource("/images/3Players.png")).getImage();
         threeButton_Icon = new ImageIcon(threeButton_image);
-        //Image threeButton_image_pressed = new ImageIcon(PATH + "3Players_pressed.png").getImage();
         Image threeButton_image_pressed = new ImageIcon(this.getClass().getResource("/images/3Players_pressed.png")).getImage();
         threeButton_Icon_Pressed = new ImageIcon(threeButton_image_pressed);
 
-        JPanel playerNumberButtons = new JPanel(new GridLayout(1,2, 15,0));
-        playerNumberButtons.setBackground(new Color(0,0,0,0));
+        JPanel playerNumberButtons = new JPanel(new GridLayout(1, 2, 15, 0));
+        playerNumberButtons.setBackground(new Color(0, 0, 0, 0));
         playerNumberButtons.setOpaque(false);
 
         two_Players_button = new JCheckBox();
-        two_Players_button.setBackground(new Color(0,0,0,0));
+        two_Players_button.setBackground(new Color(0, 0, 0, 0));
         two_Players_button.setOpaque(false);
         two_Players_button.setHorizontalAlignment(SwingConstants.CENTER);
         two_Players_button.setIcon(twoButton_Icon);
@@ -376,17 +370,17 @@ public class ClientGUIMain implements Runnable{
         two_Players_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(two_Players_button.isSelected()){
+                if (two_Players_button.isSelected()) {
                     two_Players_button.setIcon(twoButton_Icon_Pressed);
                     three_Players_button.setIcon(threeButton_Icon);
-                }else{
+                } else {
                     two_Players_button.setIcon(twoButton_Icon);
                 }
             }
         });
 
         three_Players_button = new JCheckBox();
-        three_Players_button.setBackground(new Color(0,0,0,0));
+        three_Players_button.setBackground(new Color(0, 0, 0, 0));
         three_Players_button.setOpaque(false);
         three_Players_button.setHorizontalAlignment(SwingConstants.CENTER);
         three_Players_button.setIcon(threeButton_Icon);
@@ -395,10 +389,10 @@ public class ClientGUIMain implements Runnable{
         three_Players_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(three_Players_button.isSelected()){
+                if (three_Players_button.isSelected()) {
                     three_Players_button.setIcon(threeButton_Icon_Pressed);
                     two_Players_button.setIcon(twoButton_Icon);
-                }else{
+                } else {
                     two_Players_button.setIcon(twoButton_Icon);
                 }
             }
@@ -421,21 +415,15 @@ public class ClientGUIMain implements Runnable{
 
         playButton = new JRadioButton();
 
-        //Image play = new ImageIcon(PATH + "button_play.png").getImage().getScaledInstance(126,141, Image.SCALE_SMOOTH);
-        Image play = new ImageIcon(this.getClass().getResource("/images/button_play.png")).getImage().getScaledInstance(126,141, Image.SCALE_SMOOTH);
-
+        Image play = new ImageIcon(this.getClass().getResource("/images/button_play.png")).getImage().getScaledInstance(126, 141, Image.SCALE_SMOOTH);
         ImageIcon play_button = new ImageIcon(play);
-        //Image play_pressed = new ImageIcon(PATH + "button_play_pressed.png").getImage().getScaledInstance(126,141, Image.SCALE_SMOOTH);
-        Image play_pressed = new ImageIcon(this.getClass().getResource("/images/button_play_pressed.png")).getImage().getScaledInstance(126,141, Image.SCALE_SMOOTH);
+        Image play_pressed = new ImageIcon(this.getClass().getResource("/images/button_play_pressed.png")).getImage().getScaledInstance(126, 141, Image.SCALE_SMOOTH);
         ImageIcon play_button_pressed = new ImageIcon(play_pressed);
 
         playButton.setIcon(play_button);
         playButton.setPressedIcon(play_button_pressed);
         playButton.setHorizontalAlignment(SwingConstants.CENTER);
-        //playButton.setBackground(new Color(0,0,0,0));
         playButton.setOpaque(false);
-
-        //playButton.addActionListener(new ClientGUIMain.PlayActionListener());
 
         GridBagConstraints gbcPlayButton = new GridBagConstraints();
         gbcPlayButton.insets = new Insets(0, 240, 15, 240);
@@ -448,9 +436,7 @@ public class ClientGUIMain implements Runnable{
         mainFrame.setVisible(true);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         mainFrame.setSize(1280, 720);
-        mainFrame.setLocation(dim.width/2-mainFrame.getSize().width/2, dim.height/2-mainFrame.getSize().height/2);
-
-
+        mainFrame.setLocation(dim.width / 2 - mainFrame.getSize().width / 2, dim.height / 2 - mainFrame.getSize().height / 2);
     }
 
     @Override

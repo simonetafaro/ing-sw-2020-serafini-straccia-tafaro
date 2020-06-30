@@ -36,20 +36,20 @@ public class Card implements Serializable {
 
     /**
      * Card constructor
-     * @param name
-     * It initializes standard moves with the characters:
-     * "M" move
-     * "B" build
-     * "END" end
-     * and custom moves
+     *
+     * @param name It initializes standard moves with the characters:
+     *             "M" move
+     *             "B" build
+     *             "END" end
+     *             and custom moves
      */
-    public Card (String name){
-        this.name=name;
-        this.usingCard=false;
-        this.standardStep= new ArrayList<>();
-        this.standardStep.add(0,"M");
-        this.standardStep.add(1,"B");
-        this.standardStep.add(2,"END");
+    public Card(String name) {
+        this.name = name;
+        this.usingCard = false;
+        this.standardStep = new ArrayList<>();
+        this.standardStep.add(0, "M");
+        this.standardStep.add(1, "B");
+        this.standardStep.add(2, "END");
         this.customSteps = new ArrayList<>();
     }
 
@@ -61,28 +61,27 @@ public class Card implements Serializable {
     }
 
     /**
-     * @param usingCard
-     * It changes usingCard
+     * @param usingCard It changes usingCard
      */
     public void setUsingCard(boolean usingCard) {
         this.usingCard = usingCard;
     }
 
     /**
-     * @param i index of list
+     * @param i          index of list
      * @param customStep move character
-     * It populates custom moves list
+     *                   It populates custom moves list
      */
-    public void addCustomStep(int i, String customStep){
+    public void addCustomStep(int i, String customStep) {
         this.customSteps.add(i, customStep);
     }
 
     /**
-     * @param i index
+     * @param i          index
      * @param customStep move character
-     * It changes an existing move in custom move list
+     *                   It changes an existing move in custom move list
      */
-    public void setCustomSteps(int i, String customStep){
+    public void setCustomSteps(int i, String customStep) {
         this.customSteps.set(i, customStep);
     }
 
@@ -97,16 +96,16 @@ public class Card implements Serializable {
      * @param i index
      * @return move at index i in custom move list
      */
-    public String getStepLetter(int i){
-        return customSteps.get(i-1);
+    public String getStepLetter(int i) {
+        return customSteps.get(i - 1);
     }
 
     /**
      * @param i index
      * @return move at index i in standard move list
      */
-    public String getStandardStepLetter(int i){
-        return standardStep.get(i-1);
+    public String getStandardStepLetter(int i) {
+        return standardStep.get(i - 1);
     }
 
 }

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.utils;
 
 import java.io.Serializable;
+
 /**
  * Class used between client and server when each player choose the cell on the board for his workers
  */
@@ -12,7 +13,7 @@ public class SetWorkerPosition implements Serializable {
     /**
      * Coordinate of the cell
      */
-    private int x,y;
+    private int x, y;
     /**
      * Color of the player that is sending this message
      */

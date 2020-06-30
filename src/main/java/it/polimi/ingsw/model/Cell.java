@@ -46,61 +46,58 @@ public class Cell implements Cloneable, Serializable {
     /**
      * empty Cell constructor
      */
-    public Cell(){}
+    public Cell() {
+    }
 
     /**
      * Cell constructor through the coordinates
+     *
      * @param posX coordinate x
      * @param posY coordinate y
      */
-    public Cell(int posX, int posY){
+    public Cell(int posX, int posY) {
         this.posX = posX;
         this.posY = posY;
-        this.level=0;
+        this.level = 0;
         this.currWorker = null;
         this.dome = false;
     }
 
 
     /**
-     * @param currWorker
-     * Setter of currWorker
+     * @param currWorker Setter of currWorker
      */
     public void setCurrWorker(Worker currWorker) {
         this.currWorker = currWorker;
     }
 
     /**
-     * @param freeSpace
-     * Setter of freeSpace
+     * @param freeSpace Setter of freeSpace
      */
-    public void setFreeSpace(boolean freeSpace){
-        this.freeSpace=freeSpace;
+    public void setFreeSpace(boolean freeSpace) {
+        this.freeSpace = freeSpace;
     }
 
     /**
-     * @param newPosition
-     * Setter of coordinate x
+     * @param newPosition Setter of coordinate x
      */
-    public void setPosX(int newPosition){
+    public void setPosX(int newPosition) {
         this.posX = newPosition;
     }
 
     /**
-     * @param newPosition
-     * Setter of coordinate y
+     * @param newPosition Setter of coordinate y
      */
-    public void setPosY(int newPosition){
+    public void setPosY(int newPosition) {
         this.posY = newPosition;
     }
 
     /**
-     * @param level
-     * Setter of block level
+     * @param level Setter of block level
      */
-    public void setLevel(int level){
-        this.level=level;
-        if(this.level==4){
+    public void setLevel(int level) {
+        this.level = level;
+        if (this.level == 4) {
             this.setFreeSpace(false);
         }
     }
@@ -108,14 +105,14 @@ public class Cell implements Cloneable, Serializable {
     /**
      * @return coordinate x
      */
-    public int getPosX(){
+    public int getPosX() {
         return this.posX;
     }
 
     /**
      * @return coordinate y
      */
-    public int getPosY(){
+    public int getPosY() {
         return this.posY;
     }
 
@@ -126,7 +123,7 @@ public class Cell implements Cloneable, Serializable {
      * 3 third block
      * 4 dome
      */
-    public int getLevel(){
+    public int getLevel() {
         return this.level;
     }
 
@@ -139,10 +136,10 @@ public class Cell implements Cloneable, Serializable {
 
     /**
      * @return true if the cell is free.
-     *          A cell is free if there is
-     *          neither a dome nor a worker
+     * A cell is free if there is
+     * neither a dome nor a worker
      */
-    public boolean isFree(){
+    public boolean isFree() {
         return this.freeSpace;
     }
 
@@ -150,17 +147,18 @@ public class Cell implements Cloneable, Serializable {
      * add block level in a cell:
      * it increments previous level existing in the cell
      */
-    public void buildInCell(){
+    public void buildInCell() {
         this.level++;
-        if(this.level==4){
+        if (this.level == 4) {
             this.setFreeSpace(false);
         }
     }
 
-    /**add dome in this cell
-     * */
-    public void buildDome(){
-        if(this.getLevel() == 3){
+    /**
+     * add dome in this cell
+     */
+    public void buildDome() {
+        if (this.getLevel() == 3) {
             buildInCell();
         } else {
             this.dome = true;
@@ -172,21 +170,22 @@ public class Cell implements Cloneable, Serializable {
     /**
      * @return true if dome is present in this cell
      */
-    public boolean isDome(){
+    public boolean isDome() {
         return dome;
-    }
-    /**
-     * It deletes worker pointer from a cell
-     */
-    public void deleteCurrWorker(){
-        this.currWorker=null;
     }
 
     /**
-     * @return true if a cell is adjacent to another
-     * @param cell
+     * It deletes worker pointer from a cell
      */
-    public boolean isClosedTo(Cell cell){
+    public void deleteCurrWorker() {
+        this.currWorker = null;
+    }
+
+    /**
+     * @param cell
+     * @return true if a cell is adjacent to another
+     */
+    public boolean isClosedTo(Cell cell) {
         return (this.getPosX() - cell.getPosX() <= 1 && this.getPosX() - cell.getPosX() >= -1) &&
                 (this.getPosY() - cell.getPosY() <= 1 && this.getPosY() - cell.getPosY() >= -1);
     }
@@ -195,15 +194,15 @@ public class Cell implements Cloneable, Serializable {
     /**
      * @param board
      * @return true if a cell has at least one near free cell whose level
-     *         is not more than 1 higher than the level of the cell on
-     *         which the method is called
+     * is not more than 1 higher than the level of the cell on
+     * which the method is called
      */
-    public boolean hasFreeCellClosed(Cell[][] board){
-        boolean bool=false;
-        for(int i=-1; i<2; i++){
-            for(int j=-1; j<2; j++){
-                if((this.getPosX()+i)>=0 && (this.getPosY()+j)>=0 && (this.getPosY()+j)<5 && (this.getPosX()+i)<5 &&
-                        board[this.getPosX()+i][this.getPosY()+j].getLevel()- this.getLevel()<=1) {
+    public boolean hasFreeCellClosed(Cell[][] board) {
+        boolean bool = false;
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                if ((this.getPosX() + i) >= 0 && (this.getPosY() + j) >= 0 && (this.getPosY() + j) < 5 && (this.getPosX() + i) < 5 &&
+                        board[this.getPosX() + i][this.getPosY() + j].getLevel() - this.getLevel() <= 1) {
                     if ((board[this.getPosX() + i][this.getPosY() + j]).isFree()) {
                         bool = true;
                     }
@@ -217,12 +216,12 @@ public class Cell implements Cloneable, Serializable {
      * @param board
      * @return true if a cell has at least one near free cell
      */
-    public boolean canBuildInCells(Cell[][] board){
-        boolean bool=false;
-        for(int i=-1; i<2; i++){
-            for(int j=-1; j<2; j++){
-                if((this.getPosX()+i)>=0
-                        && (this.getPosY()+j)>=0 && (this.getPosY()+j)<5 && (this.getPosX()+i)<5) {
+    public boolean canBuildInCells(Cell[][] board) {
+        boolean bool = false;
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                if ((this.getPosX() + i) >= 0
+                        && (this.getPosY() + j) >= 0 && (this.getPosY() + j) < 5 && (this.getPosX() + i) < 5) {
                     if ((board[this.getPosX() + i][this.getPosY() + j]).isFree()) {
                         bool = true;
                     }

@@ -22,12 +22,14 @@ public class ColorCheck {
     public synchronized boolean isBlue() {
         return Blue;
     }
+
     /**
      * @return true if GREY is been already chosen
      */
     public synchronized boolean isGrey() {
         return Grey;
     }
+
     /**
      * @return true if WHITE is been already chosen
      */
@@ -36,22 +38,21 @@ public class ColorCheck {
     }
 
     /**
-     * @param grey
-     * set Grey = true
+     * @param grey set Grey = true
      */
     public void setGrey(boolean grey) {
         Grey = grey;
     }
+
     /**
-     * @param white
-     * set White = true
+     * @param white set White = true
      */
     public void setWhite(boolean white) {
         White = white;
     }
+
     /**
-     * @param blue
-     * set Blue = true
+     * @param blue set Blue = true
      */
     public void setBlue(boolean blue) {
         Blue = blue;

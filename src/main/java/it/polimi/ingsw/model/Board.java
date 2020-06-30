@@ -27,15 +27,15 @@ public class Board implements Cloneable, Serializable {
     private Cell[][] board;
 
     /**
-     *  Board class constructor.
-     *  It initializes game board and initializes
-     *  all cells to empty
+     * Board class constructor.
+     * It initializes game board and initializes
+     * all cells to empty
      */
     public Board() {
         this.board = new Cell[N_COLS][N_COLS];
         for (int i = 0; i < N_ROWS; i++) {
             for (int j = 0; j < N_COLS; j++) {
-                board[i][j]= new Cell(i,j);
+                board[i][j] = new Cell(i, j);
                 board[i][j].setFreeSpace(true);
             }
         }
@@ -53,7 +53,7 @@ public class Board implements Cloneable, Serializable {
      * @param y: column of game board
      * @return cell (x,y) of game board
      */
-    public Cell getCell(int x, int y){
+    public Cell getCell(int x, int y) {
         return board[x][y];
     }
 
@@ -61,7 +61,7 @@ public class Board implements Cloneable, Serializable {
      * Game board is reinitialized:
      * each level is set to 0 and all cells are empty
      */
-    public void clearAll(){
+    public void clearAll() {
         for (int i = 0; i < N_ROWS; i++) {
             for (int j = 0; j < N_COLS; j++) {
                 board[i][j].setFreeSpace(true);
@@ -73,43 +73,40 @@ public class Board implements Cloneable, Serializable {
     /**
      * game board printing
      */
-    public void printBoard(){
-        int a,i,j,k=0;
+    public void printBoard() {
+        int a, i, j, k = 0;
         //TODO code optimization and row and column number
-        for(a=0; a<N_ROWS; a++){
-            for (i = 1; i <= 4; i++)
-            {
-                for(j = 1; j <= 40; j++)
-                {
-                    if (i == 1 || i == 4 || j ==((8*k)+1) || j == ((k*8)+8) )
+        for (a = 0; a < N_ROWS; a++) {
+            for (i = 1; i <= 4; i++) {
+                for (j = 1; j <= 40; j++) {
+                    if (i == 1 || i == 4 || j == ((8 * k) + 1) || j == ((k * 8) + 8))
                         System.out.print("*");
-                    else
-                    {
-                        if((this.board[a][j/8]).getCurrWorker() != null && i==2 && j==(4+(8*k)))
-                            System.out.print((this.board[a][j/8]).getCurrWorker().getColor());
-                        else{
-                            if((this.board[a][j/8]).getCurrWorker()  != null && i==2 && j==5+8*k)
-                                System.out.print((this.board[a][j/8]).getCurrWorker().getWorkerNum());
-                            else{
-                                if(i==3 && j==4+8*k)
+                    else {
+                        if ((this.board[a][j / 8]).getCurrWorker() != null && i == 2 && j == (4 + (8 * k)))
+                            System.out.print((this.board[a][j / 8]).getCurrWorker().getColor());
+                        else {
+                            if ((this.board[a][j / 8]).getCurrWorker() != null && i == 2 && j == 5 + 8 * k)
+                                System.out.print((this.board[a][j / 8]).getCurrWorker().getWorkerNum());
+                            else {
+                                if (i == 3 && j == 4 + 8 * k)
                                     System.out.print("L");
-                                else{
-                                    if(i==3 && j==5+8*k) {
+                                else {
+                                    if (i == 3 && j == 5 + 8 * k) {
                                         if ((this.board[a][j / 8]).isDome())
                                             System.out.print("4");
                                         else
                                             System.out.print((this.board[a][j / 8]).getLevel());
-                                    }else
+                                    } else
                                         System.out.print(" ");
                                 }
                             }
                         }
                     }
-                    if(j%8 ==0)
+                    if (j % 8 == 0)
                         k++;
                 }
                 System.out.println();
-                k=0;
+                k = 0;
             }
         }
     }

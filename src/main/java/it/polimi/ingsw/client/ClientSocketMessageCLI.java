@@ -8,7 +8,6 @@ import it.polimi.ingsw.utils.gameMessage;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -50,10 +49,11 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
      * active is true if client is active in reading,
      * activeWrite is true if client is active in writing
      */
-    private boolean active,activeWrite;
+    private boolean active, activeWrite;
 
     /**
      * Constructor that inherits from super class
+     *
      * @param connectionManagerSocket
      * @param input
      * @param output
@@ -71,7 +71,7 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
      * @return reading Thread
      * It initializes scanner in
      */
-    public Thread initializeCLI(){
+    public Thread initializeCLI() {
         in = new Scanner(System.in);
         return readFromServerCLI();
     }
@@ -83,53 +83,52 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
      * MoveMessage contains board that is printed and if a player wins or loses
      * quitGame method is called and this Thread ends.
      */
-    public Thread readFromServerCLI(){
-        Thread t=new Thread(new Runnable() {
+    public Thread readFromServerCLI() {
+        Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                while(isActive()) {
+                while (isActive()) {
                     try {
                         Object o = ClientSocketMessageCLI.this.inputStream.readObject();
-                        if(o instanceof SetWorkerPosition){
+                        if (o instanceof SetWorkerPosition) {
                             updateBoard((SetWorkerPosition) o);
                         }
-                        if(o instanceof String){
-                            if(((String) o).contains("quitClient")){
+                        if (o instanceof String) {
+                            if (((String) o).contains("quitClient")) {
                                 System.out.println("One of your opponents disconnected, closing game...");
                                 quitGame();
                                 break;
                             }
-                            if(((String) o).contains(connectionManagerSocket.getPlayerColor().toUpperCase())){
-                                if(((String) o).contains(" workerOccupiedCell") || ((String) o).contains("setWorkers")){
+                            if (((String) o).contains(connectionManagerSocket.getPlayerColor().toUpperCase())) {
+                                if (((String) o).contains(" workerOccupiedCell") || ((String) o).contains("setWorkers")) {
                                     connectionManagerSocket.getBoardCLI().setWorkers();
                                 }
 
                                 String message = ((String) o).replace(connectionManagerSocket.getPlayerColorEnum().toString(), "");
                                 System.out.println(message);
 
-                                if(((String) o).contains(gameMessage.loseMessage)){
+                                if (((String) o).contains(gameMessage.loseMessage)) {
                                     activeWrite = false;
                                     closeOrWatchGame();
                                 }
                             }
                         }
-                        if (o instanceof GameOverMessage){
-                            gameOverStuck(((MoveMessage)o).getPlayer().getColor());
+                        if (o instanceof GameOverMessage) {
+                            gameOverStuck(((MoveMessage) o).getPlayer().getColor());
                             break;
                         }
-                        if(o instanceof MoveMessage){
-                            if(((MoveMessage) o).isHasWon()){
-                                gameOver(((MoveMessage)o).getPlayer().getColor());
+                        if (o instanceof MoveMessage) {
+                            if (((MoveMessage) o).isHasWon()) {
+                                gameOver(((MoveMessage) o).getPlayer().getColor());
                                 break;
-                            }
-                            else{
-                                connectionManagerSocket.getBoardCLI().setBoard(((MoveMessage)o).getBoard());
+                            } else {
+                                connectionManagerSocket.getBoardCLI().setBoard(((MoveMessage) o).getBoard());
                                 connectionManagerSocket.getBoardCLI().printBoard();
                             }
                         }
 
-                        if(o instanceof ArrayList){
-                            if( ((ArrayList) o).get(0) instanceof Player){
+                        if (o instanceof ArrayList) {
+                            if (((ArrayList) o).get(0) instanceof Player) {
                                 connectionManagerSocket.getBoardCLI().printBoard();
                                 connectionManagerSocket.printOpponentInformation((ArrayList) o);
                                 ClientSocketMessageCLI.this.writeToServer();
@@ -137,7 +136,7 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
                         }
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
-                    } catch (IOException e ){
+                    } catch (IOException e) {
                         System.out.println("Server connection is not available, closing game...");
                         quitGame();
                         break;
@@ -150,14 +149,13 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
     }
 
     /**
-     * @param o
-     * Method used to setting initial worker positions
+     * @param o Method used to setting initial worker positions
      */
-    public void updateBoard(SetWorkerPosition o){
+    public void updateBoard(SetWorkerPosition o) {
         connectionManagerSocket.getBoardCLI().addWorkerToBoard((SetWorkerPosition) o);
-        if(o.getID() == connectionManagerSocket.getclientID()){
+        if (o.getID() == connectionManagerSocket.getclientID()) {
             connectionManagerSocket.getBoardCLI().incrementWorkerNum();
-            if(connectionManagerSocket.getBoardCLI().getWorkersNum() < 2)
+            if (connectionManagerSocket.getBoardCLI().getWorkersNum() < 2)
                 connectionManagerSocket.getBoardCLI().setWorkers();
         }
     }
@@ -168,7 +166,7 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
      * has entered the right input, sends a PlayerMove or
      * a PlayerMoveEnd to Server.
      */
-    public void writeToServer(){
+    public void writeToServer() {
         writeToserver = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -176,8 +174,8 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
                 while (isActiveWrite()) {
                     String inputLine = in.nextLine().toUpperCase();
                     try {
-                        if(checkInputStandard(inputLine)){
-                            outputStream.writeObject(handleMove(inputLine.substring(0,1),
+                        if (checkInputStandard(inputLine)) {
+                            outputStream.writeObject(handleMove(inputLine.substring(0, 1),
                                     Integer.parseInt(inputLine.substring(2, 3)),
                                     Integer.parseInt(inputLine.substring(4, 5)),
                                     Integer.parseInt(inputLine.substring(6, 7))));
@@ -194,22 +192,21 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
 
     /**
      * Input check
+     *
      * @param message input move string
      * @return true if client has entered a standard input
-     * @throws IOException
-     *
-     * If client ended his turn a PlayerMoveEnd is sent to Server
+     * @throws IOException If client ended his turn a PlayerMoveEnd is sent to Server
      */
-    public boolean checkInputStandard(String message) throws IOException{
-        if(message.equals("END")){
+    public boolean checkInputStandard(String message) throws IOException {
+        if (message.equals("END")) {
             outputStream.writeObject(new PlayerMoveEnd(connectionManagerSocket.getPlayer(), true));
             outputStream.flush();
-            return false ;
+            return false;
         }
-        if(standardInput(message))
+        if (standardInput(message))
             return true;
         else
-            System.out.println(gameMessage.wrongInputMessage+ gameMessage.insertAgain);
+            System.out.println(gameMessage.wrongInputMessage + gameMessage.insertAgain);
 
         return false;
     }
@@ -218,11 +215,11 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
      * @param message input move string
      * @return if client has entered a standard input
      */
-    private boolean standardInput(String message){
+    private boolean standardInput(String message) {
         //M 1-1,2
-        return message.length()==7 && (message.charAt(0)=='M' || message.charAt(0)=='B' || message.charAt(0)=='D') && (message.charAt(2)=='1' ||
-                message.charAt(2)=='2') && Integer.parseInt(message.substring(4,5))>=0 && Integer.parseInt(message.substring(4,5))<=4 &&
-                Integer.parseInt(message.substring(6,7))>=0 && Integer.parseInt(message.substring(6,7))<=4;
+        return message.length() == 7 && (message.charAt(0) == 'M' || message.charAt(0) == 'B' || message.charAt(0) == 'D') && (message.charAt(2) == '1' ||
+                message.charAt(2) == '2') && Integer.parseInt(message.substring(4, 5)) >= 0 && Integer.parseInt(message.substring(4, 5)) <= 4 &&
+                Integer.parseInt(message.substring(6, 7)) >= 0 && Integer.parseInt(message.substring(6, 7)) <= 4;
     }
 
     /**
@@ -234,11 +231,11 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
      * it creates a PlayerMove from string move in input
      */
     public PlayerMove handleMove(String MoveOrBuild, int worker, int row, int column) {
-        if(worker == 1) {
+        if (worker == 1) {
             PlayerMove move = new PlayerMove(connectionManagerSocket.getPlayer(), connectionManagerSocket.getPlayer().getWorker1(), row, column);
             move.setMoveOrBuild(MoveOrBuild);
             return move;
-        }else{
+        } else {
             PlayerMove move = new PlayerMove(connectionManagerSocket.getPlayer(), connectionManagerSocket.getPlayer().getWorker2(), row, column);
             move.setMoveOrBuild(MoveOrBuild);
             return move;
@@ -247,12 +244,11 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
     }
 
     /**
-     * @param color
-     * Method called when game is over, It checks
-     *      * if this client player has won or lost
+     * @param color Method called when game is over, It checks
+     *              * if this client player has won or lost
      */
-    public void gameOver (PlayerColor color){
-        if(color.equals(connectionManagerSocket.getPlayerColorEnum())){
+    public void gameOver(PlayerColor color) {
+        if (color.equals(connectionManagerSocket.getPlayerColorEnum())) {
             System.out.println("YOU WIN!");
         } else {
             System.out.println("YOU LOSE!");
@@ -261,12 +257,11 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
     }
 
     /**
-     * @param color
-     * Method called when game is over for player stuck, It checks
-     * if player stuck is this client player or not
+     * @param color Method called when game is over for player stuck, It checks
+     *              if player stuck is this client player or not
      */
-    public void gameOverStuck (PlayerColor color){
-        if(color.equals(connectionManagerSocket.getPlayerColorEnum())){
+    public void gameOverStuck(PlayerColor color) {
+        if (color.equals(connectionManagerSocket.getPlayerColorEnum())) {
             System.out.println("YOU LOSE!");
         } else {
             System.out.println("YOU WIN!");
@@ -278,7 +273,7 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
      * Method called at the end of a game to close connection
      * and to close Threads
      */
-    public void quitGame(){
+    public void quitGame() {
         new Timer(5000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -292,7 +287,7 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
     /**
      * @return true if reading Thread is still active
      */
-    public boolean isActive(){
+    public boolean isActive() {
         return active;
     }
 
@@ -307,15 +302,15 @@ public class ClientSocketMessageCLI extends ClientSocketMessage {
      * It is called when this player has lost and it
      * gives the option to stay to watch the game or close the connection
      */
-    public void closeOrWatchGame(){
+    public void closeOrWatchGame() {
         try {
             writeToserver.join();
-        } catch (InterruptedException e ){
+        } catch (InterruptedException e) {
             System.err.println(e.getMessage());
         }
         System.out.println("Press any button to continue to watch the game or write NO if you want to close.");
         String closeOrNot = in.nextLine();
-        if(closeOrNot.toUpperCase().equals("NO")){
+        if (closeOrNot.toUpperCase().equals("NO")) {
             quitGame();
         }
     }

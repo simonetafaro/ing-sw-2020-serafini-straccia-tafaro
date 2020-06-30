@@ -27,7 +27,7 @@ import java.util.ArrayList;
  */
 public class ConnectionManagerSocket {
 
-    private String nickname ;
+    private String nickname;
     private PlayerColor myColor;
     protected boolean nameSet;
     private int playerNumber;
@@ -37,7 +37,6 @@ public class ConnectionManagerSocket {
     private String playerColor, temporaryColor;
     private JFrame mainFrame;
     private Thread t, cardThread;
-    private static final String SERVER_ADDRESS = "127.0.0.1";
     private static final int SOCKET_PORT = 12345;
     private String Server_IP;
     private int order;
@@ -50,6 +49,7 @@ public class ConnectionManagerSocket {
 
     /**
      * Class constructor
+     *
      * @param nickname
      * @param playerNumber
      */
@@ -64,33 +64,30 @@ public class ConnectionManagerSocket {
 
     /**
      * @param IP server IP
-     * It sets server IP
+     *           It sets server IP
      */
-    public void setServerData(String IP){
+    public void setServerData(String IP) {
         this.Server_IP = IP;
     }
 
     /**
-     * @param mainFrame
-     * It sets board GUI JFrame of a player that is using GUI
+     * @param mainFrame It sets board GUI JFrame of a player that is using GUI
      */
     public void setMainFrame(JFrame mainFrame) {
         this.mainFrame = mainFrame;
     }
 
     /**
-     * @param clientID
-     * It sets client ID
+     * @param clientID It sets client ID
      */
     public void setclientID(int clientID) {
         this.clientID = clientID;
     }
 
     /**
-     * @param player
-     * It sets Player
+     * @param player It sets Player
      */
-    public void setPlayer(Player player){
+    public void setPlayer(Player player) {
         this.player = player;
     }
 
@@ -132,11 +129,14 @@ public class ConnectionManagerSocket {
     /**
      * @return Player color
      */
-    public PlayerColor getPlayerColorEnum(){
-        switch (playerColor.toUpperCase()){
-            case "WHITE": return PlayerColor.WHITE;
-            case "BLUE": return PlayerColor.BLUE;
-            case "GREY": return PlayerColor.GREY;
+    public PlayerColor getPlayerColorEnum() {
+        switch (playerColor.toUpperCase()) {
+            case "WHITE":
+                return PlayerColor.WHITE;
+            case "BLUE":
+                return PlayerColor.BLUE;
+            case "GREY":
+                return PlayerColor.GREY;
         }
         return null;
     }
@@ -145,7 +145,7 @@ public class ConnectionManagerSocket {
      * @return Player string color
      */
     public String getPlayerColor() {
-        synchronized (playerColor){
+        synchronized (playerColor) {
             return this.playerColor;
         }
     }
@@ -165,22 +165,20 @@ public class ConnectionManagerSocket {
     }
 
     /**
-     * @throws IOException
-     * It calls starting methods
+     * @throws IOException It calls starting methods
      */
     public void setup() throws IOException {
         this.initializeSocket();
-        this.chooseColor();
+        this.waitForOpponents();
     }
 
     /**
-     * @throws IOException
-     * Starting method to choose nickname and player number
+     * @throws IOException Starting method to choose nickname and player number
      */
     public void initializeSocket() throws IOException {
 
         socket = new Socket(Server_IP, SOCKET_PORT);
-        System.out.println("Connected to server " + SERVER_ADDRESS + " on port " + SOCKET_PORT);
+        System.out.println("Connected to server " + Server_IP + " on port " + SOCKET_PORT);
         output = new ObjectOutputStream(socket.getOutputStream());
         input = new ObjectInputStream(socket.getInputStream());
 
@@ -222,25 +220,23 @@ public class ConnectionManagerSocket {
     }
 
     /**
-     * @throws IOException
-     * Starting method to choose color
+     * @throws IOException Starting method to choose color
      */
-    public void chooseColor() throws IOException {
-        String matchCreated =null;
-        do{
-            try{
+    public void waitForOpponents() throws IOException {
+        String matchCreated = null;
+        do {
+            try {
                 matchCreated = (String) input.readObject();
-            }catch (ClassNotFoundException e){
+            } catch (ClassNotFoundException e) {
                 System.err.println(e.getMessage());
             }
-        }while (!matchCreated.equals("Match created"));
+        } while (!matchCreated.equals("Match created"));
     }
 
     /**
-     * @param boardGUI
-     * It initializes ClientSocketMessageGUI before game starts
+     * @param boardGUI It initializes ClientSocketMessageGUI before game starts
      */
-    public void initializeMessageSocket(BoardGUI boardGUI){
+    public void initializeMessageSocket(BoardGUI boardGUI) {
         this.boardGUI = boardGUI;
         this.clientSocket = new ClientSocketMessageGUI(this, input, output);
         this.clientSocket.initialize();
@@ -251,7 +247,7 @@ public class ConnectionManagerSocket {
      * @return reading Thread in CLI
      * It initializes ClientSocketMessageCLI before game starts
      */
-    public Thread initializeMessageSocketCLI(ClientCLIMain BoardCLI){
+    public Thread initializeMessageSocketCLI(ClientCLIMain BoardCLI) {
         this.boardCLI = BoardCLI;
         this.clientSocket = new ClientSocketMessageCLI(this, input, output);
         return this.clientSocket.initializeCLI();
@@ -260,8 +256,8 @@ public class ConnectionManagerSocket {
     /**
      * It resets player color
      */
-    public void resetPlayerColor(){
-        synchronized (playerColor){
+    public void resetPlayerColor() {
+        synchronized (playerColor) {
             this.playerColor = "null";
         }
     }
@@ -270,34 +266,34 @@ public class ConnectionManagerSocket {
      * @param colorResult
      * @param guiInstance
      * @return true if color
-     * @throws IOException
-     * Method that manages color choices through players
+     * @throws IOException Method that manages color choices through players
      */
     private boolean handleColorResponse(String colorResult, showPopUpColor guiInstance) throws IOException {
-        if(colorResult.toUpperCase().equals(Integer.toString(getclientID())+" "+getTemporaryColor())){
-            System.out.println("color ok");
-            if (guiInstance != null)
+        if (colorResult.toUpperCase().equals(Integer.toString(getclientID()) + " " + getTemporaryColor())) {
+            if (guiInstance != null) {
+                guiInstance.pressedColor(getTemporaryColor().toLowerCase());
                 guiInstance.closeGUI();
+            }
             this.playerColor = this.temporaryColor;
             return true;
         }
-        if(colorResult.contains("white")){
+        if (colorResult.contains("white")) {
             if (guiInstance != null)
                 guiInstance.lock("white");
             else
-                System.out.println("white already chosen");
+                System.out.println("White already chosen");
         }
-        if(colorResult.contains("blue")){
+        if (colorResult.contains("blue")) {
             if (guiInstance != null)
                 guiInstance.lock("blue");
             else
-                System.out.println("blue already chosen");
+                System.out.println("Blue already chosen");
         }
-        if(colorResult.contains("grey")){
+        if (colorResult.contains("grey")) {
             if (guiInstance != null)
                 guiInstance.lock("grey");
             else
-                System.out.println("grey already chosen");
+                System.out.println("Grey already chosen");
         }
         this.playerColor = "reset";
         return false;
@@ -305,20 +301,22 @@ public class ConnectionManagerSocket {
 
     /**
      * @param color
-     * @param guiInstance
-     * It sets player color and sends it to server
+     * @param guiInstance It sets player color and sends it to server
      */
-    public void setColor(String color, showPopUpColor guiInstance){
-        try{
+    public void setColor(String color, showPopUpColor guiInstance) {
+        try {
             this.temporaryColor = color;
-            switch (color.toUpperCase()){
-                case "WHITE": this.myColor = PlayerColor.WHITE;
-                case "BLUE": this.myColor = PlayerColor.BLUE;
-                case "GREY": this.myColor = PlayerColor.GREY;
+            switch (color.toUpperCase()) {
+                case "WHITE":
+                    this.myColor = PlayerColor.WHITE;
+                case "BLUE":
+                    this.myColor = PlayerColor.BLUE;
+                case "GREY":
+                    this.myColor = PlayerColor.GREY;
             }
             output.writeObject(color);
             output.flush();
-        }catch (IOException e){
+        } catch (IOException e) {
             System.err.println(e.getMessage());
         }
 
@@ -330,22 +328,22 @@ public class ConnectionManagerSocket {
      * thread used to choice color, it is active unless
      * player choose a color not already chosen
      */
-    public Thread receiveColorResponse(showPopUpColor guiInstance){
+    public Thread receiveColorResponse(showPopUpColor guiInstance) {
         t = new Thread(new Runnable() {
             @Override
             public void run() {
                 boolean colorCheck = false;
-                while(!colorCheck){
+                while (!colorCheck) {
                     try {
                         String colorResult = (String) input.readObject();
-                        if(colorResult.equals("quitClient")){
+                        if (colorResult.equals("quitClient")) {
                             ServerCloseConnection("One of your opponents disconnected, closing game...");
                             break;
                         }
                         colorCheck = handleColorResponse(colorResult, guiInstance);
-                    }catch (ClassNotFoundException e){
+                    } catch (ClassNotFoundException e) {
                         System.err.println(e.getMessage());
-                    }  catch (IOException e){
+                    } catch (IOException e) {
                         ServerCloseConnection("Server connection is not available, closing game...");
                         break;
                     }
@@ -362,22 +360,22 @@ public class ConnectionManagerSocket {
      * @return Thread card
      * Thread that manages card choice, it is used both for CLI and GUI
      */
-    public Thread receiveCard(PickUpCards guiInstance, ClientCLIMain cliInstance){
+    public Thread receiveCard(PickUpCards guiInstance, ClientCLIMain cliInstance) {
         this.cardThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                int i= 1;
+                int i = 1;
                 Object obj;
-                while(i<playerNumber){
+                while (i < playerNumber) {
                     try {
-                        obj =input.readObject();
-                        if (obj instanceof ArrayList){
+                        obj = input.readObject();
+                        if (obj instanceof ArrayList) {
                             ArrayList cards = null;
                             cards = (ArrayList) obj;
-                            if(cards.size() == playerNumber && ConnectionManagerSocket.this.order == 1){
-                                if(guiInstance != null)
+                            if (cards.size() == playerNumber && ConnectionManagerSocket.this.order == 1) {
+                                if (guiInstance != null)
                                     guiInstance.updateGodImage(cards);
-                                else{
+                                else {
                                     System.out.println("Please choose one of these cards:");
                                     for (Object card : cards) {
                                         System.out.println((String) card);
@@ -386,10 +384,10 @@ public class ConnectionManagerSocket {
                                 }
                                 break;
                             }
-                            if((cards.size() == (playerNumber-1)) && ConnectionManagerSocket.this.order == 2){
-                                if(guiInstance != null)
+                            if ((cards.size() == (playerNumber - 1)) && ConnectionManagerSocket.this.order == 2) {
+                                if (guiInstance != null)
                                     guiInstance.updateGodImage(cards);
-                                else{
+                                else {
                                     System.out.println("Please choose one of these cards:");
                                     for (Object card : cards) {
                                         System.out.println((String) card);
@@ -398,17 +396,20 @@ public class ConnectionManagerSocket {
                                 }
                                 break;
                             }
-                            if(ConnectionManagerSocket.this.order == 0)
+                            if (ConnectionManagerSocket.this.order == 0)
                                 break;
                             i++;
+                        } else {
+                            if (obj instanceof String) {
+                                if (((String) obj).contains("quitClient")) {
+                                    ServerCloseConnection("One of your opponents disconnected, closing game...");
+                                    break;
+                                }
+                            }
                         }
-                        if(((String) obj).contains("quitClient")){
-                            ServerCloseConnection("One of your opponents disconnected, closing game...");
-                            break;
-                        }
-                    } catch (ClassNotFoundException e){
+                    } catch (ClassNotFoundException e) {
                         System.err.println(e.getMessage());
-                    } catch (IOException e){
+                    } catch (IOException e) {
                         ServerCloseConnection("Server connection is not available, closing game...");
                         break;
                     }
@@ -421,30 +422,29 @@ public class ConnectionManagerSocket {
     }
 
     /**
-     * @throws IOException
-     * Method to differentiate between players for the choice of cards:
-     * first player must choose three or two cards to use in game and
-     * then he is the last one to make his personal choice
+     * @throws IOException Method to differentiate between players for the choice of cards:
+     *                     first player must choose three or two cards to use in game and
+     *                     then he is the last one to make his personal choice
      */
-    public void waitForFirstPlayer() throws IOException{
+    public void waitForFirstPlayer() throws IOException {
         String orderPlayer = null;
-        do{
-            try{
+        do {
+            try {
                 orderPlayer = (String) input.readObject();
-            } catch (ClassNotFoundException e){
+            } catch (ClassNotFoundException e) {
                 System.err.println(e.getMessage());
-            } catch (IOException e){
+            } catch (IOException e) {
                 ServerCloseConnection("Server connection is not available, closing game...");
                 break;
             }
-        }while (!orderPlayer.contains(" "+clientID));
-        if(orderPlayer.equals("firstPlayer: "+ this.clientID))
+        } while (!orderPlayer.contains(" " + clientID));
+        if (orderPlayer.equals("firstPlayer: " + this.clientID))
             this.order = 0;
-        if(orderPlayer.equals("secondPlayer: "+ this.clientID))
+        if (orderPlayer.equals("secondPlayer: " + this.clientID))
             this.order = 1;
-        if(orderPlayer.equals("thirdPlayer: "+ this.clientID))
+        if (orderPlayer.equals("thirdPlayer: " + this.clientID))
             this.order = 2;
-        if(this.mainFrame != null) {
+        if (this.mainFrame != null) {
             if (orderPlayer.equals("firstPlayer: " + this.clientID))
                 SwingUtilities.invokeLater(new PickUpCards(mainFrame, playerNumber, this, true));
             else
@@ -458,7 +458,7 @@ public class ConnectionManagerSocket {
      */
     public void close() {
         try {
-            if(socket != null) {
+            if (socket != null) {
                 this.socket.close();
                 this.input.close();
                 this.output.close();
@@ -472,15 +472,14 @@ public class ConnectionManagerSocket {
     }
 
     /**
-     * @param o
-     * Method to send Object to Server
+     * @param o Method to send Object to Server
      */
-    public void sendObjectToServer(Object o){
-        try{
+    public void sendObjectToServer(Object o) {
+        try {
             output.reset();
             output.writeObject(o);
             output.flush();
-        }catch (IOException e ){
+        } catch (IOException e) {
             System.err.println(e.getMessage());
         }
     }
@@ -488,32 +487,31 @@ public class ConnectionManagerSocket {
     /**
      * It show Board GUI when game starts
      */
-    public void openBoardGui(){
+    public void openBoardGui() {
         mainFrame.getContentPane().removeAll();
-        SwingUtilities.invokeLater(new BoardGUI(mainFrame,ConnectionManagerSocket.this));
+        SwingUtilities.invokeLater(new BoardGUI(mainFrame, ConnectionManagerSocket.this));
         mainFrame.update(mainFrame.getGraphics());
     }
 
     /**
-     * @param players
-     * It shows in CLI each player with his card
+     * @param players It shows in CLI each player with his card
      */
-    public void printOpponentInformation(ArrayList players){
+    public void printOpponentInformation(ArrayList players) {
         FileManager f = new FileManager();
         String PATHFILE = "toolcards/";
 
         System.out.println("Opponents information :");
-        players.forEach( (player) -> {
-            if(((Player) player).getID() == this.getclientID()){
-                System.out.println("ME -> "+((Player) player).getColor());
+        players.forEach((player) -> {
+            if (((Player) player).getID() == this.getclientID()) {
+                System.out.println("ME -> " + ((Player) player).getColor());
                 this.setPlayer(((Player) player));
             } else
-                System.out.println(((Player) player).getNickname() + " "+((Player) player).getColor());
+                System.out.println(((Player) player).getNickname() + " " + ((Player) player).getColor());
 
-            try{
+            try {
                 Document document = f.getFileDocument(PATHFILE.concat(((Player) player).getMyCard().getName()).concat(".xml"));
                 NodeList GodDescription = document.getElementsByTagName("PowerDescription");
-                System.out.println(((Player) player).getMyCard().getName()+": "+GodDescription.item(0).getTextContent());
+                System.out.println(((Player) player).getMyCard().getName() + ": " + GodDescription.item(0).getTextContent());
             } catch (IOException e) {
                 System.err.println(e.getMessage());
             } catch (ParserConfigurationException e) {
@@ -529,13 +527,13 @@ public class ConnectionManagerSocket {
     /**
      * Method called to close GUI when game ends
      */
-    public void disposeAll(){
+    public void disposeAll() {
         this.mainFrame.dispose();
     }
 
-    public void ServerCloseConnection(String message){
+    public void ServerCloseConnection(String message) {
         int TIME_VISIBLE = 5000;
-        if(mainFrame!= null) {
+        if (mainFrame != null) {
             JOptionPane pane = new JOptionPane(message,
                     JOptionPane.INFORMATION_MESSAGE);
             JDialog dialog = pane.createDialog(mainFrame, "CloseConnection");

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.PlayerColor;
+
 import java.io.Serializable;
 
 /**
@@ -25,7 +26,7 @@ public class MoveMessage implements Serializable {
     /**
      * True if the player has just won
      */
-    private final boolean  hasWon;
+    private final boolean hasWon;
 
     /**
      * Next turn color player
@@ -34,17 +35,19 @@ public class MoveMessage implements Serializable {
 
     /**
      * MoveMessage constructor with 2 parameters
+     *
      * @param player
      * @param board
      */
-    MoveMessage(Player player, Board board){
-        this.player= player;
-        this.board=board;
-        this.hasWon=false;
+    MoveMessage(Player player, Board board) {
+        this.player = player;
+        this.board = board;
+        this.hasWon = false;
     }
 
     /**
      * MoveMessage constructor with 4 parameters
+     *
      * @param board
      * @param player
      * @param hasWon
@@ -54,7 +57,7 @@ public class MoveMessage implements Serializable {
         this.player = player;
         this.board = board;
         this.hasWon = hasWon;
-        this.nextTurn=nextTurn;
+        this.nextTurn = nextTurn;
     }
 
     /**

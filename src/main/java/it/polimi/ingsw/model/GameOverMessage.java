@@ -14,12 +14,13 @@ public class GameOverMessage extends MoveMessage {
     /**
      * GameOverMessage constructor that
      * inherits MoveMessage constructor
+     *
      * @param player
      * @param board
      */
-    public GameOverMessage(Player player, Board board){
-        super(player,board);
-        this.gameOver=true;
+    public GameOverMessage(Player player, Board board) {
+        super(player, board);
+        this.gameOver = true;
     }
 
     /**

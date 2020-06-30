@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.view.View;
+
 import java.io.Serializable;
 
 /**
@@ -10,7 +11,7 @@ import java.io.Serializable;
  * {@link Player} who is making move, {@link Worker} of the player, two integers row and column
  * indicating the cell in which the player wants his worker to move or build.
  */
-public class PlayerMove implements Serializable , Cloneable{
+public class PlayerMove implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -6339404514199154790L;
 
@@ -53,13 +54,14 @@ public class PlayerMove implements Serializable , Cloneable{
 
     /**
      * PlayerMove constructor with 3 parameters
+     *
      * @param worker
      * @param row
      * @param column
      */
     public PlayerMove(Worker worker, int row, int column) {
-        this.worker=worker;
-        this.player=null;
+        this.worker = worker;
+        this.player = null;
         this.row = row;
         this.column = column;
         this.view = null;
@@ -67,14 +69,15 @@ public class PlayerMove implements Serializable , Cloneable{
 
     /**
      * PlayerMove constructor with 4 parameters
+     *
      * @param player
      * @param worker
      * @param row
      * @param column
      */
-    public PlayerMove(Player player, Worker worker,int row, int column) {
-        this.worker=worker;
-        this.player=player;
+    public PlayerMove(Player player, Worker worker, int row, int column) {
+        this.worker = worker;
+        this.player = player;
         this.row = row;
         this.column = column;
         this.view = null;
@@ -83,9 +86,10 @@ public class PlayerMove implements Serializable , Cloneable{
 
     /**
      * PlayerMove constructor with 1 parameter
+     *
      * @param player
      */
-    public PlayerMove(Player player){
+    public PlayerMove(Player player) {
         this.worker = null;
         this.player = player;
         this.color = player.getColor();
@@ -95,34 +99,30 @@ public class PlayerMove implements Serializable , Cloneable{
     }
 
     /**
-     * @param moveOrBuild
-     * It sets move or build
+     * @param moveOrBuild It sets move or build
      */
-    public void setMoveOrBuild(String moveOrBuild){
+    public void setMoveOrBuild(String moveOrBuild) {
         this.MoveOrBuild = moveOrBuild;
     }
 
     /**
-     * @param worker
-     * It sets workers move
+     * @param worker It sets workers move
      */
-    public void setWorker(Worker worker){
+    public void setWorker(Worker worker) {
         this.worker = worker;
     }
 
     /**
-     * @param row
-     * It sets row cell
+     * @param row It sets row cell
      */
-    public void setRow(int row){
+    public void setRow(int row) {
         this.row = row;
     }
 
     /**
-     * @param column
-     * It sets column cell
+     * @param column It sets column cell
      */
-    public void setColumn(int column){
+    public void setColumn(int column) {
         this.column = column;
     }
 
@@ -152,7 +152,6 @@ public class PlayerMove implements Serializable , Cloneable{
     }
 
     /**
-     *
      * @return worker
      */
     public Worker getWorker() {
@@ -160,7 +159,6 @@ public class PlayerMove implements Serializable , Cloneable{
     }
 
     /**
-     *
      * @return move or build
      */
     public String getMoveOrBuild() {
@@ -168,16 +166,14 @@ public class PlayerMove implements Serializable , Cloneable{
     }
 
     /**
-     * @param player
-     * It sets player
+     * @param player It sets player
      */
     public void setPlayer(Player player) {
         this.player = player;
     }
 
     /**
-     * @return
-     * It sets color player
+     * @return It sets color player
      */
     public PlayerColor getColor() {
         return color;
