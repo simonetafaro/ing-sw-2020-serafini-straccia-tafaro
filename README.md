@@ -50,4 +50,4 @@ This is the repository for the java implementation of the board game Santorini d
       2. Advanced Gods
 
 ## Test coverage
-  
+  ![CodeCoverageImage](Deliverables\CodeCoverage.png)
