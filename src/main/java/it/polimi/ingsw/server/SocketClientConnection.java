@@ -13,13 +13,11 @@ public class SocketClientConnection extends Observable<String> implements Runnab
 
     private ServerSocket serverSocket;
     private Server activeServer;
-    private ServerSocket gameSocket;
 
-    public SocketClientConnection(int port, Server server, int portGame) {
+    public SocketClientConnection(int port, Server server) {
         this.activeServer = server;
         try {
             serverSocket = new ServerSocket(port);
-            gameSocket = new ServerSocket(portGame);
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
