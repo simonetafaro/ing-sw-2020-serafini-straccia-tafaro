@@ -1,5 +1,8 @@
 package it.polimi.ingsw.utils;
 
+/**
+ *in this class  there are the various messages used during the game
+ */
 public class gameMessage {
 
     public static String waitMessage = "Wait for the other players' move!";
