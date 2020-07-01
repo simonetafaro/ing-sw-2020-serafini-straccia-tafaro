@@ -28,7 +28,6 @@ public class Server {
     private Map<Integer, ObjectInputStream> ClientConnectionInput;
     private List<Game> activeGame;
     private static final int PORT = 12345;
-    private final int portGame = 14456;
 
     public Server() throws IOException {
         this.activeClientConnection = new HashMap<>();
@@ -74,7 +73,7 @@ public class Server {
 
     public void run() {
         ExecutorService executorSocket = Executors.newCachedThreadPool();
-        executorSocket.submit(new SocketClientConnection(PORT, this, portGame));
+        executorSocket.submit(new SocketClientConnection(PORT, this));
 
     }
 
