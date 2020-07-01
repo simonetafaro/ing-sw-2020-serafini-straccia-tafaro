@@ -2,7 +2,6 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.view.View;
-
 import java.io.Serializable;
 
 /**
@@ -126,6 +125,10 @@ public class PlayerMove implements Serializable, Cloneable {
         this.column = column;
     }
 
+    /**
+     * @param color player color
+     * It sets PlayerColor
+     */
     public void setColor(PlayerColor color) {
         this.color = color;
     }
