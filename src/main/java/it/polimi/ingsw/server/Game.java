@@ -19,11 +19,6 @@ import java.util.Map;
 public class Game {
 
     /**
-     * players List in the game
-     */
-    private Map<Player, View> players;
-
-    /**
      * Controller of the game
      */
     private Controller controller;
@@ -44,10 +39,6 @@ public class Game {
         View player1View = new RemoteView(player1);
         View player2View = new RemoteView(player2);
         View player3View = new RemoteView(player3);
-        players = new HashMap<>();
-        players.put(player1, player1View);
-        players.put(player2, player2View);
-        players.put(player3, player3View);
         this.model = new Model();
         this.model.setPlayers(player1, player2, player3);
         this.controller = new Controller(model);
@@ -71,9 +62,6 @@ public class Game {
     public Game(Player player1, Player player2) {
         View player1View = new RemoteView(player1);
         View player2View = new RemoteView(player2);
-        players = new HashMap<>();
-        players.put(player1, player1View);
-        players.put(player2, player2View);
         this.model = new Model();
         this.model.setPlayers(player1, player2);
         this.controller = new Controller(model);

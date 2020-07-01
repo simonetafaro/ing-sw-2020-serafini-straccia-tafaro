@@ -327,7 +327,7 @@ public class ClientCLIMain {
 
     /**
      * @param args
-     * Main that launches ClientGUIMain
+     * Main that launches ClientCLIMain
      */
     public static void main(String[] args) {
         new ClientCLIMain();
