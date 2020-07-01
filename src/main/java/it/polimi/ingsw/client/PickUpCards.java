@@ -506,7 +506,7 @@ public class PickUpCards implements Runnable {
 
     /**
      * Listener to play button of all players except for first player
-     * It sends to server card choice
+     * It sends card choice to server
      */
     private class ChooseCardActionListener implements ActionListener {
 
@@ -883,7 +883,7 @@ public class PickUpCards implements Runnable {
     /**
      * It attaches PickGodActionListeners only to GUI of
      * first player that must choice three or two cards, each other player will see
-     * obscured god images and only cards chosen by first player will appears
+     * obscured god images and only cards chosen by first player will appears.
      * It initializes card choice Thread in connectionMangerSocket
      */
     @Override

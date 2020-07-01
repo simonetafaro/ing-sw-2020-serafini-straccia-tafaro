@@ -2,7 +2,6 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.client.ConnectionManagerSocket;
 import it.polimi.ingsw.client.showPopUpColor;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -12,10 +11,23 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 
+/**
+ * Class used to initialize GUI Game. Main for players who want to play with GUI.
+ * It creates starting GUI. Starting GUI is divided into three parts with three JPanel.
+ * East and West Panel have a decorative purpose. In the Central Panel there are
+ * starting parameters choice: nickname, server IP and if player wants to play a
+ * two or three players match
+ */
 public class ClientGUIMain implements Runnable {
 
+    /**
+     * Frame of the window
+     */
     private JFrame mainFrame;
 
+    /**
+     * three Panels images and icons
+     */
     private JPanel rootPanel;
     private ImageIcon westPanelImage;
     private Image westPanelImageScaled;
@@ -23,19 +35,26 @@ public class ClientGUIMain implements Runnable {
     private ImageIcon eastPanelImage;
     private Image centralPanelImageScaled;
     private ImageIcon centralPanelImage;
+
+    /**
+     * Nickname player text and server IP text choices
+     */
     private JTextField playerTextField, serverIpField;
+
+    /**
+     * play JButton, two players match and three players match JCheckBox
+     * and their ImageIcons
+     */
     private JRadioButton playButton;
-    private JTextField dayField, monthField, yearField;
     private ImageIcon threeButton_Icon, threeButton_Icon_Pressed;
     private ImageIcon twoButton_Icon, twoButton_Icon_Pressed;
-
     private JCheckBox two_Players_button;
     private JCheckBox three_Players_button;
 
-    private int clientID = 0;
-    private int playerNumber;
-
-
+    /**
+     * Internal class created for the east JPanel,
+     * It modifies height and width JPanel image
+     */
     private class EastJPanel extends JPanel {
 
         @Override
@@ -65,6 +84,10 @@ public class ClientGUIMain implements Runnable {
         }
     }
 
+    /**
+     * Internal class created for the west JPanel,
+     * It modifies height and width JPanel image
+     */
     private class WestJPanel extends JPanel {
 
         @Override
@@ -94,6 +117,10 @@ public class ClientGUIMain implements Runnable {
         }
     }
 
+    /**
+     * Internal class created for the central JPanel,
+     * It modifies height and width JPanel image
+     */
     private class CentralJPanel extends JPanel {
 
         @Override
@@ -123,7 +150,16 @@ public class ClientGUIMain implements Runnable {
         }
     }
 
+    /**
+     * Listener to play button
+     */
     private class PlayActionListener implements ActionListener {
+
+        /**
+         * @param e
+         * When a player clicks play button, it controls if all parameters are set
+         * then it initializes ConnectionManagerSocket
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
 
@@ -137,11 +173,9 @@ public class ClientGUIMain implements Runnable {
                 if (two_Players_button.isSelected() || three_Players_button.isSelected()) {
                     if (two_Players_button.isSelected()) {
                         playerNumber = 2;
-                        ClientGUIMain.this.playerNumber = 2;
                     }
                     if (three_Players_button.isSelected()) {
                         playerNumber = 3;
-                        ClientGUIMain.this.playerNumber = 3;
                     }
                     connectionManagerSocket = new ConnectionManagerSocket(playerName, playerNumber);
                     connectionManagerSocket.setServerData(serverIP);
@@ -169,12 +203,21 @@ public class ClientGUIMain implements Runnable {
         }
     }
 
+    /**
+     * @param connectionManagerSocket
+     * Method called when player play button, it removes components from mainframe
+     * and it initializes color choice GUI
+     */
     public void showPopUpPlayerColor(ConnectionManagerSocket connectionManagerSocket) {
         mainFrame.getContentPane().removeAll();
         mainFrame.update(mainFrame.getGraphics());
         SwingUtilities.invokeLater(new showPopUpColor(mainFrame, connectionManagerSocket));
     }
 
+    /**
+     * ClientGUIMain constructor initializes all the components in
+     * the GUI and it takes all the components images
+     */
     public ClientGUIMain() {
         mainFrame = new JFrame("Santorini Game");
         mainFrame.setBackground(Color.lightGray);
@@ -439,11 +482,18 @@ public class ClientGUIMain implements Runnable {
         mainFrame.setLocation(dim.width / 2 - mainFrame.getSize().width / 2, dim.height / 2 - mainFrame.getSize().height / 2);
     }
 
+    /**
+     * It adds listener to play button
+     */
     @Override
     public void run() {
         playButton.addActionListener(new PlayActionListener());
     }
 
+    /**
+     * @param args
+     * Main that launches ClientGUIMain
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new ClientGUIMain());
     }

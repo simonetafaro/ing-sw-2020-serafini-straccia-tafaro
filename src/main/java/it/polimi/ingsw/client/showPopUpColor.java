@@ -168,7 +168,7 @@ public class showPopUpColor implements Runnable {
     }
 
     /**
-     * @param color It is called when an opponent chose a color
+     * @param color It is called when an opponent chooses a color
      *              and this color is locked with a lock image
      */
     public void lock(String color) {
@@ -186,7 +186,7 @@ public class showPopUpColor implements Runnable {
     }
 
     /**
-     * @param color It is called when a player chose a color
+     * @param color It is called when a player chooses a color
      *              and this color is free
      */
     public void pressedColor(String color) {
