@@ -3,6 +3,10 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.utils.gameMessage;
 
 
+/**
+ * the following method has been decorated: build
+ * the following method has been implemented:checkPerimeterSpace
+ */
 public class HestiaRuleDecorator extends StandardRuleDecorator {
     /**
      * This method allowed a worker to build an additional time

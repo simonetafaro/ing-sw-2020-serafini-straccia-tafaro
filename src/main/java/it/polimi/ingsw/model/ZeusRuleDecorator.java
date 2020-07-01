@@ -3,6 +3,10 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.utils.gameMessage;
 
 
+/**
+ * the following method has been decorated: play
+ * the following methods have been implemented:ZeusBuild,ZeusTooHigh
+ */
 public class ZeusRuleDecorator extends StandardRuleDecorator {
     /**
      * this method allows Zeus to build under yourself
@@ -71,17 +75,17 @@ public class ZeusRuleDecorator extends StandardRuleDecorator {
         }
         //if the worker have the Zeus power can build under your self
         else {
-            if (!model.isReachableCell(move) && !Zeusbuild(move, model, turn)) {
+            if (!model.isReachableCell(move) && !ZeusBuild(move, model, turn)) {
                 model.sendError(move.getColor().toString() + " " + gameMessage.notReachableCellMessage + "\n" + gameMessage.insertAgain);
                 return;
             }
 
-            if (!model.isEmptyCell(move) && !Zeusbuild(move, model, turn)) {
+            if (!model.isEmptyCell(move) && !ZeusBuild(move, model, turn)) {
                 //read worker position and check if there are some empty cell where he can move in.
                 model.sendError(move.getColor().toString() + " " + gameMessage.occupiedCellMessage + "\n" + gameMessage.insertAgain);
                 return;
             }
-            if (ZeusTohight(move, model) && Zeusbuild(move, model, turn)) {
+            if (ZeusTooHigh(move, model) && ZeusBuild(move, model, turn)) {
                 model.sendError(move.getColor().toString() + " " + gameMessage.invalidBuildZeus + "\n" + gameMessage.insertAgain);
                 return;
             }
@@ -97,17 +101,16 @@ public class ZeusRuleDecorator extends StandardRuleDecorator {
      * @param turn
      * @return true if the cell where the worker wants to build is the one where he is
      */
-    public boolean Zeusbuild(PlayerMove move, Model model, Turn turn) {
+    public boolean ZeusBuild(PlayerMove move, Model model, Turn turn) {
         return model.getBoard().getCell(move.getRow(), move.getColumn()).equals(turn.getPlayerTurn(move.getPlayer()).getStepI(1).getCellTo());
     }
-
 
     /**
      * @param move
      * @param model
      * @return true if the cell where the worker wants to build is at level three
      */
-    public boolean ZeusTohight(PlayerMove move, Model model) {
+    public boolean ZeusTooHigh(PlayerMove move, Model model) {
         return model.getBoard().getCell(move.getRow(), move.getColumn()).getLevel() == 3;
     }
 }

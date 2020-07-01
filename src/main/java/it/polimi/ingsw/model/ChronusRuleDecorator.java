@@ -2,6 +2,10 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
+/**
+ * the following method has been decorated: play
+ * the following method has been implemented:ChronusRule
+ */
 public class ChronusRuleDecorator extends StandardRuleDecorator {
 
     /**
@@ -17,7 +21,7 @@ public class ChronusRuleDecorator extends StandardRuleDecorator {
     public void play(PlayerMove move, Turn turn, Model model) {
         //if the player how have chronus builds the fifth dome then he wins
         if (move instanceof PlayerMoveEnd) {
-            if (cronusrule(model)) {
+            if (ChronusRule(model)) {
                 model.notifyView(move, true);
                 return;
             }
@@ -30,7 +34,7 @@ public class ChronusRuleDecorator extends StandardRuleDecorator {
             return;
         }
         //if there are 5 complete tower the player how have Cronus win
-        if (cronusrule(model)) {
+        if (ChronusRule(model)) {
             model.notifyView(move, true);
             return;
         }
@@ -90,7 +94,7 @@ public class ChronusRuleDecorator extends StandardRuleDecorator {
      * @param model
      * @return true if there are five complete towers
      */
-    public boolean cronusrule(Model model) {
+    public boolean ChronusRule(Model model) {
         int counter = 0;
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {

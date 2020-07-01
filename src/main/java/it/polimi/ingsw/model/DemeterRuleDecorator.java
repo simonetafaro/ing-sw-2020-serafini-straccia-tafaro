@@ -2,6 +2,9 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
+/**
+ * the following method has been decorated: build
+ */
 public class DemeterRuleDecorator extends StandardRuleDecorator {
 
     /**
