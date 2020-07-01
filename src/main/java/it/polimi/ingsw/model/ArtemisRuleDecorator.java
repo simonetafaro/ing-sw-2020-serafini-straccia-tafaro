@@ -5,7 +5,7 @@ import it.polimi.ingsw.utils.gameMessage;
 
 public class ArtemisRuleDecorator extends StandardRuleDecorator {
     /**
-     * this method allowed to a player ho have artemis to move a second time
+     * this method allowed to a player how have artemis to move a second time
      *
      * @param move
      * @param model

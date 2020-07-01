@@ -27,6 +27,14 @@ public class SetWorkerPosition implements Serializable {
      */
     private int WorkerNum;
 
+    /**
+     *it is used to set worker's position
+     * @param x coordinate x
+     * @param y coordinate y
+     * @param color color of the  player
+     * @param ID player ID
+     * @param workerNum worker number (man or woman )
+     */
     public SetWorkerPosition(int x, int y, PlayerColor color, int ID, int workerNum) {
         this.x = x;
         this.y = y;
@@ -35,22 +43,37 @@ public class SetWorkerPosition implements Serializable {
         WorkerNum = workerNum;
     }
 
+    /**
+     * @return coordinate x
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * @return coordinate y
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * @return color of the  player
+     */
     public PlayerColor getColor() {
         return color;
     }
 
+    /**
+     * @return player ID
+     */
     public int getID() {
         return ID;
     }
 
+    /**
+     * @return worker number  (man or woman )
+     */
     public int getWorkerNum() {
         return WorkerNum;
     }
