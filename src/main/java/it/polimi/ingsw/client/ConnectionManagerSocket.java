@@ -7,7 +7,6 @@ import it.polimi.ingsw.utils.PlayerColor;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.event.ActionEvent;
@@ -27,24 +26,94 @@ import java.util.ArrayList;
  */
 public class ConnectionManagerSocket {
 
+    /**
+     * Nickname of player
+     */
     private String nickname;
+
+    /**
+     * player color
+     */
     private PlayerColor myColor;
+
+    /**
+     * true if nickname is set
+     */
     protected boolean nameSet;
+
+    /**
+     * player number
+     */
     private int playerNumber;
+
+    /**
+     * socket client
+     */
     private Socket socket;
+
+    /**
+     * ObjectOutputStream of client
+     */
     private ObjectOutputStream output;
+
+    /**
+     * ObjectInputStream of client
+     */
     private ObjectInputStream input;
+
+    /**
+     * parameters used to manages color choice
+     */
     private String playerColor, temporaryColor;
+
+    /**
+     * mainframe of boardUI
+     */
     private JFrame mainFrame;
+
+    /**
+     * Thread used to manages card and color choice
+     */
     private Thread t, cardThread;
+
+    /**
+     * Socket Port
+     */
     private static final int SOCKET_PORT = 12345;
+
+    /**
+     * Ip server
+     */
     private String Server_IP;
+
+    /**
+     * order of this player turn
+     */
     private int order;
+
+    /**
+     * pointer to ClientSocketMessage
+     */
     private ClientSocketMessage clientSocket;
+
+    /**
+     * pointer to BoardGUI
+     */
     private BoardGUI boardGUI;
+
+    /**
+     * pointer to ClientCLIMain
+     */
     private ClientCLIMain boardCLI;
+
+    /**
+     * player
+     */
     private Player player;
 
+    /**
+     * client ID
+     */
     protected int clientID;
 
     /**
@@ -531,6 +600,12 @@ public class ConnectionManagerSocket {
         this.mainFrame.dispose();
     }
 
+    /**
+     * @param message close connection message
+     * Method called when there are connection problems,
+     * if player is using GUI a popUp appears, while he is using CLI
+     * this method prints message.
+     */
     public void ServerCloseConnection(String message) {
         int TIME_VISIBLE = 5000;
         if (mainFrame != null) {
