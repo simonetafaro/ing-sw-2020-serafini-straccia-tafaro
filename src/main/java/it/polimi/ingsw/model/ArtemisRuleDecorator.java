@@ -3,6 +3,9 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.utils.gameMessage;
 
 
+/**
+ * the following methods have been decorated: play,move,build
+ */
 public class ArtemisRuleDecorator extends StandardRuleDecorator {
     /**
      * this method allowed to a player how have artemis to move a second time

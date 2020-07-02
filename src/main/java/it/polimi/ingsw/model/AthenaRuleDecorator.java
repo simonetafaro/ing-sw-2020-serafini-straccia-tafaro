@@ -2,6 +2,10 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
+/**
+ * the following methods have been decorated: play,move
+ * the following method has been implemented:isLevelDifferenceAllowedAthena
+ */
 public class AthenaRuleDecorator extends StandardRuleDecorator {
 
     /**

@@ -1,5 +1,9 @@
 package it.polimi.ingsw.model;
 
+/**
+ * the following method has been decorated: move
+ * the following method has been implemented:panWinCondition
+ */
 public class PanRuleDecorator extends StandardRuleDecorator {
 
     /**

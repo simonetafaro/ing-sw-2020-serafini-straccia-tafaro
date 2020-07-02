@@ -2,6 +2,10 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
+/**
+ * the following methods have been decorated: play,move
+ * the following method has been implemented: isRightWorker
+ */
 public class SeleneRuleDecorator extends StandardRuleDecorator {
     private boolean IamWoman = false;
 
@@ -24,7 +28,7 @@ public class SeleneRuleDecorator extends StandardRuleDecorator {
             return;
         }
         //female Worker may build regardless of which Worker moved.
-        if (!isRightWorkerDecorator(move, turn)) {
+        if (!isRightWorker(move, turn)) {
             if (move.getWorker().getWorkerNum() == 2)
                 IamWoman = true;
             else {
@@ -111,7 +115,7 @@ public class SeleneRuleDecorator extends StandardRuleDecorator {
      * @return true if it is the first step (M) or if the first step's worker
      * is the same of the move's worker
      */
-    public boolean isRightWorkerDecorator(PlayerMove move, Turn turn) {
+    public boolean isRightWorker(PlayerMove move, Turn turn) {
         return (turn.getPlayerTurn(move.getPlayer()).isFirstStep()) || turn.getPlayerTurn(move.getPlayer()).getTurnWorker().equals(move.getWorker());
     }
 }

@@ -2,6 +2,10 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
+/**
+ * the following methods have been decorated: play,move,isEndAllowed
+ * the following method has been implemented:isRightWorker
+ */
 public class PoseidonRuleDecorator extends StandardRuleDecorator {
     private boolean ican;
 
@@ -16,7 +20,7 @@ public class PoseidonRuleDecorator extends StandardRuleDecorator {
     @Override
     public void play(PlayerMove move, Turn turn, Model model) {
         if (move instanceof PlayerMoveEnd) {
-            if (isEndAllowedDecorator(move, turn)) {
+            if (isEndAllowed(move, turn)) {
                 model.endMessage(move, turn, model);
                 move.getPlayer().getMyCard().setUsingCard(false);
                 ican = false;
@@ -140,7 +144,8 @@ public class PoseidonRuleDecorator extends StandardRuleDecorator {
      * @return true if the end is allowed by step or
      * if I'm playing with the player not moved
      */
-    public boolean isEndAllowedDecorator(PlayerMove move, Turn turn) {
+    @Override
+    public boolean isEndAllowed(PlayerMove move, Turn turn) {
         return move.getPlayer().getMyCard().isUsingCard() ? (move.getPlayer().getMyCard().getStepLetter(turn.getPlayerTurn(move.getPlayer()).getI())).equals("END") || turn.getPlayerTurn(move.getPlayer()).getI() > 3 :
                 (move.getPlayer().getMyCard().getStandardStepLetter(turn.getPlayerTurn(move.getPlayer()).getI())).equals("END");
     }
