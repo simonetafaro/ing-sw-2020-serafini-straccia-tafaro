@@ -5,7 +5,7 @@
     <option name="languageLevel" value="ES6" />
   </component>
   <component name="JavadocGenerationManager">
-    <option name="OUTPUT_DIRECTORY" value="$USER_HOME$/Desktop/Project_Ing_SW/javadoc" />
+    <option name="OUTPUT_DIRECTORY" value="$USER_HOME$/Desktop/Project_Ing_SW/finalJavaDoc" />
   </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">

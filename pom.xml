@@ -62,7 +62,7 @@
             <archive>
               <manifestFile>src/main/java/META-INF/MANIFEST.MF</manifestFile>
             </archive>
-            <finalName>${project.artifactId}-ServerMain</finalName>
+            <finalName>${project.artifactId}-CLIMain</finalName>
           </configuration>
         </plugin>
         <plugin>
