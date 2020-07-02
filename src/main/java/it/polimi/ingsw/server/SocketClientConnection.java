@@ -1,7 +1,10 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.observ.Observable;
+import it.polimi.ingsw.view.RemoteView;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -9,11 +12,26 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * SocketClientConnection class is used to accept incoming connection
+ * on the socket from client
+ */
 public class SocketClientConnection extends Observable<String> implements Runnable {
 
+    /**
+     * This is the socket used to accept connection
+     */
     private ServerSocket serverSocket;
+    /**
+     * Instance of the server class
+     */
     private Server activeServer;
 
+    /**
+     * @param port of the server
+     * @param server instance of server
+     * Constructor, creates new Server Socket on the specified port
+     */
     public SocketClientConnection(int port, Server server) {
         this.activeServer = server;
         try {
@@ -23,6 +41,10 @@ public class SocketClientConnection extends Observable<String> implements Runnab
         }
     }
 
+    /**
+     * This method accept incoming connection on serverSocket
+     * and processes client based on input
+     */
     @Override
     public void run() {
         while (true) {
