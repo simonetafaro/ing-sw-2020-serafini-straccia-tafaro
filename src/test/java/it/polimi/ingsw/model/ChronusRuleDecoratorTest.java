@@ -163,7 +163,7 @@ class ChronusRuleDecoratorTest {
         player.setWorker1(worker);
         player.setWorker2(worker1);
         chronusRuleDecorator.play(playermove,turn,model);
-        assertTrue(chronusRuleDecorator.cronusrule(model));
+        assertTrue(chronusRuleDecorator.ChronusRule(model));
     }
 
 
@@ -188,7 +188,7 @@ class ChronusRuleDecoratorTest {
         PlayerMoveEnd moveend=new PlayerMoveEnd(player,true);
         moveend.setColor(PlayerColor.BLUE);
         chronusRuleDecorator.play(moveend,turn,model);
-        assertTrue(chronusRuleDecorator.cronusrule(model));
+        assertTrue(chronusRuleDecorator.ChronusRule(model));
 
     }
 

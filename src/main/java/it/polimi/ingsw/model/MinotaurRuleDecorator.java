@@ -2,6 +2,10 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
+/**
+ * the following methods have been decorated: play,move
+ * the following methods have been implemented:pushWorkerPosition, minotaurMoveAllowed,pushingInCell,isMinotaurWorker,hasFreeCellClosed,isEmptyCell
+ */
 public class MinotaurRuleDecorator extends StandardRuleDecorator {
 
     /**

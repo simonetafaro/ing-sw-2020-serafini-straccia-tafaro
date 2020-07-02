@@ -203,9 +203,9 @@ class ZeusRuleDecoratorTest {
     @Test
     void zeusbuild() {
         turn.getPlayerTurn(player).getStepI(1).setCellTo(model.getBoard().getCell(1,1));
-        assertTrue(ZeusRuleDecorator.Zeusbuild(playermove,model,turn));
+        assertTrue(ZeusRuleDecorator.ZeusBuild(playermove,model,turn));
         turn.getPlayerTurn(player).getStepI(1).setCellTo(model.getBoard().getCell(0,1));
-        assertFalse(ZeusRuleDecorator.Zeusbuild(playermove,model,turn));
+        assertFalse(ZeusRuleDecorator.ZeusBuild(playermove,model,turn));
     }
 
 }

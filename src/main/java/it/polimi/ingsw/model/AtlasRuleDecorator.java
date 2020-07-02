@@ -1,6 +1,9 @@
 package it.polimi.ingsw.model;
 
 
+/**
+ * the following method has been decorated: build
+ */
 public class AtlasRuleDecorator extends StandardRuleDecorator {
 
     /**

@@ -2,6 +2,10 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.gameMessage;
 
+/**
+ * the following methods have been decorated: play,move,build
+ * the following method has been implemented:canBuildInAndThenMove
+ */
 public class PrometheusRuleDecorator extends StandardRuleDecorator {
 
     /**
