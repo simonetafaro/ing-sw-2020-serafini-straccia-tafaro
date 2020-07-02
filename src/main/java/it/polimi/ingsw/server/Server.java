@@ -16,19 +16,48 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-
+/**
+ * Server class is used to manage active connection, creating new game room.
+ */
 public class Server {
 
+    /**
+     * Each client is identified by an unique ID
+     */
     private static int clientId = 1;
+    /**
+     * Temporary lobby that contains players who want to play in a two players match
+     */
     private List<Player> twoPlayerMatch;
+    /**
+     * Temporary lobby that contains players who want to play in a three players match
+     */
     private List<Player> threePlayerMatch;
+    /**
+     * Association between client ID and nickname
+     */
     private Map<Integer, String> playerData;
+    /**
+     * Association between connected client ID and his socket
+     */
     private Map<Integer, Socket> activeClientConnection;
+    /**
+     * For each client ID associate his output stream
+     */
     private Map<Integer, ObjectOutputStream> ClientConnectionOutput;
+    /**
+     * For each client ID associate his input stream
+     */
     private Map<Integer, ObjectInputStream> ClientConnectionInput;
-    private List<Game> activeGame;
+
+    /**
+     * Port used to open new Server Socket
+     */
     private static final int PORT = 12345;
 
+    /**
+     * Server constructor, initialize list and Map
+     */
     public Server() throws IOException {
         this.activeClientConnection = new HashMap<>();
         this.playerData = new HashMap<>();
@@ -36,47 +65,78 @@ public class Server {
         this.threePlayerMatch = new ArrayList<>();
         this.ClientConnectionOutput = new HashMap<>();
         this.ClientConnectionInput = new HashMap<>();
-        this.activeGame = new ArrayList<>();
     }
 
+    /**
+     * @return current clientID
+     */
     public static int getClientId() {
         return clientId;
     }
 
+    /**
+     * Increase Client ID when new connection is accepted
+     */
     public static void increaseClientId() {
         clientId++;
     }
 
+    /**
+     * @return list of two players lobby
+     */
     public List<Player> getTwoPlayerMatch() {
         return twoPlayerMatch;
     }
 
+    /**
+     * @return list of three players lobby
+     */
     public List<Player> getThreePlayerMatch() {
         return threePlayerMatch;
     }
 
+    /**
+     * @return list of active connection
+     */
     public Map<Integer, Socket> getActiveClientConnection() {
         return activeClientConnection;
     }
 
+    /**
+     * @return Map that associate clientID with his nickname
+     */
     public Map<Integer, String> getPlayerData() {
         return playerData;
     }
 
+    /**
+     * @return Map that associate clientID with his Output stream
+     */
     public Map<Integer, ObjectOutputStream> getClientConnectionOutput() {
         return ClientConnectionOutput;
     }
 
+    /**
+     * @return Map that associate clientID with his Input stream
+     */
     public Map<Integer, ObjectInputStream> getClientConnectionInput() {
         return ClientConnectionInput;
     }
 
+    /**
+     * Run new Thread (SocketClientConnection) that handle new incoming connection
+     */
     public void run() {
         ExecutorService executorSocket = Executors.newCachedThreadPool();
         executorSocket.submit(new SocketClientConnection(PORT, this));
 
     }
 
+    /**
+     * @param player1 contains data of first player
+     * @param player2 contains data of second player
+     *                  Create Game instance and start game
+     */
     public void createTwoPlayersMatch(Player player1, Player player2) {
         new Thread(new Runnable() {
             @Override
@@ -142,6 +202,12 @@ public class Server {
         }).start();
     }
 
+    /**
+     * @param player1 contains data of first player
+     * @param player2 contains data of second player
+     * @param player3 contains data of third playes
+     *                  Create Game instance and start game
+     */
     public void createThreePlayersMatch(Player player1, Player player2, Player player3) {
         new Thread(new Runnable() {
             @Override
@@ -222,6 +288,11 @@ public class Server {
         }).start();
     }
 
+    /**
+     * @param match contains list of output stream
+     * @param message contains object we want to send
+     *                Used to send broadcast message to all players in the match
+     */
     public void broadcastMessage(List<ObjectOutputStream> match, Object message) {
         match.forEach(c -> {
             try {
@@ -234,6 +305,14 @@ public class Server {
         });
     }
 
+    /**
+     * @param matchColor
+     * @param color
+     * @param player
+     * @param broadcast
+     * @return true if color is free
+     * Check if the color can be assigned to the player or not
+     */
     public synchronized boolean parseColor(ColorCheck matchColor, String color, Player player, List<ObjectOutputStream> broadcast) {
         switch (color) {
             case "WHITE":
@@ -270,6 +349,14 @@ public class Server {
         return false;
     }
 
+    /**
+     * @param matchColor
+     * @param input
+     * @param player
+     * @param broadcast
+     * @return Thread
+     * used to handle color choose from client
+     */
     private Thread handleColorChoose(ColorCheck matchColor, ObjectInputStream input, Player player, List broadcast) {
         Thread t = new Thread(new Runnable() {
             @Override
