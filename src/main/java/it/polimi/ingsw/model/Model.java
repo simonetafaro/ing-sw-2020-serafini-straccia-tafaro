@@ -4,7 +4,6 @@ import it.polimi.ingsw.observ.Observable;
 import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.SetWorkerPosition;
 import it.polimi.ingsw.utils.gameMessage;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +34,9 @@ public class Model extends Observable<Object> {
      */
     private int level;
 
+    /**
+     * Model constructor
+     */
     public Model() {
         this.board = new Board();
         playOrder_List = new ArrayList<>();
@@ -174,6 +176,12 @@ public class Model extends Observable<Object> {
         });
     }
 
+    /**
+     * @param message
+     * @param turn
+     * @param model
+     * Method called when player end turn
+     */
     public void endMessage(PlayerMove message, Turn turn, Model model) {
         turn.getPlayerTurn(message.getPlayer()).resetStep();
         model.endNotifyView(message, false);
@@ -181,7 +189,7 @@ public class Model extends Observable<Object> {
 
     /**
      * @param move
-     * @param hasWon notify RemoteView when player end turn
+     * @param hasWon notify RemoteView called in endMessage
      */
     public void endNotifyView(PlayerMove move, boolean hasWon) {
         PlayerColor nextTurn = playOrder_List.get((playOrder_List.indexOf(turn) + 1) % playOrder_List.size());

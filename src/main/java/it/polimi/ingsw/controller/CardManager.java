@@ -8,14 +8,26 @@ import it.polimi.ingsw.utils.FileManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
-
 import java.lang.reflect.Constructor;
 
+/**
+ * Class used to take card information from cardName.xml file
+ */
 public class CardManager {
 
+    /**
+     * Path file
+     */
     private static final String PATH = "toolcards/";
+
+    /**
+     * FileFinder
+     */
     private FileManager fileFinder;
 
+    /**
+     * CardManager constructor
+     */
     public CardManager() {
         this.fileFinder = new FileManager();
     }

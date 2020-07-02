@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.PlayerColor;
-
 import java.io.Serializable;
 
 /**
